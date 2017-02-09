@@ -3,6 +3,10 @@ Check if some ETA is appropriate as an loop invariant for mccarthy91 function
 '''
 
 def mccarthy91(n):
+    '''
+    if n > 100 returns n - 10
+    else returns 91
+    '''
     ret = n
     c = 1
     while (c > 0):
@@ -19,14 +23,10 @@ def mccarthy91(n):
 
 from z3 import *
 
-s = Solver()
-# Initially, we have n, ret, and c, such that ret == n and c == 1
-n = Int('N')
-ret = Int('RET')
-c = Int('C')
-# s.add( And(ret == n, c == 1) )
-# In the end, we shall have (n <= 100) => (ret == 91) and (n > 100) => (ret == n - 10)
-# s.add( And(Implies(n <= 100, ret == 91), Implies(n > 100, ret == n - 10)) )
+# Initially, we have n, ret, and c, such that ret == n and c == 1:
+# And(ret == n, c == 1)
+# In the end, we shall have (n <= 100) => (ret == 91) and (n > 100) => (ret == n - 10):
+# And(Implies(n <= 100, ret == 91), Implies(n > 100, ret == n - 10))
 
 # For an invariant ETA to satisfy this loop and its pre/post-conditions, it must hold that
 # 1. (|B and ETA|) C (|ETA|) with B being c > 0 and C being the inner ITE expression
@@ -121,22 +121,27 @@ def isImpValid(solver, imp):
 # and how to check those eligibility. We're poised to finish the problem.
 # We'll define a function checkInvariant that decides if some formula is eligible.
 def checkInvariant(eta):
-    # init solver
-    s = Solver()
-    n = Int('N')
-    ret = Int('RET')
-    c = Int('C')
     # check first requirement
-    firstReq = Implies(And(c > 0, eta), And(Implies(ret > 100, substitute(substitute(ETA, (c, c-1)), (ret, ret-10))), Implies(ret <= 100, substitute(substitute(ETA, (c, c+1)), (ret, ret+11)))))
+    firstReq = Implies(And(c > 0, eta), And(Implies(ret > 100, substitute(substitute(eta, (c, c-1)), (ret, ret-10))), Implies(ret <= 100, substitute(substitute(eta, (c, c+1)), (ret, ret+11)))))
     if not isImpValid(s, firstReq):
         raise Exception("firstReq failed")
     # check second requirement
-    secondReq = Implies(And(ret == n, c == 1), ETA)
+    secondReq = Implies(And(ret == n, c == 1), eta)
     if not isImpValid(s, secondReq):
         raise Exception("secondReq failed")
     # check third requirement
-    thirdReq = Implies(And(ETA, c <= 0), And(Implies((n <= 100), (ret == 91)), Implies((n > 100), (ret == n - 10))))
+    thirdReq = Implies(And(eta, c <= 0), And(Implies((n <= 100), (ret == 91)), Implies((n > 100), (ret == n - 10))))
     if not isImpValid(s, thirdReq):
         raise Exception("thirdReq failed")
+    # if all three requirements are met(all three implications are valid),
+    # then we are done, and the eta is suitable
     print("Success")
     return True
+# init solver
+s = Solver()
+n = Int('N')
+ret = Int('RET')
+c = Int('C')
+# check eta
+eta = # NOTE: I can't figure out an eta ;(
+checkInvariant(eta)
