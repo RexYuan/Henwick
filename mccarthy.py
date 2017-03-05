@@ -143,5 +143,5 @@ n = Int('N')
 ret = Int('RET')
 c = Int('C')
 # check eta
-eta = # NOTE: I can't figure out an eta ;(
+eta = And (Implies (n > 100, And (c >= 0, n > 100, ret == n - 10 + 10 * c)), Implies (n <= 100, And (Implies (ret >=  90, And (91 - c <= ret, ret <= 91 + 10 * c)), Implies (ret <   90, c > 0))))
 checkInvariant(eta)
