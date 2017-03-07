@@ -9,9 +9,10 @@
 # Int->Int->Int    : +, -, *
 
 # grammar
-# Root ::= And(BoolExp, BoolExp) | Or(BoolExp, BoolExp) | Implies(BoolExp, BoolExp)
-# BoolExp ::= IntExp < IntExp | IntExp <= IntExp | IntExp == IntExp | T | F
-# IntExp ::= IntExp + IntExp | IntExp - IntExp | IntExp * IntExp | Int
+# Root    ::= BoolExp
+# BoolExp ::= And(BoolExp, BoolExp) | Or(BoolExp, BoolExp) | Implies(BoolExp, BoolExp) |
+#             IntExp < IntExp | IntExp <= IntExp | IntExp == IntExp | T | F
+# IntExp  ::= IntExp + IntExp | IntExp - IntExp | IntExp * IntExp | Int
 
 # how to check well-formness? and convert from string to z3?
 # how many Int var to have? how to model constants? 100, 10, 90, 91, 0?
@@ -27,10 +28,10 @@ class Z3:
     def __init__(self, exp_size_limit):
         # CFG
         self.productions = {
-            'Root':    [['And',     'BoolExp', 'BoolExp'],
+            'BoolExp': [['And',     'BoolExp', 'BoolExp'],
                         ['Or',      'BoolExp', 'BoolExp'],
-                        ['Implies', 'BoolExp', 'BoolExp']],
-            'BoolExp': [['IntExp', '<',  'IntExp'],
+                        ['Implies', 'BoolExp', 'BoolExp'],
+                        ['IntExp', '<',  'IntExp'],
                         ['IntExp', '<=', 'IntExp'],
                         ['IntExp', '==', 'IntExp'],
                         ['T'], ['F']],
@@ -62,7 +63,7 @@ class Z3:
         The generated expressions populate self.expressions
 
         When called outside:
-        1) exp should be ['Root']
+        1) exp should be ['BoolExp']
         2) depth should be 1
         3) limit should be larger than 1
         e.g. Z3_obj.genesis(['Root'], 1, 5)
@@ -87,7 +88,7 @@ class Z3:
                     self.genesis(new_exp, depth+len(prod)-1, limit)
 s = Z3(10)
 t = time()
-s.genesis(['Root'], 1, 5)
+s.genesis(['BoolExp'], 1, 5)
 print(time()-t)
 PrettyPrinter(indent=4, width=60).pprint(s.expressions)
 
