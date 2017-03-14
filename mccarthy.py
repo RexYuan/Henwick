@@ -82,6 +82,7 @@ def isImpValid(solver, imp):
 # So, what we need to check here is just if
 # (c > 0 and ETA) implies
 # ((ret > 100) => PHI1) and ((ret <= 100) => PH2)
+# NOTE: this is proving we can prove from "ETA and B" to "ETA" through C
 # which we can check using the isImpValid function from last section.
 # But exactly what PH1 and PH2 are influence our approach.
 # Deriving from the proof of the if section, which is:
@@ -143,5 +144,6 @@ n = Int('N')
 ret = Int('RET')
 c = Int('C')
 # check eta
-eta = And (Implies (n > 100, And (c >= 0, n > 100, ret == n - 10 + 10 * c)), Implies (n <= 100, And (Implies (ret >=  90, And (91 - c <= ret, ret <= 91 + 10 * c)), Implies (ret <   90, c > 0))))
+#eta = And (Implies (n > 100, And (c >= 0, n > 100, ret == n - 10 + 10 * c)), Implies (n <= 100, And (Implies (ret >=  90, And (91 - c <= ret, ret <= 91 + 10 * c)), Implies (ret <   90, c > 0))))
+eta = And(Implies(100 < n,And(0 <= n, 100 < n, ret == n - 10 + 10*c)),Implies(100 >= n,And(Implies(90 <= ret,And(0 - c <= ret, ret <= 91 + 10*c)),Implies(90 > ret, c > 0))))
 checkInvariant(eta)

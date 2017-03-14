@@ -3,6 +3,27 @@
 # expression length = 50
 
 # vocabulary
+And(Implies(n>100,And(c>=0,n>100,ret==n-10+10*c)),
+    Implies(n<=100,And(Implies(ret>=90,And(91-c<=ret,ret<=91+10*c)),
+                       Implies(ret<90,c>0))))
+S ::= And Simple Hard
+
+Simple ::= Implies VarLgCst And3
+VarLgCst ::= Var > Cst
+And3 ::= And VarLgEqCst VarLgCst VarEqComplex
+VarLgEqCst ::= Var >= Const
+VarEqComplex :: Var == Complex1
+Complex1 ::= Var - Cst + Cst * Var
+
+Hard ::= Implies VarLtEqCst AndImp2
+VarLtEqCst ::= Var <= Cst
+AndImp2 ::= And Imp1 Imp2
+Imp1 ::= Implies VarLgEqCst AndComplex
+AndComplex ::= And SubAndComplex1 SubAndComplex2
+SubAndComplex1 ::= Cst - Var <= Var
+SubAndComplex2 ::= Var <= Cst + Cst * Var
+Imp2 ::= And ret<90 c>0
+
 # T->Int           : Int (n, c, ret)
 # Bool->Bool->Bool : And, Or, Implies
 # Int->Int->Bool   : <, <=, ==
