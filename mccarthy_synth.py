@@ -1,157 +1,138 @@
-# target
-# And(Implies(n>100,And(c>=0,n>100,ret==n-10+10*c)),Implies(n<=100,And(Implies(ret>=90,And(91-c<=ret,ret<=91+10*c)),Implies(ret<90,c>0))))
-# expression length = 50
-
-# vocabulary
-# T->Int           : Int (n, c, ret)
-# Bool->Bool->Bool : And, Or, Implies
-# Int->Int->Bool   : <, <=, ==
-# Int->Int->Int    : +, -, *
-
-# grammar
-# Root    ::= BoolExp
-# BoolExp ::= And(BoolExp, BoolExp) | Or(BoolExp, BoolExp) | Implies(BoolExp, BoolExp) |
-#             IntExp < IntExp | IntExp <= IntExp | IntExp == IntExp | T | F
-# IntExp  ::= IntExp + IntExp | IntExp - IntExp | IntExp * IntExp | Int
-
-# how to check well-formness? and convert from string to z3?
-# how many Int var to have? how to model constants? 100, 10, 90, 91, 0?
-# what are the concrete examples in concolic approach here?
-# how to prune program generation? time grow too fast(small limit like 7 takes ~15s, 8 takes ~23s, and 9 > 3 hrs)
-# prune with saving intermediate form and skip when encountered? => history too large to check against
-# smaller footprint? => prune with evaluated z3 exp? => simplify command
-# evaluate z3 from string => unify exp? use prefix not
-
 from z3 import *
-from pprint import PrettyPrinter
-from itertools import chain
 from time import time
+
 class Z3:
-    def __init__(self, exp_size_limit):
-        # CFG
-        self.productions = {
-            'BoolExp': [['And',     'BoolExp', 'BoolExp'],
-                        ['Or',      'BoolExp', 'BoolExp'],
-                        ['Implies', 'BoolExp', 'BoolExp'],
-                        ['<',  'IntExp', 'IntExp'],
-                        ['<=', 'IntExp', 'IntExp'],
-                        ['==', 'IntExp', 'IntExp'],
-                        ['T'], ['F']],
-            'IntExp':  [['+', 'IntExp', 'IntExp'],
-                        ['-', 'IntExp', 'IntExp'],
-                        ['*', 'IntExp', 'IntExp'],
-                        ['Int']]#,
-            #'Int':     [['X'],
-            #            ['Y'],
-            #            ['Z']]
+    def __init__(self):
+        self.n = Int('n')
+        self.c = Int('c')
+        self.ret = Int('ret')
+
+        self.S = Bool('S')
+        self._Simple = Bool('Simple')
+        self._Hard = Bool('Hard')
+
+        self._Cst1 = Int('Cst1')
+        self._Cst2 = Int('Cst2')
+        self._Cst3 = Int('Cst3')
+
+        self._Var1 = Int('Var1')
+        self._Var2 = Int('Var2')
+        self._Var3 = Int('Var3')
+        self._Var4 = Int('Var4')
+        self._Var5 = Int('Var5')
+        self._Var6 = Int('Var6')
+        self._Var7 = Int('Var7')
+
+        self.prod = {
+            self.S:  [And(self._Simple, self._Hard)],
+
+            #              Implies (self.n > IntVal(100), And (self.c >= IntVal(0), self.n > IntVal(100), self.ret == self.n - IntVal(10) + IntVal(10) * self.c))
+            self._Simple: [Implies (self.n > IntVal(100), And (self._Var1 >= IntVal(0), self._Var2 > IntVal(100), self._Var3 == self.n - IntVal(10) + IntVal(10) * self.c))],
+            #            Implies (self.n <= IntVal(100), And (Implies (self.ret >=  IntVal(90), And (IntVal(91) - self.c <= self.ret, self.ret <= IntVal(91) + IntVal(10) * self.c)), Implies (self.ret <   IntVal(90), self.c > 0)))
+            self._Hard: [Implies (self._Var4 <= IntVal(100), And (Implies (self.ret >=  IntVal(90), And (IntVal(91) - self.c <= self.ret, self.ret <= IntVal(91) + IntVal(10) * self.c)), Implies (self.ret <   IntVal(90), self.c > 0)))],
+
+            self._Cst1: [IntVal(100), IntVal(0), IntVal(10), IntVal(90), IntVal(91)],
+            self._Cst2: [IntVal(100), IntVal(0), IntVal(10), IntVal(90), IntVal(91)],
+            self._Cst3: [IntVal(100), IntVal(0), IntVal(10), IntVal(90), IntVal(91)],
+
+            self._Var1: [self.n, self.c, self.ret],
+            self._Var2: [self.n, self.c, self.ret],
+            self._Var3: [self.n, self.c, self.ret],
+            self._Var4: [self.n, self.c, self.ret],
+            self._Var5: [self.n, self.c, self.ret],
+            self._Var6: [self.n, self.c, self.ret],
+            self._Var7: [self.n, self.c, self.ret]
         }
-        self.arity = {
-            'Int': 0,
-            'T': 0,
-            'F': 0,
-            'And': 2,
-            'Or': 2,
-            'Implies': 2,
-            '<': 2,
-            '<=': 2,
-            '==': 2,
-            '+': 2,
-            '-': 2,
-            '*': 2
-        }
-        self.expressions = [[] for _ in range(exp_size_limit)]
-        self.c = 0
+        self.solver = Solver()
+        self.counter_examples1 = []
+        self.counter_examples2 = []
+        self.counter = 0
+        self.p1counter = 0
+        self.p2counter = 0
+        self.hcounter = 0
+        self.history = []
 
-    def eval(self, exp):
-        # eval only terminus string
-        if any(s in self.productions for s in exp):
-            raise Exception('Non-terminus string evaluation')
-        # recursion base
-        if len(exp) == 1:
-            # TODO: eval arbitrary input
-            return Bool('X')
+    def isImpValid(self, imp):
+        self.solver.push()
+        self.solver.add(Not(imp))
+        result = self.solver.check()
+        ret = True if result == unsat else self.solver.model()
+        self.solver.pop()
+        return ret
 
-        exp_iter = exp.__iter__()
-        for index, symbol in enumerate(exp_iter):
-            if self.arity[symbol] > 0:
-                # collect arguments to unpack for function application
-                # TODO: eval arbitrary input
-                if symbol == 'And':
-                    return And([self.eval(arg) for arg in exp[index+1: index+1+self.arity[symbol]]])
-
-    def genesis(self, exp, depth, limit):
-        '''
-        Recursively generate all Z3 expressions using depth limited search
-        with depth(symbol count) <= limit
-        The generated expressions populate self.expressions
-
-        When called outside:
-        1) exp should be ['BoolExp']
-        2) depth should be 1
-        3) limit should be larger than 1
-        e.g. Z3_obj.genesis(['Root'], 1, 5)
-        '''
-        # recursion base
-        if not exp or len(exp) > limit:
+    def checkEta(self, eta):
+        result = self.isImpValid(Implies(And(self.ret == self.n, self.c == 1), eta))
+        if result != True:
+            self.counter_examples1.append((result[self.ret], result[self.n], result[self.c]))
             return False
-        # terminus
-        elif not any(s in self.productions for s in exp):
-            if exp not in self.expressions[depth-1]:
-                self.expressions[depth-1].append(exp)
-            return True
-        # additional expansion possible
-        for index, symbol in enumerate(exp):
-            # symbol can be expanded
-            if symbol in self.productions:
-                # for every expansion it has
-                for prod in self.productions[symbol]:
-                    # replace symbol with its expansion
-                    new_exp = list(chain(exp[:index], prod, exp[index+1:]))
-                    #print(new_exp)
-                    # expand
-                    self.c+=1
-                    self.genesis(new_exp, depth+len(prod)-1, limit)
-s = Z3(10)
+        result = self.isImpValid(Implies(And(eta, self.c <= 0), And(Implies((self.n <= 100), (self.ret == 91)), Implies((self.n > 100), (self.ret == self.n - 10)))))
+        if result != True:
+            self.counter_examples2.append((result[self.ret], result[self.n], result[self.c]))
+            return False
+        result = self.isImpValid(Implies(And(self.c > 0, eta), And(Implies(self.ret > 100, substitute(substitute(eta, (self.c, self.c-1)), (self.ret, self.ret-10))), Implies(self.ret <= 100, substitute(substitute(eta, (self.c, self.c+1)), (self.ret, self.ret+11))))))
+        if result != True:
+            return False
+        return True
+
+    def getConstituents(self, exp):
+        for c in exp.children():
+            if c.children():
+                yield from self.getConstituents(c)
+            else:
+                yield c
+
+    def genesis(self, exp):
+        components = list(self.getConstituents(exp))
+        if components in self.history:
+            self.hcounter+=1
+            return False
+        self.history.append(components)
+        # recursion base
+        # if expression has children and they're all termini or
+        # if expression has no child and is a terminus
+        #print(components)
+        if (exp.children() and not any(c in self.prod for c in components) or
+            not exp.children() and exp not in self.prod):
+            # pruning
+            if any(simplify(cret == cn) and simplify(cc == IntVal(1)) and not simplify(substitute(exp, (self.ret, cret), (self.n, cn), (self.c, cc))) for (cret, cn, cc) in self.counter_examples1):
+                self.p1counter+=1
+                return False
+            if any((simplify(substitute(exp, (self.ret, cret), (self.n, cn), (self.c, cc))) and simplify(cc <= IntVal(0))) and (not ((not simplify(cn <= IntVal(100)) or simplify(cret == IntVal(91))) and (simplify(cn <= IntVal(100)) or simplify(cret == IntVal(-10) + cn)))) for (cret, cn, cc) in self.counter_examples2):
+                self.p2counter+=1
+                return False
+            self.counter+=1
+            if self.checkEta(exp):
+                return exp
+            else:
+                return False
+        # expression expansion
+        # single term
+        if not components:
+            for p in self.prod[exp]:
+                ret = self.genesis(p)
+                # eta is found
+                if type(ret) == BoolRef:
+                    return ret
+        # multiple terms
+        else:
+            for c in [c for c in components if c in self.prod]:
+                for p in self.prod[c]:
+                    ret = self.genesis(substitute(exp, (c, p)))
+                    # eta is found
+                    if type(ret) == BoolRef:
+                        return ret
+        return False
+
+    def test(self):
+        print(self.checkEta(And (Implies (self.n > 100, And (self.c >= 0, self.n > 100, self.ret == self.n - 10 + 10 * self.c)), Implies (self.n <= 100, And (Implies (self.ret >=  90, And (91 - self.c <= self.ret, self.ret <= 91 + 10 * self.c)), Implies (self.ret <   90, self.c > 0))))))
+        return
+
+z3 = Z3()
 t = time()
-#s.genesis(['BoolExp'], 1, 9)
-print(s.eval(['And', 'T', 'F']))
-a = Solver()
-a.add(s.eval(['And', 'T', 'F']))
-#print(a.check())
-#print(a.model())
-#print(time()-t)
-#PrettyPrinter(indent=4, width=60).pprint(s.expressions)
-#print(s.c)
-"""
-def isImpValid(solver, imp):
-    solver.push()
-    solver.add(Not(imp))
-    result = solver.check()
-    solver.pop()
-    return result == unsat
-def checkInvariant(eta):
-    firstReq = Implies(And(c > 0, eta), And(Implies(ret > 100, substitute(substitute(eta, (c, c-1)), (ret, ret-10))), Implies(ret <= 100, substitute(substitute(eta, (c, c+1)), (ret, ret+11)))))
-    if not isImpValid(s, firstReq):
-        raise Exception("firstReq failed")
-    secondReq = Implies(And(ret == n, c == 1), eta)
-    if not isImpValid(s, secondReq):
-        raise Exception("secondReq failed")
-    thirdReq = Implies(And(eta, c <= 0), And(Implies((n <= 100), (ret == 91)), Implies((n > 100), (ret == n - 10))))
-    if not isImpValid(s, thirdReq):
-        raise Exception("thirdReq failed")
-    print("Success")
-    return True
-s = Solver()
-n = Int('N')
-ret = Int('RET')
-c = Int('C')
-
-#eta = And (Implies (n > 100, And (c >= 0, n > 100, ret == n - 10 + 10 * c)), Implies (n <= 100, And (Implies (ret >=  90, And (91 - c <= ret, ret <= 91 + 10 * c)), Implies (ret <   90, c > 0))))
-#eta = gen
-#checkInvariant(eta)
-
-use not B and E1 and not post to gen concrete ex
-remember evaluated truth
-and prune whenever make E2 true too
-what if E2 has var doesnt has E1
-"""
+print(z3.genesis(Bool('S')))
+print("time:", time()-t)
+print("z3 queried:", z3.counter)
+print("req1 pruned:", z3.p1counter)
+print("req2 pruned:", z3.p2counter)
+print("h pruned:", z3.hcounter)
+#z3.test()
