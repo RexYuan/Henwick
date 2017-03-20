@@ -146,15 +146,13 @@ class Z3:
 
     def checkEta(self, eta):
         # req 1) T => eta[j/9][i/0]
-        #result = self.isImpValid(Implies(True, substitute(eta, (self.j, IntVal(9)), (self.i, IntVal(0)))))
-        result = self.isImpValid(Implies(self.i + self.j == IntVal(9), eta))
+        result = self.isImpValid(Implies(True, substitute(eta, (self.j, IntVal(9)), (self.i, IntVal(0)))))
         if result != True:
             if result[self.i] != None and result[self.j] != None:
                 self.counter_examples1.append((result[self.i], result[self.j]))
             return False
         # req 2) eta and not i < 10 => i = 10 and j = -1
-        #result = self.isImpValid(Implies(And(eta, Not(self.i < IntVal(10))), And(self.i == IntVal(10), self.j == IntVal(-1))))
-        result = self.isImpValid(Implies(And(eta, Not(self.i < IntVal(10))), self.i + self.j == IntVal(9)))
+        result = self.isImpValid(Implies(And(eta, Not(self.i < IntVal(10))), And(self.i == IntVal(10), self.j == IntVal(-1))))
         if result != True:
             if result[self.i] != None and result[self.j] != None:
                 self.counter_examples2.append((result[self.i], result[self.j]))
@@ -173,32 +171,25 @@ class Z3:
             return True
         # pruning with counter examples
         # T => eta[j/9][i/0]
-        """if any(simplify(substitute(substitute(exp, (self.j, IntVal(9)), (self.i, IntVal(0))),
-               (self.i, ci), (self.j, cj))) == False
-               for (ci, cj) in self.counter_examples1):"""
-        #if simplify(substitute(exp, (self.j, IntVal(9)), (self.i, IntVal(0)))) == False:
-
-        if any(simplify(And(ci + cj == IntVal(9),
-                            Not(substitute(exp, (self.i, ci), (self.j, cj)))))
-                            for (ci, cj) in self.counter_examples1):
+        #if any(simplify(substitute(substitute(exp, (self.j, IntVal(9)), (self.i, IntVal(0))),
+        #       (self.i, ci), (self.j, cj))) == False
+        #       for (ci, cj) in self.counter_examples1):"""
+        if simplify(substitute(exp, (self.j, IntVal(9)), (self.i, IntVal(0)))) == False:
             self.prune1_counter += 1
             return True
         # eta and not i < 10 => i = 10 and j = -1
-        #if any(simplify(substitute(exp, (self.i, ci), (self.j, cj))) == True
-        #       for (ci, cj) in self.counter_examples2):
-        if any(simplify(And(substitute(exp, (self.i, ci), (self.j, cj)),
-                            Not(ci < IntVal(10)),
-                            Not(ci + cj == IntVal(9)))) for (ci, cj) in self.counter_examples2):
+        if any(simplify(substitute(exp, (self.i, ci), (self.j, cj))) == True
+               for (ci, cj) in self.counter_examples2):
             self.prune2_counter += 1
             return True
         # i < 10 and eta => eta[j-1/j][i+1/i]
         #if any(simplify(substitute(exp, (self.i, ci), (self.j, cj))) == True
         #       and simplify(substitute(substitute(exp, (self.j, self.j-IntVal(1)), (self.i, self.i+IntVal(1))),
         #       (self.i, ci), (self.j, cj))) for (ci, cj) in self.counter_examples3):
-        if any(simplify(And(ci < IntVal(10),
-                            substitute(exp, (self.i, ci), (self.j, cj)),
-                            Not(substitute(substitute(exp, (self.j, self.j-IntVal(1)), (self.i, self.i+IntVal(1))),
-                            (self.i, ci), (self.j, cj))))) for (ci, cj) in self.counter_examples3):
+        if any(simplify(substitute(exp, (self.i, ci), (self.j, cj))) == True
+               and simplify(substitute(exp, (self.j, cj-IntVal(1)),
+                                            (self.i, ci+IntVal(1)))) == False
+               for (ci, cj) in self.counter_examples3):
             self.prune3_counter += 1
             return True
 
@@ -286,4 +277,4 @@ print(z3.synthesis(5))
 z3.report()
 print("time:", time()-t)
 
-#z3.test()
+z3.test()
