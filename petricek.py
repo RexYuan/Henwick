@@ -68,7 +68,7 @@ example program retrieved from http://stackoverflow.com/a/3221583/2448540
 # E2[j-1/j][i+1/i] is False to prune it off.
 # 2) Prune with semantic requirements.
 # simplify to true or false
-# 3) Prune with history
+# 3) Prune with history or semantic equivalence like commutativity
 # 4) invariant insight
 # 5) depth limited on offsprings count
 
@@ -104,15 +104,15 @@ class Z3:
             self._Bool1: [And(self._Bool1, self._Bool2),
                           Or(self._Bool1, self._Bool2),
                           Implies(self._Bool1, self._Bool2),
+                          self._Int1 == self._Int2,
                           self._Int1 > self._Int2,
-                          self._Int1 >= self._Int2,
-                          self._Int1 == self._Int2],
+                          self._Int1 >= self._Int2],
             self._Bool2: [And(self._Bool1, self._Bool2),
                           Or(self._Bool1, self._Bool2),
                           Implies(self._Bool1, self._Bool2),
+                          self._Int1 == self._Int2,
                           self._Int1 > self._Int2,
-                          self._Int1 >= self._Int2,
-                          self._Int1 == self._Int2],
+                          self._Int1 >= self._Int2,],
             self._Int1:  [self._Num1,
                           self._Num1 + self._Num2,
                           self._Num1 - self._Num2],
@@ -167,38 +167,47 @@ class Z3:
             return False
         return True
 
-    def getConstituents(self, exp):
-        for c in exp.children():
-            if c.children():
-                yield from self.getConstituents(c)
-            else:
-                yield c
-
     def pruned(self, exp):
         # NOTE strat 2)
         if simplify(exp) == True or simplify(exp) == False:
             return True
         # pruning with counter examples
         # T => eta[j/9][i/0]
-        #if any(simplify(substitute(substitute(eta, (self.j, IntVal(9)), (self.i, IntVal(0))),
-        #       (self.i, ci), (self.j, cj))) == False
-        #       for (ci, cj) in self.counter_examples1):
-        if any(simplify(And(ci + cj == IntVal(9), Not(substitute(exp, (self.i, ci), (self.j, cj))))) for (ci, cj) in self.counter_examples1):
+        """if any(simplify(substitute(substitute(exp, (self.j, IntVal(9)), (self.i, IntVal(0))),
+               (self.i, ci), (self.j, cj))) == False
+               for (ci, cj) in self.counter_examples1):"""
+        #if simplify(substitute(exp, (self.j, IntVal(9)), (self.i, IntVal(0)))) == False:
+
+        if any(simplify(And(ci + cj == IntVal(9),
+                            Not(substitute(exp, (self.i, ci), (self.j, cj)))))
+                            for (ci, cj) in self.counter_examples1):
             self.prune1_counter += 1
             return True
         # eta and not i < 10 => i = 10 and j = -1
         #if any(simplify(substitute(exp, (self.i, ci), (self.j, cj))) == True
         #       for (ci, cj) in self.counter_examples2):
-        if any(simplify(And(substitute(exp, (self.i, ci), (self.j, cj)), Not(ci < IntVal(10)), Not(ci + cj == IntVal(9)))) for (ci, cj) in self.counter_examples2):
+        if any(simplify(And(substitute(exp, (self.i, ci), (self.j, cj)),
+                            Not(ci < IntVal(10)),
+                            Not(ci + cj == IntVal(9)))) for (ci, cj) in self.counter_examples2):
             self.prune2_counter += 1
             return True
         # i < 10 and eta => eta[j-1/j][i+1/i]
         #if any(simplify(substitute(exp, (self.i, ci), (self.j, cj))) == True
         #       and simplify(substitute(substitute(exp, (self.j, self.j-IntVal(1)), (self.i, self.i+IntVal(1))),
         #       (self.i, ci), (self.j, cj))) for (ci, cj) in self.counter_examples3):
-        if any(simplify(And(ci < IntVal(10), substitute(exp, (self.i, ci), (self.j, cj)), Not(substitute(substitute(exp, (self.j, self.j-IntVal(1)), (self.i, self.i+IntVal(1))), (self.i, ci), (self.j, cj))))) for (ci, cj) in self.counter_examples3):
+        if any(simplify(And(ci < IntVal(10),
+                            substitute(exp, (self.i, ci), (self.j, cj)),
+                            Not(substitute(substitute(exp, (self.j, self.j-IntVal(1)), (self.i, self.i+IntVal(1))),
+                            (self.i, ci), (self.j, cj))))) for (ci, cj) in self.counter_examples3):
             self.prune3_counter += 1
             return True
+
+    def getConstituents(self, exp):
+        for c in exp.children():
+            if c.children():
+                yield from self.getConstituents(c)
+            else:
+                yield c
 
     def genesis(self, exp, limit):
         offsprings = list(self.getConstituents(exp))
