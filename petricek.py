@@ -1,3 +1,5 @@
+# TODO: either think of a way to modify substitute or dynamically generate variables
+
 """
 Synthesize a loop invariant expression for Tomas Petricek's
 example program retrieved from http://stackoverflow.com/a/3221583/2448540
@@ -364,17 +366,26 @@ class Z3:
                       self._Int1 >= self._Int2,],
         """
         self.prod = {
-            self._S:     [And(self._Bool1, self._Bool2)],
-                          #self._Int1 == self._Int2,
-                          #self._Int3 > self._Int4
-            self._Bool1: [#And(self._Bool3, self._Bool4),
-            self._Int7 < self._Int8,
-                          self._Int5 == self._Int6
-                          ],
-            self._Bool2: [#And(self._Bool5, self._Bool6),
-            self._Int9 == self._Int10,
-                          self._Int11 < self._Int12
-                          ],
+            #self._S:     [And(self._Bool1, self._Bool2)],
+            #              #self._Int1 == self._Int2,
+            #              #self._Int3 > self._Int4
+            #self._Bool1: [#And(self._Bool3, self._Bool4),
+            #               self._Int7 < self._Int8,
+            #               self._Int5 == self._Int6
+            #              ],
+            #self._Bool2: [#And(self._Bool5, self._Bool6),
+            #               self._Int9 == self._Int10,
+            #               self._Int11 < self._Int12
+            #              ],
+            self._S:     [And(self._Bool1, self._Bool2),
+                          self._Int1 == self._Int2,
+                          self._Int3 > self._Int4],
+            self._Bool1: [And(self._Bool3, self._Bool4),
+                          self._Int5 == self._Int6,
+                          self._Int7 > self._Int8],
+            self._Bool2: [And(self._Bool5, self._Bool6),
+                          self._Int9 == self._Int10,
+                          self._Int11 > self._Int12],
             self._Bool3: [And(self._Bool7, self._Bool8),
                           self._Int13 == self._Int14,
                           self._Int15 > self._Int16],
@@ -845,10 +856,12 @@ class Z3:
 
     def synthesis(self, limit):
         # iterative deepening search
-        for l in range(5, limit+1):
+        for l in range(2, limit+1):
             result = self.genesis(self._S, l)
-            print(l)
+            print("==========================")
+            print("level",l)
             self.report()
+            print("==========================")
             # eta is found
             if type(result) == BoolRef:
                 return result
@@ -873,8 +886,11 @@ class Z3:
 
 z3 = Z3()
 t = time()
-print(z3.synthesis(10))
+synthed = z3.synthesis(10)
+print("==========================")
+print("exp =", synthed)
 z3.report()
 print("time:", time()-t)
+print("==========================")
 
 #z3.test()
