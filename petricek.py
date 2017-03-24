@@ -88,6 +88,8 @@ from time import time
 
 class Z3:
     def __init__(self):
+        self.done = False
+
         NT = DeclareSort('Nonterminal')
         self._S     = Bool('S')
         self._Bool1 = Bool('Bool1')
@@ -884,13 +886,48 @@ class Z3:
         print("req 3 pruned:", z3.prune3_counter, "\n")
         return
 
+    def sub(self, exp, oldv, newv):
+        parts = exp.children()
+        if is_const(exp):
+            if exp == oldv and not self.done:
+                self.done = True
+                return newv
+            else:
+                return exp
+        elif is_and(exp):
+            return And([self.sub(parts[i], oldv, newv) for i in range(len(parts))])
+        elif is_or(exp):
+            return Or([self.sub(parts[i], oldv, newv) for i in range(len(parts))])
+        elif is_add(exp):
+            return eval('+'.join([self.sub(parts[i], oldv, newv).__str__() for i in range(len(parts))]))
+        elif is_sub(exp):
+            return eval('-'.join([self.sub(parts[i], oldv, newv).__str__() for i in range(len(parts))]))
+        elif is_le(exp):
+            return self.sub(parts[0], oldv, newv) <= self.sub(parts[1], oldv, newv)
+        elif is_lt(exp):
+            return self.sub(parts[0], oldv, newv) < self.sub(parts[1], oldv, newv)
+        elif is_eq(exp):
+            return self.sub(parts[0], oldv, newv) == self.sub(parts[1], oldv, newv)
+        else:
+            raise Exception("uncaught sub")
+
 z3 = Z3()
 t = time()
-synthed = z3.synthesis(10)
+#synthed = z3.synthesis(10)
 print("==========================")
-print("exp =", synthed)
-z3.report()
+#print("exp =", synthed)
+#z3.report()
 print("time:", time()-t)
 print("==========================")
 
 #z3.test()
+w,x,y,z,m = Bools('w x y z m')
+a,b,c,d,n = Ints('a b c d n')
+# From And(w, Or(x, b<d, a-b<=c, x, x), a+b==c-a, x)
+# To   And(w, Or(x, b<d, n-b<=c, x, x), a+b==c-a, x)
+z3.done = False
+print(z3.sub(And(w, Or(x, b<d, a-b<=c, x, x), a+b==c-a, x), a, n))
+# From And(w, Or(x, b<d, a-b<=c, x, x), a+b==c-a, x)
+# To   And(w, Or(m, b<d, a-b<=c, x, x), a+b==c-a, x)
+z3.done = False
+print(z3.sub(And(w, Or(x, b<d, a-b<=c, x, x), a+b==c-a, x), x, m))
