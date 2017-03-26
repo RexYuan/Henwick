@@ -101,7 +101,6 @@ class Z3:
         self.prod = {
             self._S:    [self._Bool],
             self._Bool: [Or(self._Bool, self._Bool),
-                         Implies(self._Bool, self._Bool),
                          self._Int > self._Int,
                          self._Int >= self._Int,
                          self._Int == self._Int,
