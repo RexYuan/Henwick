@@ -30,7 +30,7 @@ class Z3:
                          self._Int == self._Int,
                          And(self._Bool, self._Bool),
                          Or(self._Bool, self._Bool),
-                         Not(self._Bool)],
+                         Or(Not(self._Bool), self._Bool)],
             self._Int:  [self._Term,
                          self._Term * self._Term,
                          self._Term + self._Term],
