@@ -25,11 +25,12 @@ class Z3:
 
         self.prod = {
             self._S:    [self._Bool],
-            self._Bool: [And(self._Bool, self._Bool),
-                         Implies(self._Bool, self._Bool),
-                         self._Int > self._Int,
+            self._Bool: [self._Int > self._Int,
                          self._Int >= self._Int,
-                         self._Int == self._Int],
+                         self._Int == self._Int,
+                         And(self._Bool, self._Bool),
+                         Or(self._Bool, self._Bool),
+                         Not(self._Bool)],
             self._Int:  [self._Term,
                          self._Term * self._Term,
                          self._Term + self._Term],
@@ -160,6 +161,8 @@ class Z3:
                                                self.ret <= 91 + 10 * self.c)),
                                  Implies (self.ret <   90, self.c > 0))))
         print(self.checkEta(eta))
+        print(self.sub(Not(Bool('x')), Bool('x'), Bool('y')))
+        print(self.sub(Not(And(Bool('x'), Bool('x'))), Bool('x'), Bool('y'), 1))
 
     def report(self):
         # stats
@@ -187,6 +190,8 @@ class Z3:
             return And([self.subv(parts[i], oldv, newv, order) for i in range(len(parts))])
         elif is_or(exp):
             return Or([self.subv(parts[i], oldv, newv, order) for i in range(len(parts))])
+        elif is_not(exp):
+            return Not(self.subv(parts[0], oldv, newv, order))
         elif is_add(exp):
             return self.subv(parts[0], oldv, newv, order) + self.subv(parts[1], oldv, newv, order)
         elif is_sub(exp):
@@ -206,12 +211,15 @@ class Z3:
         else:
             raise Exception("uncaught sub", exp, oldv, newv, order)
 
-    def sub(self, exp, oldv, newv, order=1):
+    def sub(self, exp, oldv, newv, order=0):
         self.done = False
         self.subc = 0
         return self.subv(exp, oldv, newv, order)
 
 z3 = Z3()
+
+#z3.test()
+
 t = time()
 synthed = z3.synthesis(26)
 print("==========================")
@@ -219,5 +227,3 @@ print("exp =", synthed)
 z3.report()
 print("time:", time()-t)
 print("==========================")
-
-#z3.test()
