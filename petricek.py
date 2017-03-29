@@ -1,21 +1,3 @@
-# 1) Non terminal z3 sort
-# 2) z3 variable?
-# 3) commutative for all functions? => for greedy expansion
-#    expansion on terminus? contradict def? => for dynamic programming
-# 4) cant check semantic equivalence? (a and b) != (b and a) => for historic prune
-# 5) chatbot => cf botman
-#    user design by DFA and friendly syntax. synthesized a corresponding syntax for it
-#    stateful with remember user choice
-#    - simply macro?
-#    - what is and how to check correctness? can SMT apply?
-#    - merely state and transition code? what if theres NL...
-#    - is this more like a compiler
-# 6) whats a "good" grammar? (I = I + I | T) vs (I = I + T)
-#    and does this affect my algo?
-#    excluding not and > >=, redundancy?
-# 7) what can invariant insight do? => dynamically changing grammar order?
-# 8) is_implied? can i use Or(Not(a), b)
-
 """
 Synthesize a loop invariant expression for Tomas Petricek's
 example program retrieved from http://stackoverflow.com/a/3221583/2448540
@@ -62,39 +44,63 @@ example program retrieved from http://stackoverflow.com/a/3221583/2448540
 # 3) i < 10 and eta => eta[j-1/j][i+1/i]
 
 # Strategies:
-# 1) Prune with logical requirements for invariant.
-#   Given an expression E for eta, for any failure in checking some requirements R,
-# SMT solver Z3 would return a particular model M (valuation), that makes R, with
-# eta substituted with E, evaluate to false, when the variables in eta are
-# substituted with the corresponding concrete values in M.
-#   Thus, we can examine the form of R and devise pruning strategies from the fact
-# that M resolves much of R but the part of eta, where it can only be checked
-# after substituting with some expression E. So, with the knowledge of the form
-# of R and how everything but eta in R evaluates to under M, we need only to check
-# what E evaluates to under M to determine if R holds or not.
-#   For requirement 1), T => eta[j/9][i/0], since eta is in the concequent slot of
-# an implication, and under any valuation T evaluates to True, if eta[j/9][i/0]
-# evaluates to False under M, this should be pruned.
-#   For requirement 2), eta and not i < 10 => i = 10 and j = -1, if we know from Z3
-# that, for an expression E1 and model M, this requirement is False, we know that
-# , under M, E1 and not i < 10 evaluates to True and i = 10 and j = -1 to False.
-#   So, for an expression E2, we need only to check whether E2 evaluates to True
-# under M to decide if this should be pruned, and thus saving time asking Z3.
-#   For i < 10 and eta => eta[j-1/j][i+1/i], if i < 10 and E1 => E1[j-1/j][i+1/i]
-# evaluates to False under M, E1 must evaluates to True and E1[j-1/j][i+1/i] to
-# False, respectively, under M. So, we only need to check if E2 is True and
-# E2[j-1/j][i+1/i] is False to prune it off.
+# - Prune with logical requirements for invariant.
+#      Given an expression E for eta, for any failure in checking some requirements R,
+#    SMT solver Z3 would return a particular model M (valuation), that makes R, with
+#    eta substituted with E, evaluate to false, when the variables in eta are
+#    substituted with the corresponding concrete values in M.
+#      Thus, we can examine the form of R and devise pruning strategies from the fact
+#    that M resolves much of R but the part of eta, where it can only be checked
+#    after substituting with some expression E. So, with the knowledge of the form
+#    of R and how everything but eta in R evaluates to under M, we need only to check
+#    what E evaluates to under M to determine if R holds or not.
+#      For requirement 1), T => eta[j/9][i/0], since eta is in the concequent slot of
+#    an implication, and under any valuation T evaluates to True, if eta[j/9][i/0]
+#    evaluates to False under M, this should be pruned.
+#      For requirement 2), eta and not i < 10 => i = 10 and j = -1, if we know from Z3
+#    that, for an expression E1 and model M, this requirement is False, we know that
+#    , under M, E1 and not i < 10 evaluates to True and i = 10 and j = -1 to False.
+#      So, for an expression E2, we need only to check whether E2 evaluates to True
+#    under M to decide if this should be pruned, and thus saving time asking Z3.
+#      For i < 10 and eta => eta[j-1/j][i+1/i], if i < 10 and E1 => E1[j-1/j][i+1/i]
+#    evaluates to False under M, E1 must evaluates to True and E1[j-1/j][i+1/i] to
+#    False, respectively, under M. So, we only need to check if E2 is True and
+#    E2[j-1/j][i+1/i] is False to prune it off.
 #
-# 2) NOTE: how to Prune with semantic requirements.
-# simplify to true or false
-# 3) NOTE: Prune with history or semantic equivalence like commutativity
-# 4) NOTE: invariant insight
-# 5) NOTE: depth limited on offsprings count
+# - depth pruning prune just by saying if we're at limit of depth k
+#    every terminus expression with depth 1~k-1 are to be pruned
+#    bc if they are the target we wouldn't have made it to k
+#    NOTE: can we prune by counting B*2+terminus and check will it exceed limit?
+#
+# - how to Prune with semantic requirements.
+#    simplify to true or false => can be done by simplification
+#    (no use bc False cant be invariant and true is always an invariant)
+#    more: prune with seen equivalent expression like knowing
+#    (A and B) is the same as (B and A); or, further, if E1 and E2
+#    are equivalent then, if (E1 and B) is False, we dont need to
+#    check (E2 and B) and it's thus pruned
+#
+# - how to prune with history for dynamic programming?
+#
+# - greedy expansion => keep expanding on first nonterminal bc they'll all be
+#   the same further down the tree
+#   regardless of AST, all fo the possible concrete trees
+#   of the form of AST are completely determined by the terminus value
+#
+# - < and <= is redundant bc enumerate > and >= will also have the equivalent
+#   for Not, since Not < is >= and Not <= is > all that is left is ==
+#   we only need to add Not ==
+#   since Implies is Or(Not B, B), and we got Not, it's also redundant
+#
+# - invariant insight: invariant may be like (post and E) or (post or E)
+#
+# - depth limited on offsprings count
 
 # grammar:
 # S    ::= Bool
 # Bool ::= And(Bool, Bool) | Or(Bool, Bool) |
-#          Int > Int | Int >= Int | Int == Int
+#          Int > Int | Int >= Int |
+#          Int == Int | Not(Int == Int)
 # Int  ::= Term | Term + Term | Term - Term
 # Term ::= Cst | Var
 # Cst  ::= 9 | 11
@@ -121,7 +127,8 @@ class Z3:
                          Or(self._Bool, self._Bool),
                          self._Int > self._Int,
                          self._Int >= self._Int,
-                         self._Int == self._Int],
+                         self._Int == self._Int,
+                         Not(self._Int == self._Int)],
             self._Int:  [self._Term,
                          self._Term + self._Term,
                          self._Term - self._Term],
@@ -141,6 +148,7 @@ class Z3:
         self.history = []
 
         self.query_counter = 0
+        self.pruned_counter = 0
         self.prunes_counter = 0
         self.pruneh_counter = 0
         self.prune1_counter = 0
@@ -179,8 +187,13 @@ class Z3:
             return False
         return True
 
-    def pruned(self, exp):
+    def pruned(self, exp, depth, limit):
         """check if exp is pruned"""
+        # depth pruning
+        if depth < limit:
+            self.pruned_counter += 1
+            return True
+
         # semantic pruning:
         if simplify(exp) == True or simplify(exp) == False:
             self.prunes_counter += 1
@@ -239,7 +252,7 @@ class Z3:
         if (children and not any(c in self.prod for c in offsprings) or
             not children and exp not in self.prod):
             # pruning
-            if self.pruned(exp):
+            if self.pruned(exp, len(offsprings), limit):
                 return False
             # query SMT solver
             if self.checkEta(exp):
@@ -291,10 +304,11 @@ class Z3:
         """synthesis stats report"""
         print("==========================")
         if type(self.inv) == BoolRef:
-            print("invariant found:", self.inv)
+            print("invariant found:", self.inv, "\n")
         else:
-            print("invariant not found within depth:", self.lim)
+            print("invariant not found within depth:", self.lim, "\n")
         print("z3 queried:", z3.query_counter, "\n")
+        print("depth pruned:", z3.pruned_counter, "\n")
         print("semantics pruned:", z3.prunes_counter, "\n")
         print("history size:", len(self.history))
         print("history pruned:", z3.pruneh_counter, "\n")
