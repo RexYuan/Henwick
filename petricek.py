@@ -1,9 +1,11 @@
 # 1) Non terminal z3 sort
 # 2) z3 variable?
 # 3) commutative for all functions? => for greedy expansion
+#    expansion on terminus? contradict def? => for dynamic programming
 # 4) cant check semantic equivalence? (a and b) != (b and a) => for historic prune
 # 5) chatbot => cf botman
 #    user design by DFA and friendly syntax. synthesized a corresponding syntax for it
+#    stateful with remember user choice
 #    - simply macro?
 #    - what is and how to check correctness? can SMT apply?
 #    - merely state and transition code? what if theres NL...
@@ -179,9 +181,8 @@ class Z3:
 
     def pruned(self, exp):
         """check if exp is pruned"""
-        # semantic pruning
-        if (not any(c in self.prod for c in self.getConstituents(exp)) and
-            (simplify(exp) == True or simplify(exp) == False)):
+        # semantic pruning:
+        if simplify(exp) == True or simplify(exp) == False:
             self.prunes_counter += 1
             return True
 
