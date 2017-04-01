@@ -75,12 +75,12 @@ example program retrieved from http://stackoverflow.com/a/3221583/2448540
 # - how to Prune with semantic requirements.
 #    simplify to true or false => can be done by simplification
 #    (no use bc False cant be invariant and true is always an invariant)
-#    more: prune with seen equivalent expression like knowing
+#    NOTE: more: prune with seen equivalent expression like knowing
 #    (A and B) is the same as (B and A); or, further, if E1 and E2
 #    are equivalent then, if (E1 and B) is False, we dont need to
 #    check (E2 and B) and it's thus pruned
 #
-# - how to prune with history for dynamic programming?
+# - NOTE: how to prune with history for dynamic programming?
 #
 # - greedy expansion => keep expanding on first nonterminal bc they'll all be
 #   the same further down the tree
@@ -92,7 +92,7 @@ example program retrieved from http://stackoverflow.com/a/3221583/2448540
 #   we only need to add Not ==
 #   since Implies is Or(Not B, B), and we got Not, it's also redundant
 #
-# - invariant insight: invariant may be like (post and E) or (post or E)
+# - NOTE: invariant insight: invariant may be like (post and E) or (post or E)
 #
 # - depth limited on offsprings count
 
@@ -114,6 +114,7 @@ class Z3:
         #NT = DeclareSort('Nonterminal')
         self._S     = Bool('S')
         self._Bool  = Bool('Bool')
+        self._btBool  = Bool('btBool')
         self._Int   = Int('Int')
         self._Term  = Int('Term')
         self._Cst   = Int('Cst')
@@ -123,15 +124,63 @@ class Z3:
 
         self.prod = {
             self._S:    [self._Bool],
-            self._Bool: [And(self._Bool, self._Bool),
-                         Or(self._Bool, self._Bool),
+            #self._Bool: [And(self._Bool, self._Bool),
+            #             Or(self._Bool, self._Bool),
+            #             self._Int > self._Int,
+            #             self._Int >= self._Int,
+            #             self._Int == self._Int,
+            #             Not(self._Int == self._Int)],
+            #self._Int:  [self._Term,
+            #             self._Term + self._Term,
+            #             self._Term - self._Term],
+            self._Bool: [And(self._Int > self._Int, self._btBool),
+                         And(self._Int >= self._Int, self._beBool),
+                         And(self._Int == self._Int, self._eqBool),
+                         And(Not(self._Int == self._Int), self._neBool),
+                         Or(self._Int > self._Int, self._btBool),
+                         Or(self._Int >= self._Int, self._beBool),
+                         Or(self._Int == self._Int, self._eqBool),
+                         Or(Not(self._Int == self._Int), self._neBool),
                          self._Int > self._Int,
                          self._Int >= self._Int,
                          self._Int == self._Int,
                          Not(self._Int == self._Int)],
-            self._Int:  [self._Term,
-                         self._Term + self._Term,
-                         self._Term - self._Term],
+            self._btBool: [self._Int >= self._Int,
+                           self._Int == self._Int,
+                           Not(self._Int == self._Int)],
+            self._beBool: [self._Int > self._Int,
+                           self._Int == self._Int,
+                           Not(self._Int == self._Int)],
+            self._eqBool: [self._Int > self._Int,
+                           self._Int >= self._Int,
+                           Not(self._Int == self._Int)],
+            self._neBool: [self._Int > self._Int,
+                           self._Int >= self._Int,
+                           self._Int == self._Int],
+            self._Int:  [IntVal(9),
+                         IntVal(11),
+                         self.i,
+                         self.j,
+                         IntVal(9) + IntVal(9),
+                         IntVal(9) + IntVal(11),
+                         IntVal(9) + self.i,
+                         IntVal(9) + self.j,
+                         IntVal(11) + IntVal(11),
+                         IntVal(11) + self.i,
+                         IntVal(11) + self.j,
+                         self.i + self.i,
+                         self.i + self.j,
+                         self.j + self.j,
+                         IntVal(9) - IntVal(9),
+                         IntVal(9) - IntVal(11),
+                         IntVal(9) - self.i,
+                         IntVal(9) - self.j,
+                         IntVal(11) - IntVal(11),
+                         IntVal(11) - self.i,
+                         IntVal(11) - self.j,
+                         self.i - self.i,
+                         self.i - self.j,
+                         self.j - self.j],
             self._Term: [self._Cst,
                          self._Var],
             self._Cst:  [IntVal(9),
@@ -247,6 +296,7 @@ class Z3:
            (len(offsprings) == limit and any(c == self._Bool for c in offsprings)) or
            sum(2 if c == self._Bool else 1 for c in offsprings) > limit):
             return False
+        print(exp)
         # recursion base: if expression has children and they're all termini or
         #                    expression has no child and is a terminus
         if (children and not any(c in self.prod for c in offsprings) or
@@ -287,7 +337,7 @@ class Z3:
         self.lim = limit
         self.inv = None
         # iterative deepening search
-        for l in range(1, limit+1):
+        for l in range(5, limit+1):
             result = self.genesis(self._S, l)
             # eta is found
             if type(result) == BoolRef:
@@ -298,6 +348,8 @@ class Z3:
     def test(self):
         print(self.checkEta(self.i+self.j==IntVal(9)))
         print(self.checkEta(And(self.i+self.j==IntVal(9), self.i < IntVal(11))))
+        print(self.checkEta(And(11 > self.i, 9 == self.i + self.j)))
+
         return
 
     def report(self):
@@ -312,7 +364,7 @@ class Z3:
         print("semantics pruned:", z3.prunes_counter, "\n")
         print("history size:", len(self.history))
         print("history pruned:", z3.pruneh_counter, "\n")
-        print("ce 1 size:", len(self.counter_examples1))
+        print("ce 1 size:", "N/A")
         print("req 1 pruned:", z3.prune1_counter, "\n")
         print("ce 2 size:", len(self.counter_examples2))
         print("req 2 pruned:", z3.prune2_counter, "\n")
@@ -394,6 +446,6 @@ z3 = Z3()
 t = time()
 
 z3.synthesis(10)
-z3.report()
+#z3.report()
 
 #z3.test()
