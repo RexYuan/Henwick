@@ -115,6 +115,9 @@ class Z3:
         self._S     = Bool('S')
         self._Bool  = Bool('Bool')
         self._btBool  = Bool('btBool')
+        self._beBool  = Bool('beBool')
+        self._eqBool  = Bool('eqBool')
+        self._neBool  = Bool('neBool')
         self._Int   = Int('Int')
         self._Term  = Int('Term')
         self._Cst   = Int('Cst')
@@ -446,6 +449,6 @@ z3 = Z3()
 t = time()
 
 z3.synthesis(10)
-#z3.report()
+z3.report()
 
 #z3.test()
