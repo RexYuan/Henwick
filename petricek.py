@@ -1,3 +1,5 @@
+# TODO: dynamic programming on rule expansion and size
+
 """
 Synthesize a loop invariant expression for Tomas Petricek's
 example program retrieved from http://stackoverflow.com/a/3221583/2448540
