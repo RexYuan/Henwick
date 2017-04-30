@@ -168,10 +168,12 @@ class Z3:
             t = time()
             if self.genesis(size):
                 print(time()-t0, 'total')
-
+                return True
             print(time()-t, 'size', size, 'done')
+            print('int_sub_expr size:', len(self.int_sub_expr[size]))
+            print('bool_sub_expr size:', len(self.bool_sub_expr[size]))
+        return False
 
 z3 = Z3()
 
 z3.synthesis(10)
-#print(z3.isValid(Bool('a')==Bool('b'))==True)
