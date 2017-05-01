@@ -24,6 +24,6 @@ start = 'q0'
 accepting = {'q0'}
 T0 = Teacher(DFA(states, symbols, transitions, start, accepting))
 L0 = Learner(T0)
-print(L0.table)
 
-print(L0.get_acceptor())
+L0.go()
+print(T0.U.eq(L0.result))
