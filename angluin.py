@@ -26,7 +26,7 @@ class Learner:
     def __init__(self, teacher):
         self.teacher = teacher
         #self.alphabet = set(teacher.U.symbols)
-        self.alphabet = {'0','1'}
+        self.alphabet = {'0','1','2'}
         # observation table
         self.table = {
             'S': {''},

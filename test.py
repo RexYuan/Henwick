@@ -43,6 +43,8 @@ class Stoplight:
         if t == '0' and self.light == 'g':
             self.light = 'r'
         elif t == '1' and self.light == 'r':
+            self.light = 'y'
+        elif t == '2' and self.light == 'y':
             self.light = 'g'
         else:
             self.light = 'd'
@@ -61,7 +63,48 @@ class EvidenceTeacher:
         return tmp
     def equiv(self, M):
         # NOTE: how do i get this?
-        tests = ['0', '1', '00', '01','10','11']
+        tests = [
+            '000',
+            '001',
+            '002',
+            '010',
+            '011',
+            '012',
+            '020',
+            '021',
+            '022',
+            '100',
+            '101',
+            '102',
+            '110',
+            '111',
+            '112',
+            '120',
+            '121',
+            '122',
+            '200',
+            '201',
+            '202',
+            '210',
+            '211',
+            '212',
+            '220',
+            '221',
+            '222',
+            '00',
+            '01',
+            '02',
+            '10',
+            '11',
+            '12',
+            '20',
+            '21',
+            '22',
+            '0',
+            '1',
+            '2'
+        ]
+
         for t in tests:
             if not (self.member(t) == M.member(t)):
                 self.counter = t
@@ -72,6 +115,44 @@ class EvidenceTeacher:
 I = Stoplight()
 T = EvidenceTeacher(I)
 #print(T.member('00'))
+L = Learner(T)
+L.go()
+print(L)
+
+class Even01:
+    def __init__(self):
+        self.ones = 0
+        self.zeros = 0
+    def take(self,a):
+        if a == '0':
+            self.zeros += 1
+        elif a == '1':
+            self.ones += 1
+    def good(self):
+        return self.ones % 2 == 0 and self.zeros % 2 == 0
+    def reset(self):
+        self.ones = 0
+        self.zeros = 0
+class EvidenceTeacher:
+    def __init__(self, even):
+        self.even = even
+    def member(self, w):
+        for a in w:
+            self.even.take(a)
+        tmp = self.even.good()
+        self.even.reset()
+        return tmp
+    def equiv(self, M):
+        # what
+        tests = ['0', '1', '00', '01', '10', '11']
+
+        for t in tests:
+            if not (self.member(t) == M.member(t)):
+                self.counter = t
+                return False
+        return True
+E = Even01()
+T = EvidenceTeacher(E)
 L = Learner(T)
 L.go()
 print(L)
