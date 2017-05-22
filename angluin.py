@@ -25,15 +25,19 @@ class Teacher:
 class Learner:
     def __init__(self, teacher):
         self.teacher = teacher
-        self.alphabet = set(teacher.U.symbols)
+        #self.alphabet = set(teacher.U.symbols)
+        self.alphabet = {'0','1'}
         # observation table
         self.table = {
             'S': {''},
             'E': {''},
             'T': {t: self.teacher.member(t) for t in {''} | self.alphabet}
         }
+        self.result = None
     def __str__(self):
-        return self.result.__str__()
+        if self.result:
+            return self.result.__str__()
+        raise Exception('go first')
     def row(self, s):
         return ''.join(str(int(self.teacher.member(s + e))) for e in self.table['E'])
     def step(self):

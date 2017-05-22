@@ -1,131 +1,77 @@
 from angluin import *
 
-# even number of 1s and 0s
+'''
+trace_target = ['1', '2', '3']
+trace1 = ['1', '4', '2', '6', '3']
+trace2 = ['7', '1', '2', '6', '7', '3']
+trace3 = ['4', '6', '5', '1', '2', '3']
+traces = ['123','1423','1423','4123','14263', '712673', '465123']
+
+class EvidenceTeacher:
+    def __init__(self):
+        pass
+    def member(self, w):
+        return w in traces
+    def equiv(self, M):
+        for w in traces:
+            if not M.member(w):
+                self.counter = w
+                return False
+        return True
+
 states = {'q0','q1','q2','q3'}
-symbols = {'0', '1'}
+symbols = {'1','2','3','4','5','6','7','8'}
 transitions = {
     'q0': {
-        '0': 'q2',
         '1': 'q1'
     },
     'q1': {
-        '0': 'q3',
-        '1': 'q0'
+        '2': 'q2'
     },
     'q2': {
-        '0': 'q0',
-        '1': 'q3'
-    },
-    'q3': {
-        '0': 'q1',
-        '1': 'q2'
+        '3': 'q3'
     }
 }
 start = 'q0'
-accepting = {'q0'}
-T = Teacher(DFA(states, symbols, transitions, start, accepting))
+accepting = {'q3'}
+'''
+
+class Stoplight:
+    def __init__(self):
+        self.light = 'r'
+    def tick(self,t):
+        if t == '0' and self.light == 'g':
+            self.light = 'r'
+        elif t == '1' and self.light == 'r':
+            self.light = 'g'
+        else:
+            self.light = 'd'
+    def alive(self):
+        return self.light != 'd'
+    def reset(self):
+        self.light = 'r'
+class EvidenceTeacher:
+    def __init__(self, stoplight):
+        self.stoplight = stoplight
+    def member(self, w):
+        for a in w:
+            self.stoplight.tick(a)
+        tmp = self.stoplight.alive()
+        self.stoplight.reset()
+        return tmp
+    def equiv(self, M):
+        # NOTE: how do i get this?
+        tests = ['0', '1', '00', '01','10','11']
+        for t in tests:
+            if not (self.member(t) == M.member(t)):
+                self.counter = t
+                return False
+        return True
+
+#T = Teacher(DFA(states, symbols, transitions, start, accepting))
+I = Stoplight()
+T = EvidenceTeacher(I)
+#print(T.member('00'))
 L = Learner(T)
-
 L.go()
-print('minimized? ===> ',len(T.U.minimize().states) == len(L.result.states),'\n')
-
-# contains substring 11
-states = {'init','seen1','done'}
-symbols = {'0', '1'}
-transitions = {
-    'init': {
-        '0': 'init',
-        '1': 'seen1'
-    },
-    'seen1': {
-        '0': 'init',
-        '1': 'done'
-    },
-    'done': {
-        '0': 'done',
-        '1': 'done'
-    }
-}
-start = 'init'
-accepting = {'done'}
-T = Teacher(DFA(states, symbols, transitions, start, accepting))
-L = Learner(T)
-
-L.go()
-print('minimized? ===> ',len(T.U.minimize().states) == len(L.result.states),'\n')
-
-states = {'A','B','C','D','E','F','G','H'}
-symbols = {'0', '1'}
-transitions = {
-    'A': {
-        '0': 'B',
-        '1': 'F'
-    },
-    'B': {
-        '0': 'G',
-        '1': 'C'
-    },
-    'C': {
-        '0': 'A',
-        '1': 'C'
-    },
-    'D': {
-        '0': 'C',
-        '1': 'G'
-    },
-    'E': {
-        '0': 'H',
-        '1': 'F'
-    },
-    'F': {
-        '0': 'C',
-        '1': 'G'
-    },
-    'G': {
-        '0': 'G',
-        '1': 'E'
-    },
-    'H': {
-        '0': 'G',
-        '1': 'C'
-    }
-}
-start = 'A'
-accepting = {'C'}
-T = Teacher(DFA(states, symbols, transitions, start, accepting))
-L = Learner(T)
-
-L.go()
-print('minimized? ===> ',len(T.U.minimize().states) == len(L.result.states),'\n')
-
-states = {'A','B','C','D','E'}
-symbols = {'0', '1'}
-transitions = {
-    'A': {
-        '0': 'A',
-        '1': 'B'
-    },
-    'B': {
-        '0': 'A',
-        '1': 'B'
-    },
-    'C': {
-        '0': 'D',
-        '1': 'E'
-    },
-    'D': {
-        '0': 'D',
-        '1': 'E'
-    },
-    'E': {
-        '0': 'C',
-        '1': 'E'
-    }
-}
-start = 'E'
-accepting = {'A', 'C', 'D'}
-T = Teacher(DFA(states, symbols, transitions, start, accepting))
-L = Learner(T)
-
-L.go()
-print('minimized? ===> ',len(T.U.minimize().states) == len(L.result.states),'\n')
+print(L)
