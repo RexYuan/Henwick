@@ -32,6 +32,8 @@ class Learner:
             'E': {''},
             'T': {t: self.teacher.member(t) for t in {''} | self.alphabet}
         }
+    def __str__(self):
+        return self.result.__str__()
     def row(self, s):
         return ''.join(str(int(self.teacher.member(s + e))) for e in self.table['E'])
     def step(self):
@@ -72,10 +74,10 @@ class Learner:
     def go(self):
         print('starting...')
         c = 1
-        print('\nattempt:',c)
+        print('attempt:',c)
         while not self.step():
             c+=1
-            print('\nattempt:',c)
+            print('attempt:',c)
     def is_consistent(self):
         '''
         return is observation table consistent
