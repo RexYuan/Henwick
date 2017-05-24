@@ -8,6 +8,8 @@ class Teacher:
         if type(U) != DFA:
             raise Exception('target U must be DFA')
         self.U = U
+    def get_alphabet(self):
+        return set(self.U.symbols)
     def __str__(self):
         return self.U.__str__()
     def member(self, w):
@@ -25,8 +27,7 @@ class Teacher:
 class Learner:
     def __init__(self, teacher):
         self.teacher = teacher
-        #self.alphabet = set(teacher.U.symbols)
-        self.alphabet = {'0','1','2'}
+        self.alphabet = teacher.get_alphabet()
         # observation table
         self.table = {
             'S': {''},
@@ -40,7 +41,7 @@ class Learner:
         raise Exception('go first')
     def row(self, s):
         return ''.join(str(int(self.teacher.member(s + e))) for e in self.table['E'])
-    def step(self):
+    def step(self, debug):
         # update T per S and E
         def extend():
             # TODO: optimize
@@ -53,13 +54,15 @@ class Learner:
             # add found a.e to E and extend T
             self.table['E'] |= {self.counter}
             extend()
-            print('inconsistent, add to E:', self.counter)
+            if debug:
+                print('inconsistent, add to E:', self.counter)
             return False
         if not self.is_closed():
             # add found s.a to S and extend T
             self.table['S'] |= {self.counter}
             extend()
-            print('unclosed, add to S:', self.counter)
+            if debug:
+                print('unclosed, add to S:', self.counter)
             return False
         if self.is_consistent() and self.is_closed():
             # make conjecture
@@ -67,21 +70,25 @@ class Learner:
                 # add found counter example and its prefixes to S and extend T
                 self.table['S'] |= {self.teacher.counter[:i+1] for i in range(len(self.teacher.counter))}
                 extend()
-                print('conjecture inequivalent, add to S:', self.teacher.counter)
+                if debug:
+                    print('conjecture inequivalent, add to S:', self.teacher.counter)
                 return False
             else:
                 # found it!
-                print('done')
+                if debug:
+                    print('done')
                 self.result = self.get_acceptor()
                 return True
         raise Exception()
-    def go(self):
-        print('starting...')
+    def go(self, debug=False):
         c = 1
-        print('attempt:',c)
-        while not self.step():
-            c+=1
+        if debug:
+            print('starting...')
             print('attempt:',c)
+        while not self.step(debug):
+            c+=1
+            if debug:
+                print('attempt:',c)
     def is_consistent(self):
         '''
         return is observation table consistent
