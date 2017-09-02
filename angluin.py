@@ -1,25 +1,43 @@
+# TODO: make all strings represented as tuples of symbols
+# 1) modify fsm
+# 2) modify this
+
 from functools import partial
 import sys
-sys.path.append('/Users/Rex/Namara')
-from dfa import *
+import fsm
+
+def concat(*tps):
+    tmp = tuple()
+    for t in tps:
+        assert(type(t)==tuple)
+        for e in t:
+            tmp += (e,) if e!='' else ()
+    return tmp if tmp!=() else ('',)
 
 class Teacher:
-    def __init__(self, U):
-        if type(U) != DFA:
-            raise Exception('target U must be DFA')
-        self.U = U
+    def __init__(self, M):
+        if type(M) != fsm.DFA and type(M) != fsm.Moore:
+            print(type(M))
+            raise Exception('M must be DFA or Moore')
+        self.M = M
     def get_alphabet(self):
-        return set(self.U.symbols)
+        if type(self.M) == fsm.DFA:
+            return set(self.M.symbols)
+        elif type(self.M) == fsm.Moore:
+            return set(self.M.input)
     def __str__(self):
-        return self.U.__str__()
+        return self.M.__str__()
     def member(self, w):
-        if type(w) != str:
-            raise Exception('w must be str')
-        return self.U.member(w)
-    def equiv(self, M):
-        if type(M) != DFA:
-            raise Exception('conjecture M must be DFA')
-        ret = self.U.eq(M)
+        if type(w) != tuple:
+            raise Exception('w must be str tuple')
+        if type(self.M) == fsm.DFA:
+            return 'T' if w in self.M else 'F'
+        elif type(self.M) == fsm.Moore:
+            return self.M[w]
+    def equiv(self, H):
+        if type(H) != type(self.M):
+            raise Exception('conjecture H must match M')
+        ret = self.M == H
         if ret != True:
             self.counter = ret
             return False
@@ -30,9 +48,9 @@ class Learner:
         self.alphabet = teacher.get_alphabet()
         # observation table
         self.table = {
-            'S': {''},
-            'E': {''},
-            'T': {t: self.teacher.member(t) for t in {''} | self.alphabet}
+            'S': {('',)},
+            'E': {('',)},
+            'T': {(t,): self.teacher.member((t,)) for t in self.alphabet | {''}}
         }
         self.result = None
     def __str__(self):
@@ -40,16 +58,18 @@ class Learner:
             return self.result.__str__()
         raise Exception('go first')
     def row(self, s):
-        return ''.join(str(int(self.teacher.member(s + e))) for e in self.table['E'])
+        if type(s) != tuple:
+            raise Exception('s must be str tuple')
+        return ''.join([self.teacher.member(concat(s,e)) for e in self.table['E']])
     def step(self, debug):
         # update T per S and E
         def extend():
             # TODO: optimize
             for s in self.table['S']:
-                for a in self.alphabet | {''}:
+                for a in self.alphabet:
                     for e in self.table['E']:
-                        if s+a+e not in self.table['T']:
-                            self.table['T'][s+a+e] = self.teacher.member(s+a+e)
+                        if concat(s,(a,),e) not in self.table['T']:
+                            self.table['T'][concat(s,(a,),e)] = self.teacher.member(concat(s,(a,),e))
         if not self.is_consistent():
             # add found a.e to E and extend T
             self.table['E'] |= {self.counter}
@@ -100,9 +120,9 @@ class Learner:
         for s1, s2 in [(s1, s2) for s1 in self.table['S'] for s2 in self.table['S'] if s1 != s2 and self.row(s1) == self.row(s2)]:
             for a in self.alphabet:
                 for e in self.table['E']:
-                    if self.teacher.member(s1+a+e) != self.teacher.member(s2+a+e):
+                    if self.teacher.member(concat(s1,(a,),e)) != self.teacher.member(concat(s2,(a,),e)):
                         # not consistent
-                        self.counter = a+e
+                        self.counter = concat((a,),e)
                         return False
         return True
     def is_closed(self):
@@ -115,9 +135,9 @@ class Learner:
         '''
         for s in self.table['S']:
             for a in self.alphabet:
-                if self.row(s+a) not in [self.row(s) for s in self.table['S']]:
+                if self.row(concat(s,(a,))) not in [self.row(s) for s in self.table['S']]:
                     # not closed
-                    self.counter = s+a
+                    self.counter = concat(s,(a,))
                     return False
         return True
     def get_acceptor(self):
@@ -132,13 +152,24 @@ class Learner:
             start = row('')
             accepting = {row(s) for all s of S if T(s) = 1}
         '''
-        states = {self.row(s) for s in self.table['S']}
-        symbols = set(self.alphabet)
-        transitions = {
-            self.row(s): {
-                a: self.row(s+a) for a in self.alphabet # NOTE: WTF why s+a need not be in S? it may not be a state!
-            } for s in self.table['S']
-        }
-        start = self.row('')
-        accepting = {self.row(s) for s in self.table['S'] if self.table['T'][s]}
-        return DFA(states, symbols, transitions, start, accepting)
+        if type(self.teacher.M) == fsm.DFA:
+            transitions = {
+                self.row(s): {
+                    a: self.row(concat(s,(a,))) for a in self.alphabet
+                } for s in self.table['S']
+            }
+            start = self.row(('',))
+            finals = {self.row(s) for s in self.table['S'] if self.table['T'][s] == 'T'}
+            return fsm.DFA(transitions, start, finals)
+        elif type(self.teacher.M) == fsm.Moore:
+            transitions = {
+                self.row(s): {
+                    a: self.row(concat(s,(a,))) for a in self.alphabet
+                } for s in self.table['S']
+            }
+            start = self.row(('',))
+            finals = {self.row(s) for s in self.table['S'] if self.table['T'][s]}
+            outputs = {
+                self.row(s): self.table['T'][s] for s in self.table['S']
+            }
+            return fsm.Moore(transitions, start, outputs)
