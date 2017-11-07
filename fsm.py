@@ -1,6 +1,23 @@
 from functools import reduce
 from itertools import product
 
+def rename(M):
+    '''
+    returns an automaton isomorphic to M with states renamed as indices
+    '''
+    if type(M) != DFA:
+        raise Exception('not implemented')
+    rename_tab = {p: str(n) for n, p in enumerate(M.states)}
+    transitions = {
+        rename_tab[p]: {
+            a: rename_tab[M.transitions[p][a]] for a in M.symbols
+        } for p in M.states
+    }
+    start = rename_tab[M.start]
+    finals = {rename_tab[p] for p in M.finals}
+    M = DFA(transitions, start, finals, True)
+    return M
+
 class FSM:
     '''
     finite state machine base
@@ -79,6 +96,7 @@ class FSM:
         for p in self.transitions:
             for a in self.transitions[p]:
                 tmp+='    ('+p+', '+a+') = '+self.transitions[p][a]+'\n'
+            tmp+='\n'
         tmp+='start: '+self.start+'\n'
         return tmp.rstrip()
     def walk(self, w, verbose=False):
@@ -175,7 +193,7 @@ class DFA:
         '''
         def print_table():
             # TODO: handle state name with variable length
-            print('not implemented')
+            raise Exception('not implemented')
         s_pairs = set(product(self.states, repeat=2))
         table = {p1: {p2: False for p2 in self.states} for p1 in self.states}
         # pairs of distinguishable states
@@ -195,7 +213,7 @@ class DFA:
         while ps_quene:
             p1, p2 = ps_quene.pop()
             # if r, s are distinguishable and d(p,a)=r, d(q,a)=s, then p, q are distinguishable
-            # TODO: optimize with converse lookup
+            # TODO: optimize with reverse lookup
             for q1, q2 in s_pairs:
                 for a in self.symbols:
                     if self.transitions[q1][a] == p1 and self.transitions[q2][a] == p2:
@@ -362,7 +380,7 @@ class Moore:
         '''
         def print_table():
             # TODO: handle state name with variable length
-            print('not implemented')
+            raise Exception('not implemented')
         s_pairs = set(product(self.states, repeat=2))
         table = {p1: {p2: False for p2 in self.states} for p1 in self.states}
         # pairs of distinguishable states

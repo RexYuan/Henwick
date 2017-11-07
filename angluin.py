@@ -57,6 +57,8 @@ class Learner:
         if self.result:
             return self.result.__str__()
         raise Exception('go first')
+    def _print_table(self):
+        pass
     def row(self, s):
         if type(s) != tuple:
             raise Exception('s must be str tuple')
@@ -104,11 +106,13 @@ class Learner:
         c = 1
         if debug:
             print('starting...')
-            print('attempt:',c)
+            print('----- attempt:',c,' -----')
+            self._print_table()
         while not self.step(debug):
             c+=1
             if debug:
-                print('attempt:',c)
+                print('\n----- attempt:',c,' -----')
+                self._print_table()
     def is_consistent(self):
         '''
         return is observation table consistent
