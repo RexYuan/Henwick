@@ -1,0 +1,29 @@
+SSHClient.connect -> Transport.start_client -> Transport.run
+    -> Packetizer.start_handshake
+    -> Transport._send_kex_init -> Packetizer.send_message(Message.add_byte -> BytesIO.write) -> Packetizer.write_all -> socket.send
+    -> Transport._expect_packet(MSG_KEXINIT)
+    loop:
+        -> Packetizer.read_message -> Packetizer.read_all
+        if received = MSG_IGNORE
+            -> continue
+        elif received = MSG_DISCONNECT
+            -> Transport._parse_disconnect
+        elif received = MSG_DEBUG
+            -> Transport._parse_debug
+        elif expecting_packet
+            if received != expected
+                -> raise SSHException
+            else
+                -> clear expecting_packet
+            if 30 <= received <= 41
+                -> Transport.kex_engine.parse_next
+        else
+            if exists handler for received
+                -> call handler
+            elif exists channel handler for received
+                -> ?
+            elif exists auth handler for received
+                -> call handler
+            else
+                -> Transport._send_message( Message(cMSG_UNIMPLEMENTED, seqno) )
+        -> Packetizer.complete_handshake
