@@ -1,0 +1,222 @@
+# Z.120 Main Text: Basic MSC Concrete Textual Grammar
+
+    <message sequence chart> ::= [<virtuality>] msc <msc head> { <msc> | <hmsc> } endmsc <end>
+
+    <msc> ::= <msc body>
+
+    <msc head> ::= <msc name>[<msc parameter decl>] [ <time offset> ] <end> [ <msc inst interface> ] <msc gate interface>
+
+    <msc parameter decl> ::= <left open> <msc parm decl list> <right open>
+
+    <msc parm decl list> ::= <msc parm decl block> [ <end> <msc parm decl list> ]
+
+    <msc parm decl block> ::= <data parameter decl>
+                            | <instance parameter decl>
+                            | <message parameter decl>
+                            | <timer parameter decl>
+
+    <instance parameter decl> ::= inst <instance parm decl list>
+
+    <instance parm decl list> ::= <instance parameter name> [: <instance kind>] [, <instance parm decl list>]
+
+    <instance parameter name> ::= <instance name>
+
+    <message parameter decl> ::= msg <message parm decl list>
+
+    <message parm decl list> ::= <message decl list>
+
+    <timer parameter decl> ::= timer <timer parm decl list>
+
+    <timer parm decl list> ::= <timer decl list>
+
+    <msc inst interface> ::= <containing clause>
+
+    <instance kind> ::= [ <kind denominator> ] <identifier>
+
+    <kind denominator> ::= <name>
+
+    <msc gate interface> ::= <msc gate def>*
+
+    <msc gate def> ::= gate { <msg gate>
+                            | <method call gate>
+                            | <reply gate>
+                            | <create gate>
+                            | <order gate> } <end>
+
+    <msg gate> ::= <def in gate>
+                 | <def out gate>
+
+    <method call gate> ::= <def out call gate>
+                         | <def in call gate>
+
+    <reply gate> ::= <def out reply gate>
+                   | <def in reply gate>
+
+    <create gate> ::= <def create in gate>
+                    | <def create out gate>
+
+    <order gate> ::= <def order in gate>
+                   | <def order out gate>
+
+    <msc body> ::= <msc statement>*
+                 | <instance decl statement>*
+
+    <msc statement> ::= <text definition>
+                      | <event definition>
+
+    <event definition> ::= <instance name> : <instance event list>
+                         | <instance name list> : <multi instance event list>
+
+    <instance event list> ::= <start method> <instance event>* <end method>
+                            | <start suspension> <instance event>* <end suspension>
+                            | <start coregion> <instance event>* <end coregion>
+                            | <instance head statement> <instance event>* { <instance end statement> | <stop> }
+
+    <instance decl statement> ::= <instance head statement> { <orderable event>
+                                                            | <non orderable event> }* { <instance end statement>
+                                                                                       | <stop> }
+
+    <instance event> ::= <orderable event>
+                       | <non orderable event>
+
+    <orderable event> ::= [ label <event name> <end>] { <message event>
+                                                      | <incomplete message event>
+                                                      | <method call event>
+                                                      | <incomplete method call event>
+                                                      | <create>
+                                                      | <timer statement>
+                                                      | <action> } [ before <order dest list> ] [ after <order dest list> ] <end> [ time <time dest list> <end> ]
+
+    <order dest list> ::= <order dest> [ , <order dest list> ]
+
+    <time dest list> ::= [<time dest> [ origin ] ] <time interval> [ , <time dest list> ]
+
+    <time dest> ::= <event name>
+                  | { top
+                    | bottom } { <reference identification>
+                               | <label name> }
+
+    <non orderable event> ::= <shared condition>
+                            | <shared msc reference>
+                            | <shared inline expr>
+
+    <instance name list> ::= <instance name> { , <instance name> }*
+                           | all
+
+    <multi instance event list> ::= <multi instance event>+
+
+    <multi instance event> ::= <condition>
+                             | <msc reference>
+                             | <inline expr>
+
+# Z.120 Annex B: Basic MSC
+A Basic Message Sequence Chart concentrates on communications and local actions
+only.
+
+The body of a Basic Message Sequence Chart is formed by a finite collection of
+instances. An instance is an abstract entity on which message outputs, message
+inputs and local actions may be specified. With every instance an instance name
+is associated. Instances are referred to by means of the instance name.
+Therefore, the instance name must be unique within an MSC. A local action
+describes internal activity of an instance. The action character string is an
+informal description for this internal activity. With every message a message
+name is associated.
+
+## Intuitive semantics
+An MSC is intended to describe a number of executions of the events contained.
+These events can be local actions, message outputs and message inputs. An MSC
+does not only describe the events to be executed, it also contains information
+on the order in which they can be executed. One of the basic assumptions is
+that all events are executed instantaneously, i.e., it is assumed that the
+execution of an event consumes no time. Another important assumption is that no
+two events can be executed at the same time.
+
+As explained before, an MSC consists of a number of instances on which events
+are specified. The meaning of such an instance is that it executes the events
+specified in the same order as they are given on the vertical axis from top to
+bottom. Thus one can say that the time along each instance axis is running from
+top to bottom. Therefore, the events specified on an instance are totally
+ordered in time. Although an instance describes the execution of events while
+time progresses, the instance does not specify the elapse of time in between
+two consecutive events. It might be the case that the first event is executed
+at 5 minutes and that the second event is executed at 25 minutes.
+
+The instances of an MSC in principle operate independently of each other. No
+global notion of time is assumed. The only dependencies between the timing of
+the instances come from the restriction that a message must be sent before it
+is received. The execution of a local action is only restricted by the ordering
+of events on the instance it is defined on. Another consequence of this mode of
+communication is that overtaking of messages is allowed.
+
+It is not allowed that a message output is causally depending on its
+corresponding message input, directly or via other messages. This is the case
+if the temporal ordering of the events imposed by the Basic Message Sequence
+Chart specifies that a message input is executed before its corresponding
+message output. Such MSCs are often called inconsistent.
+
+## Textual representation
+Although the application of Message Sequence Charts is mainly focussed on the
+graphical representation, they have a concrete textual syntax. This
+representation was originally intended for exchanging Message Sequence Charts
+between computer tools only, but in this annex it is used for the definition of
+the semantics.
+
+With respect to the textual description the language MSC offers two principal
+means to describe MSCs. First of all an MSC can be described by giving the
+behavior of all its instances in isolation. This way of describing an MSC is
+called instance-oriented and has been incorporated in the language from the
+beginning. With the appearance of the main text of this Recommendation also
+another way of representing MSCs has been incorporated: the so-called
+event-oriented description. With the event-oriented descriptions just a list of
+events is given, for example as they are expected to occur in a trace of the
+system or as they are encountered while scanning the MSC from top-to-bottom.
+Besides these two ways of describing an MSC there is also the possibility to
+describe an MSC by mixing these two descriptions. In this annex the
+event-oriented textual syntax is used for the definition of a formal semantics.
+
+The textual representation of an MSC consists of the keywords msc and endmsc
+and in between those an msc name and an msc body. The MSC body is defined
+differently for the three previously mentioned description styles.
+
+In the event-oriented syntax an MSC body consists of a list of event
+definitions. An event definition is an instance name followed by an instance
+event. Instance events are message events and local actions.
+
+Textually a message event is described by a message output event and a message
+input event. If m is a message that is sent from instance i to instance j,
+textually the corresponding message output event is denoted by "i : out m to j"
+and the message input event by "j : in m from i". In the textual representation
+a message output event and a message input event are corresponding iff
+    1) the events have the same message name;
+    2) the instance on which the message output event is specified is the same as
+       the instance indicated by the output address of the message input event;
+    3) the instance on which the message input event is specified is the same as
+       the instance indicated by the input address of the message output event.
+
+A natural requirement on the textual representation of MSCs is that for every
+message output event there is at most one corresponding message input event,
+and vice versa, for every message input event there is at most one message
+output event. As no dangling message output arrows and message input arrows are
+allowed, another natural requirement is that for every message output (input)
+there is at least one corresponding message input (output). Note that for
+messages that are sent to the environment or that are received from the
+environment this requirement does not have to be satisfied.
+
+A local action is denoted by the keyword action followed by an action character
+string.
+
+msc example1;
+i1 : out m0 to env;
+i1 : out m1 to i2;
+i2 : in m1 from i1;
+i2 : out m2 to i3;
+i3 : in m2 from i2;
+i3 : out m3 to i4;
+i4 : in m3 from i3;
+i2 : action a;
+i2 : out m4 to i1;
+i1 : in m4 from i2;
+endmsc;
+
+The textual syntax of MSC is presented in Recommendation Z.120. For the
+definition of the semantics a simplified version of the textual syntax is used.

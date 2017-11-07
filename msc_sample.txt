@@ -1,0 +1,12 @@
+msc example1;
+i1 : out m0 to env;
+i1 : out m1 to i2;
+i2 : in m1 from i1;
+i2 : out m2 to i3;
+i3 : in m2 from i2;
+i3 : out m3 to i4;
+i4 : in m3 from i3;
+i2 : action a;
+i2 : out m4 to i1;
+i1 : in m4 from i2;
+endmsc;

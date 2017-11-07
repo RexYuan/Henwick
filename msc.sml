@@ -31,7 +31,7 @@ exception NodeNotInGraph
 exception NodeAlreadyInCut
 
 (* given a node n and a cut c in a graph of vertices vs, check if the cut property
-   holds after adding n to c : forall e in c forall e' e' < e -> e' in c *)
+   holds after adding n to c : forall e and e' in c, e' < e -> e' in c *)
 fun safe_node vs c n =
     let
         fun vertex_helper (vs,n) =
@@ -46,3 +46,5 @@ fun safe_node vs c n =
         then raise NodeAlreadyInCut
         else List.all (fn n' => List.exists (fn n'' => n''=n') c) ns
     end
+
+(* TODO: use TextIO.openIn and TextIO.inputLine to read in msc_sample.txt *)
