@@ -13,6 +13,12 @@ POSET AXIOMS
 A) forall k, forall x != y, -(kxy & kyx)
 B) forall k, forall x != y, kxy => forall z != [x,y], -(kxz & kzy)
 
+kxz => -(kxy & kyz)
+kxy & kyz => -kxz
+
+ca ab
+cb
+
 POSET COVER CONSTRAINTS
 given linear extension w = (u1)(u2)(u3)...(un),
 Lw) exists k, forall (ui)(ui+1) where 1<=i<n, k(ui)(ui+1) | (-k(ui)(ui+1) & -k(ui+1)(ui))
@@ -132,17 +138,23 @@ for i in range(H):
             atm[str(i+1)+x+y] = Variable(str(i+1)+x+y)
 
 axA= (-(atm['1ab'] & atm['1ba']) &
-   -(atm['1ac'] & atm['1ca']) &
-   -(atm['1bc'] & atm['1cb']) &
-   -(atm['2ab'] & atm['2ba']) &
-   -(atm['2ac'] & atm['2ca']) &
-   -(atm['2bc'] & atm['2cb']))
+      -(atm['1ac'] & atm['1ca']) &
+      -(atm['1bc'] & atm['1cb']) &
+      -(atm['2ab'] & atm['2ba']) &
+      -(atm['2ac'] & atm['2ca']) &
+      -(atm['2bc'] & atm['2cb']))
 axB= ((atm['1ab'] >> -(atm['1ac'] & atm['1cb'])) &
-   (atm['1ac'] >> -(atm['1ab'] & atm['1bc'])) &
-   (atm['1bc'] >> -(atm['1ba'] & atm['1ac'])) &
-   (atm['2ab'] >> -(atm['2ac'] & atm['2cb'])) &
-   (atm['2ac'] >> -(atm['2ab'] & atm['2bc'])) &
-   (atm['2bc'] >> -(atm['2ba'] & atm['2ac'])))
+      (atm['1ba'] >> -(atm['1bc'] & atm['1ca'])) &
+      (atm['1ac'] >> -(atm['1ab'] & atm['1bc'])) &
+      (atm['1ca'] >> -(atm['1cb'] & atm['1ba'])) &
+      (atm['1bc'] >> -(atm['1ba'] & atm['1ac'])) &
+      (atm['1cb'] >> -(atm['1ca'] & atm['1ab'])) &
+      (atm['2ab'] >> -(atm['2ac'] & atm['2cb'])) &
+      (atm['2ba'] >> -(atm['2bc'] & atm['2ca'])) &
+      (atm['2ac'] >> -(atm['2ab'] & atm['2bc'])) &
+      (atm['2ca'] >> -(atm['2cb'] & atm['2ba'])) &
+      (atm['2bc'] >> -(atm['2ba'] & atm['2ac'])) &
+      (atm['2cb'] >> -(atm['2ca'] & atm['2ab'])))
 # acyclic : x<y => !Ez z<x * y<z?????
 axC= ((atm['1ab'] & atm['1bc']) >> -atm['1ca'] &
 (atm['1ac'] & atm['1cb']) >> -atm['1ba'] &
@@ -163,7 +175,8 @@ axD=(
 (-atm['1bc'] & -atm['1cb']) >> (-(atm['1ba'] & atm['1ac']) & -(atm['1ca'] & atm['1ab']))&
 (-atm['2ab'] & -atm['2ba']) >> (-(atm['2ac'] & atm['2cb']) & -(atm['2bc'] & atm['2ca']))&
 (-atm['2ac'] & -atm['2ca']) >> (-(atm['2ab'] & atm['2bc']) & -(atm['2cb'] & atm['2ba']))&
-(-atm['2bc'] & -atm['2cb']) >> (-(atm['2ba'] & atm['2ac']) & -(atm['2ca'] & atm['2ab']))
+(-atm['2bc'] & -atm['2cb']) >> (-(atm['2ba'] & atm['2ac']) & -(atm['2ca'] & atm['2ab'])) # this line fucks up
+# incomparability is with order not cover
 )
 
 Labc = (((atm['1ab'] | (-atm['1ab'] & -atm['1ba'])) & (atm['1bc'] | (-atm['1bc'] & -atm['1cb']))) |
@@ -182,22 +195,35 @@ Nbca = (-(-atm['1bc'] & -atm['1cb'] & -atm['1ca'] & -atm['1ac']) &
 solver = Minisat()
 
 # method one : use absent extensions
-exp = axA & axB & Labc & Lacb & Lcab & Ncba & Nbac & Nbca &axC&axD
+x = atm['1ab'] & atm['1ac'] & atm['2ca'] & atm['2ab']
+exp = axA & axB & Labc & Lacb & Lcab & Ncba & Nbac & Nbca & axC & axD & x
 solution = solver.solve(exp)
-if solution.success:
+while solution.success:
     for i in range(H):
         for x in U:
             for y in U-{x}:
                 if solution[atm[str(i+1)+x+y]]:
                     print(str(i+1)+x+y)
-else:
-    print('no')
+    print()
+    tmp = Variable('dot') | -Variable('dot')
+    for i in range(H):
+        for x in U:
+            for y in U-{x}:
+                if solution[atm[str(i+1)+x+y]]:
+                    tmp = tmp & atm[str(i+1)+x+y]
+                else:
+                    tmp = tmp & -atm[str(i+1)+x+y]
+    exp = exp & -tmp
+    solution = solver.solve(exp)
+print('done')
 
 # method two : exhaust with counter-examples to find the strictest case
 # NOTE: doesnt work?
 # NOTE: axiom not enough? need to establish noncircularity ab,bc => -ca
+'''
 solver = Minisat()
-exp = axA & axB & Labc & Lacb & Lcab
+x = atm['1ab'] & atm['1ac'] & atm['2ca'] & atm['2ab']
+exp = axA & axB & axC & axD & Labc & Lacb & Lcab
 solution = solver.solve(exp)
 while solution.success:
     break
@@ -218,3 +244,4 @@ while solution.success:
             for x in U:
                 for y in U-{x}:
                     print(str(i+1)+x+y, solution[atm[str(i+1)+x+y]])
+'''
