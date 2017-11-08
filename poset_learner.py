@@ -1,3 +1,13 @@
+
+
+# !!!!!!!!!important
+# NOTE: does L* actually help in any way getting a automaton?
+#       we still need to query at worst(best?) case |Y| times,
+#       making a equivalence query for every linearizations, aint it!?
+#       DOESNT FUCKING MAKE SENSE why w're doing this!!?? FUUUUUUUCKKKKKKK
+
+
+
 import fsm, angluin
 
 '''
