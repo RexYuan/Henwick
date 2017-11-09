@@ -3,7 +3,7 @@ from satispy.solver import Minisat
 
 '''
 -------------------------------------------------------------------------------
-Variables:
+Variables for example:
 X ::= a | b | c
 P ::= Labc | Lacb
 V ::= X<X |
@@ -86,6 +86,7 @@ COVER RELATION AXIOM
                              => forall x!=y!=z, (x{y & y{z) => (-x{z & -z{x)
 NOTE: forall x!=y!=z, x{z => -(x{y & y{z) is entailed by ATS
 (CO) relation between cover and order : forall (x,y), x{y => x<y
+                                     => forall x!=y,  x{y => x<y
 
 EXAMPLE : generate all cover relations with universe = {a, b, c}
 (AS) -(a{b & b{a) &
@@ -325,7 +326,7 @@ pAbca = (-V['b{c'] & -(-V['b<c'] & -V['c<b'])) | (-V['c{a'] & -(-V['c<a'] & -V['
 pAcab = (-V['c{a'] & -(-V['c<a'] & -V['a<c'])) | (-V['a{b'] & -(-V['a<b'] & -V['b<a']))
 pAcba = (-V['c{b'] & -(-V['c<b'] & -V['b<c'])) | (-V['b{a'] & -(-V['b<a'] & -V['a<b']))
 
-exp = (pATS & pT & pE &
+exp = (pATS & pT & pAS & pATT & pCO & pE &
        pLabc & pLabc_ATS & pLabc_T & pLabc_TO & pLabc_AS & pLabc_ATT & pLabc_CO &
        pLacb & pLacb_ATS & pLacb_T & pLacb_TO & pLacb_AS & pLacb_ATT & pLacb_CO &
        pAbac & pAbca & pAcab & pAcba)
@@ -348,10 +349,3 @@ while result.success:
     i = i+1
     print()
 print('---generating order done---')
-
-# TODO: 1) automate constraint generation
-#       2) furthur testing with more complex poset
-#       3) test it with multiple poset ; ie poset cover problem
-#       4) this many clauses? are you fucking kidding me? can you not?
-#          must find a way to make it more efficient
-#          maybe automaton would help after all?
