@@ -91,26 +91,52 @@ def get_generating_poset_constraints(*linears):
     exp = get_blanket_poset_constraints(*linears)
 
     # NOTE: this is probably the most tricky bottle neck
-    # constraint of absent order ; {absent} = {permutations} - linears
+    # {absent} = {permutations} - linears
     perms = {''.join(p) for p in permutations(linears[0])}
     for w in perms-set(linears):
+        '''
         # pA : exists x.y in w, -x{y & -x||y
         pA = con
         for i in range(len(w)-1):
             pA = pA | (-Variable(w[i]+'{'+w[i+1]) & -(-Variable(w[i]+'<'+w[i+1]) & -Variable(w[i+1]+'<'+w[i])))
+        '''
+        # pA : exist x.*y in w, y<x
+        pA = con
+        for i in range(len(w)):
+            for j in range(i+1,len(w)):
+                pA = pA | Variable(w[j]+'<'+w[i])
 
         exp = exp & pA
     return exp
 
-exp = get_generating_poset_constraints('abc','acb','cab')
+exp = get_generating_poset_constraints('abcde','abced','acbde','acbed','acdbe','acedb','acebd','acdeb','acedb')
 result = sat.solve(exp)
 i = 1
 print('---begin---')
 while result.success:
     print('order',i,' : ',end='')
     counter = tau
-    for x in {'a','b','c'}:
-        for y in {'a','b','c'}-{x}:
+    for x in {'a','b','c','d','e'}:
+        for y in {'a','b','c','d','e'}-{x}:
+            if result[Variable(x+'<'+y)]:
+                print(x+'<'+y,' ',end='')
+                counter = counter & Variable(x+'<'+y)
+            else:
+                counter = counter & -Variable(x+'<'+y)
+    exp = exp & -counter
+    result = sat.solve(exp)
+    i = i+1
+    print()
+print('---end---\n')
+exp = get_generating_poset_constraints('abcde','abced','bacde','baced')
+result = sat.solve(exp)
+i = 1
+print('---begin---')
+while result.success:
+    print('order',i,' : ',end='')
+    counter = tau
+    for x in {'a','b','c','d','e'}:
+        for y in {'a','b','c','d','e'}-{x}:
             if result[Variable(x+'<'+y)]:
                 print(x+'<'+y,' ',end='')
                 counter = counter & Variable(x+'<'+y)

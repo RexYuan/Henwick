@@ -190,9 +190,10 @@ BLANKET ORDER PROBLEM
 CONSTRAINT OF PRESENT ORDER
     For every linear order L in Y, since we know cover implies order,
     totality and transitivity are ensured, and we also know that, if L extends
-    P, we can set the case for L and P will follow. The constraints of a give
-    L that should be blanket by P is, simply, forall x.y in w, Lw_x{y.
-(Lw) forall x.y in w, Lw_x{y
+    P, we can set the case for L and the constraints on P will follow from the
+    axiom of order extension. The constraints of a given L that should be
+    blanketed by P is, simply, forall x.y in w, Lw_x{y.
+(Lw) w in L(P) |= (forall x.y in w, Lw_x{y)
 
 EXAMPLE : let Labc = abc and Lacb = acb ; expected P = { a<b, a<c } | { a<b } | { a<c } | {}
 (E) (a<b => (Labc_a<b & Lacb_a<b)) &
@@ -201,8 +202,8 @@ EXAMPLE : let Labc = abc and Lacb = acb ; expected P = { a<b, a<c } | { a<b } | 
     (b<c => (Labc_b<c & Lacb_b<c)) &
     (c<a => (Labc_c<a & Lacb_c<a)) &
     (c<b => (Labc_c<b & Lacb_c<b))
-(Labc) Labc_a<b & Labc_b<c
-(Lacb) Lacb_a<c & Lacb_c<b
+(Labc) Labc_a{b & Labc_b{c
+(Lacb) Lacb_a{c & Lacb_c{b
 -------------------------------------------------------------------------------
 '''
 
@@ -303,28 +304,45 @@ GENERATING ORDER PROBLEM
     That is, find the strictest poset P that blankets Y.
 
 CONSTRAINT OF ABSENT ORDER
+*** WRONG ***
     For every linear order L not in Y, P must not blankets it.
     From theorem : if P blankets L, forall cover x{y in L, x{y in P xor x||y in P,
     we know that, if exists a cover x{y in L, not(x{y in P xor x||y in P), then
     P does not blanket L, namely, the constraint of the absent L.
     Since not(x xor y) is equivalent to (x & y) | (-x & -y) and that x{y and x||y
     can never coincide, it must be the case that -x{y & -x||y.
-(Aw) exists x.y in w, -x{y & -x||y
-
+(*Aw) exists x.y in w, -x{y & -x||y
 EXAMPLE : let Labc = abc and Lacb = acb ; expected P = { a<b, a<c }
           absent orders = [ bac, bca, cab, cba ]
 (Abac) (-b{a & -(-b<a & -a<b)) | (-a{c & -(-a<c & -c<a))
 (Abca) (-b{c & -(-b<c & -c<b)) | (-c{a & -(-c<a & -a<c))
 (Acab) (-c{a & -(-c<a & -a<c)) | (-a{b & -(-a<b & -b<a))
 (Acba) (-c{b & -(-c<b & -b<c)) | (-b{a & -(-b<a & -a<b))
+
+NOTE: ^ negating the necessary condition is too strong; use equivalence:
+(Aw) w not in L(P) =||= (exist (x,y), Lw_x<y & y<x)
+                   => (exist x.*y in w, y<x)
+EXAMPLE : let Labc = abc and Lacb = acb ; expected P = { a<b, a<c }
+          absent orders = [ bac, bca, cab, cba ]
+(Abac) a<b | c<b | c<a
+(Abca) c<b | a<b | a<c
+(Acab) a<c | b<c | b<a
+(Acba) b<c | a<c | a<b
+
 NOTE: comparability and incomparability are both intransitive.
 -------------------------------------------------------------------------------
 '''
 
-pAbac = (-V['b{a'] & -(-V['b<a'] & -V['a<b'])) | (-V['a{c'] & -(-V['a<c'] & -V['c<a']))
-pAbca = (-V['b{c'] & -(-V['b<c'] & -V['c<b'])) | (-V['c{a'] & -(-V['c<a'] & -V['a<c']))
-pAcab = (-V['c{a'] & -(-V['c<a'] & -V['a<c'])) | (-V['a{b'] & -(-V['a<b'] & -V['b<a']))
-pAcba = (-V['c{b'] & -(-V['c<b'] & -V['b<c'])) | (-V['b{a'] & -(-V['b<a'] & -V['a<b']))
+#wrong
+#pAbac = (-V['b{a'] & -(-V['b<a'] & -V['a<b'])) | (-V['a{c'] & -(-V['a<c'] & -V['c<a']))
+#pAbca = (-V['b{c'] & -(-V['b<c'] & -V['c<b'])) | (-V['c{a'] & -(-V['c<a'] & -V['a<c']))
+#pAcab = (-V['c{a'] & -(-V['c<a'] & -V['a<c'])) | (-V['a{b'] & -(-V['a<b'] & -V['b<a']))
+#pAcba = (-V['c{b'] & -(-V['c<b'] & -V['b<c'])) | (-V['b{a'] & -(-V['b<a'] & -V['a<b']))
+
+pAbac = V['a<b'] | V['c<b'] | V['c<a']
+pAbca = V['c<b'] | V['a<b'] | V['a<c']
+pAcab = V['a<c'] | V['b<c'] | V['b<a']
+pAcba = V['b<c'] | V['a<c'] | V['a<b']
 
 exp = (pATS & pT & pAS & pATT & pCO & pE &
        pLabc & pLabc_ATS & pLabc_T & pLabc_TO & pLabc_AS & pLabc_ATT & pLabc_CO &
@@ -349,3 +367,13 @@ while result.success:
     i = i+1
     print()
 print('---generating order done---')
+
+# With these naive SAT constraints, the complexity is bad because:
+#     1) must use every permutation : O( |U|! )
+#     2) for absent permutation, must use every ui,uj such that i<j : O( |U|^2 )
+
+# TODO possible improvement 1: find the equivalence condition for present order
+# like we did for absent order, so that we don't need to build an extra poset
+# for every present order.
+# TODO possible improvement 2: use cover relation to reduce number of clauses
+# TODO possible improvement 3: use automaton to reduce number of clauses
