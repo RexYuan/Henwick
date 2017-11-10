@@ -1,2 +1,0 @@
-# Henwick
-opus academiae sinicae
