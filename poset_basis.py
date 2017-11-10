@@ -560,7 +560,7 @@ pE = ((((V['P1_a<b'] >> (V['Labc_a<b'])) &
         (V['P1_b<c'] >> (V['Labc_b<c'])) &
         (V['P1_c<a'] >> (V['Labc_c<a'])) &
         (V['P1_c<b'] >> (V['Labc_c<b']))) |
-       ((V['P1_a<b'] >> (V['Labc_a<b'])) &
+       ((V['P2_a<b'] >> (V['Labc_a<b'])) &
         (V['P2_a<c'] >> (V['Labc_a<c'])) &
         (V['P2_b<a'] >> (V['Labc_b<a'])) &
         (V['P2_b<c'] >> (V['Labc_b<c'])) &
@@ -572,7 +572,7 @@ pE = ((((V['P1_a<b'] >> (V['Labc_a<b'])) &
         (V['P1_b<c'] >> (V['Lacb_b<c'])) &
         (V['P1_c<a'] >> (V['Lacb_c<a'])) &
         (V['P1_c<b'] >> (V['Lacb_c<b']))) |
-       ((V['P1_a<b'] >> (V['Lacb_a<b'])) &
+       ((V['P2_a<b'] >> (V['Lacb_a<b'])) &
         (V['P2_a<c'] >> (V['Lacb_a<c'])) &
         (V['P2_b<a'] >> (V['Lacb_b<a'])) &
         (V['P2_b<c'] >> (V['Lacb_b<c'])) &
@@ -584,7 +584,7 @@ pE = ((((V['P1_a<b'] >> (V['Labc_a<b'])) &
         (V['P1_b<c'] >> (V['Lcab_b<c'])) &
         (V['P1_c<a'] >> (V['Lcab_c<a'])) &
         (V['P1_c<b'] >> (V['Lcab_c<b']))) |
-       ((V['P1_a<b'] >> (V['Lcab_a<b'])) &
+       ((V['P2_a<b'] >> (V['Lcab_a<b'])) &
         (V['P2_a<c'] >> (V['Lcab_a<c'])) &
         (V['P2_b<a'] >> (V['Lcab_b<a'])) &
         (V['P2_b<c'] >> (V['Lcab_b<c'])) &
@@ -596,7 +596,7 @@ pE = ((((V['P1_a<b'] >> (V['Labc_a<b'])) &
         (V['P1_b<c'] >> (V['Lcba_b<c'])) &
         (V['P1_c<a'] >> (V['Lcba_c<a'])) &
         (V['P1_c<b'] >> (V['Lcba_c<b']))) |
-       ((V['P1_a<b'] >> (V['Lcba_a<b'])) &
+       ((V['P2_a<b'] >> (V['Lcba_a<b'])) &
         (V['P2_a<c'] >> (V['Lcba_a<c'])) &
         (V['P2_b<a'] >> (V['Lcba_b<a'])) &
         (V['P2_b<c'] >> (V['Lcba_b<c'])) &
