@@ -4,8 +4,16 @@ from functools import reduce
 from itertools import permutations
 
 sat = Minisat()
-T = Variable('dot') | -Variable('dot')
-F = Variable('dot') & -Variable('dot')
+T = (Variable('dot') | -Variable('dot'))
+F = (Variable('dot') & -Variable('dot'))
+
+def str_lin(l,*os):
+    # assuming the orders are indeed consistent
+    l = [[i,0] for i,_ in enumerate(range(l))]
+    for x,y in map((lambda s : s.split('<')), os):
+        l[int(x)-1][1] += 1
+    l = sorted(l,key=(lambda e : e[1]),reverse=True)
+    return int(''.join(str(x+1) for x in map((lambda a : a[0]), l)))
 
 class poset:
     def __init__(self, universe, rel=set(), name='', total=False, linearization=''):
@@ -31,17 +39,41 @@ class poset:
                 # pAS : forall x!=y, -(x{y & y{x)
                 pAS = pAS & -(v[name+x+'{'+y] & v[name+y+'{'+x])
                 # pCO : forall x!=y, x{y => x<y
-                pCO = pCO & (v[name+x+'{'+y] >> v[name+x+'<'+y])
+                #pCO = pCO & (v[name+x+'{'+y] >> v[name+x+'<'+y])
 
                 if total:
                     # pTO : forall x!=y,  (x<y | y<x)
                     pTO = pTO & (v[name+x+'<'+y] | v[name+y+'<'+x])
 
+                z_in_xy = F
                 for z in universe-{x,y}:
                     # pT : forall x!=y!=z, (x<y & y<z) => x<z
                     pT = pT & ((v[name+x+'<'+y] & v[name+y+'<'+z]) >> v[name+x+'<'+z])
                     # pATT : forall x!=y!=z, (x{y & y{z) => (-x{z & -z{x)
-                    pATT = pATT & ((v[name+x+'{'+y] & v[name+y+'{'+z]) >> (-v[name+x+'{'+z] & -v[name+z+'{'+x]))
+                    # NOTE: this needs more work ; the definition of cover relation
+                    #       is x{z iff x<z & -(exists y, x{y & y{z) . the antitransitivity
+                    #       here isn't sufficient for the right-to-left direction of the
+                    #       equivalence . what we're doing here is merely one direction of
+                    #       encoding, namely from cover to order . and the antitransitivity
+                    #       is only useful for validating constraints on covers themselves .
+                    #       it's not enough to infer from SAT results anything about covers .
+                    #       need to consider using the definition itself or some other
+                    #       equivalent condition, if cover relation is ever to be used as
+                    #       more than a short-hand way of encoding orders .
+                    #pATT = pATT & ((v[name+x+'{'+y] & v[name+y+'{'+z]) >> (-v[name+x+'{'+z] & -v[name+z+'{'+x]))
+                    # -(exists y, x{y & y{z)
+                    # foall z, -(x{z & z{y)
+                    #pATT = pATT & (
+                    #     (v[name+x+'{'+y] &  (v[name+x+'<'+y] & -(v[name+x+'{'+z] & v[name+z+'{'+y]))) |
+                    #    (-v[name+x+'{'+y] & -(v[name+x+'<'+y] & -(v[name+x+'{'+z] & v[name+z+'{'+y])))
+                    #)
+                    z_in_xy = z_in_xy | (v[name+x+'{'+z] & v[name+z+'{'+y])
+                # lesson learned : explicitly demorgan for it
+                pATT = pATT & (
+                     (v[name+x+'{'+y] &  (v[name+x+'<'+y] & -(z_in_xy))) |
+                    (-v[name+x+'{'+y] & (-v[name+x+'<'+y] | (z_in_xy)))
+                )
+
         self.constraints = pATS & pT & pAS & pATT & pCO & pTO
 
         # manual constraints with <
@@ -55,8 +87,12 @@ class poset:
 
         # linear constraints
         if total and linearization:
-            for i in range(len(linearization)-1):
-                self.constraints = self.constraints & v[name+linearization[i]+'{'+linearization[i+1]]
+            w = linearization
+            for i in range(len(w)):
+                for j in range(i+1, len(w)):
+                    self.constraints = self.constraints & v[name+w[i]+'<'+w[j]]
+        #    for i in range(len(linearization)-1):
+        #        self.constraints = self.constraints & v[name+linearization[i]+'{'+linearization[i+1]]
 
     def get_extension_constraints(self, p):
         assert(type(p) == poset and p.name != '')
@@ -89,7 +125,50 @@ class poset:
     def get_constraints(self):
         return self.constraints
 
-    def generate(self, sat=sat):
+    def get_linearizations(self, sat=sat):
+        '''
+        generate all linearizations
+        '''
+        universe = self.universe
+
+        l = poset(universe, name='L', total=True)
+        exp = self.get_constraints() & self.get_extension_constraints(l) & l.get_constraints()
+        v = {**self.get_variables(), **l.get_variables()}
+
+        result = sat.solve(exp)
+        while result.success:
+            lin = set()
+            counter = T
+            for x in universe:
+                for y in universe-{x}:
+                    if result[v[l.name+x+'<'+y]]:
+                        counter = counter & v[l.name+x+'<'+y]
+                        lin.add(x+'<'+y)
+                    else:
+                        counter = counter & -v[l.name+x+'<'+y]
+            yield lin
+            exp = exp & -counter
+            result = sat.solve(exp)
+
+    def print_linearizations(self):
+        i = 1
+        tmp = set()
+        print('---Linearizations---')
+        for lin in sorted(map((lambda r : str_lin(5,*r)), self.get_linearizations())):
+            print('L'+str(i)+' : ', end='')
+            #str_lin(5,*lin)
+            print(lin, end='')
+            tmp.add(lin)
+            #for r in lin:
+            #    print(r, ' ', end='')
+            i = i+1
+            print()
+        return tmp
+
+    def solve(self, sat=sat):
+        '''
+        get all consistent poset
+        '''
         name = self.name
         v = self.v
         universe = self.universe
@@ -116,12 +195,12 @@ class poset:
 
         i = 1
         tmp += '---Consistent posets---\n'
-        for result in self.generate():
+        for result in self.solve():
             tmp += 'order '+str(i)+'  : '
             for x in universe:
                 for y in universe-{x}:
-                    if result[v[self.name+x+'<'+y]]:
-                        tmp += ' '+name+x+'<'+y
+                    if result[v[self.name+x+'{'+y]]:
+                        tmp += ' '+name+x+'{'+y
             i = i+1
             tmp += '\n'
         tmp += '---done---'
@@ -234,12 +313,46 @@ def poset_cover(k=1, *lins, solve=False):
 
     return constraints
 
-poset_cover(2, 'abc', 'acb', 'cab', 'cba', solve=True)
+#poset({'a','b','c','d','e','f'}).print_linearizations()
+#poset_cover(2, 'abc', 'acb', 'cab', 'cba', solve=True)
 
-# TODO: 1) automate constraint generation
-#                 ======> optimize variable storage with global context
+l = ['2741563',
+'7241563',
+'2741653',
+'7241653',
+'2745163',
+'7245163']
+
+l2=['1234567',
+'1235467',
+'1324567',
+'1325467',
+'2134567',
+'2135467',
+'2314567',
+'2315467',
+'3124567',
+'3125467',
+'3214567',
+'3215467']
+
+l3 = [*l2, '7654321','7654231']
+
+#a = poset({'1','2','3','4','5'}, rel=['1<4','2<4','2<5','3<5'])
+#l1 = a.print_linearizations()
+#a = poset({'1','2','3','4','5'}, rel=['1<4','1<2','1<5','3<2','3<4','3<5','2<4','2<5'])
+#a = poset({'1','2','3','4','5'}, rel=['1<4','2<4','2<5','3<5','1<5','3<4'])
+#a = poset({'1','2','3','4','5'}, rel=['1<4','3<5','1<5','3<4','3<2'])
+#l2 = a.print_linearizations()
+a = poset({'1','2','3'}, rel=['1<2','1<3','2<3'])
+
+#poset_cover(1, *l, solve=True)
+
+# TODO:
 #       2) furthur testing with more complex poset
 #       3) test it with multiple poset ; ie poset cover problem
 #       4) this many clauses? are you fucking kidding me? can you not?
 #          must find a way to make it more efficient
 #          maybe automaton would help after all?
+
+#cover_from_order(5,'2<4','1<5','1<4','2<1','2<5','5<4','2<3','3<5','3<4','1<3')
