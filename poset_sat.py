@@ -67,7 +67,7 @@ class poset:
                     #     (v[name+x+'{'+y] &  (v[name+x+'<'+y] & -(v[name+x+'{'+z] & v[name+z+'{'+y]))) |
                     #    (-v[name+x+'{'+y] & -(v[name+x+'<'+y] & -(v[name+x+'{'+z] & v[name+z+'{'+y])))
                     #)
-                    z_in_xy = z_in_xy | (v[name+x+'{'+z] & v[name+z+'{'+y])
+                    z_in_xy = z_in_xy | (v[name+x+'<'+z] & v[name+z+'<'+y])
                 # lesson learned : explicitly demorgan for it
                 pATT = pATT & (
                      (v[name+x+'{'+y] &  (v[name+x+'<'+y] & -(z_in_xy))) |
@@ -249,8 +249,9 @@ def poset_blanket(k=1, *lins, solve=False, ret_ctx=False):
             for pname, p in ps.items():
                 for x in universe:
                     for y in universe-{x}:
+                        if result[v[p.name+x+'{'+y]]:
+                            print(p.name+x+'{'+y,' ',end='')
                         if result[v[p.name+x+'<'+y]]:
-                            print(p.name+x+'<'+y,' ',end='')
                             counter = counter & v[p.name+x+'<'+y]
                         else:
                             counter = counter & -v[p.name+x+'<'+y]
@@ -300,8 +301,9 @@ def poset_cover(k=1, *lins, solve=False):
             for x in universe:
                 for y in universe-{x}:
                     for pname, p in ps.items():
+                        if result[v[p.name+x+'{'+y]]:
+                            print(p.name+x+'{'+y,' ',end='')
                         if result[v[p.name+x+'<'+y]]:
-                            print(p.name+x+'<'+y,' ',end='')
                             counter = counter & v[p.name+x+'<'+y]
                         else:
                             counter = counter & -v[p.name+x+'<'+y]
@@ -344,9 +346,13 @@ l3 = [*l2, '7654321','7654231']
 #a = poset({'1','2','3','4','5'}, rel=['1<4','2<4','2<5','3<5','1<5','3<4'])
 #a = poset({'1','2','3','4','5'}, rel=['1<4','3<5','1<5','3<4','3<2'])
 #l2 = a.print_linearizations()
-a = poset({'1','2','3'}, rel=['1<2','1<3','2<3'])
+#a = poset({'1','2','3'})
+#from time import time as t
+#t1 = t()
+#poset_blanket(3,'12354','43125','54231',solve=True)
+#print(t()-t1)
 
-#poset_cover(1, *l, solve=True)
+poset_cover(1, *l, solve=True)
 
 # TODO:
 #       2) furthur testing with more complex poset
