@@ -53,13 +53,13 @@ class poset:
                     s.add(pT)
                     constraints = simplify(And(constraints, pT))
                     # pATT : forall x!=y, (x{y) <=> (x<y & forall z, -(x<z & z<y))
-                    z_in_xy = simplify(Or(z_in_xy, And(v(name+x+'<'+z), v(name+z+'<'+y))))
-                pATT = Or(
-                    And(    v(name+x+'{'+y),      And(v(name+x+'<'+y), Not(z_in_xy))),
-                    And(Not(v(name+x+'{'+y)), Not(And(v(name+x+'<'+y), Not(z_in_xy))))
-                )
-                s.add(pATT)
-                constraints = simplify(And(constraints, pATT))
+                    #z_in_xy = simplify(Or(z_in_xy, And(v(name+x+'<'+z), v(name+z+'<'+y))))
+                #pATT = Or(
+                #    And(    v(name+x+'{'+y),      And(v(name+x+'<'+y), Not(z_in_xy))),
+                #    And(Not(v(name+x+'{'+y)), Not(And(v(name+x+'<'+y), Not(z_in_xy))))
+                #)
+                #s.add(pATT)
+                #constraints = simplify(And(constraints, pATT))
 
         # manual constraints with <
         if rel:
@@ -75,12 +75,13 @@ class poset:
         # linear constraints
         if total and linearization:
             w = linearization
-            #for i in range(len(w)):
-            #    for j in range(i+1, len(w)):
-            #        s.add(v[name+w[i]+'<'+w[j]])
-            for i in range(len(linearization)-1):
-                s.add(v(name+linearization[i]+'{'+linearization[i+1]))
-                constraints = simplify(And(constraints, v(name+linearization[i]+'{'+linearization[i+1])))
+            for i in range(len(w)):
+                for j in range(i+1, len(w)):
+                    s.add(v(name+w[i]+'<'+w[j]))
+                    constraints = simplify(And(constraints, v(name+w[i]+'<'+w[j])))
+            #for i in range(len(linearization)-1):
+            #    s.add(v(name+linearization[i]+'{'+linearization[i+1]))
+            #    constraints = simplify(And(constraints, v(name+linearization[i]+'{'+linearization[i+1])))
 
         self.constraints = constraints
 
@@ -288,9 +289,10 @@ def poset_cover(k=1, *lins, solve=True):
             for x in universe:
                 for y in universe-{x}:
                     for pname, p in ps.items():
-                        if m[v(p.name+x+'{'+y)]:
-                            print(p.name+x+'{'+y,' ',end='')
+                        #if m[v(p.name+x+'{'+y)]:
+                            #print(p.name+x+'{'+y,' ',end='')
                         if m[v(p.name+x+'<'+y)]:
+                            print(p.name+x+'<'+y,' ',end='')
                             counter = And(counter, v(p.name+x+'<'+y))
                         else:
                             counter = And(counter, Not(v(p.name+x+'<'+y)))
@@ -341,7 +343,7 @@ l3 = [*l2, '7654321','7654231']
 #poset_blanket(3,'12354','43125','54231',solve=True)
 #print(t()-t1)
 
-poset_cover(1, *l, solve=True)
+poset_cover(2, *l3, solve=True)
 
 # TODO:
 #       2) furthur testing with more complex poset

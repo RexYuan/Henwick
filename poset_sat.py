@@ -67,12 +67,12 @@ class poset:
                     #     (v[name+x+'{'+y] &  (v[name+x+'<'+y] & -(v[name+x+'{'+z] & v[name+z+'{'+y]))) |
                     #    (-v[name+x+'{'+y] & -(v[name+x+'<'+y] & -(v[name+x+'{'+z] & v[name+z+'{'+y])))
                     #)
-                    z_in_xy = z_in_xy | (v[name+x+'<'+z] & v[name+z+'<'+y])
+                    #z_in_xy = z_in_xy | (v[name+x+'<'+z] & v[name+z+'<'+y])
                 # lesson learned : explicitly demorgan for it
-                pATT = pATT & (
-                     (v[name+x+'{'+y] &  (v[name+x+'<'+y] & -(z_in_xy))) |
-                    (-v[name+x+'{'+y] & (-v[name+x+'<'+y] | (z_in_xy)))
-                )
+                #pATT = pATT & (
+                #     (v[name+x+'{'+y] &  (v[name+x+'<'+y] & -(z_in_xy))) |
+                #    (-v[name+x+'{'+y] & (-v[name+x+'<'+y] | (z_in_xy)))
+                #)
 
         self.constraints = pATS & pT & pAS & pATT & pCO & pTO
 
@@ -301,9 +301,10 @@ def poset_cover(k=1, *lins, solve=False):
             for x in universe:
                 for y in universe-{x}:
                     for pname, p in ps.items():
-                        if result[v[p.name+x+'{'+y]]:
-                            print(p.name+x+'{'+y,' ',end='')
+                        #if result[v[p.name+x+'{'+y]]:
+                        #    print(p.name+x+'{'+y,' ',end='')
                         if result[v[p.name+x+'<'+y]]:
+                            print(p.name+x+'<'+y,' ',end='')
                             counter = counter & v[p.name+x+'<'+y]
                         else:
                             counter = counter & -v[p.name+x+'<'+y]
@@ -352,7 +353,7 @@ l3 = [*l2, '7654321','7654231']
 #poset_blanket(3,'12354','43125','54231',solve=True)
 #print(t()-t1)
 
-poset_cover(1, *l, solve=True)
+poset_cover(2, *l3, solve=True)
 
 # TODO:
 #       2) furthur testing with more complex poset
