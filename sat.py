@@ -4,52 +4,6 @@ class Formula(object):
     '''
     Base class for all formulae.
     '''
-    @classmethod
-    def from_satispy(cnf):
-        '''
-        Construct Formula from satispy Cnf.
-        '''
-        raise NotImplementedError
-
-    def to_satispy(self):
-        '''
-        Convert to satispy Cnf.
-        '''
-        def translate(X):
-            if type(X) == Atom:
-                return satispy.Variable(X.name)
-            elif type(X) == Not:
-                return -translate(X.subf)
-            elif type(X) == And:
-                return translate(X.subf1) & translate(X.subf2)
-            elif type(X) == Or:
-                return translate(X.subf1) | translate(X.subf2)
-            else:
-                raise Exception()
-        return translate(self)
-
-    @classmethod
-    def from_z3(formula):
-        '''
-        Construct Formula from z3 BoolRef.
-        '''
-        raise NotImplementedError
-
-    def to_z3(self):
-        '''
-        Convert to z3 BoolRef.
-        '''
-        def translate(X):
-            if type(X) == Atom:
-                return z3.Bool(X.name)
-            elif type(X) == Not:
-                return z3.Not(translate(X.subf))
-            elif type(X) == And:
-                return z3.And(translate(X.subf1), translate(X.subf2))
-            elif type(X) == Or:
-                return z3.Or(translate(X.subf1), translate(X.subf2))
-        return translate(self)
-
     def __neg__(self):
         '''
         Shorthand for Not.
@@ -207,6 +161,109 @@ class Formula(object):
                 raise Exception()
         return Atom('p_'+self) & walk(self)
 
+    @staticmethod
+    def _cnf_list(X):
+        '''
+        Encode CNF list.
+        '''
+        var_map = {}
+
+        def get_terms(X):
+            if type(X) == Atom:
+                s = repr(X)
+                if s not in var_map:
+                    var_map[s] = str(len(var_map)+1)
+                return [var_map[s]]
+            elif type(X) == Not:
+                s = repr(X.subf)
+                if s not in var_map:
+                    var_map[s] = str(len(var_map)+1)
+                return ['-'+var_map[s]]
+            elif type(X) == And:
+                raise Exception()
+            elif type(X) == Or:
+                return [*get_terms(X.subf1), *get_terms(X.subf2)]
+            else:
+                raise Exception()
+
+        def get_clauses(X):
+            if type(X) == Atom:
+                s = repr(X)
+                if s not in var_map:
+                    var_map[s] = str(len(var_map)+1)
+                return [var_map[s]]
+            elif type(X) == Not:
+                s = repr(X.subf)
+                if s not in var_map:
+                    var_map[s] = str(len(var_map)+1)
+                return ['-'+var_map[s]]
+            elif type(X) == And:
+                return [*get_clauses(X.subf1), *get_clauses(X.subf2)]
+            elif type(X) == Or:
+                return [get_terms(X)]
+            else:
+                raise Exception()
+
+        cs = get_clauses(X)
+        return (cs, len(var_map), len(cs))
+
+    def to_dimacs(self):
+        '''
+        Convert to DIMACS CNF format.
+        '''
+        cs, nbv, nbc = self._cnf_list(self.cnf())
+        tmp = 'p cnf '+str(nbv)+' '+str(nbc)+'\n'
+        for c in cs:
+            tmp += ' '.join(c) + ' 0\n'
+        tmp = tmp.rstrip()
+        return tmp
+
+    @classmethod
+    def from_satispy(cnf):
+        '''
+        Construct Formula from satispy Cnf.
+        '''
+        raise NotImplementedError
+
+    def to_satispy(self):
+        '''
+        Convert to satispy Cnf.
+        '''
+        def translate(X):
+            if type(X) == Atom:
+                return satispy.Variable(X.name)
+            elif type(X) == Not:
+                return -translate(X.subf)
+            elif type(X) == And:
+                return translate(X.subf1) & translate(X.subf2)
+            elif type(X) == Or:
+                return translate(X.subf1) | translate(X.subf2)
+            else:
+                raise Exception()
+        return translate(self)
+
+    @classmethod
+    def from_z3(formula):
+        '''
+        Construct Formula from z3 BoolRef.
+        '''
+        raise NotImplementedError
+
+    def to_z3(self):
+        '''
+        Convert to z3 BoolRef.
+        '''
+        def translate(X):
+            if type(X) == Atom:
+                return z3.Bool(X.name)
+            elif type(X) == Not:
+                return z3.Not(translate(X.subf))
+            elif type(X) == And:
+                return z3.And(translate(X.subf1), translate(X.subf2))
+            elif type(X) == Or:
+                return z3.Or(translate(X.subf1), translate(X.subf2))
+        return translate(self)
+
 class _Head(Formula):
     '''
     Tautology constructor.
@@ -289,6 +346,11 @@ class Or(Formula):
     def __repr__(self):
         return '('+repr(self.subf1)+' | '+repr(self.subf2)+')'
 
+p,q,r,s = Atom('p'),Atom('q'),Atom('r'),Atom('s')
+x = p | (q & -r & (r | -p | (s & -q & -p)))
+
+
+'''
 from time import time
 
 t = time()
@@ -408,3 +470,4 @@ while result == z3.sat:
     smt.add(z3.Not(counter))
     result = smt.check()
 print('z3 took for tseitin', time()-t)
+'''
