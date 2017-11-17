@@ -219,7 +219,7 @@ class Formula(object):
         return tmp
 
     @classmethod
-    def from_satispy(cnf):
+    def from_satispy(cls, cnf):
         '''
         Construct Formula from satispy Cnf.
         '''
@@ -243,11 +243,27 @@ class Formula(object):
         return translate(self)
 
     @classmethod
-    def from_z3(formula):
+    def from_z3(cls, formula):
         '''
         Construct Formula from z3 BoolRef.
         '''
-        raise NotImplementedError
+        def translate(X):
+            cs = X.children()
+            if z3.is_bool(X) and cs == []:
+                return Atom(repr(X))
+            elif z3.is_not(X):
+                return Not(translate(cs[0]))
+            elif z3.is_and(X):
+                if len(cs) > 2:
+                    return And(translate(cs[0]), translate(z3.And(*cs[1:])))
+                else:
+                    return And(translate(cs[0]), translate(cs[1]))
+            elif z3.is_or(X):
+                if len(cs) > 2:
+                    return Or(translate(cs[0]), translate(z3.Or(*cs[1:])))
+                else:
+                    return Or(translate(cs[0]), translate(cs[1]))
+        return translate(formula)
 
     def to_z3(self):
         '''
