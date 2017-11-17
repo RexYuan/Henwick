@@ -4,6 +4,9 @@ class Formula(object):
     '''
     Base class for all formulae.
     '''
+    def __rshift__(self, other):
+        return Or(Not(self), other)
+
     def __neg__(self):
         '''
         Shorthand for Not.
@@ -162,7 +165,7 @@ class Formula(object):
         return Atom('p_'+self) & walk(self)
 
     @staticmethod
-    def _cnf_list(X, f=str):
+    def _cnf_list(X, f=str, encode=True):
         '''
         Encode CNF list.
         '''
@@ -175,13 +178,13 @@ class Formula(object):
                 if s not in var_map:
                     var_map[s] = str(len(var_map)+1)
                     rev_map[f(len(var_map))] = X
-                return [f(var_map[s])]
+                return [f(var_map[s])] if encode else [X]
             elif type(X) == Not:
                 s = repr(X.subf)
                 if s not in var_map:
                     var_map[s] = str(len(var_map)+1)
                     rev_map[f(len(var_map))] = X.subf
-                return [f('-'+var_map[s])]
+                return [f('-'+var_map[s])] if encode else [X]
             elif type(X) == And:
                 raise Exception()
             elif type(X) == Or:
@@ -195,13 +198,13 @@ class Formula(object):
                 if s not in var_map:
                     var_map[s] = str(len(var_map)+1)
                     rev_map[f(len(var_map))] = X
-                return [f(var_map[s])]
+                return [[f(var_map[s])]] if encode else [[X]]
             elif type(X) == Not:
                 s = repr(X.subf)
                 if s not in var_map:
                     var_map[s] = str(len(var_map)+1)
                     rev_map[f(len(var_map))] = X.subf
-                return [f('-'+var_map[s])]
+                return [[f('-'+var_map[s])]]if encode else [[X]]
             elif type(X) == And:
                 return [*get_clauses(X.subf1), *get_clauses(X.subf2)]
             elif type(X) == Or:
@@ -516,3 +519,5 @@ while result == z3.sat:
     result = smt.check()
 print('z3 took for tseitin', time()-t)
 '''
+
+a,b = Atom('a'),Atom('b')
