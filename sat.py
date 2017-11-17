@@ -1,4 +1,4 @@
-import satispy, z3
+import satispy, z3, pycosat
 
 class Formula(object):
     '''
@@ -162,23 +162,26 @@ class Formula(object):
         return Atom('p_'+self) & walk(self)
 
     @staticmethod
-    def _cnf_list(X):
+    def _cnf_list(X, f=str):
         '''
         Encode CNF list.
         '''
         var_map = {}
+        rev_map = {}
 
         def get_terms(X):
             if type(X) == Atom:
                 s = repr(X)
                 if s not in var_map:
                     var_map[s] = str(len(var_map)+1)
-                return [var_map[s]]
+                    rev_map[f(len(var_map))] = X
+                return [f(var_map[s])]
             elif type(X) == Not:
                 s = repr(X.subf)
                 if s not in var_map:
                     var_map[s] = str(len(var_map)+1)
-                return ['-'+var_map[s]]
+                    rev_map[f(len(var_map))] = X.subf
+                return [f('-'+var_map[s])]
             elif type(X) == And:
                 raise Exception()
             elif type(X) == Or:
@@ -191,12 +194,14 @@ class Formula(object):
                 s = repr(X)
                 if s not in var_map:
                     var_map[s] = str(len(var_map)+1)
-                return [var_map[s]]
+                    rev_map[f(len(var_map))] = X
+                return [f(var_map[s])]
             elif type(X) == Not:
                 s = repr(X.subf)
                 if s not in var_map:
                     var_map[s] = str(len(var_map)+1)
-                return ['-'+var_map[s]]
+                    rev_map[f(len(var_map))] = X.subf
+                return [f('-'+var_map[s])]
             elif type(X) == And:
                 return [*get_clauses(X.subf1), *get_clauses(X.subf2)]
             elif type(X) == Or:
@@ -205,7 +210,7 @@ class Formula(object):
                 raise Exception()
 
         cs = get_clauses(X)
-        return (cs, len(var_map), len(cs))
+        return (cs, len(var_map), len(cs), rev_map)
 
     def to_dimacs(self):
         '''
@@ -241,6 +246,9 @@ class Formula(object):
             else:
                 raise Exception()
         return translate(self)
+
+    def solve_satispy(self):
+        raise NotImplementedError
 
     @classmethod
     def from_z3(cls, formula):
@@ -279,6 +287,27 @@ class Formula(object):
             elif type(X) == Or:
                 return z3.Or(translate(X.subf1), translate(X.subf2))
         return translate(self)
+
+    def solve_z3(self):
+        raise NotImplementedError
+
+    def solve_pycosat(self):
+        cs, nbv, _, vmap = self._cnf_list(self.cnf(), f=int)
+        result = pycosat.solve(cs, vars=nbv, verbose=0)
+        result = list(map((lambda x : vmap[abs(x)] if x > 0 else Not(vmap[abs(x)])), result))
+        return result
+
+    def solve_all_pycosat(self):
+        cs, nbv, _, vmap = self._cnf_list(self.cnf(), f=int)
+        for r in pycosat.itersolve(cs, vars=nbv, verbose=0):
+            result = list(map((lambda x : vmap[abs(x)] if x > 0 else Not(vmap[abs(x)])), r))
+            yield result
+
+    def solve(self):
+        return self.solve_pycosat()
+
+    def solve_all(self):
+        return self.solve_all_pycosat()
 
 class _Head(Formula):
     '''
