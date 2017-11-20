@@ -1,5 +1,16 @@
 from functools import reduce
 from itertools import product
+import graphviz as gv
+
+def render(M, fmt='jpg', name='g', path='graphs/'):
+    g = gv.Digraph(format=fmt)
+    for p in M.states:
+        g.node(p)
+    for p in M.states:
+        for s in M.symbols:
+            g.edge(p, M.transitions[p][s], label=s)
+    g.render(filename=path+name)
+    print('Graph is rendered at ./'+path+name+'.'+fmt)
 
 def rename(M):
     '''
@@ -494,3 +505,13 @@ class Moore:
         else:
             # equivalent
             return True
+
+
+t = {'A': {'0': 'A',
+           '1': 'B'},
+     'B': {'0': 'A',
+           '1': 'B'}}
+s = 'A'
+f = {'B'}
+m = DFA(t, s, f)
+render(m)

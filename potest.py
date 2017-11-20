@@ -1,11 +1,8 @@
-from satispy import Variable
-from satispy.solver import Minisat
+#from satispy import Variable
+#from satispy.solver import Minisat
 from functools import reduce
 from itertools import permutations
-
-sat = Minisat()
-T = (Variable('dot') | -Variable('dot'))
-F = (Variable('dot') & -Variable('dot'))
+from sat import *
 
 def str_lin(l,*os):
     # assuming the orders are indeed consistent
@@ -26,8 +23,8 @@ class poset:
         v = {}
         for x in universe:
             for y in universe-{x}:
-                v[name+x+'<'+y] = Variable(name+x+'<'+y)
-                v[name+x+'{'+y] = Variable(name+x+'{'+y)
+                v[name+x+'<'+y] = Atom(name+x+'<'+y)
+                v[name+x+'{'+y] = Atom(name+x+'{'+y)
         self.v = v
 
         # build them axioms
@@ -49,6 +46,7 @@ class poset:
                 for z in universe-{x,y}:
                     # pT : forall x!=y!=z, (x<y & y<z) => x<z
                     pT = pT & ((v[name+x+'<'+y] & v[name+y+'<'+z]) >> v[name+x+'<'+z])
+
                     # pATT : forall x!=y!=z, (x{y & y{z) => (-x{z & -z{x)
                     # NOTE: this needs more work ; the definition of cover relation
                     #       is x{z iff x<z & -(exists y, x{y & y{z) . the antitransitivity
@@ -125,7 +123,7 @@ class poset:
     def get_constraints(self):
         return self.constraints
 
-    def get_linearizations(self, sat=sat):
+    def get_linearizations(self, sat=None):
         '''
         generate all linearizations
         '''
@@ -165,7 +163,7 @@ class poset:
             print()
         return tmp
 
-    def solve(self, sat=sat):
+    def solve(self, sat=None):
         '''
         get all consistent poset
         '''

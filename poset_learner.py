@@ -70,6 +70,14 @@ tuple('7654321'),
 tuple('7654231'),
 tuple('76542317654231')]
 
+syms = set('123')
+lins ={tuple('123'),
+tuple('132'),
+tuple('213'),
+tuple('231'),
+tuple('312'),
+tuple('321')}
+
 ls = list(lins)
 
 class PosetTeacher:
@@ -85,6 +93,7 @@ class PosetTeacher:
             self.counter = tuple(l)
             return False
         print(fsm.rename(H))
+        fsm.render(fsm.rename(H))
         d = input('is it good? (y/n)  ')
         if d == 'y':
             return True
