@@ -70,13 +70,12 @@ tuple('7654321'),
 tuple('7654231'),
 tuple('76542317654231')]
 
-syms = set('123')
-lins ={tuple('123'),
-tuple('132'),
-tuple('213'),
-tuple('231'),
-tuple('312'),
-tuple('321')}
+syms = set('abc')
+lins ={tuple('abc'),
+tuple('cab'),
+tuple('bac'),
+tuple('bca'),
+tuple('cba')}
 
 ls = list(lins)
 

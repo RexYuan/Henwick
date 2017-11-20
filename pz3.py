@@ -1,6 +1,7 @@
 from z3 import *
 from functools import reduce
 from itertools import permutations
+from graphviz import Digraph
 
 v = Bool
 T = BoolVal(True)
@@ -279,6 +280,9 @@ def poset_cover(k=1, *lins, solve=True):
             constraints = simplify(And(constraints , pA))
 
     if solve:
+        covers = []
+        pedges = {pname: [] for pname, p in ps.items()}
+
         result = c_s.check()
         i = 1
         print('---cover for : [ ', ' '.join(lins), ' ]---')
@@ -290,6 +294,7 @@ def poset_cover(k=1, *lins, solve=True):
                 for y in universe-{x}:
                     for pname, p in ps.items():
                         if m[v(p.name+x+'{'+y)]:
+                            pedges[pname].append((p.name+x,p.name+y))
                             print(p.name+x+'{'+y,' ',end='')
                         if m[v(p.name+x+'<'+y)]:
                             #print(p.name+x+'<'+y,' ',end='')
@@ -301,7 +306,22 @@ def poset_cover(k=1, *lins, solve=True):
             result = c_s.check()
             i = i+1
             print()
+
+            covers.append(pedges)
+            pedges = {pname: [] for pname, p in ps.items()}
         print('---end---\n')
+
+        for i, pedges in enumerate(covers):
+            g = Digraph('G', filename='graphs/cover_'+str(i), format='jpg')
+            g.attr(label='Cover '+str(i))
+            for pname, edges in pedges.items():
+                with g.subgraph(name='cluster_'+pname) as c:
+                    c.attr(color='black')
+                    c.attr(label='poset '+pname)
+                    c.node_attr.update(style='filled', color='white')
+                    c.edges(edges)
+            g.render()
+            print('rendered ./graphs/cover_'+str(i)+'.jpg')
 
     return constraints
 
@@ -390,11 +410,21 @@ l2=['1234567',
 l3 = [*l2, '7654321','7654231']
 
 l4 = [
+'abc',
+'cab',
+'bac',
+'bca',
+'cba'
+]
+
+l5 = [
 '1234',
 '2134',
 '2314',
 '3214',
-'3124'
+'3124',
+'4132',
+'4312'
 ]
 
 #a = poset({'1','2','3','4','5'}, rel=['1<4','2<4','2<5','3<5'])
@@ -410,7 +440,7 @@ l4 = [
 #poset_blanket(3,'12354','43125','54231',solve=True)
 #print(t()-t1)
 
-poset_cover(2, *l4, solve=True)
+poset_cover(3, *l5, solve=True)
 
 # TODO:
 #       2) furthur testing with more complex poset
