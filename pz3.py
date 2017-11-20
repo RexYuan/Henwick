@@ -280,8 +280,9 @@ def poset_cover(k=1, *lins, solve=True):
             constraints = simplify(And(constraints , pA))
 
     if solve:
-        covers = []
-        pedges = {pname: [] for pname, p in ps.items()}
+        covers = set()
+        cover = set()
+        poset = set()
 
         result = c_s.check()
         i = 1
@@ -290,36 +291,39 @@ def poset_cover(k=1, *lins, solve=True):
             m = c_s.model()
             print('cover',i,' : ',end='')
             counter = T
-            for x in universe:
-                for y in universe-{x}:
-                    for pname, p in ps.items():
+            for pname, p in ps.items():
+                for x in universe:
+                    for y in universe-{x}:
                         if m[v(p.name+x+'{'+y)]:
-                            pedges[pname].append((p.name+x,p.name+y))
+                            poset.add((x,y))
                             print(p.name+x+'{'+y,' ',end='')
                         if m[v(p.name+x+'<'+y)]:
                             #print(p.name+x+'<'+y,' ',end='')
                             counter = And(counter, v(p.name+x+'<'+y))
                         else:
                             counter = And(counter, Not(v(p.name+x+'<'+y)))
+                cover.add(frozenset(poset))
+                poset = set()
             #print('\n',simplify(counter))
             c_s.add(Not(simplify(counter)))
             result = c_s.check()
             i = i+1
             print()
 
-            covers.append(pedges)
-            pedges = {pname: [] for pname, p in ps.items()}
+            covers.add(frozenset(cover))
+            cover = set()
         print('---end---\n')
 
-        for i, pedges in enumerate(covers):
+        for i, cover in enumerate(covers):
             g = Digraph('G', filename='graphs/cover_'+str(i), format='jpg')
             g.attr(label='Cover '+str(i))
-            for pname, edges in pedges.items():
-                with g.subgraph(name='cluster_'+pname) as c:
+            for j, poset in enumerate(cover):
+                with g.subgraph(name='cluster_'+str(j)) as c:
                     c.attr(color='black')
-                    c.attr(label='poset '+pname)
+                    c.attr(label='Poset '+str(j))
                     c.node_attr.update(style='filled', color='white')
-                    c.edges(edges)
+                    for x,y in poset:
+                        c.edge(str(j)+x,str(j)+y)
             g.render()
             print('rendered ./graphs/cover_'+str(i)+'.jpg')
 
