@@ -1,4 +1,4 @@
-
+from itertools import permutations
 
 # !!!!!!!!!important
 # NOTE: does L* actually help in any way getting a automaton?
@@ -44,7 +44,6 @@ lins = {
 ('b','a','c'),
 ('b','c','a')
 }
-'''
 
 syms = set('2741563')
 lins ={tuple('2741563'),
@@ -76,6 +75,29 @@ tuple('cab'),
 tuple('bac'),
 tuple('bca'),
 tuple('cba')}
+'''
+
+syms = set('1234')
+lins = [
+tuple('1234'),
+tuple('2134'),
+tuple('2314'),
+tuple('3214'),
+tuple('3124'),
+tuple('4132'),
+tuple('4312')
+]
+lins = list(permutations(tuple('1234')))
+
+lins = [
+'acbd',
+'cabd',
+'acdb',
+'cadb',
+'cdab'
+]
+lins = list(map(tuple, lins))
+syms = set('acbd')
 
 ls = list(lins)
 
@@ -103,3 +125,15 @@ class PosetTeacher:
 
 l = angluin.Learner(PosetTeacher())
 l.go(debug=True)
+
+# do we really need cover relation, save for easy specification?
+# 1) firsly the benefits of specification by cover relation only save
+# for a polynomial amount of time since order can be refered by
+# traversing through the input with n squared steps.
+# 2) generating covers for hasse can be done with order relation with
+# an extra polynomial time for sorting through the elements
+# with a custom comparison function which remembers all of the
+# order relation and decides order accordingly
+# 3) generating a chain/linearization can be done with simply sort
+# the order prefix by order occurance with ascending order which is
+# polynomial in number of orders

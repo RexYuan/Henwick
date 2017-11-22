@@ -323,7 +323,7 @@ def poset_cover(k=1, *lins, solve=True):
                     c.attr(label='Poset '+str(j))
                     c.node_attr.update(style='filled', color='white')
                     for x,y in poset:
-                        c.edge(str(j)+x,str(j)+y)
+                        c.edge('P'+str(j)+'_'+x,'P'+str(j)+'_'+y)
             g.render()
             print('rendered ./graphs/cover_'+str(i)+'.jpg')
 
@@ -430,7 +430,37 @@ l5 = [
 '4132',
 '4312'
 ]
+'''
+l5 = [
+'acbd',
+'cabd',
+'acdb',
+'cadb',
+'cdab'
+]
 
+l5 = [
+'abc',
+'bac',
+'bca',
+'cba'
+]
+'''
+l5 = [
+'acedb',
+'adceb',
+'bcdae',
+'bcdea'
+]
+
+'''
+l5 = [
+'abcd',
+'bacd',
+'abdc',
+'badc'
+]
+'''
 #a = poset({'1','2','3','4','5'}, rel=['1<4','2<4','2<5','3<5'])
 #a.print_linearizations()
 #a = poset({'1','2','3','4','5'}, rel=['1<4','1<2','1<5','3<2','3<4','3<5','2<4','2<5'])
