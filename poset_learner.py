@@ -6,109 +6,50 @@ from itertools import permutations
 #       making a equivalence query for every linearizations, aint it!?
 #       DOESNT FUCKING MAKE SENSE why w're doing this!!?? FUUUUUUUCKKKKKKK
 
-
-
 import fsm, angluin
 
-'''
-abc
-acb
-
-lins = {
-('a','b','c'),
-('a','c','b')
-}
-'''
-
-'''
-abcde
-acbde
-acdbe
-acdeb
-acedb
-acebd
-
-lins = {('a','b','c','d','e'),
-('a','c','b','d','e'),
-('a','c','d','b','e'),
-('a','c','d','e','b'),
-('a','c','e','d','b'),
-('a','c','e','b','d')}
-'''
-
-'''
-syms = {'a','b','c'}
-lins = {
-('a','b','c'),
-('a','c','b'),
-('b','a','c'),
-('b','c','a')
-}
-
-syms = set('2741563')
-lins ={tuple('2741563'),
-tuple('7241563'),
-tuple('2741653'),
-tuple('7241653'),
-tuple('2745163'),
-tuple('7245163')}
-
-lins =[tuple('1234567'),
-tuple('1235467'),
-tuple('1324567'),
-tuple('1325467'),
-tuple('2134567'),
-tuple('2135467'),
-tuple('2314567'),
-tuple('2315467'),
-tuple('3124567'),
-tuple('3125467'),
-tuple('3214567'),
-tuple('3215467'),
-tuple('7654321'),
-tuple('7654231'),
-tuple('76542317654231')]
-
-syms = set('abc')
-lins ={tuple('abc'),
-tuple('cab'),
-tuple('bac'),
-tuple('bca'),
-tuple('cba')}
-'''
-
-syms = set('1234')
 lins = [
-tuple('1234'),
-tuple('2134'),
-tuple('2314'),
-tuple('3214'),
-tuple('3124'),
-tuple('4132'),
-tuple('4312')
+'abdcfe',
+'badcfe'
 ]
-lins = list(permutations(tuple('1234')))
-
 lins = [
-'acbd',
-'cabd',
-'acdb',
-'cadb',
-'cdab'
+'abcdef'
 ]
+lins = [
+'badcef',
+'badcfe'
+]
+lins = [
+'abcdef',
+'badcef',
+'abdcfe',
+'badcfe'
+]
+syms = set(lins[0])
 lins = list(map(tuple, lins))
-syms = set('acbd')
-
 ls = list(lins)
 
 class PosetTeacher:
-    def __init__(self):
+    def __init__(self,lins):
+        self.syms = set(lins[0])
+        self.lins = list(map(tuple, lins))
+        self.ls = list(lins)
+        self.ls.append(lins[0]*2)
         self.M = fsm.DFA({},'',set())
     def get_alphabet(self):
+        syms = self.syms
+        lins = self.lins
+        ls = self.ls
         return syms
     def member(self, w):
+        syms = self.syms
+        lins = self.lins
+        ls = self.ls
         return 'T' if w in lins else 'F'
     def equiv(self, H):
+        syms = self.syms
+        lins = self.lins
+        ls = self.ls
         if ls:
             l = ls.pop()
             self.counter = tuple(l)
@@ -123,8 +64,12 @@ class PosetTeacher:
             return False
         self.counter = tuple(c)
 
-l = angluin.Learner(PosetTeacher())
-l.go(debug=True)
+#l = angluin.Learner(PosetTeacher())
+#l.go(debug=True)
+
+def learn(lins):
+    l = angluin.Learner(PosetTeacher(lins))
+    l.go(debug=True)
 
 # do we really need cover relation, save for easy specification?
 # 1) firsly the benefits of specification by cover relation only save

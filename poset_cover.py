@@ -1,3 +1,6 @@
+import graphviz as gz
+import networkx as nx
+
 from z3 import *
 from functools import reduce
 from itertools import permutations
@@ -7,20 +10,10 @@ v = Bool
 T = BoolVal(True)
 F = BoolVal(False)
 
-def str_lin(l,*os):
-    '''
-    string form of linear order
-    '''
-    # assuming the orders are indeed consistent
-    l = [[i,0] for i,_ in enumerate(l)]
-    for x,y in map((lambda s : s.split('<')), os):
-        l[int(x)-1][1] += 1
-    l = sorted(l,key=(lambda e : e[1]),reverse=True)
-    return int(''.join(str(x+1) for x in map((lambda a : a[0]), l)))
-
 class poset:
-    def __init__(self, universe, rel=set(), name='', total=False, linearization=''):
-        self.universe = universe
+    def __init__(self, universe, name='', total=False, linearization=''):
+        self.universe = set(universe)
+        universe = set(universe)
         self.s = Solver()
         s = self.s
 
@@ -28,7 +21,6 @@ class poset:
         self.name = name
 
         constraints = T
-        self.constraints = constraints
 
         # build them axioms
         for x in universe:
@@ -37,10 +29,12 @@ class poset:
                 pATS = Not(And(v(name+x+'<'+y), v(name+y+'<'+x)))
                 s.add(pATS)
                 constraints = simplify(And(constraints, pATS))
+
                 # pAS : forall x!=y, -(x{y & y{x)
                 pAS = Not(And(v(name+x+'{'+y), v(name+y+'{'+x)))
                 s.add(pAS)
                 constraints = simplify(And(constraints, pAS))
+
                 if total:
                     # pTO : forall x!=y,  (x<y | y<x)
                     pTO = Or(v(name+x+'<'+y), v(name+y+'<'+x))
@@ -53,8 +47,10 @@ class poset:
                     pT = Implies(And(v(name+x+'<'+y), v(name+y+'<'+z)), v(name+x+'<'+z))
                     s.add(pT)
                     constraints = simplify(And(constraints, pT))
+
                     # pATT : forall x!=y, (x{y) <=> (x<y & forall z, -(x<z & z<y))
                     z_in_xy = simplify(Or(z_in_xy, And(v(name+x+'<'+z), v(name+z+'<'+y))))
+
                 pATT = Or(
                     And(    v(name+x+'{'+y),      And(v(name+x+'<'+y), Not(z_in_xy))),
                     And(Not(v(name+x+'{'+y)), Not(And(v(name+x+'<'+y), Not(z_in_xy))))
@@ -62,24 +58,13 @@ class poset:
                 s.add(pATT)
                 constraints = simplify(And(constraints, pATT))
 
-        # manual constraints with <
-        if rel:
-            for x in universe:
-                for y in universe-{x}:
-                    if x+'<'+y in rel:
-                        s.add(v(name+x+'<'+y))
-                        constraints = simplify(And(constraints, v(name+x+'<'+y)))
-                    else:
-                        s.add(Not(v(name+x+'<'+y)))
-                        constraints = simplify(And(constraints, Not(v(name+x+'<'+y))))
-
         # linear constraints
-        if total and linearization:
+        if linearization:
             w = linearization
-            #for i in range(len(w)):
-            #    for j in range(i+1, len(w)):
-            #        s.add(v(name+w[i]+'<'+w[j]))
-            #        constraints = simplify(And(constraints, v(name+w[i]+'<'+w[j])))
+            for i in range(len(w)):
+                for j in range(i+1, len(w)):
+                    s.add(v(name+w[i]+'<'+w[j]))
+                    constraints = simplify(And(constraints, v(name+w[i]+'<'+w[j])))
             for i in range(len(linearization)-1):
                 s.add(v(name+linearization[i]+'{'+linearization[i+1]))
                 constraints = simplify(And(constraints, v(name+linearization[i]+'{'+linearization[i+1])))
@@ -145,11 +130,17 @@ class poset:
 
     def print_linearizations(self):
         universe = self.universe
+        def str_lin(rels):
+            count = {x:0 for x in universe}
+            for x,_ in map((lambda s : s.split('<')), rels):
+                count[x] += 1
+            count = sorted(list(count.items()), key=(lambda e : e[1]), reverse=True)
+            return ''.join(x for x in map((lambda e : e[0]), count))
 
         i = 1
         tmp = set()
         print('---Linearizations---')
-        for lin in sorted(map((lambda r : str_lin(universe,*r)), self.get_linearizations())):
+        for lin in map((lambda rels : str_lin(rels)), self.get_linearizations()):
             print('L'+str(i)+' : ', lin)
             tmp.add(lin)
             i = i+1
@@ -196,10 +187,10 @@ class poset:
         tmp += '---done---'
         return tmp
 
-def poset_blanket(k=1, *lins, solve=True):
+def poset_blanket(k=1, lins=[], solve=True):
     '''
     k : the number of blanketing posets
-    ls : linearizations as strings
+    lins : linearizations as strings
     '''
     b_s = Solver()
 
@@ -255,23 +246,64 @@ def poset_blanket(k=1, *lins, solve=True):
 
     return (universe, constraints, ps, ls) if not solve else None
 
-def poset_cover(k=1, *lins, solve=True):
+def poset_cover(k=1, lins=[], solve=True, render=True):
     '''
     k : the number of covering posets
-    ls : linearizations as strings
+    lins : linearizations as strings
     '''
     c_s = Solver()
 
+    # helper function : generate adjacent transposed linearizations
+    def get_swap(s):
+        for i in range(len(s)-1):
+            yield s[:i]+s[i+1]+s[i]+s[i+2:]
+
+    # helper function : if s1 s2 are adjacent transposed
+    def is_swap(s1, s2):
+        pair = False
+        i = 0
+        while i < len(s1):
+            if s1[i] != s2[i]:
+                if i == len(s1)-1:
+                    return False
+                if (s1[i] == s2[i+1] and s1[i+1] == s2[i]):
+                    if pair:
+                        return False
+                    pair = True
+                    i += 1
+                else:
+                    return False
+            i += 1
+        return pair
+
+    # generate swap graph from lins
+    swap_graph = nx.Graph()
+    swap_graph.add_nodes_from(lins)
+    for i,l1 in enumerate(lins):
+        for l2 in lins[i+1:]:
+            if is_swap(l1, l2):
+                swap_graph.add_edge(l1, l2)
+
     # build atop poset blanket
-    universe, constraints, ps, ls = poset_blanket(k, *lins, solve=False)
+    universe, constraints, ps, ls = poset_blanket(k, lins, solve=False)
     c_s.add(constraints)
 
-    # {absent} = {permutations} - linears
-    absent = {''.join(p) for p in permutations(lins[0])} - set(lins)
-    # l not generated by any p:
-    # forall p, forall l, exists l_x<y, p_y<x
+    # find poset cover for each and every components
+    bar = set()
+    for comp in nx.connected_components(swap_graph):
+        comp = swap_graph.subgraph(comp)
+
+        # find the insulating barrier
+        for l in comp.nodes:
+            for f in get_swap(l):
+                if f not in comp.nodes:
+                    bar.add(f)
+
+    # non-extension constraints
+    # l not generated by any p : (absent)
+    # forall p, exists l_x<y, p_y<x
     for pname, p in ps.items():
-        for w in absent:
+        for w in bar:
             pA = F
             for i in range(len(w)):
                 for j in range(i+1,len(w)):
@@ -313,6 +345,14 @@ def poset_cover(k=1, *lins, solve=True):
             covers.add(frozenset(cover))
             cover = set()
         #print('---end---\n')
+
+        # render
+        g = gz.Graph('G', filename='graphs/swap_graph', format='jpg')
+        for n in swap_graph.nodes:
+            g.node(n)
+        g.edges(swap_graph.edges)
+        g.render()
+
         done = False
         for i, cover in enumerate(covers):
             done = True
@@ -330,67 +370,17 @@ def poset_cover(k=1, *lins, solve=True):
 
     return done
 
-def new_poset_cover(k=1, *lins, solve=True):
+def pc(lins):
     '''
-    k : the number of covering posets
-    ls : linearizations as strings
-
-    choosing tactic based on lins count?
-
-    insight 1: if    Swap(L1,L2) = {a,b} &
-                             (a,b) in L1 &
-                                 L1 in Y &
-                             L2 not in Y
-                  => exists a covering poset w/ (a,b)
+    incrementally incr k
     '''
-    c_s = Solver()
-
-    # build atop poset blanket
-    universe, constraints, ps, ls = poset_blanket(k, *lins, solve=False)
-    c_s.add(constraints)
-
-    # {absent} = {permutations} - linears
-    absent = {''.join(p) for p in permutations(lins[0])} - set(lins)
-    # l not generated by any p:
-    # forall p, forall l, exists l_x<y, p_y<x
-    for pname, p in ps.items():
-        for w in absent:
-            pA = F
-            for i in range(len(w)):
-                for j in range(i+1,len(w)):
-                    pA = Or(pA , v(p.name+w[j]+'<'+w[i]))
-            c_s.add(pA)
-            constraints = simplify(And(constraints , pA))
-
-    if solve:
-        result = c_s.check()
-        i = 1
-        print('---cover for : [ ', ' '.join(lins), ' ]---')
-        while result == sat:
-            m = c_s.model()
-            print('cover',i,' : ',end='')
-            counter = T
-            for x in universe:
-                for y in universe-{x}:
-                    for pname, p in ps.items():
-                        #if m[v(p.name+x+'{'+y)]:
-                            #print(p.name+x+'{'+y,' ',end='')
-                        if m[v(p.name+x+'<'+y)]:
-                            print(p.name+x+'<'+y,' ',end='')
-                            counter = And(counter, v(p.name+x+'<'+y))
-                        else:
-                            counter = And(counter, Not(v(p.name+x+'<'+y)))
-            #print('\n',simplify(counter))
-            c_s.add(Not(simplify(counter)))
-            result = c_s.check()
-            i = i+1
-            print()
-        print('---end---\n')
-
-    return constraints
-
-#poset({'a','b','c','d','e','f'}).print_linearizations()
-#poset_cover(2, 'abc', 'acb', 'cab', 'cba', solve=True)
+    for i in range(len(lins)):
+        r = poset_cover(i+1, lins)
+        if r:
+            print(i+1,'succeeded')
+            break
+        else:
+            print(i+1,'failed')
 
 lins = [
 'abcdef',
@@ -399,34 +389,24 @@ lins = [
 'badcfe'
 ]
 
-def pc(l):
-    for i in range(len(l)):
-        r = poset_cover(i+1, *l, solve=True)
-        if r:
-            break
-        else:
-            print(i+1,'failed')
+lins = [
+ 'afbced',
+ 'afbecd',
+ 'abfecd',
+ 'bfaced',
+ 'bafced',
+ 'abfced',
+ 'bacfed',
+ 'abcfed',
+ 'bacefd',
+ 'abcefd'
+]
 
-#poset_cover(3, *lins, solve=True)
-
-#a = poset({'1','2','3','4','5'}, rel=['1<4','2<4','2<5','3<5'])
-#a.print_linearizations()
-#a = poset({'1','2','3','4','5'}, rel=['1<4','1<2','1<5','3<2','3<4','3<5','2<4','2<5'])
-#a = poset({'1','2','3','4','5'}, rel=['1<4','2<4','2<5','3<5','1<5','3<4'])
-#a = poset({'1','2','3','4','5'}, rel=['1<4','3<5','1<5','3<4','3<2'])
-#poset({'1','2','3','4','5'}, rel=['1<4','3<5','1<5','3<4','3<2'])
-#a.print_linearizations()
-#a = poset({'1','2','3'})
-#from time import time as t
-#t1 = t()
-#poset_blanket(3,'12354','43125','54231',solve=True)
-#print(t()-t1)
-
-# TODO:
-#       2) furthur testing with more complex poset
-#       3) test it with multiple poset ; ie poset cover problem
-#       4) this many clauses? are you fucking kidding me? can you not?
-#          must find a way to make it more efficient
-#          maybe automaton would help after all?
-
-#cover_from_order(5,'2<4','1<5','1<4','2<1','2<5','5<4','2<3','3<5','3<4','1<3')
+lins = set()
+from random import shuffle
+x = list('abcdefhijk')
+for _ in range(500):
+    lins.add(''.join(x))
+    shuffle(x)
+print(lins)
+lins = list(lins)

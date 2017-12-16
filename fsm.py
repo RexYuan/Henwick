@@ -4,15 +4,25 @@ import graphviz as gv
 
 def render(M, fmt='jpg', name='g', path='graphs/'):
     g = gv.Digraph(format=fmt)
-    g.attr('node', shape='circle')
-    for p in M.states-M.finals:
-        g.node(p)
-    g.attr('node', shape='doublecircle')
-    for p in M.finals:
-        g.node(p)
+    # find dead state
+    ds = set()
     for p in M.states:
+        if all(M.transitions[p][s] == p for s in M.symbols):
+            ds.add(p)
+    # the states
+    g.attr('node', shape='circle')
+    for p in M.states-M.finals-ds:
+        g.node(p)
+    # the final states
+    g.attr('node', shape='doublecircle')
+    for p in M.finals-ds:
+        g.node(p)
+    # the edges
+    for p in M.states-ds:
         for s in M.symbols:
-            g.edge(p, M.transitions[p][s], label=s)
+            if M.transitions[p][s] not in ds:
+                g.edge(p, M.transitions[p][s], label=s)
+    # save file
     g.render(filename=path+name)
     g.view()
     print('Graph is rendered at ./'+path+name+'.'+fmt)
