@@ -318,19 +318,19 @@ def poset_cover(k=1, lins=[], solve=True, render=True):
 
         result = c_s.check()
         i = 1
-        #print('---cover for : [ ', ' '.join(lins), ' ]---')
-        while result == sat:
+        print('---cover for : [ ', ' '.join(lins), ' ]---')
+        if result == sat:
             m = c_s.model()
-            #print('cover',i,' : ',end='')
+            print('cover',i,' : ',end='')
             counter = T
             for pname, p in ps.items():
                 for x in universe:
                     for y in universe-{x}:
                         if m[v(p.name+x+'{'+y)]:
                             poset.add((x,y))
-                            #print(p.name+x+'{'+y,' ',end='')
+                            print(p.name+x+'{'+y,' ',end='')
                         if m[v(p.name+x+'<'+y)]:
-                            #print(p.name+x+'<'+y,' ',end='')
+                            print(p.name+x+'<'+y,' ',end='')
                             counter = And(counter, v(p.name+x+'<'+y))
                         else:
                             counter = And(counter, Not(v(p.name+x+'<'+y)))
@@ -340,13 +340,15 @@ def poset_cover(k=1, lins=[], solve=True, render=True):
             c_s.add(Not(simplify(counter)))
             result = c_s.check()
             i = i+1
-            #print()
+            print()
 
             covers.add(frozenset(cover))
             cover = set()
-        #print('---end---\n')
+        print('---end---\n')
 
         # render
+        done = True if covers else False
+        '''
         g = gz.Graph('G', filename='graphs/swap_graph', format='jpg')
         for n in swap_graph.nodes:
             g.node(n)
@@ -367,6 +369,7 @@ def poset_cover(k=1, lins=[], solve=True, render=True):
                         c.edge('P'+str(j)+'_'+x,'P'+str(j)+'_'+y)
             g.render()
             print('rendered ./graphs/cover_'+str(i)+'.jpg')
+        '''
 
     return done
 
@@ -408,5 +411,7 @@ x = list('abcdefhijk')
 for _ in range(500):
     lins.add(''.join(x))
     shuffle(x)
-print(lins)
+#print(lins)
 lins = list(lins)
+
+# TODO: eliminate duplicate covers
