@@ -319,7 +319,7 @@ def poset_cover(k=1, lins=[], solve=True, render=True):
         result = c_s.check()
         i = 1
         print('---cover for : [ ', ' '.join(lins), ' ]---')
-        if result == sat:
+        while result == sat:
             m = c_s.model()
             print('cover',i,' : ',end='')
             counter = T
