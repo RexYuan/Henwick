@@ -287,7 +287,7 @@ def poset_cover(k=1, *lins, solve=True):
         result = c_s.check()
         i = 1
         print('---cover for : [ ', ' '.join(lins), ' ]---')
-        if result == sat:
+        while result == sat:
             m = c_s.model()
             print('cover',i,' : ',end='')
             counter = T
@@ -316,10 +316,7 @@ def poset_cover(k=1, *lins, solve=True):
 
         done = True if covers else False
 
-        '''
-        done = False
         for i, cover in enumerate(covers):
-            done = True
             g = Digraph('G', filename='graphs/cover_'+str(i), format='jpg')
             g.attr(label='Cover '+str(i))
             for j, poset in enumerate(cover):
@@ -331,7 +328,6 @@ def poset_cover(k=1, *lins, solve=True):
                         c.edge('P'+str(j)+'_'+x,'P'+str(j)+'_'+y)
             g.render()
             print('rendered ./graphs/cover_'+str(i)+'.jpg')
-        '''
 
     return done
 

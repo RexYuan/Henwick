@@ -9,28 +9,10 @@ from graphviz import Digraph
 TAUTO = BoolVal(True)
 CONTRA = BoolVal(False)
 
-def order_graph(rs):
-    g = nx.Graph()
-    g.add_edges_from(rs)
-    return g
-
-def render_order(ng):
-    g = gz.Graph('G', filename='graphs/order_graph', format='jpg')
-    for n in ng.nodes:
-        g.node(n)
-    g.edges(ng.edges)
-    g.view()
-
-def render_graph(ng):
-    g = gz.Graph('G', filename='graphs/swap_graph', format='jpg')
-    for n in ng.nodes:
-        g.node(n)
-    g.edges(ng.edges)
-    #g.render()
-    #print('rendered ./graphs/swap_graph.jpg')
-    g.view()
-
 def trans_closure(ss):
+    '''
+    ss : list
+    '''
     s = set(map((lambda s : tuple(s.split('<'))), ss))
     t = set()
     while True:
@@ -46,6 +28,17 @@ def trans_closure(ss):
         if not changed:
             break
     return set(map('<'.join, s)) | t
+
+def rm_trans_closure(uni, rs):
+    crels = set()
+    for x,y in rs:
+        cover = True
+        for z in uni:
+            if (x,z) in rs and (z,y) in rs:
+                cover = False
+        if cover:
+            crels.add( (x,y) )
+    return crels
 
 def poset_axioms(universe, name, total=False):
     '''
@@ -223,34 +216,40 @@ def poset_cover(lins):
                 swap_graph.add_edge(l1, l2)
 
     # divide & conquer on connected components
-    for comp in nx.connected_components(swap_graph):
+    for i, comp in enumerate(nx.connected_components(swap_graph)):
         comp = swap_graph.subgraph(comp)
-        lins = comp.nodes
+        l = list(comp.nodes)
 
         # find poset cover for each and every components
-        covers = connected_poset_cover(lins)
+        covers = connected_poset_cover(l)
 
-
-
-        '''
-        g = gz.Graph('G', filename='graphs/swap_graph', format='jpg')
-        for n in swap_graph.nodes:
-            g.node(n)
-        g.edges(swap_graph.edges)
-        g.render()
-
-        done = False
-        for i, cover in enumerate(covers):
-            done = True
-            g = Digraph('G', filename='graphs/cover_'+str(i), format='jpg')
-            g.attr(label='Cover '+str(i))
-            for j, poset in enumerate(cover):
-                with g.subgraph(name='cluster_'+str(j)) as c:
-                    c.attr(color='black')
-                    c.attr(label='Poset '+str(j))
-                    c.node_attr.update(style='filled', color='white')
-                    for x,y in poset:
-                        c.edge('P'+str(j)+'_'+x,'P'+str(j)+'_'+y)
+        # render cover
+        for j, cover in enumerate(covers):
+            g = gz.Digraph('G', filename='graphs/comp_'+str(i+1)+'_cover_'+str(j+1), format='jpg')
+            g.attr(label='Cover '+str(j+1)+' for component '+str(i+1))
+            # render posets as clusters
+            for k, poset in enumerate(cover):
+                with g.subgraph(name='cluster_'+str(k+1)) as c:
+                    c.attr(label='Poset '+str(k+1))
+                    for x,y in rm_trans_closure(omega, poset):
+                        c.node('P'+str(k+1)+'_'+x, x)
+                        c.node('P'+str(k+1)+'_'+y, y)
+                        c.edge('P'+str(k+1)+'_'+x,'P'+str(k+1)+'_'+y)
             g.render()
-            print('rendered ./graphs/cover_'+str(i)+'.jpg')
-        '''
+            print('rendered ./graphs/comp_'+str(i+1)+'_cover_'+str(j+1)+'.jpg')
+
+    # render swap graph
+    g = gz.Graph('G', filename='graphs/swap_graph', format='jpg')
+    g.attr(label='[ '+' '.join(lins)+' ]')
+    # render components as clusters
+    for i, comp in enumerate(nx.connected_components(swap_graph)):
+        comp = swap_graph.subgraph(comp)
+        nodes, edges = comp.nodes, comp.edges
+        # copy information from networkx to graphviz
+        with g.subgraph(name='cluster_'+str(i+1)) as c:
+            c.attr(label='Component '+str(i+1))
+            for n in nodes:
+                c.node(n)
+            c.edges(edges)
+    g.render()
+    print('rendered ./graphs/swap_graph.jpg')
