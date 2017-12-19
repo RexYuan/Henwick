@@ -6,259 +6,190 @@ from functools import reduce
 from itertools import permutations
 from graphviz import Digraph
 
-v = Bool
-T = BoolVal(True)
-F = BoolVal(False)
+TAUTO = BoolVal(True)
+CONTRA = BoolVal(False)
 
-class poset:
-    def __init__(self, universe, name='', total=False, linearization=''):
-        self.universe = set(universe)
-        universe = set(universe)
-        self.s = Solver()
-        s = self.s
-
-        name = name+'_' if name != '' else name
-        self.name = name
-
-        constraints = T
-
-        # build them axioms
-        for x in universe:
-            for y in universe-{x}:
-                # pATS : forall x!=y, -(x<y & y<x)
-                pATS = Not(And(v(name+x+'<'+y), v(name+y+'<'+x)))
-                s.add(pATS)
-                constraints = simplify(And(constraints, pATS))
-
-                # pAS : forall x!=y, -(x{y & y{x)
-                pAS = Not(And(v(name+x+'{'+y), v(name+y+'{'+x)))
-                s.add(pAS)
-                constraints = simplify(And(constraints, pAS))
-
-                if total:
-                    # pTO : forall x!=y,  (x<y | y<x)
-                    pTO = Or(v(name+x+'<'+y), v(name+y+'<'+x))
-                    s.add(pTO)
-                    constraints = simplify(And(constraints, pTO))
-
-                z_in_xy = F
-                for z in universe-{x,y}:
-                    # pT : forall x!=y!=z, (x<y & y<z) => x<z
-                    pT = Implies(And(v(name+x+'<'+y), v(name+y+'<'+z)), v(name+x+'<'+z))
-                    s.add(pT)
-                    constraints = simplify(And(constraints, pT))
-
-                    # pATT : forall x!=y, (x{y) <=> (x<y & forall z, -(x<z & z<y))
-                    z_in_xy = simplify(Or(z_in_xy, And(v(name+x+'<'+z), v(name+z+'<'+y))))
-
-                pATT = Or(
-                    And(    v(name+x+'{'+y),      And(v(name+x+'<'+y), Not(z_in_xy))),
-                    And(Not(v(name+x+'{'+y)), Not(And(v(name+x+'<'+y), Not(z_in_xy))))
-                )
-                s.add(pATT)
-                constraints = simplify(And(constraints, pATT))
-
-        # linear constraints
-        if linearization:
-            w = linearization
-            for i in range(len(w)):
-                for j in range(i+1, len(w)):
-                    s.add(v(name+w[i]+'<'+w[j]))
-                    constraints = simplify(And(constraints, v(name+w[i]+'<'+w[j])))
-            for i in range(len(linearization)-1):
-                s.add(v(name+linearization[i]+'{'+linearization[i+1]))
-                constraints = simplify(And(constraints, v(name+linearization[i]+'{'+linearization[i+1])))
-
-        self.constraints = constraints
-
-    def get_extension_constraints(self, p):
-        assert(type(p) == poset and p.name != '')
-
-        name = self.name
-        universe = self.universe
-
-        pE = T
-        for x in universe:
-            for y in universe-{x}:
-                # pE (P2 extends P1) : forall x!=y, (x<y in P1) => (x<y in P2)
-                pE = And(pE , Implies(v(name+x+'<'+y) , v(p.name+x+'<'+y)))
-        return pE
-
-    def extends(self, *ps):
-        s = self.s
-        constraints = self.constraints
-
-        for p in ps:
-            new_c = And(self.get_extension_constraints(p), p.get_constraints())
-            s.add(new_c)
-            constraints = simplify(And(constraints, new_c))
-
-        self.constraints = constraints
-        return True
-
-    def get_universe(self):
-        return self.universe
-
-    def get_constraints(self):
-        return self.constraints
-
-    def get_linearizations(self, sat=sat):
-        '''
-        generate all linearizations
-        '''
-        universe = self.universe
-
-        l = poset(universe, name='L', total=True)
-        lin_s = Solver()
-        lin_s.add(self.get_constraints() , self.get_extension_constraints(l) , l.get_constraints())
-
-        result = lin_s.check()
-        while result == sat:
-            lin = set()
-            m = lin_s.model()
-            counter = T
-            for x in universe:
-                for y in universe-{x}:
-                    if m[v(l.name+x+'<'+y)]:
-                        counter = And(counter , v(l.name+x+'<'+y))
-                        lin.add(x+'<'+y)
-                    else:
-                        counter = And(counter , Not(v(l.name+x+'<'+y)))
-            yield lin
-            lin_s.add(Not(counter))
-            result = lin_s.check()
-
-    def print_linearizations(self):
-        universe = self.universe
-        def str_lin(rels):
-            count = {x:0 for x in universe}
-            for x,_ in map((lambda s : s.split('<')), rels):
-                count[x] += 1
-            count = sorted(list(count.items()), key=(lambda e : e[1]), reverse=True)
-            return ''.join(x for x in map((lambda e : e[0]), count))
-
-        i = 1
+def trans_closure(ss):
+    '''
+    ss : list
+    '''
+    s = set(map((lambda s : tuple(s.split('<'))), ss))
+    t = set()
+    while True:
         tmp = set()
-        print('---Linearizations---')
-        for lin in map((lambda rels : str_lin(rels)), self.get_linearizations()):
-            print('L'+str(i)+' : ', lin)
-            tmp.add(lin)
-            i = i+1
-        print('---done---')
-        return tmp
+        changed = False
+        for x in s:
+            for y in s:
+                if x[1] == y[0] and x[0]+'<'+y[1] not in t:
+                    tmp.add((x[0], y[1]))
+                    t.add(x[0]+'<'+y[1])
+                    changed = True
+        s = s | tmp
+        if not changed:
+            break
+    return set(map('<'.join, s)) | t
 
-    def solve(self, sat=sat):
-        '''
-        get all consistent poset
-        '''
-        name = self.name
-        universe = self.universe
-        s = self.s
+def rm_trans_closure(uni, rs):
+    crels = set()
+    for x,y in rs:
+        cover = True
+        for z in uni:
+            if (x,z) in rs and (z,y) in rs:
+                cover = False
+        if cover:
+            crels.add( (x,y) )
+    return crels
 
-        result = s.check()
-        while result == sat:
-            m = s.model()
-            yield m
-            counter = T
-            for x in universe:
-                for y in universe-{x}:
-                    if m[v(name+x+'<'+y)]:
-                        counter = And(counter , v(name+x+'<'+y))
-                    else:
-                        counter = And(counter , Not(v(name+x+'<'+y)))
-            s.add(Not(counter))
-            result = s.check()
-
-    def __str__(self):
-        name = self.name
-        universe = self.universe
-        tmp = ''
-
-        i = 1
-        tmp += '---Consistent posets---\n'
-        for result in self.solve():
-            tmp += 'order '+str(i)+'  : '
-            for x in universe:
-                for y in universe-{x}:
-                    if result[v(name+x+'{'+y)]:
-                        tmp += ' '+name+x+'{'+y
-            i = i+1
-            tmp += '\n'
-        tmp += '---done---'
-        return tmp
-
-def poset_blanket(k=1, lins=[], solve=True):
+def poset_axioms(universe, name, total=False):
     '''
-    k : the number of blanketing posets
-    lins : linearizations as strings
+    build poset axioms on iterable universe
     '''
-    b_s = Solver()
+    def rel(x, y):
+        return Bool('P'+name+'_'+x+'<'+y)
+    constraints = TAUTO
+    omega = set(universe)
 
-    universe = set(lins[0])
-    constraints = T
+    for x in omega:
+        for y in omega-{x}:
+            # forall x!=y, -(x<y & y<x)
+            constraints = simplify(And( constraints , Not( And(rel(x,y),rel(y,x)) ) ))
 
-    # build the k blanketing posets
-    ps = {}
-    for i in range(1, k+1):
-        ps['P'+str(i)] = poset(universe, name='P'+str(i))
-        b_s.add(ps['P'+str(i)].get_constraints())
-        constraints = simplify(And(constraints , ps['P'+str(i)].get_constraints()))
+            if total:
+                # forall x!=y, (x<y | y<x)
+                constraints = simplify(And( constraints , Or( rel(x,y),rel(y,x) ) ))
 
-    # build the linear posets
-    ls = {}
-    for w in lins:
-        ls['L'+w] = poset(universe, name='L'+w, total=True, linearization=w)
-        b_s.add(ls['L'+w].get_constraints())
-        constraints = simplify(And(constraints , ls['L'+w].get_constraints()))
+            for z in omega-{x,y}:
+                # forall x!=y!=z, (x<y & y<z) => x<z
+                constraints = simplify(And( constraints , Implies( And(rel(x,y),rel(y,z)) , rel(x,z) ) ))
+    return constraints
 
-    # build the extension constraints
-    for lname, l in ls.items():
-        pE = F
-        # forall l, exists p, l extends p
-        for pname, p in ps.items():
-            pE = Or(pE, p.get_extension_constraints(l))
-        b_s.add(pE)
-        constraints = simplify(And(constraints , pE))
-
-    # solve
-    if solve:
-        result = b_s.check()
-        i = 1
-        print('---blanket for : [ ', ' '.join(lins), ' ]---')
-        while result == sat:
-            m = b_s.model()
-            print('blanket',i,' : ',end='')
-            counter = T
-            for pname, p in ps.items():
-                for x in universe:
-                    for y in universe-{x}:
-                        if m[v(p.name+x+'{'+y)]:
-                            print(p.name+x+'{'+y,' ',end='')
-                        if m[v(p.name+x+'<'+y)]:
-                            counter = And(counter, v(p.name+x+'<'+y))
-                        else:
-                            counter = And(counter, Not(v(p.name+x+'<'+y)))
-            b_s.add(Not(counter))
-            result = b_s.check()
-            i = i+1
-            print()
-        print('---end---\n')
-
-    return (universe, constraints, ps, ls) if not solve else None
-
-def poset_cover(k=1, lins=[], solve=True, render=True):
+def le_constraints(universe, name, lin):
     '''
-    k : the number of covering posets
-    lins : linearizations as strings
-    '''
-    c_s = Solver()
+    linear extension constraints : <lin> (string) extends poset <name>
 
-    # helper function : generate adjacent transposed linearizations
+    given P2,
+    P2 extends P1 : forall r, r in P1 => r in P2
+                  = forall r, r not in P2 => r not in P1
+    '''
+    def rel(x, y):
+        return Bool('P'+name+'_'+x+'<'+y)
+    constraints = TAUTO
+    omega = set(universe)
+
+    ords = set()
+    # cartesian set
+    for x in omega:
+        for y in omega-{x}:
+            ords.add( (x,y) )
+
+    # set difference the relations from lin
+    for i,x in enumerate(lin):
+        for y in lin[i+1:]:
+            ords.remove( (x,y) )
+
+    # build constraints on name : forall r not in <lin>, r not in <name>
+    for r in ords:
+        constraints = simplify(And( constraints , Not(rel(*r)) ))
+    return constraints
+
+def connected_poset_cover(lins, f=1, get_constraint=False):
+    '''
+    minimal poset cover for connected lins
+    '''
+    omega = set(lins[0])
+    s = Solver()
+    constraints = TAUTO
+
+    # to make relation
+    def rel(name, x, y):
+        return Bool('P'+name+'_'+x+'<'+y)
+
+    # to generate swaps
     def get_swap(s):
         for i in range(len(s)-1):
             yield s[:i]+s[i+1]+s[i]+s[i+2:]
 
-    # helper function : if s1 s2 are adjacent transposed
+    # find the insulating barrier
+    bar = list(filter( lambda l : l not in lins ,
+               reduce( lambda x,y : x|y ,
+               map( lambda l : set(get_swap(l)) , lins ) ) ))
+
+    # make k posets ; worst case is size of lins
+    for k in range(1, len(lins)+1):
+        s.reset()
+        constraints = TAUTO
+
+        # poset axioms : basic poset contraints
+        for i in range(f, f+k):
+            s.add( simplify(poset_axioms(omega , str(i))) )
+            constraints = simplify(And( constraints , simplify(poset_axioms(omega , str(i))) ))
+
+        # extension constraints : forall l, exists p, p covers l
+        for l in lins:
+            tmp = CONTRA
+            for i in range(f, f+k):
+                tmp = Or( tmp , le_constraints(omega , str(i) , l) )
+            s.add( simplify(tmp) )
+            constraints = simplify(And( constraints , simplify(tmp) ))
+
+        # non-extension constraints : forall not l, forall p, p does not cover l
+        for l in bar:
+            for i in range(f, f+k):
+                s.add( simplify(Not(le_constraints(omega , str(i) , l))) )
+                constraints = simplify(And( constraints , simplify(Not(le_constraints(omega , str(i) , l))) ))
+
+        # for tossing away duplicates
+        covers = set()
+        cover = set()
+        poset = set()
+
+        # check if size k works
+        done = False
+        result = s.check()
+
+        # return constraint with satisfying number of posets
+        if get_constraint and result == sat:
+            return constraints
+
+        # get all covers
+        while result == sat:
+            done = True
+            m = s.model()
+            counter = TAUTO
+
+            # collect example
+            for i in range(f, f+k):
+                for x in omega:
+                    for y in omega-{x}:
+                        if m[ rel(str(i), x, y) ]:
+                            poset.add( (x,y) )
+                            counter = And( counter , rel(str(i), x, y) )
+                        else:
+                            counter = And( counter , Not(rel(str(i), x, y)) )
+                cover.add(frozenset(poset))
+                poset = set()
+            covers.add(frozenset(cover))
+            cover = set()
+
+            # force this example to false
+            s.add( simplify(Not(counter)) )
+            result = s.check()
+
+        # return all covers if found
+        if covers:
+            return covers
+        else:
+            print(k,'failed')
+
+def poset_cover(lins):
+    '''
+    minimal poset cover for arbitrary lins
+    '''
+    omega = set(lins[0])
+    s = Solver()
+    constraints = TAUTO
+
+    # if s1 s2 are off by one swap
     def is_swap(s1, s2):
         pair = False
         i = 0
@@ -284,134 +215,53 @@ def poset_cover(k=1, lins=[], solve=True, render=True):
             if is_swap(l1, l2):
                 swap_graph.add_edge(l1, l2)
 
-    # build atop poset blanket
-    universe, constraints, ps, ls = poset_blanket(k, lins, solve=False)
-    c_s.add(constraints)
-
-    # find poset cover for each and every components
-    bar = set()
-    for comp in nx.connected_components(swap_graph):
+    # divide & conquer on connected components
+    for i, comp in enumerate(nx.connected_components(swap_graph)):
         comp = swap_graph.subgraph(comp)
+        l = list(comp.nodes)
 
-        # find the insulating barrier
-        for l in comp.nodes:
-            for f in get_swap(l):
-                if f not in comp.nodes:
-                    bar.add(f)
+        # find poset cover for each and every components
+        covers = connected_poset_cover(l)
 
-    # non-extension constraints
-    # l not generated by any p : (absent)
-    # forall p, exists l_x<y, p_y<x
-    for pname, p in ps.items():
-        for w in bar:
-            pA = F
-            for i in range(len(w)):
-                for j in range(i+1,len(w)):
-                    pA = Or(pA , v(p.name+w[j]+'<'+w[i]))
-            c_s.add(pA)
-            constraints = simplify(And(constraints , pA))
-
-    if solve:
-        covers = set()
-        cover = set()
-        poset = set()
-
-        result = c_s.check()
-        i = 1
-        print('---cover for : [ ', ' '.join(lins), ' ]---')
-        while result == sat:
-            m = c_s.model()
-            print('cover',i,' : ',end='')
-            counter = T
-            for pname, p in ps.items():
-                for x in universe:
-                    for y in universe-{x}:
-                        if m[v(p.name+x+'{'+y)]:
-                            poset.add((x,y))
-                            print(p.name+x+'{'+y,' ',end='')
-                        if m[v(p.name+x+'<'+y)]:
-                            print(p.name+x+'<'+y,' ',end='')
-                            counter = And(counter, v(p.name+x+'<'+y))
-                        else:
-                            counter = And(counter, Not(v(p.name+x+'<'+y)))
-                cover.add(frozenset(poset))
-                poset = set()
-            #print('\n',simplify(counter))
-            c_s.add(Not(simplify(counter)))
-            result = c_s.check()
-            i = i+1
-            print()
-
-            covers.add(frozenset(cover))
-            cover = set()
-        print('---end---\n')
-
-        # render
-        done = True if covers else False
-        '''
-        g = gz.Graph('G', filename='graphs/swap_graph', format='jpg')
-        for n in swap_graph.nodes:
-            g.node(n)
-        g.edges(swap_graph.edges)
-        g.render()
-
-        done = False
-        for i, cover in enumerate(covers):
-            done = True
-            g = Digraph('G', filename='graphs/cover_'+str(i), format='jpg')
-            g.attr(label='Cover '+str(i))
-            for j, poset in enumerate(cover):
-                with g.subgraph(name='cluster_'+str(j)) as c:
-                    c.attr(color='black')
-                    c.attr(label='Poset '+str(j))
-                    c.node_attr.update(style='filled', color='white')
-                    for x,y in poset:
-                        c.edge('P'+str(j)+'_'+x,'P'+str(j)+'_'+y)
+        # render cover
+        for j, cover in enumerate(covers):
+            g = gz.Digraph('G', filename='graphs/comp_'+str(i+1)+'_cover_'+str(j+1), format='jpg')
+            g.attr(label='Cover '+str(j+1)+' for component '+str(i+1))
+            # render posets as clusters
+            for k, poset in enumerate(cover):
+                with g.subgraph(name='cluster_'+str(k+1)) as c:
+                    c.attr(label='Poset '+str(k+1))
+                    for x,y in rm_trans_closure(omega, poset):
+                        c.node('P'+str(k+1)+'_'+x, x)
+                        c.node('P'+str(k+1)+'_'+y, y)
+                        c.edge('P'+str(k+1)+'_'+x,'P'+str(k+1)+'_'+y)
             g.render()
-            print('rendered ./graphs/cover_'+str(i)+'.jpg')
-        '''
+            print('rendered ./graphs/comp_'+str(i+1)+'_cover_'+str(j+1)+'.jpg')
 
-    return done
+    # render swap graph
+    g = gz.Graph('G', filename='graphs/swap_graph', format='jpg')
+    g.attr(label='[ '+' '.join(lins)+' ]')
+    # render components as clusters
+    for i, comp in enumerate(nx.connected_components(swap_graph)):
+        comp = swap_graph.subgraph(comp)
+        nodes, edges = comp.nodes, comp.edges
+        # copy information from networkx to graphviz
+        with g.subgraph(name='cluster_'+str(i+1)) as c:
+            c.attr(label='Component '+str(i+1))
+            for n in nodes:
+                c.node(n)
+            c.edges(edges)
+    g.render()
+    print('rendered ./graphs/swap_graph.jpg')
 
-def pc(lins):
-    '''
-    incrementally incr k
-    '''
-    for i in range(len(lins)):
-        r = poset_cover(i+1, lins)
-        if r:
-            print(i+1,'succeeded')
-            break
-        else:
-            print(i+1,'failed')
-
+# example
 lins = [
 'abcdef',
-'badcef',
-'abdcfe',
-'badcfe'
+'acbdfe',
+'acbfde',
+'adcbef',
+'acdbfe',
+'acdfbe',
+'bacdef'
 ]
-
-lins = [
- 'afbced',
- 'afbecd',
- 'abfecd',
- 'bfaced',
- 'bafced',
- 'abfced',
- 'bacfed',
- 'abcfed',
- 'bacefd',
- 'abcefd'
-]
-
-lins = set()
-from random import shuffle
-x = list('abcdefhijk')
-for _ in range(500):
-    lins.add(''.join(x))
-    shuffle(x)
-#print(lins)
-lins = list(lins)
-
-# TODO: eliminate duplicate covers
+poset_cover(lins)

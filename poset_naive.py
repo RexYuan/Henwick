@@ -331,17 +331,6 @@ def poset_cover(k=1, *lins, solve=True):
 
     return done
 
-
-#poset({'a','b','c','d','e','f'}).print_linearizations()
-#poset_cover(2, 'abc', 'acb', 'cab', 'cba', solve=True)
-
-lins = [
-'abcdef',
-'badcef',
-'abdcfe',
-'badcfe'
-]
-
 def pc(l):
     for i in range(len(l)):
         r = poset_cover(i+1, *l, solve=True)
@@ -350,26 +339,14 @@ def pc(l):
         else:
             print(i+1,'failed')
 
-#poset_cover(3, *lins, solve=True)
-
-#a = poset({'1','2','3','4','5'}, rel=['1<4','2<4','2<5','3<5'])
-#a.print_linearizations()
-#a = poset({'1','2','3','4','5'}, rel=['1<4','1<2','1<5','3<2','3<4','3<5','2<4','2<5'])
-#a = poset({'1','2','3','4','5'}, rel=['1<4','2<4','2<5','3<5','1<5','3<4'])
-#a = poset({'1','2','3','4','5'}, rel=['1<4','3<5','1<5','3<4','3<2'])
-#poset({'1','2','3','4','5'}, rel=['1<4','3<5','1<5','3<4','3<2'])
-#a.print_linearizations()
-#a = poset({'1','2','3'})
-#from time import time as t
-#t1 = t()
-#poset_blanket(3,'12354','43125','54231',solve=True)
-#print(t()-t1)
-
-# TODO:
-#       2) furthur testing with more complex poset
-#       3) test it with multiple poset ; ie poset cover problem
-#       4) this many clauses? are you fucking kidding me? can you not?
-#          must find a way to make it more efficient
-#          maybe automaton would help after all?
-
-#cover_from_order(5,'2<4','1<5','1<4','2<1','2<5','5<4','2<3','3<5','3<4','1<3')
+# example
+lins = [
+'abcdef',
+'acbdfe',
+'acbfde',
+'adcbef',
+'acdbfe',
+'acdfbe',
+'bacdef'
+]
+pc(lins)
