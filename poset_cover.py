@@ -106,8 +106,12 @@ def connected_poset_cover(lins, f=1, get_constraint=False):
 
     # to generate swaps
     def get_swap(s):
-        for i in range(len(s)-1):
-            yield s[:i]+s[i+1]+s[i]+s[i+2:]
+        if type(s) == str:
+            for i in range(len(s)-1):
+                yield s[:i]+s[i+1]+s[i]+s[i+2:]
+        else:
+            for i in range(len(s)-1):
+                yield s[:i]+(s[i+1],)+(s[i],)+s[i+2:]
 
     # find the insulating barrier
     bar = list(filter( lambda l : l not in lins ,
@@ -240,11 +244,17 @@ def poset_cover(lins):
 
     # render swap graph
     g = gz.Graph('G', filename='graphs/swap_graph', format='jpg')
-    g.attr(label='[ '+' '.join(lins)+' ]')
+    if type(lins[0]) == str:
+        g.attr(label='[ '+' '.join(lins)+' ]')
+    else:
+        g.attr(label='[ '+' '.join(map(lambda t : '-'.join(t) , lins))+' ]')
     # render components as clusters
     for i, comp in enumerate(nx.connected_components(swap_graph)):
         comp = swap_graph.subgraph(comp)
-        nodes, edges = comp.nodes, comp.edges
+        nodes, edges = list(comp.nodes), list(comp.edges)
+        if type(nodes[0]) != str:
+            nodes = list(map(lambda t : '-'.join(t), nodes))
+            edges = list(map(lambda p : ('-'.join(p[0]), '-'.join(p[1])), edges))
         # copy information from networkx to graphviz
         with g.subgraph(name='cluster_'+str(i+1)) as c:
             c.attr(label='Component '+str(i+1))
@@ -264,4 +274,11 @@ lins = [
 'acdfbe',
 'bacdef'
 ]
+'''
+lins = [
+('send1','recv1','send2','recv2','term'),
+('send2','recv2','send1','recv1','term')
+]
+'''
+lins = list(map(str, lins))
 poset_cover(lins)
