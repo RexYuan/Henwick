@@ -222,10 +222,10 @@ def poset_cover(lins):
     # divide & conquer on connected components
     for i, comp in enumerate(nx.connected_components(swap_graph)):
         comp = swap_graph.subgraph(comp)
-        l = list(comp.nodes)
+        ls = list(comp.nodes)
 
         # find poset cover for each and every components
-        covers = connected_poset_cover(l)
+        covers = connected_poset_cover(ls)
 
         # render cover
         for j, cover in enumerate(covers):
@@ -265,6 +265,7 @@ def poset_cover(lins):
     print('rendered ./graphs/swap_graph.jpg')
 
 # example
+'''
 lins = [
 'abcdef',
 'acbdfe',
@@ -274,11 +275,12 @@ lins = [
 'acdfbe',
 'bacdef'
 ]
-'''
+
 lins = [
 ('send1','recv1','send2','recv2','term'),
 ('send2','recv2','send1','recv1','term')
 ]
-'''
+
 lins = list(map(str, lins))
 poset_cover(lins)
+'''
