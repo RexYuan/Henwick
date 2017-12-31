@@ -9,13 +9,36 @@ from poset_cover import poset_axioms, le_constraints
 from poset_cover import TAUTO, CONTRA
 from poset_cover import rm_trans_closure
 
+def torder_to_string(universe, rs):
+    '''
+    rs : order as a set of 2-tuples
+
+    return the string form of total order
+    '''
+    omega = set(universe)
+    xs = reduce( lambda x,y : set(x)|set(y) , rs )
+    elem_tab = {x: 0 for x in xs}
+
+    # the order of elements is the same as the their
+    # number of occurances in the first position
+    for r in rs:
+        x = r[0]
+        # keep count of their occurances in the first position
+        elem_tab[x] += 1
+
+    # sort by their occurance in descending order and
+    # concat them as a string
+    ret = ''.join(map( lambda p : str(p[0]),
+                       sorted(elem_tab.items(),
+                              key= lambda p : p[1] , reverse=True)))
+    return ret
+
 def partial_cover(lins, l):
     '''
     maximal partial cover containing l for lins
     '''
     omega = set(lins[0])
     s = Solver()
-    constraints = TAUTO
 
     # to make relation
     def rel(x, y):
@@ -85,10 +108,8 @@ def partial_cover(lins, l):
         k = float("inf")
 
         # get all blanketing posets
-        done = False
         result = s.check()
         while result == sat:
-            done = True
             m = s.model()
             counter = TAUTO
 
@@ -117,7 +138,56 @@ def partial_cover(lins, l):
         # return all the minimum posets
         return posets
 
+def get_linearizations(universe, rs):
+    '''
+    rs : order as a set of 2-tuples
+
+    return all linearizations of rs
+    '''
+    omega = set(universe)
+    s = Solver()
+
+    # to make relation
+    def rel(x, y):
+        return Bool('P'+'_'+x+'<'+y)
+
+    # make poset
+    s.add( simplify(poset_axioms(omega , '', total=True)) )
+
+    # force base poset
+    for r in rs:
+        s.add( rel(*r) )
+
+    # linear orders
+    lins = set()
+    lin = set()
+
+    # solve all linear orders
+    result = s.check()
+    while result == sat:
+        m = s.model()
+        counter = TAUTO
+
+        # collect example
+        for x in omega:
+            for y in omega-{x}:
+                if m[ rel(x, y) ]:
+                    lin.add( (x,y) )
+                    counter = And( counter , rel(x, y) )
+                else:
+                    counter = And( counter , Not(rel(x, y)) )
+        lins.add(frozenset(lin))
+        lin = set()
+
+        # force this example to false
+        s.add( simplify(Not(counter)) )
+        result = s.check()
+
+    # return all the minimum posets
+    return list(map(lambda l : torder_to_string(omega, l), lins))
+
 # example
+'''
 lins = [
 '13245',
 '12345',
@@ -135,6 +205,7 @@ lins = list(map(str, lins))
 rets = partial_cover(lins, '12345')
 for ret in rets:
     print(frozenset(rm_trans_closure(set('12345'), ret)))
+    print(get_linearizations('12345',ret))
 
 print()
 
@@ -146,3 +217,29 @@ ans = frozenset({
 ('3','5')
 })
 print(ans)
+print(get_linearizations('12345',ans))
+'''
+'''
+l = 'abfced'
+ls = [
+'afbced',
+'afbecd',
+'abfecd',
+'abfced',
+'bfaced',
+'bafced',
+'bacfed',
+'abcfed',
+'abcefd',
+'bacefd'
+]
+rets = partial_cover(ls, l)
+x = []
+for i,ret in enumerate(rets):
+    #print(frozenset(rm_trans_closure(set('abcdef'), ret)))
+    print('poset',i)
+    print(set(ret))
+    x.append(set(ret))
+    #print(get_linearizations('abcdef',ret))
+    print()
+'''
