@@ -183,7 +183,7 @@ def connected_poset_cover(lins, f=1, get_constraint=False):
         if covers:
             return covers
         else:
-            print(k,'failed')
+            print(k,'failed', flush=True)
 
 def poset_cover(lins, render=False):
     '''
@@ -241,7 +241,7 @@ def poset_cover(lins, render=False):
                             c.node('P'+str(k+1)+'_'+y, y)
                             c.edge('P'+str(k+1)+'_'+x,'P'+str(k+1)+'_'+y)
                 g.render()
-                print('rendered ./graphs/comp_'+str(i+1)+'_cover_'+str(j+1)+'.jpg')
+                print('rendered ./graphs/comp_'+str(i+1)+'_cover_'+str(j+1)+'.jpg', flush=True)
 
     # render swap graph
     g = gz.Graph('G', filename='graphs/swap_graph', format='jpg')
@@ -263,7 +263,7 @@ def poset_cover(lins, render=False):
                 c.node(n)
             c.edges(edges)
     g.render()
-    print('rendered ./graphs/swap_graph.jpg')
+    print('rendered ./graphs/swap_graph.jpg', flush=True)
 
 # example
 '''
