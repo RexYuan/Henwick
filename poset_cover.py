@@ -185,7 +185,7 @@ def connected_poset_cover(lins, f=1, get_constraint=False):
         else:
             print(k,'failed')
 
-def poset_cover(lins):
+def poset_cover(lins, render=False):
     '''
     minimal poset cover for arbitrary lins
     '''
@@ -228,19 +228,20 @@ def poset_cover(lins):
         covers = connected_poset_cover(ls)
 
         # render cover
-        for j, cover in enumerate(covers):
-            g = gz.Digraph('G', filename='graphs/comp_'+str(i+1)+'_cover_'+str(j+1), format='jpg')
-            g.attr(label='Cover '+str(j+1)+' for component '+str(i+1))
-            # render posets as clusters
-            for k, poset in enumerate(cover):
-                with g.subgraph(name='cluster_'+str(k+1)) as c:
-                    c.attr(label='Poset '+str(k+1))
-                    for x,y in rm_trans_closure(omega, poset):
-                        c.node('P'+str(k+1)+'_'+x, x)
-                        c.node('P'+str(k+1)+'_'+y, y)
-                        c.edge('P'+str(k+1)+'_'+x,'P'+str(k+1)+'_'+y)
-            g.render()
-            print('rendered ./graphs/comp_'+str(i+1)+'_cover_'+str(j+1)+'.jpg')
+        if render:
+            for j, cover in enumerate(covers):
+                g = gz.Digraph('G', filename='graphs/comp_'+str(i+1)+'_cover_'+str(j+1), format='jpg')
+                g.attr(label='Cover '+str(j+1)+' for component '+str(i+1))
+                # render posets as clusters
+                for k, poset in enumerate(cover):
+                    with g.subgraph(name='cluster_'+str(k+1)) as c:
+                        c.attr(label='Poset '+str(k+1))
+                        for x,y in rm_trans_closure(omega, poset):
+                            c.node('P'+str(k+1)+'_'+x, x)
+                            c.node('P'+str(k+1)+'_'+y, y)
+                            c.edge('P'+str(k+1)+'_'+x,'P'+str(k+1)+'_'+y)
+                g.render()
+                print('rendered ./graphs/comp_'+str(i+1)+'_cover_'+str(j+1)+'.jpg')
 
     # render swap graph
     g = gz.Graph('G', filename='graphs/swap_graph', format='jpg')
