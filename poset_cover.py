@@ -5,6 +5,8 @@ from z3 import *
 from functools import reduce
 from itertools import permutations
 from graphviz import Digraph
+from math import factorial
+from time import time
 
 TAUTO = BoolVal(True)
 CONTRA = BoolVal(False)
@@ -92,13 +94,16 @@ def le_constraints(universe, name, lin):
         constraints = simplify(And( constraints , Not(rel(*r)) ))
     return constraints
 
-def connected_poset_cover(lins, f=1, get_constraint=False):
+def connected_poset_cover(lins, f=1, get_constraint=False, getall=False):
     '''
     minimal poset cover for connected lins
     '''
     omega = set(lins[0])
     s = Solver()
     constraints = TAUTO
+
+    # use the naive method if insulation takes more time
+    naive_method = len(lins) * (len(omega)-1) > factorial(len(omega))
 
     # to make relation
     def rel(name, x, y):
@@ -113,21 +118,30 @@ def connected_poset_cover(lins, f=1, get_constraint=False):
             for i in range(len(s)-1):
                 yield s[:i]+(s[i+1],)+(s[i],)+s[i+2:]
 
-    # find the insulating barrier
-    bar = list(filter( lambda l : l not in lins ,
-               reduce( lambda x,y : x|y ,
-               map( lambda l : set(get_swap(l)) , lins ) ) ))
+    # non-extended linearizations
+    if naive_method:
+        # all the absent permutations
+        bar = {''.join(p) for p in permutations(omega)} - set(lins)
+    else:
+        # the insulating barrier
+        bar = list(filter( lambda l : l not in lins ,
+                   reduce( lambda x,y : x|y ,
+                   map( lambda l : set(get_swap(l)) , lins ) ) ))
 
     # make k posets ; worst case is size of lins
     for k in range(1, len(lins)+1):
+        print('doing',k, flush=True)
         s.reset()
         constraints = TAUTO
 
+        print('axm...', end=' ', flush=True); time1=time()
         # poset axioms : basic poset contraints
         for i in range(f, f+k):
             s.add( simplify(poset_axioms(omega , str(i))) )
             constraints = simplify(And( constraints , simplify(poset_axioms(omega , str(i))) ))
+        print('axmed...', end=' ', flush=True); time2=time(); print(time2-time1, flush=True)
 
+        print('ext...', end=' ', flush=True); time1=time()
         # extension constraints : forall l, exists p, p covers l
         for l in lins:
             tmp = CONTRA
@@ -135,12 +149,15 @@ def connected_poset_cover(lins, f=1, get_constraint=False):
                 tmp = Or( tmp , le_constraints(omega , str(i) , l) )
             s.add( simplify(tmp) )
             constraints = simplify(And( constraints , simplify(tmp) ))
+        print('exted...', end=' ', flush=True); time2=time(); print(time2-time1, flush=True)
 
+        print('next...', end=' ', flush=True); time1=time()
         # non-extension constraints : forall not l, forall p, p does not cover l
         for l in bar:
             for i in range(f, f+k):
                 s.add( simplify(Not(le_constraints(omega , str(i) , l))) )
                 constraints = simplify(And( constraints , simplify(Not(le_constraints(omega , str(i) , l))) ))
+        print('nexted...', end=' ', flush=True); time2=time(); print(time2-time1, flush=True)
 
         # for tossing away duplicates
         covers = set()
@@ -149,35 +166,56 @@ def connected_poset_cover(lins, f=1, get_constraint=False):
 
         # check if size k works
         done = False
+        print('checking...', end=' ', flush=True); time1=time()
         result = s.check()
+        print('checked...', end=' ', flush=True); time2=time(); print(time2-time1, flush=True)
 
-        # return constraint with satisfying number of posets
-        if get_constraint and result == sat:
-            return constraints
+        print('gen...', end=' ', flush=True); time1=time()
+        # cover found
+        if result == sat:
+            # return constraint
+            if get_constraint:
+                return constraints
 
-        # get all covers
-        while result == sat:
-            done = True
-            m = s.model()
-            counter = TAUTO
+            # get one cover
+            if not getall:
+                m = s.model()
 
-            # collect example
-            for i in range(f, f+k):
-                for x in omega:
-                    for y in omega-{x}:
-                        if m[ rel(str(i), x, y) ]:
-                            poset.add( (x,y) )
-                            counter = And( counter , rel(str(i), x, y) )
-                        else:
-                            counter = And( counter , Not(rel(str(i), x, y)) )
-                cover.add(frozenset(poset))
-                poset = set()
-            covers.add(frozenset(cover))
-            cover = set()
+                # collect example
+                for i in range(f, f+k):
+                    for x in omega:
+                        for y in omega-{x}:
+                            if m[ rel(str(i), x, y) ]:
+                                poset.add( (x,y) )
+                    cover.add(frozenset(poset))
+                    poset = set()
+                covers.add(frozenset(cover))
 
-            # force this example to false
-            s.add( simplify(Not(counter)) )
-            result = s.check()
+            # get all covers NOTE: factorial time
+            else:
+                while result == sat:
+                    done = True
+                    m = s.model()
+                    counter = TAUTO
+
+                    # collect example
+                    for i in range(f, f+k):
+                        for x in omega:
+                            for y in omega-{x}:
+                                if m[ rel(str(i), x, y) ]:
+                                    poset.add( (x,y) )
+                                    counter = And( counter , rel(str(i), x, y) )
+                                else:
+                                    counter = And( counter , Not(rel(str(i), x, y)) )
+                        cover.add(frozenset(poset))
+                        poset = set()
+                    covers.add(frozenset(cover))
+                    cover = set()
+
+                    # force this example to false
+                    s.add( simplify(Not(counter)) )
+                    result = s.check()
+        print('gened...', end=' ', flush=True); time2=time(); print(time2-time1, flush=True)
 
         # return all covers if found
         if covers:
@@ -185,7 +223,7 @@ def connected_poset_cover(lins, f=1, get_constraint=False):
         else:
             print(k,'failed', flush=True)
 
-def poset_cover(lins, render=False):
+def poset_cover(lins, render=False, getall=False):
     '''
     minimal poset cover for arbitrary lins
     '''
@@ -219,30 +257,6 @@ def poset_cover(lins, render=False):
             if is_swap(l1, l2):
                 swap_graph.add_edge(l1, l2)
 
-    # divide & conquer on connected components
-    for i, comp in enumerate(nx.connected_components(swap_graph)):
-        comp = swap_graph.subgraph(comp)
-        ls = list(comp.nodes)
-
-        # find poset cover for each and every components
-        covers = connected_poset_cover(ls)
-
-        # render cover
-        if render:
-            for j, cover in enumerate(covers):
-                g = gz.Digraph('G', filename='graphs/comp_'+str(i+1)+'_cover_'+str(j+1), format='jpg')
-                g.attr(label='Cover '+str(j+1)+' for component '+str(i+1))
-                # render posets as clusters
-                for k, poset in enumerate(cover):
-                    with g.subgraph(name='cluster_'+str(k+1)) as c:
-                        c.attr(label='Poset '+str(k+1))
-                        for x,y in rm_trans_closure(omega, poset):
-                            c.node('P'+str(k+1)+'_'+x, x)
-                            c.node('P'+str(k+1)+'_'+y, y)
-                            c.edge('P'+str(k+1)+'_'+x,'P'+str(k+1)+'_'+y)
-                g.render()
-                print('rendered ./graphs/comp_'+str(i+1)+'_cover_'+str(j+1)+'.jpg', flush=True)
-
     # render swap graph
     g = gz.Graph('G', filename='graphs/swap_graph', format='jpg')
     if type(lins[0]) == str:
@@ -264,6 +278,53 @@ def poset_cover(lins, render=False):
             c.edges(edges)
     g.render()
     print('rendered ./graphs/swap_graph.jpg', flush=True)
+
+    # divide & conquer on connected components
+    for i, comp in enumerate(nx.connected_components(swap_graph)):
+        comp = swap_graph.subgraph(comp)
+        ls = list(comp.nodes)
+
+        # find poset cover(s) for each and every components
+        covers = connected_poset_cover(ls, getall=getall)
+
+        # render cover
+        if render:
+            for j, cover in enumerate(covers):
+                g = gz.Digraph('G', filename='graphs/comp_'+str(i+1)+'_cover_'+str(j+1), format='jpg')
+                g.attr(label='Cover '+str(j+1)+' for component '+str(i+1))
+                # render posets as clusters
+                for k, poset in enumerate(cover):
+                    with g.subgraph(name='cluster_'+str(k+1)) as c:
+                        c.attr(label='Poset '+str(k+1))
+                        for x,y in rm_trans_closure(omega, poset):
+                            c.node('P'+str(k+1)+'_'+x, x)
+                            c.node('P'+str(k+1)+'_'+y, y)
+                            c.edge('P'+str(k+1)+'_'+x,'P'+str(k+1)+'_'+y)
+                g.render()
+                print('rendered ./graphs/comp_'+str(i+1)+'_cover_'+str(j+1)+'.jpg', flush=True)
+    '''
+    # render swap graph
+    g = gz.Graph('G', filename='graphs/swap_graph', format='jpg')
+    if type(lins[0]) == str:
+        g.attr(label='[ '+' '.join(lins)+' ]')
+    else:
+        g.attr(label='[ '+' '.join(map(lambda t : '-'.join(t) , lins))+' ]')
+    # render components as clusters
+    for i, comp in enumerate(nx.connected_components(swap_graph)):
+        comp = swap_graph.subgraph(comp)
+        nodes, edges = list(comp.nodes), list(comp.edges)
+        if type(nodes[0]) != str:
+            nodes = list(map(lambda t : '-'.join(t), nodes))
+            edges = list(map(lambda p : ('-'.join(p[0]), '-'.join(p[1])), edges))
+        # copy information from networkx to graphviz
+        with g.subgraph(name='cluster_'+str(i+1)) as c:
+            c.attr(label='Component '+str(i+1))
+            for n in nodes:
+                c.node(n)
+            c.edges(edges)
+    g.render()
+    print('rendered ./graphs/swap_graph.jpg', flush=True)
+    '''
 
 # example
 '''
