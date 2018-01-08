@@ -94,7 +94,7 @@ def le_constraints(universe, name, lin):
         constraints = simplify(And( constraints , Not(rel(*r)) ))
     return constraints
 
-def connected_poset_cover(lins, f=1, get_constraint=False, getall=False):
+def connected_poset_cover(lins, f=1, get_constraint=False, getall=False, g=None):
     '''
     minimal poset cover for connected lins
     '''
@@ -129,7 +129,7 @@ def connected_poset_cover(lins, f=1, get_constraint=False, getall=False):
                    map( lambda l : set(get_swap(l)) , lins ) ) ))
 
     # make k posets ; worst case is size of lins
-    for k in range(11, len(lins)+1):
+    for k in range(1, len(lins)+1):
         print('doing',k, flush=True)
         s.reset()
         constraints = TAUTO
@@ -158,6 +158,23 @@ def connected_poset_cover(lins, f=1, get_constraint=False, getall=False):
                 s.add( simplify(Not(le_constraints(omega , str(i) , l))) )
                 constraints = simplify(And( constraints , simplify(Not(le_constraints(omega , str(i) , l))) ))
         print('nexted...', end=' ', flush=True); time2=time(); print(time2-time1, flush=True)
+
+        print('tau...', end=' ', flush=True); time1=time()
+        # tau dist
+        for i in range(f, f+k):
+            for off, pi in enumerate(lins):
+                for tau in lins[off+1:]:
+                    poles = And(le_constraints(omega , str(i) , pi), le_constraints(omega , str(i) , tau))
+                    tmp = TAUTO
+                    musts = set()
+                    #for l in kendall[pi][tau][1:-1]:
+                    for path in nx.all_shortest_paths(g, source=pi, target=tau):
+                        for l in path[1:-1]:
+                            musts.add( l )
+                    for l in musts:
+                        tmp = And(tmp, le_constraints(omega , str(i) , l) )
+                    s.add( Implies(poles, tmp) )
+        print('taued...', end=' ', flush=True); time2=time(); print(time2-time1, flush=True)
 
         # for tossing away duplicates
         covers = set()
@@ -285,7 +302,8 @@ def poset_cover(lins, render=False, getall=False):
         ls = list(comp.nodes)
 
         # find poset cover(s) for each and every components
-        covers = connected_poset_cover(ls, getall=getall)
+        #kendall = dict(nx.all_pairs_shortest_path(comp))
+        covers = connected_poset_cover(ls, getall=getall, g=comp)
 
         # render cover
         if render:
@@ -302,5 +320,4 @@ def poset_cover(lins, render=False, getall=False):
                             c.edge('P'+str(k+1)+'_'+x,'P'+str(k+1)+'_'+y)
                 g.render()
                 print('rendered ./graphs/comp_'+str(i+1)+'_cover_'+str(j+1)+'.jpg', flush=True)
-    cover = covers.pop()
-    return len(cover)
+    return len(covers)
