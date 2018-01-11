@@ -115,7 +115,7 @@ def le_constraints(universe, name, lin):
         constraints = simplify(And( constraints , Not(rel(*r)) ))
     return constraints
 
-def connected_poset_cover(lins, f=1, get_constraint=False, getall=False, g=None, tau=False, log=False, breakaway=None):
+def connected_poset_cover(lins, f=1, get_constraint=False, getall=False, g=None, tau=False, log=False, breakaway_v=None, breakaway_p=None):
     '''
     minimal poset cover for connected lins
     '''
@@ -156,9 +156,13 @@ def connected_poset_cover(lins, f=1, get_constraint=False, getall=False, g=None,
 
     # make k posets ; worst case is size of lins
     for k in range(1, len(lins)+1):
-        if breakaway and k * len(omega)**2 > breakaway:
+        if breakaway_p and k > breakaway_p:
             if log:
-                print('breaking', flush=True)
+                print('breaking p', flush=True)
+            return False
+        if breakaway_v and k * len(omega)**2 > breakaway_v:
+            if log:
+                print('breaking v', flush=True)
             return False
 
         if log:
@@ -302,7 +306,7 @@ def connected_poset_cover(lins, f=1, get_constraint=False, getall=False, g=None,
     else:
         return cover
 
-def poset_cover(lins, render=False, getall=False, log=True, tau=True, dir='graphs'):
+def poset_cover(lins, render=False, getall=False, log=True, tau=True, dir='graphs', breakaway_p=None, breakaway_v=None):
     '''
     minimal poset cover for arbitrary lins
     '''
@@ -351,7 +355,7 @@ def poset_cover(lins, render=False, getall=False, log=True, tau=True, dir='graph
         ls = list(comp.nodes)
 
         # find poset cover(s) for each and every components
-        covers = connected_poset_cover(ls, getall=getall, g=comp, tau=tau, log=log)
+        covers = connected_poset_cover(ls, getall=getall, g=comp, tau=tau, log=log, breakaway_p=breakaway_p, breakaway_v=breakaway_v)
 
         # render cover
         if render:
