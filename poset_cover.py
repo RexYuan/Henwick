@@ -11,6 +11,27 @@ from time import time
 TAUTO = BoolVal(True)
 CONTRA = BoolVal(False)
 
+def is_swap(s1, s2):
+    '''
+    return if s1 and s2 are off by one swap
+    s1, s2 : string | tuple
+    '''
+    pair = False
+    i = 0
+    while i < len(s1):
+        if s1[i] != s2[i]:
+            if i == len(s1)-1:
+                return False
+            if (s1[i] == s2[i+1] and s1[i+1] == s2[i]):
+                if pair:
+                    return False
+                pair = True
+                i += 1
+            else:
+                return False
+        i += 1
+    return pair
+
 def trans_closure(ss):
     '''
     ss : list
@@ -94,13 +115,18 @@ def le_constraints(universe, name, lin):
         constraints = simplify(And( constraints , Not(rel(*r)) ))
     return constraints
 
-def connected_poset_cover(lins, f=1, get_constraint=False, getall=False):
+def connected_poset_cover(lins, f=1, get_constraint=False, getall=False, g=None, tau=False, log=False, breakaway=None):
     '''
     minimal poset cover for connected lins
     '''
     omega = set(lins[0])
     s = Solver()
     constraints = TAUTO
+
+    if log:
+        print('=> solving:', lins, flush=True)
+        print('|S| =',len(omega),'|Y| =', len(lins), flush=True)
+        stime = time()
 
     # use the naive method if insulation takes more time
     naive_method = len(lins) * (len(omega)-1) > factorial(len(omega))
@@ -129,19 +155,28 @@ def connected_poset_cover(lins, f=1, get_constraint=False, getall=False):
                    map( lambda l : set(get_swap(l)) , lins ) ) ))
 
     # make k posets ; worst case is size of lins
-    for k in range(11, len(lins)+1):
-        print('doing',k, flush=True)
+    for k in range(1, len(lins)+1):
+        if breakaway and k * len(omega)**2 > breakaway:
+            if log:
+                print('breaking', flush=True)
+            return False
+
+        if log:
+            print('>','trying',k, flush=True)
         s.reset()
         constraints = TAUTO
 
-        print('axm...', end=' ', flush=True); time1=time()
+        if log:
+            print('axm...', end=' ', flush=True); time1=time()
         # poset axioms : basic poset contraints
         for i in range(f, f+k):
             s.add( simplify(poset_axioms(omega , str(i))) )
             constraints = simplify(And( constraints , simplify(poset_axioms(omega , str(i))) ))
-        print('axmed...', end=' ', flush=True); time2=time(); print(time2-time1, flush=True)
+        if log:
+            print('axmed...', end=' ', flush=True); time2=time(); print(time2-time1, flush=True)
 
-        print('ext...', end=' ', flush=True); time1=time()
+        if log:
+            print('ext...', end=' ', flush=True); time1=time()
         # extension constraints : forall l, exists p, p covers l
         for l in lins:
             tmp = CONTRA
@@ -149,15 +184,38 @@ def connected_poset_cover(lins, f=1, get_constraint=False, getall=False):
                 tmp = Or( tmp , le_constraints(omega , str(i) , l) )
             s.add( simplify(tmp) )
             constraints = simplify(And( constraints , simplify(tmp) ))
-        print('exted...', end=' ', flush=True); time2=time(); print(time2-time1, flush=True)
+        if log:
+            print('exted...', end=' ', flush=True); time2=time(); print(time2-time1, flush=True)
 
-        print('next...', end=' ', flush=True); time1=time()
+        if log:
+            print('next...', end=' ', flush=True); time1=time()
         # non-extension constraints : forall not l, forall p, p does not cover l
         for l in bar:
             for i in range(f, f+k):
                 s.add( simplify(Not(le_constraints(omega , str(i) , l))) )
                 constraints = simplify(And( constraints , simplify(Not(le_constraints(omega , str(i) , l))) ))
-        print('nexted...', end=' ', flush=True); time2=time(); print(time2-time1, flush=True)
+        if log:
+            print('nexted...', end=' ', flush=True); time2=time(); print(time2-time1, flush=True)
+
+        if log and tau:
+            print('tau...', end=' ', flush=True); time1=time()
+        if tau:
+            # tau dist
+            for i in range(f, f+k):
+                for off, pi in enumerate(lins):
+                    for tau in lins[off+1:]:
+                        poles = And(le_constraints(omega , str(i) , pi), le_constraints(omega , str(i) , tau))
+                        tmp = TAUTO
+                        musts = set()
+                        #for l in kendall[pi][tau][1:-1]:
+                        for path in nx.all_shortest_paths(g, source=pi, target=tau):
+                            for l in path[1:-1]:
+                                musts.add( l )
+                        for l in musts:
+                            tmp = And(tmp, le_constraints(omega , str(i) , l) )
+                        s.add( Implies(poles, tmp) )
+        if log and tau:
+            print('taued...', end=' ', flush=True); time2=time(); print(time2-time1, flush=True)
 
         # for tossing away duplicates
         covers = set()
@@ -166,13 +224,17 @@ def connected_poset_cover(lins, f=1, get_constraint=False, getall=False):
 
         # check if size k works
         done = False
-        print('checking...', end=' ', flush=True); time1=time()
+        if log:
+            print('checking...', end=' ', flush=True); time1=time()
         result = s.check()
-        print('checked...', end=' ', flush=True); time2=time(); print(time2-time1, flush=True)
+        if log:
+            print('checked...', end=' ', flush=True); time2=time(); print(time2-time1, flush=True)
 
-        print('gen...', end=' ', flush=True); time1=time()
         # cover found
         if result == sat:
+            if log and getall:
+                print('all...', end=' ', flush=True); time1=time()
+
             # return constraint
             if get_constraint:
                 return constraints
@@ -189,7 +251,6 @@ def connected_poset_cover(lins, f=1, get_constraint=False, getall=False):
                                 poset.add( (x,y) )
                     cover.add(frozenset(poset))
                     poset = set()
-                covers.add(frozenset(cover))
 
             # get all covers NOTE: factorial time
             else:
@@ -215,15 +276,33 @@ def connected_poset_cover(lins, f=1, get_constraint=False, getall=False):
                     # force this example to false
                     s.add( simplify(Not(counter)) )
                     result = s.check()
-        print('gened...', end=' ', flush=True); time2=time(); print(time2-time1, flush=True)
 
-        # return all covers if found
-        if covers:
-            return covers
+            # found
+            if log:
+                if getall:
+                    print('alled...', end=' ', flush=True); time2=time(); print(time2-time1, flush=True)
+                print('>',k,'found', flush=True)
+            break
+        # add more poset
         else:
-            print(k,'failed', flush=True)
+            if log:
+                print('>',k,'failed', flush=True)
 
-def poset_cover(lins, render=False, getall=False):
+    # return cover(s)
+    if log:
+        etime = time()
+        print('time =', etime-stime, flush=True)
+        if getall:
+            print(covers)
+        else:
+            print(cover)
+        print('=> done', flush=True)
+    if getall:
+        return covers
+    else:
+        return cover
+
+def poset_cover(lins, render=False, getall=False, log=True, tau=True, dir='graphs'):
     '''
     minimal poset cover for arbitrary lins
     '''
@@ -231,23 +310,9 @@ def poset_cover(lins, render=False, getall=False):
     s = Solver()
     constraints = TAUTO
 
-    # if s1 s2 are off by one swap
-    def is_swap(s1, s2):
-        pair = False
-        i = 0
-        while i < len(s1):
-            if s1[i] != s2[i]:
-                if i == len(s1)-1:
-                    return False
-                if (s1[i] == s2[i+1] and s1[i+1] == s2[i]):
-                    if pair:
-                        return False
-                    pair = True
-                    i += 1
-                else:
-                    return False
-            i += 1
-        return pair
+    if log:
+        print('==> lins:', lins, flush=True)
+        pstime = time()
 
     # generate swap graph from lins
     swap_graph = nx.Graph()
@@ -258,26 +323,27 @@ def poset_cover(lins, render=False, getall=False):
                 swap_graph.add_edge(l1, l2)
 
     # render swap graph
-    g = gz.Graph('G', filename='graphs/swap_graph', format='jpg')
-    if type(lins[0]) == str:
-        g.attr(label='[ '+' '.join(lins)+' ]')
-    else:
-        g.attr(label='[ '+' '.join(map(lambda t : '-'.join(t) , lins))+' ]')
-    # render components as clusters
-    for i, comp in enumerate(nx.connected_components(swap_graph)):
-        comp = swap_graph.subgraph(comp)
-        nodes, edges = list(comp.nodes), list(comp.edges)
-        if type(nodes[0]) != str:
-            nodes = list(map(lambda t : '-'.join(t), nodes))
-            edges = list(map(lambda p : ('-'.join(p[0]), '-'.join(p[1])), edges))
-        # copy information from networkx to graphviz
-        with g.subgraph(name='cluster_'+str(i+1)) as c:
-            c.attr(label='Component '+str(i+1))
-            for n in nodes:
-                c.node(n)
-            c.edges(edges)
-    g.render()
-    print('rendered ./graphs/swap_graph.jpg', flush=True)
+    if render:
+        g = gz.Graph('G', filename=dir+'/swap_graph', format='jpg')
+        if type(lins[0]) == str:
+            g.attr(label='[ '+' '.join(lins)+' ]')
+        else:
+            g.attr(label='[ '+' '.join(map(lambda t : '-'.join(t) , lins))+' ]')
+        # render components as clusters
+        for i, comp in enumerate(nx.connected_components(swap_graph)):
+            comp = swap_graph.subgraph(comp)
+            nodes, edges = list(comp.nodes), list(comp.edges)
+            if type(nodes[0]) != str:
+                nodes = list(map(lambda t : '-'.join(t), nodes))
+                edges = list(map(lambda p : ('-'.join(p[0]), '-'.join(p[1])), edges))
+            # copy information from networkx to graphviz
+            with g.subgraph(name='cluster_'+str(i+1)) as c:
+                c.attr(label='Component '+str(i+1))
+                for n in nodes:
+                    c.node(n)
+                c.edges(edges)
+        g.render()
+        print('rendered ./'+dir+'/swap_graph.jpg', flush=True)
 
     # divide & conquer on connected components
     for i, comp in enumerate(nx.connected_components(swap_graph)):
@@ -285,12 +351,12 @@ def poset_cover(lins, render=False, getall=False):
         ls = list(comp.nodes)
 
         # find poset cover(s) for each and every components
-        covers = connected_poset_cover(ls, getall=getall)
+        covers = connected_poset_cover(ls, getall=getall, g=comp, tau=tau, log=log)
 
         # render cover
         if render:
-            for j, cover in enumerate(covers):
-                g = gz.Digraph('G', filename='graphs/comp_'+str(i+1)+'_cover_'+str(j+1), format='jpg')
+            for j, cover in enumerate(covers if getall else [covers]):
+                g = gz.Digraph('G', filename=dir+'/comp_'+str(i+1)+'_cover_'+str(j+1), format='jpg')
                 g.attr(label='Cover '+str(j+1)+' for component '+str(i+1))
                 # render posets as clusters
                 for k, poset in enumerate(cover):
@@ -301,6 +367,11 @@ def poset_cover(lins, render=False, getall=False):
                             c.node('P'+str(k+1)+'_'+y, y)
                             c.edge('P'+str(k+1)+'_'+x,'P'+str(k+1)+'_'+y)
                 g.render()
-                print('rendered ./graphs/comp_'+str(i+1)+'_cover_'+str(j+1)+'.jpg', flush=True)
-    cover = covers.pop()
-    return len(cover)
+                print('rendered ./'+dir+'/comp_'+str(i+1)+'_cover_'+str(j+1)+'.jpg', flush=True)
+
+    if log:
+        petime = time()
+        print('all time:',petime-pstime, flush=True)
+        print('==> all done\n', flush=True)
+
+    return covers
