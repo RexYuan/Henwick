@@ -12,12 +12,13 @@ from pprint import pprint
 s = list('abcd')
 t = list(map(lambda l:''.join(l), list(permutations(s))))
 
-c = 0
+times = []
 # get all subsets of len 23
 for i in range(24):
     lins = t[:i]+t[i+1:]
-    ret = poset_cover(lins, breakaway_p=10)
+    t1 = time()
+    ret = poset_cover(lins)
+    times.append( time()-t1 )
 
-    if not ret:
-        c+=1
-print(c)
+print(times)
+print('avg',sum(times)/len(times))
