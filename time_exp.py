@@ -6,7 +6,7 @@ from contextlib import redirect_stdout
 import os
 
 for trial in range(100):
-    n = choice(list(range(10,11)))
+    n = choice(list(range(5,11)))
     y = choice(list(range(10,101)))
 
     s = list(map(str,range(n)))
