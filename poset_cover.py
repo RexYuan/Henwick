@@ -160,7 +160,7 @@ def connected_poset_cover(lins, f=1, get_constraint=False, getall=False, g=None,
                    map( lambda l : set(get_swap(l)) , lins ) ) ))
 
     # make k posets ; worst case is size of lins
-    for k in range(1, len(lins)+1):
+    for k in range(13, len(lins)+1):
         if breakaway_p and k > breakaway_p:
             if log:
                 print('breaking p', flush=True)
@@ -297,6 +297,8 @@ def connected_poset_cover(lins, f=1, get_constraint=False, getall=False, g=None,
             if log:
                 if timeout and result == unknown:
                     print('>',k,'timeout', flush=True)
+                    with open('../timeout_table.txt','a') as fp:
+                        fp.write("({}, {}, {}, {}, {}),\n".format(len(lins), len(omega), k, nx.diameter(g), nx.radius(g)))
                 else:
                     print('>',k,'failed', flush=True)
 
