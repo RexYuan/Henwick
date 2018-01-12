@@ -115,7 +115,7 @@ def le_constraints(universe, name, lin):
         constraints = simplify(And( constraints , Not(rel(*r)) ))
     return constraints
 
-def connected_poset_cover(lins, f=1, get_constraint=False, getall=False, g=None, tau=False, log=False, breakaway_v=None, breakaway_p=None):
+def connected_poset_cover(lins, f=1, get_constraint=False, getall=False, g=None, tau=False, log=False, breakaway_v=None, breakaway_p=None, timeout=None):
     '''
     minimal poset cover for connected lins
     '''
@@ -123,9 +123,14 @@ def connected_poset_cover(lins, f=1, get_constraint=False, getall=False, g=None,
     s = Solver()
     constraints = TAUTO
 
+    if timeout:
+        s.set('timeout', timeout)
+
     if log:
         print('=> solving:', lins, flush=True)
         print('|S| =',len(omega),'|Y| =', len(lins), flush=True)
+        if timeout:
+            print('timeout =',timeout, flush=True)
         stime = time()
 
     # use the naive method if insulation takes more time
@@ -290,7 +295,10 @@ def connected_poset_cover(lins, f=1, get_constraint=False, getall=False, g=None,
         # add more poset
         else:
             if log:
-                print('>',k,'failed', flush=True)
+                if timeout and result == unknown:
+                    print('>',k,'timeout', flush=True)
+                else:
+                    print('>',k,'failed', flush=True)
 
     # return cover(s)
     if log:
@@ -306,7 +314,7 @@ def connected_poset_cover(lins, f=1, get_constraint=False, getall=False, g=None,
     else:
         return cover
 
-def poset_cover(lins, render=False, getall=False, log=True, tau=True, dir='graphs', breakaway_p=None, breakaway_v=None):
+def poset_cover(lins, render=False, getall=False, log=True, tau=True, dir='graphs', breakaway_p=None, breakaway_v=None, timeout=None):
     '''
     minimal poset cover for arbitrary lins
     '''
@@ -355,7 +363,7 @@ def poset_cover(lins, render=False, getall=False, log=True, tau=True, dir='graph
         ls = list(comp.nodes)
 
         # find poset cover(s) for each and every components
-        covers = connected_poset_cover(ls, getall=getall, g=comp, tau=tau, log=log, breakaway_p=breakaway_p, breakaway_v=breakaway_v)
+        covers = connected_poset_cover(ls, getall=getall, g=comp, tau=tau, log=log, breakaway_p=breakaway_p, breakaway_v=breakaway_v, timeout=timeout)
 
         # render cover
         if render:
