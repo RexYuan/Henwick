@@ -177,6 +177,7 @@ def connected_poset_cover(lins, f=1, get_constraint=False, getall=False, g=None,
 
         if log:
             print('axm...', end=' ', flush=True); time1=time()
+        # TODO: OPTIMIZE
         # poset axioms : basic poset contraints
         for i in range(f, f+k):
             s.add( simplify(poset_axioms(omega , str(i))) )
@@ -186,6 +187,7 @@ def connected_poset_cover(lins, f=1, get_constraint=False, getall=False, g=None,
 
         if log:
             print('ext...', end=' ', flush=True); time1=time()
+        # TODO: OPTIMIZE
         # extension constraints : forall l, exists p, p covers l
         for l in lins:
             tmp = CONTRA
@@ -198,6 +200,7 @@ def connected_poset_cover(lins, f=1, get_constraint=False, getall=False, g=None,
 
         if log:
             print('next...', end=' ', flush=True); time1=time()
+        # TODO: OPTIMIZE
         # non-extension constraints : forall not l, forall p, p does not cover l
         for l in bar:
             for i in range(f, f+k):
