@@ -2,14 +2,19 @@ import graphviz as gz
 import networkx as nx
 
 from z3 import *
+
+import logging
+
 from functools import reduce
 from itertools import permutations
-from graphviz import Digraph
 from math import factorial
 from time import time
 
 TAUTO = BoolVal(True)
 CONTRA = BoolVal(False)
+
+logger = logging.getLogger(__name__)
+logger.addHandler(logging.NullHandler())
 
 def is_swap(s1, s2):
     '''
@@ -115,26 +120,37 @@ def le_constraints(universe, name, lin):
         constraints = simplify(And( constraints , Not(rel(*r)) ))
     return constraints
 
-def connected_poset_cover(lins, f=1, get_constraint=False, getall=False, g=None, tau=False, log=False, breakaway_v=None, breakaway_p=None, timeout=None):
+def connected_poset_cover(lins=None, comp=None, getall=False, timeout=None, runaway_timeout=False):
     '''
-    minimal poset cover for connected lins
+    Return minimal poset cover for connected linearizations
+
+    return type : a set of frozensets of 2-tuples ; as a poset is expressed as
+    a set of 2-tuples. if getall is set the return type is a set of frozensets
+    of frozensets of 2-tuples ; as a cover is expressed as a set of posets
+
+    lins : linearizations as collection of strings ; if set will override comp
+    comp : a networkx induced connected component subgraph
+    getall : if set will return all possible solutions
+    timeout : timeout for each z3 query
+    runaway_timeout : if set will return None on z3 timeout
     '''
+
+    lins = lins if lins else list(comp.nodes)
     omega = set(lins[0])
     s = Solver()
-    constraints = TAUTO
+
+    logger.info("Solving connected component: |S| = %s ; |Y| = %s", len(omega), len(lins))
+    logger.debug("Lins: %s", lins)
 
     if timeout:
         s.set('timeout', timeout)
+        logger.info("Timeout = %s", timeout)
 
-    if log:
-        print('=> solving:', lins, flush=True)
-        print('|S| =',len(omega),'|Y| =', len(lins), flush=True)
-        if timeout:
-            print('timeout =',timeout, flush=True)
-        stime = time()
+    start_time = time()
 
     # use the naive method if insulation takes more time
     naive_method = len(lins) * (len(omega)-1) > factorial(len(omega))
+    logger.debug("Revert to naive method: %s", naive_method)
 
     # to make relation
     def rel(name, x, y):
@@ -160,59 +176,42 @@ def connected_poset_cover(lins, f=1, get_constraint=False, getall=False, g=None,
                    map( lambda l : set(get_swap(l)) , lins ) ) ))
 
     # make k posets ; worst case is size of lins
-    for k in range(1, len(lins)+1):
-        if breakaway_p and k > breakaway_p:
-            if log:
-                print('breaking p', flush=True)
-            return False
-        if breakaway_v and k * len(omega)**2 > breakaway_v:
-            if log:
-                print('breaking v', flush=True)
-            return False
-
-        if log:
-            print('>','trying',k, flush=True)
+    for k in range(10, len(lins)+1):
         s.reset()
-        constraints = TAUTO
 
-        if log:
-            print('axm...', end=' ', flush=True); time1=time()
+        logger.debug("Trying with %s posets!", k)
+
         # TODO: OPTIMIZE
+        logger.debug("Encoding poset axioms..."); time1=time()
         # poset axioms : basic poset contraints
-        for i in range(f, f+k):
-            s.add( simplify(poset_axioms(omega , str(i))) )
-            constraints = simplify(And( constraints , simplify(poset_axioms(omega , str(i))) ))
-        if log:
-            print('axmed...', end=' ', flush=True); time2=time(); print(time2-time1, flush=True)
+        for i in range(k):
+            s.add( poset_axioms(omega , str(i)) )
+        logger.debug("Done. Time = %s", round(time()-time1,4))
 
-        if log:
-            print('ext...', end=' ', flush=True); time1=time()
         # TODO: OPTIMIZE
+        logger.debug("Encoding extension constraints..."); time1=time()
         # extension constraints : forall l, exists p, p covers l
         for l in lins:
             tmp = CONTRA
-            for i in range(f, f+k):
+            for i in range(k):
                 tmp = Or( tmp , le_constraints(omega , str(i) , l) )
-            s.add( simplify(tmp) )
-            constraints = simplify(And( constraints , simplify(tmp) ))
-        if log:
-            print('exted...', end=' ', flush=True); time2=time(); print(time2-time1, flush=True)
+            s.add( tmp )
+        logger.debug("Done. Time = %s", round(time()-time1,4))
 
-        if log:
-            print('next...', end=' ', flush=True); time1=time()
         # TODO: OPTIMIZE
+        logger.debug("Encoding non-extension constraints..."); time1=time()
         # non-extension constraints : forall not l, forall p, p does not cover l
         for l in bar:
-            for i in range(f, f+k):
-                s.add( simplify(Not(le_constraints(omega , str(i) , l))) )
-                constraints = simplify(And( constraints , simplify(Not(le_constraints(omega , str(i) , l))) ))
-        if log:
-            print('nexted...', end=' ', flush=True); time2=time(); print(time2-time1, flush=True)
+            for i in range(k):
+                s.add( Not(le_constraints(omega , str(i) , l)) )
+        logger.debug("Done. Time = %s", round(time()-time1,4))
 
+        '''
         if log and tau:
             print('tau...', end=' ', flush=True); time1=time()
         if tau:
             # tau dist
+            # TODO: all paths
             for i in range(f, f+k):
                 for off, pi in enumerate(lins):
                     for tau in lins[off+1:]:
@@ -228,6 +227,7 @@ def connected_poset_cover(lins, f=1, get_constraint=False, getall=False, g=None,
                         s.add( Implies(poles, tmp) )
         if log and tau:
             print('taued...', end=' ', flush=True); time2=time(); print(time2-time1, flush=True)
+        '''
 
         # for tossing away duplicates
         covers = set()
@@ -235,44 +235,23 @@ def connected_poset_cover(lins, f=1, get_constraint=False, getall=False, g=None,
         poset = set()
 
         # check if size k works
-        done = False
-        if log:
-            print('checking...', end=' ', flush=True); time1=time()
+        logger.debug("Checking..."); time1=time()
         result = s.check()
-        if log:
-            print('checked...', end=' ', flush=True); time2=time(); print(time2-time1, flush=True)
+        logger.debug("Done. Time = %s", round(time()-time1,4))
 
         # cover found
         if result == sat:
-            if log and getall:
-                print('all...', end=' ', flush=True); time1=time()
-
-            # return constraint
-            if get_constraint:
-                return constraints
-
-            # get one cover
-            if not getall:
-                m = s.model()
-
-                # collect example
-                for i in range(f, f+k):
-                    for x in omega:
-                        for y in omega-{x}:
-                            if m[ rel(str(i), x, y) ]:
-                                poset.add( (x,y) )
-                    cover.add(frozenset(poset))
-                    poset = set()
+            logger.info("%s works!", k)
 
             # get all covers NOTE: factorial time
-            else:
+            if getall:
+                logger.debug("Finding all answers..."); time1=time()
                 while result == sat:
-                    done = True
                     m = s.model()
                     counter = TAUTO
 
                     # collect example
-                    for i in range(f, f+k):
+                    for i in range(k):
                         for x in omega:
                             for y in omega-{x}:
                                 if m[ rel(str(i), x, y) ]:
@@ -288,48 +267,53 @@ def connected_poset_cover(lins, f=1, get_constraint=False, getall=False, g=None,
                     # force this example to false
                     s.add( simplify(Not(counter)) )
                     result = s.check()
+                logger.debug("Done. Time = %s", round(time()-time1,4))
+            # get one cover
+            else:
+                m = s.model()
 
-            # found
-            if log:
-                if getall:
-                    print('alled...', end=' ', flush=True); time2=time(); print(time2-time1, flush=True)
-                print('>',k,'found', flush=True)
+                # collect example
+                for i in range(k):
+                    for x in omega:
+                        for y in omega-{x}:
+                            if m[ rel(str(i), x, y) ]:
+                                poset.add( (x,y) )
+                    cover.add(frozenset(poset))
+                    poset = set()
+
             break
-        # add more poset
+        # k doesn't work meh
         else:
-            if log:
-                if timeout and result == unknown:
-                    print('>',k,'timeout', flush=True)
-                    with open('../timeout_table.txt','a') as fp:
-                        fp.write("({}, {}, {}, {}, {}),\n".format(len(lins), len(omega), k, nx.diameter(g), nx.radius(g)))
-                else:
-                    print('>',k,'failed', flush=True)
+            if timeout and result == unknown:
+                logger.info("%s timed out :/", k)
+                # data collection
+                logger.warning("(%s, %s, %s, %s, %s),", len(lins), len(omega), k, nx.diameter(comp), nx.radius(comp))
+                # yeah you better run
+                if runaway_timeout:
+                    logger.info("Runaway set. I quit.")
+                    return None
+            else:
+                logger.info("%s failed :(", k)
 
     # return cover(s)
-    if log:
-        etime = time()
-        print('time =', etime-stime, flush=True)
-        if getall:
-            print(covers)
-        else:
-            print(cover)
-        print('=> done', flush=True)
     if getall:
+        logger.debug("All solutions: %s", covers)
+        logger.info("Component done. Time = %s", round(time()-start_time,4))
         return covers
     else:
+        logger.debug("Solution: %s", cover)
+        logger.info("Component done. Time = %s", round(time()-start_time,4))
         return cover
 
-def poset_cover(lins, render=False, getall=False, log=True, tau=True, dir='graphs', breakaway_p=None, breakaway_v=None, timeout=None):
+def poset_cover(lins, getall=False, timeout=None, runaway_timeout=False, render=False, dir='graphs'):
     '''
-    minimal poset cover for arbitrary lins
+    Find the minimal poset cover for arbitrary linearizations
     '''
     omega = set(lins[0])
-    s = Solver()
-    constraints = TAUTO
 
-    if log:
-        print('==> lins:', lins, flush=True)
-        pstime = time()
+    logger.info("Input: |S| = %s ; |Y| = %s", len(omega), len(lins))
+    logger.debug("Lins: %s", lins)
+    start_time = time()
 
     # generate swap graph from lins
     swap_graph = nx.Graph()
@@ -360,15 +344,22 @@ def poset_cover(lins, render=False, getall=False, log=True, tau=True, dir='graph
                     c.node(n)
                 c.edges(edges)
         g.render()
-        print('rendered ./'+dir+'/swap_graph.jpg', flush=True)
+        logger.info("rendered ./%s/swap_graph.jpg", dir)
 
     # divide & conquer on connected components
+    component_covers = []
     for i, comp in enumerate(nx.connected_components(swap_graph)):
         comp = swap_graph.subgraph(comp)
-        ls = list(comp.nodes)
+        lins = list(comp.nodes)
 
         # find poset cover(s) for each and every components
-        covers = connected_poset_cover(ls, getall=getall, g=comp, tau=tau, log=log, breakaway_p=breakaway_p, breakaway_v=breakaway_v, timeout=timeout)
+        covers = connected_poset_cover(comp=comp, getall=getall, timeout=timeout, runaway_timeout=runaway_timeout)
+
+        # well shit
+        if covers == None:
+            continue
+        else:
+            component_covers.append( (lins, covers) )
 
         # render cover
         if render:
@@ -384,11 +375,12 @@ def poset_cover(lins, render=False, getall=False, log=True, tau=True, dir='graph
                             c.node('P'+str(k+1)+'_'+y, y)
                             c.edge('P'+str(k+1)+'_'+x,'P'+str(k+1)+'_'+y)
                 g.render()
-                print('rendered ./'+dir+'/comp_'+str(i+1)+'_cover_'+str(j+1)+'.jpg', flush=True)
+                logger.info("rendered ./%s/comp_%s_cover_%s.jpg", dir, str(i+1), str(j+1))
 
-    if log:
-        petime = time()
-        print('all time:',petime-pstime, flush=True)
-        print('==> all done\n', flush=True)
+    if covers:
+        logger.debug("Solution found: %s", component_covers)
+        logger.info("All done! Total time = %s", round(time()-start_time,4))
+    else:
+        logger.info("Failed, sorry! Total time = %s", round(time()-start_time,4))
 
     return covers
