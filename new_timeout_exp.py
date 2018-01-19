@@ -9,9 +9,9 @@ from time import time
 # 15 minutes
 timeout = 900000
 # status dir path
-status_path = '~/'
+status_path = './'
 # trial dir path
-trial_path = '~/trials/'
+trial_path = './trials/'
 # batch numbering (1~9)
 batch = 1
 # element count (6,8,10)
@@ -29,7 +29,7 @@ status_fh.setFormatter(status_formatter)
 overall_logger.addHandler(status_fh)
 
 # run a batch of 100 trials
-for trial in range(100, 100*batch+1):
+for trial in range(100*(batch-1)+1, 100*batch+1):
     os.makedirs(os.path.dirname(trial_path+"trial_{:0>3}/log.txt".format(trial)), exist_ok=True)
 
     logger = logging.getLogger('poset_cover')
