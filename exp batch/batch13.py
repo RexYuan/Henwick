@@ -13,9 +13,9 @@ status_path = '../'
 # trial dir path
 trial_path = '../trials/'
 # batch numbering (1~9)
-batch = 1
+batch = 13
 # element count (6,8,10)
-ele_count = 6
+ele_count = 10
 # linearization count (60,80,100)
 lin_count = 60
 

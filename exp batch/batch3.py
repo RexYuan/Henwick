@@ -13,11 +13,11 @@ status_path = '../'
 # trial dir path
 trial_path = '../trials/'
 # batch numbering (1~9)
-batch = 1
+batch = 3
 # element count (6,8,10)
 ele_count = 6
 # linearization count (60,80,100)
-lin_count = 60
+lin_count = 80
 
 overall_logger = logging.getLogger('batch '+str(batch))
 overall_logger.setLevel(logging.INFO)

@@ -176,7 +176,7 @@ def connected_poset_cover(lins=None, comp=None, getall=False, timeout=None, runa
                    map( lambda l : set(get_swap(l)) , lins ) ) ))
 
     # make k posets ; worst case is size of lins
-    for k in range(10, len(lins)+1):
+    for k in range(1, len(lins)+1):
         s.reset()
 
         logger.debug("Trying with %s posets!", k)
