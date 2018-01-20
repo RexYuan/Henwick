@@ -133,17 +133,16 @@ def partial_cover(Upsilon, L):
 
     # while UpsilonPrime =/= Delta
     while UpsilonPrime != Delta:
+        # NOTE: i figured it out! this is the problem! should be select L1,L2 scuh that...
+        #       if you select L1 first then you may not be able to find a L2
+        #       but there is always a pair of L1,L2 as long as Y' != D (proof?)
+        # NOTE: thus the bug of infinite loop is resolved
         # do Select L1 in Delta and L2 in UpsilonPrime\Delta such that L1 <-> L2
         L1 = choice(tuple(Delta))
         L2 = choice(tuple(UpsilonPrime - Delta))
-        tried = {L2}
         while not is_swap(L1 , L2):
-            # in case we stuck here forever
-            if len(tried) >= len(UpsilonPrime - Delta):
-                #return (A, B, Delta, UpsilonPrime)
-                return False
+            L1 = choice(tuple(Delta))
             L2 = choice(tuple(UpsilonPrime - Delta))
-            tried.add(L2)
 
         # Delta <- Delta U {L2}
         Delta = Delta | {L2}
@@ -173,7 +172,7 @@ def partial_cover(Upsilon, L):
                             A, UpsilonPrime = Trim(A, UpsilonPrime, Delta)
                             # again <- True
                             again = True
-        # Set UpsilonPrime to the set of linear orders in the connected component of G(Y) that contains L
+        # Set UpsilonPrime to the set of linear orders in the connected component of G(Y') that contains L
         swap_graph = nx.Graph()
         swap_graph.add_nodes_from(UpsilonPrime)
         UP = list(UpsilonPrime)
@@ -190,44 +189,18 @@ def partial_cover(Upsilon, L):
     return (A, B, Delta)
 
 '''
-# example
-lins = [
-'13245',
-'12345',
-'21345',
-'23145',
-'32145',
-'13254',
-'12354',
-'21354',
-'23154',
-'32154',
-'31245'
-]
-lins = list(map(str, lins))
-
-print()
-
-l = 'abfced'
-ls = [
+lins1 = [
 'afbced',
 'afbecd',
 'abfecd',
-'abfced',
 'bfaced',
 'bafced',
+'abfced',
 'bacfed',
 'abcfed',
-'abcefd',
-'bacefd'
+'bacefd',
+'abcefd'
 ]
-lpps = ls
-rets = partial_cover(ls, l)
-while not rets:
-    rets = partial_cover(ls, l)
-print(rets)
-#A = rets[0]
-#A = trans_closure(A)
-#covers = get_linearizations(l,A)
-#print(A)
+for _ in range(100):
+    print(partial_cover(lins1, 'abfced')[2])
 '''
