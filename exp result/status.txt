@@ -1,0 +1,2400 @@
+[INFO] 2018-01-20 09:30:11,475 : batch 2 : Trial 51 timed out.
+[INFO] 2018-01-20 09:31:02,392 : batch 6 : Trial 251 timed out.
+[INFO] 2018-01-20 09:31:31,902 : batch 1 : Trial 1 timed out.
+[INFO] 2018-01-20 09:31:42,153 : batch 4 : Trial 151 timed out.
+[INFO] 2018-01-20 09:32:00,056 : batch 5 : Trial 201 timed out.
+[INFO] 2018-01-20 09:32:19,977 : batch 3 : Trial 101 timed out.
+[INFO] 2018-01-20 09:34:09,893 : batch 8 : Trial 351 timed out.
+[INFO] 2018-01-20 09:34:13,441 : batch 7 : Trial 301 timed out.
+[INFO] 2018-01-20 09:35:25,322 : batch 10 : Trial 451 timed out.
+[INFO] 2018-01-20 09:35:29,568 : batch 11 : Trial 501 timed out.
+[INFO] 2018-01-20 09:36:21,707 : batch 9 : Trial 401 timed out.
+[INFO] 2018-01-20 09:36:23,594 : batch 13 : Trial 601 timed out.
+[INFO] 2018-01-20 09:36:34,031 : batch 12 : Trial 551 timed out.
+[INFO] 2018-01-20 09:38:48,364 : batch 14 : Trial 651 timed out.
+[INFO] 2018-01-20 09:39:16,816 : batch 16 : Trial 751 timed out.
+[INFO] 2018-01-20 09:40:09,464 : batch 18 : Trial 851 timed out.
+[INFO] 2018-01-20 09:41:15,149 : batch 15 : Trial 701 timed out.
+[INFO] 2018-01-20 09:43:20,264 : batch 17 : Trial 801 timed out.
+[INFO] 2018-01-20 09:47:27,132 : batch 1 : Trial 2 timed out.
+[INFO] 2018-01-20 09:47:31,142 : batch 2 : Trial 52 timed out.
+[INFO] 2018-01-20 09:48:08,618 : batch 6 : Trial 252 timed out.
+[INFO] 2018-01-20 09:49:43,688 : batch 5 : Trial 202 timed out.
+[INFO] 2018-01-20 09:50:59,570 : batch 4 : Trial 152 timed out.
+[INFO] 2018-01-20 09:51:38,076 : batch 3 : Trial 102 timed out.
+[INFO] 2018-01-20 09:54:16,836 : batch 8 : Trial 352 timed out.
+[INFO] 2018-01-20 09:55:55,536 : batch 7 : Trial 302 timed out.
+[INFO] 2018-01-20 09:55:56,215 : batch 13 : Trial 602 timed out.
+[INFO] 2018-01-20 09:56:43,324 : batch 12 : Trial 552 timed out.
+[INFO] 2018-01-20 09:58:48,333 : batch 11 : Trial 502 timed out.
+[INFO] 2018-01-20 09:59:39,999 : batch 10 : Trial 452 timed out.
+[INFO] 2018-01-20 10:00:24,905 : batch 9 : Trial 402 timed out.
+[INFO] 2018-01-20 10:03:58,660 : batch 14 : Trial 652 timed out.
+[INFO] 2018-01-20 10:05:11,339 : batch 16 : Trial 752 timed out.
+[INFO] 2018-01-20 10:05:16,852 : batch 1 : Trial 3 timed out.
+[INFO] 2018-01-20 10:06:44,766 : batch 6 : Trial 253 timed out.
+[INFO] 2018-01-20 10:07:06,955 : batch 2 : Trial 53 timed out.
+[INFO] 2018-01-20 10:07:24,370 : batch 5 : Trial 203 timed out.
+[INFO] 2018-01-20 10:09:19,842 : batch 15 : Trial 702 timed out.
+[INFO] 2018-01-20 10:10:10,933 : batch 17 : Trial 802 timed out.
+[INFO] 2018-01-20 10:10:47,809 : batch 18 : Trial 852 timed out.
+[INFO] 2018-01-20 10:11:59,913 : batch 3 : Trial 103 timed out.
+[INFO] 2018-01-20 10:12:29,480 : batch 4 : Trial 153 timed out.
+[INFO] 2018-01-20 10:13:40,664 : batch 7 : Trial 303 timed out.
+[INFO] 2018-01-20 10:14:44,735 : batch 12 : Trial 553 timed out.
+[INFO] 2018-01-20 10:14:51,201 : batch 8 : Trial 353 timed out.
+[INFO] 2018-01-20 10:17:38,765 : batch 13 : Trial 603 timed out.
+[INFO] 2018-01-20 10:22:45,854 : batch 11 : Trial 503 timed out.
+[INFO] 2018-01-20 10:23:10,484 : batch 9 : Trial 403 timed out.
+[INFO] 2018-01-20 10:23:23,486 : batch 1 : Trial 4 timed out.
+[INFO] 2018-01-20 10:23:38,378 : batch 10 : Trial 453 timed out.
+[INFO] 2018-01-20 10:24:56,891 : batch 6 : Trial 254 timed out.
+[INFO] 2018-01-20 10:26:08,936 : batch 2 : Trial 54 timed out.
+[INFO] 2018-01-20 10:28:21,972 : batch 14 : Trial 653 timed out.
+[INFO] 2018-01-20 10:28:26,020 : batch 5 : Trial 204 timed out.
+[INFO] 2018-01-20 10:31:44,430 : batch 4 : Trial 154 timed out.
+[INFO] 2018-01-20 10:31:57,355 : batch 3 : Trial 104 timed out.
+[INFO] 2018-01-20 10:32:44,950 : batch 16 : Trial 753 timed out.
+[INFO] 2018-01-20 10:32:52,481 : batch 7 : Trial 304 timed out.
+[INFO] 2018-01-20 10:35:10,339 : batch 12 : Trial 554 timed out.
+[INFO] 2018-01-20 10:36:21,540 : batch 8 : Trial 354 timed out.
+[INFO] 2018-01-20 10:37:38,736 : batch 13 : Trial 604 timed out.
+[INFO] 2018-01-20 10:39:08,306 : batch 15 : Trial 703 timed out.
+[INFO] 2018-01-20 10:39:56,909 : batch 18 : Trial 853 timed out.
+[INFO] 2018-01-20 10:41:30,910 : batch 1 : Trial 5 timed out.
+[INFO] 2018-01-20 10:42:00,524 : batch 17 : Trial 803 timed out.
+[INFO] 2018-01-20 10:43:15,092 : batch 6 : Trial 255 timed out.
+[INFO] 2018-01-20 10:45:30,451 : batch 2 : Trial 55 timed out.
+[INFO] 2018-01-20 10:45:47,444 : batch 9 : Trial 404 timed out.
+[INFO] 2018-01-20 10:46:13,849 : batch 11 : Trial 504 timed out.
+[INFO] 2018-01-20 10:48:08,676 : batch 10 : Trial 454 timed out.
+[INFO] 2018-01-20 10:48:33,813 : batch 5 : Trial 205 timed out.
+[INFO] 2018-01-20 10:49:30,470 : batch 3 : Trial 105 timed out.
+[INFO] 2018-01-20 10:51:20,595 : batch 7 : Trial 305 timed out.
+[INFO] 2018-01-20 10:52:12,019 : batch 4 : Trial 155 timed out.
+[INFO] 2018-01-20 10:55:47,777 : batch 14 : Trial 654 timed out.
+[INFO] 2018-01-20 10:56:35,069 : batch 12 : Trial 555 timed out.
+[INFO] 2018-01-20 10:58:22,202 : batch 13 : Trial 605 timed out.
+[INFO] 2018-01-20 10:58:34,761 : batch 1 : Trial 6 timed out.
+[INFO] 2018-01-20 10:58:54,176 : batch 8 : Trial 355 timed out.
+[INFO] 2018-01-20 10:58:55,410 : batch 16 : Trial 754 timed out.
+[INFO] 2018-01-20 11:02:13,562 : batch 6 : Trial 256 timed out.
+[INFO] 2018-01-20 11:04:03,052 : batch 2 : Trial 56 timed out.
+[INFO] 2018-01-20 11:05:16,731 : batch 9 : Trial 405 timed out.
+[INFO] 2018-01-20 11:07:00,566 : batch 18 : Trial 854 timed out.
+[INFO] 2018-01-20 11:07:21,299 : batch 15 : Trial 704 timed out.
+[INFO] 2018-01-20 11:09:35,085 : batch 7 : Trial 306 timed out.
+[INFO] 2018-01-20 11:09:53,661 : batch 11 : Trial 505 timed out.
+[INFO] 2018-01-20 11:09:59,761 : batch 3 : Trial 106 timed out.
+[INFO] 2018-01-20 11:11:55,187 : batch 17 : Trial 804 timed out.
+[INFO] 2018-01-20 11:12:07,584 : batch 10 : Trial 455 timed out.
+[INFO] 2018-01-20 11:13:30,934 : batch 4 : Trial 156 timed out.
+[INFO] 2018-01-20 11:14:34,065 : batch 1 : Trial 7 timed out.
+[INFO] 2018-01-20 11:17:39,904 : batch 12 : Trial 556 timed out.
+[INFO] 2018-01-20 11:18:58,863 : batch 6 : Trial 257 timed out.
+[INFO] 2018-01-20 11:19:42,667 : batch 13 : Trial 606 timed out.
+[INFO] 2018-01-20 11:19:50,713 : batch 14 : Trial 655 timed out.
+[INFO] 2018-01-20 11:21:58,840 : batch 8 : Trial 356 timed out.
+[INFO] 2018-01-20 11:24:37,945 : batch 2 : Trial 57 timed out.
+[INFO] 2018-01-20 11:25:17,744 : batch 5 : Trial 206 timed out.
+[INFO] 2018-01-20 11:28:17,513 : batch 9 : Trial 406 timed out.
+[INFO] 2018-01-20 11:28:35,083 : batch 7 : Trial 307 timed out.
+[INFO] 2018-01-20 11:29:07,071 : batch 16 : Trial 755 timed out.
+[INFO] 2018-01-20 11:29:34,923 : batch 3 : Trial 107 timed out.
+[INFO] 2018-01-20 11:30:39,199 : batch 15 : Trial 705 timed out.
+[INFO] 2018-01-20 11:31:07,165 : batch 4 : Trial 157 timed out.
+[INFO] 2018-01-20 11:32:43,140 : batch 1 : Trial 8 timed out.
+[INFO] 2018-01-20 11:34:02,943 : batch 10 : Trial 456 timed out.
+[INFO] 2018-01-20 11:34:02,958 : batch 11 : Trial 506 timed out.
+[INFO] 2018-01-20 11:38:09,439 : batch 6 : Trial 258 timed out.
+[INFO] 2018-01-20 11:38:27,526 : batch 12 : Trial 557 timed out.
+[INFO] 2018-01-20 11:38:57,307 : batch 18 : Trial 855 timed out.
+[INFO] 2018-01-20 11:41:46,324 : batch 13 : Trial 607 timed out.
+[INFO] 2018-01-20 11:43:48,290 : batch 8 : Trial 357 timed out.
+[INFO] 2018-01-20 11:44:12,107 : batch 17 : Trial 805 timed out.
+[INFO] 2018-01-20 11:44:54,852 : batch 2 : Trial 58 timed out.
+[INFO] 2018-01-20 11:45:35,756 : batch 14 : Trial 656 timed out.
+[INFO] 2018-01-20 11:46:44,531 : batch 5 : Trial 207 timed out.
+[INFO] 2018-01-20 11:47:44,146 : batch 3 : Trial 108 timed out.
+[INFO] 2018-01-20 11:47:57,019 : batch 7 : Trial 308 timed out.
+[INFO] 2018-01-20 11:50:05,787 : batch 9 : Trial 407 timed out.
+[INFO] 2018-01-20 11:50:15,777 : batch 1 : Trial 9 timed out.
+[INFO] 2018-01-20 11:51:09,848 : batch 4 : Trial 158 timed out.
+[INFO] 2018-01-20 11:55:27,149 : batch 10 : Trial 457 timed out.
+[INFO] 2018-01-20 11:55:30,448 : batch 15 : Trial 706 timed out.
+[INFO] 2018-01-20 11:55:49,724 : batch 16 : Trial 756 timed out.
+[INFO] 2018-01-20 11:56:41,766 : batch 6 : Trial 259 timed out.
+[INFO] 2018-01-20 11:59:05,421 : batch 11 : Trial 507 timed out.
+[INFO] 2018-01-20 12:03:35,842 : batch 2 : Trial 59 timed out.
+[INFO] 2018-01-20 12:04:11,533 : batch 13 : Trial 608 timed out.
+[INFO] 2018-01-20 12:05:56,498 : batch 5 : Trial 208 timed out.
+[INFO] 2018-01-20 12:06:33,372 : batch 7 : Trial 309 timed out.
+[INFO] 2018-01-20 12:06:47,525 : batch 8 : Trial 358 timed out.
+[INFO] 2018-01-20 12:07:44,551 : batch 1 : Trial 10 timed out.
+[INFO] 2018-01-20 12:07:57,940 : batch 3 : Trial 109 timed out.
+[INFO] 2018-01-20 12:09:28,070 : batch 18 : Trial 856 timed out.
+[INFO] 2018-01-20 12:09:54,828 : batch 12 : Trial 558 timed out.
+[INFO] 2018-01-20 12:10:04,562 : batch 17 : Trial 806 timed out.
+[INFO] 2018-01-20 12:10:05,908 : batch 4 : Trial 159 timed out.
+[INFO] 2018-01-20 12:11:49,970 : batch 14 : Trial 657 timed out.
+[INFO] 2018-01-20 12:12:25,221 : batch 9 : Trial 408 timed out.
+[INFO] 2018-01-20 12:13:12,921 : batch 6 : Trial 260 timed out.
+[INFO] 2018-01-20 12:17:26,430 : batch 10 : Trial 458 timed out.
+[INFO] 2018-01-20 12:21:01,648 : batch 15 : Trial 707 timed out.
+[INFO] 2018-01-20 12:21:36,825 : batch 11 : Trial 508 timed out.
+[INFO] 2018-01-20 12:23:21,756 : batch 16 : Trial 757 timed out.
+[INFO] 2018-01-20 12:23:23,282 : batch 2 : Trial 60 timed out.
+[INFO] 2018-01-20 12:23:46,858 : batch 1 : Trial 11 timed out.
+[INFO] 2018-01-20 12:23:58,124 : batch 13 : Trial 609 timed out.
+[INFO] 2018-01-20 12:24:43,312 : batch 5 : Trial 209 timed out.
+[INFO] 2018-01-20 12:25:54,765 : batch 7 : Trial 310 timed out.
+[INFO] 2018-01-20 12:26:58,817 : batch 3 : Trial 110 timed out.
+[INFO] 2018-01-20 12:27:16,742 : batch 8 : Trial 359 timed out.
+[INFO] 2018-01-20 12:30:10,950 : batch 4 : Trial 160 timed out.
+[INFO] 2018-01-20 12:30:20,198 : batch 12 : Trial 559 timed out.
+[INFO] 2018-01-20 12:31:41,669 : batch 6 : Trial 261 timed out.
+[INFO] 2018-01-20 12:35:13,820 : batch 9 : Trial 409 timed out.
+[INFO] 2018-01-20 12:37:47,834 : batch 18 : Trial 857 timed out.
+[INFO] 2018-01-20 12:38:05,597 : batch 17 : Trial 807 timed out.
+[INFO] 2018-01-20 12:38:13,365 : batch 10 : Trial 459 timed out.
+[INFO] 2018-01-20 12:39:19,444 : batch 14 : Trial 658 timed out.
+[INFO] 2018-01-20 12:41:45,189 : batch 1 : Trial 12 timed out.
+[INFO] 2018-01-20 12:43:14,933 : batch 2 : Trial 61 timed out.
+[INFO] 2018-01-20 12:44:16,016 : batch 7 : Trial 311 timed out.
+[INFO] 2018-01-20 12:44:22,028 : batch 11 : Trial 509 timed out.
+[INFO] 2018-01-20 12:44:36,757 : batch 13 : Trial 610 timed out.
+[INFO] 2018-01-20 12:45:49,116 : batch 5 : Trial 210 timed out.
+[INFO] 2018-01-20 12:47:27,422 : batch 3 : Trial 111 timed out.
+[INFO] 2018-01-20 12:47:46,861 : batch 15 : Trial 708 timed out.
+[INFO] 2018-01-20 12:48:11,199 : batch 16 : Trial 758 timed out.
+[INFO] 2018-01-20 12:48:12,717 : batch 8 : Trial 360 timed out.
+[INFO] 2018-01-20 12:49:03,333 : batch 12 : Trial 560 timed out.
+[INFO] 2018-01-20 12:49:05,942 : batch 4 : Trial 161 timed out.
+[INFO] 2018-01-20 12:50:17,322 : batch 6 : Trial 262 timed out.
+[INFO] 2018-01-20 12:57:09,278 : batch 9 : Trial 410 timed out.
+[INFO] 2018-01-20 12:59:01,861 : batch 1 : Trial 13 timed out.
+[INFO] 2018-01-20 13:00:15,516 : batch 10 : Trial 460 timed out.
+[INFO] 2018-01-20 13:01:39,943 : batch 2 : Trial 62 timed out.
+[INFO] 2018-01-20 13:03:20,185 : batch 7 : Trial 312 timed out.
+[INFO] 2018-01-20 13:04:11,046 : batch 18 : Trial 858 timed out.
+[INFO] 2018-01-20 13:05:05,441 : batch 5 : Trial 211 timed out.
+[INFO] 2018-01-20 13:05:34,749 : batch 14 : Trial 659 timed out.
+[INFO] 2018-01-20 13:06:21,712 : batch 13 : Trial 611 timed out.
+[INFO] 2018-01-20 13:06:22,723 : batch 17 : Trial 808 timed out.
+[INFO] 2018-01-20 13:07:06,665 : batch 11 : Trial 510 timed out.
+[INFO] 2018-01-20 13:07:27,044 : batch 3 : Trial 112 timed out.
+[INFO] 2018-01-20 13:08:51,296 : batch 4 : Trial 162 timed out.
+[INFO] 2018-01-20 13:08:59,021 : batch 8 : Trial 361 timed out.
+[INFO] 2018-01-20 13:09:05,166 : batch 12 : Trial 561 timed out.
+[INFO] 2018-01-20 13:09:28,725 : batch 6 : Trial 263 timed out.
+[INFO] 2018-01-20 13:12:28,535 : batch 15 : Trial 709 timed out.
+[INFO] 2018-01-20 13:16:56,279 : batch 16 : Trial 759 timed out.
+[INFO] 2018-01-20 13:17:01,436 : batch 1 : Trial 14 timed out.
+[INFO] 2018-01-20 13:20:36,867 : batch 9 : Trial 411 timed out.
+[INFO] 2018-01-20 13:21:03,651 : batch 2 : Trial 63 timed out.
+[INFO] 2018-01-20 13:22:28,539 : batch 7 : Trial 313 timed out.
+[INFO] 2018-01-20 13:23:16,264 : batch 5 : Trial 212 timed out.
+[INFO] 2018-01-20 13:24:52,856 : batch 10 : Trial 461 timed out.
+[INFO] 2018-01-20 13:25:43,746 : batch 3 : Trial 113 timed out.
+[INFO] 2018-01-20 13:27:37,584 : batch 6 : Trial 264 timed out.
+[INFO] 2018-01-20 13:28:12,490 : batch 13 : Trial 612 timed out.
+[INFO] 2018-01-20 13:28:51,635 : batch 4 : Trial 163 timed out.
+[INFO] 2018-01-20 13:29:27,919 : batch 14 : Trial 660 timed out.
+[INFO] 2018-01-20 13:29:35,455 : batch 12 : Trial 562 timed out.
+[INFO] 2018-01-20 13:29:49,594 : batch 18 : Trial 859 timed out.
+[INFO] 2018-01-20 13:30:26,885 : batch 11 : Trial 511 timed out.
+[INFO] 2018-01-20 13:32:10,210 : batch 8 : Trial 362 timed out.
+[INFO] 2018-01-20 13:33:37,793 : batch 17 : Trial 809 timed out.
+[INFO] 2018-01-20 13:35:13,589 : batch 1 : Trial 15 timed out.
+[INFO] 2018-01-20 13:39:48,679 : batch 2 : Trial 64 timed out.
+[INFO] 2018-01-20 13:40:44,447 : batch 15 : Trial 710 timed out.
+[INFO] 2018-01-20 13:41:13,131 : batch 7 : Trial 314 timed out.
+[INFO] 2018-01-20 13:42:19,264 : batch 9 : Trial 412 timed out.
+[INFO] 2018-01-20 13:44:18,387 : batch 16 : Trial 760 timed out.
+[INFO] 2018-01-20 13:44:50,222 : batch 5 : Trial 213 timed out.
+[INFO] 2018-01-20 13:45:43,157 : batch 6 : Trial 265 timed out.
+[INFO] 2018-01-20 13:46:12,449 : batch 3 : Trial 114 timed out.
+[INFO] 2018-01-20 13:47:02,726 : batch 10 : Trial 462 timed out.
+[INFO] 2018-01-20 13:48:53,286 : batch 4 : Trial 164 timed out.
+[INFO] 2018-01-20 13:48:55,306 : batch 12 : Trial 563 timed out.
+[INFO] 2018-01-20 13:48:55,664 : batch 13 : Trial 613 timed out.
+[INFO] 2018-01-20 13:51:11,469 : batch 11 : Trial 512 timed out.
+[INFO] 2018-01-20 13:51:38,361 : batch 1 : Trial 16 timed out.
+[INFO] 2018-01-20 13:51:53,871 : batch 14 : Trial 661 timed out.
+[INFO] 2018-01-20 13:53:10,971 : batch 8 : Trial 363 timed out.
+[INFO] 2018-01-20 13:56:40,254 : batch 2 : Trial 65 timed out.
+[INFO] 2018-01-20 13:57:50,682 : batch 18 : Trial 860 timed out.
+[INFO] 2018-01-20 13:59:49,276 : batch 7 : Trial 315 timed out.
+[INFO] 2018-01-20 14:02:33,472 : batch 17 : Trial 810 timed out.
+[INFO] 2018-01-20 14:03:08,881 : batch 3 : Trial 115 timed out.
+[INFO] 2018-01-20 14:04:14,374 : batch 9 : Trial 413 timed out.
+[INFO] 2018-01-20 14:04:32,853 : batch 6 : Trial 266 timed out.
+[INFO] 2018-01-20 14:05:18,477 : batch 5 : Trial 214 timed out.
+[INFO] 2018-01-20 14:06:12,779 : batch 15 : Trial 711 timed out.
+[INFO] 2018-01-20 14:07:41,035 : batch 4 : Trial 165 timed out.
+[INFO] 2018-01-20 14:09:07,080 : batch 1 : Trial 17 timed out.
+[INFO] 2018-01-20 14:09:11,355 : batch 10 : Trial 463 timed out.
+[INFO] 2018-01-20 14:09:46,025 : batch 12 : Trial 564 timed out.
+[INFO] 2018-01-20 14:10:18,707 : batch 13 : Trial 614 timed out.
+[INFO] 2018-01-20 14:11:13,314 : batch 16 : Trial 761 timed out.
+[INFO] 2018-01-20 14:12:22,535 : batch 11 : Trial 513 timed out.
+[INFO] 2018-01-20 14:15:21,854 : batch 8 : Trial 364 timed out.
+[INFO] 2018-01-20 14:15:58,357 : batch 2 : Trial 66 timed out.
+[INFO] 2018-01-20 14:16:25,558 : batch 14 : Trial 662 timed out.
+[INFO] 2018-01-20 14:19:22,897 : batch 7 : Trial 316 timed out.
+[INFO] 2018-01-20 14:21:38,056 : batch 3 : Trial 116 timed out.
+[INFO] 2018-01-20 14:22:21,766 : batch 6 : Trial 267 timed out.
+[INFO] 2018-01-20 14:25:56,693 : batch 9 : Trial 414 timed out.
+[INFO] 2018-01-20 14:26:12,672 : batch 5 : Trial 215 timed out.
+[INFO] 2018-01-20 14:26:43,932 : batch 1 : Trial 18 timed out.
+[INFO] 2018-01-20 14:27:28,673 : batch 4 : Trial 166 timed out.
+[INFO] 2018-01-20 14:27:51,803 : batch 18 : Trial 861 timed out.
+[INFO] 2018-01-20 14:29:32,589 : batch 12 : Trial 565 timed out.
+[INFO] 2018-01-20 14:30:42,274 : batch 13 : Trial 615 timed out.
+[INFO] 2018-01-20 14:30:48,020 : batch 17 : Trial 811 timed out.
+[INFO] 2018-01-20 14:31:02,853 : batch 10 : Trial 464 timed out.
+[INFO] 2018-01-20 14:32:17,417 : batch 15 : Trial 712 timed out.
+[INFO] 2018-01-20 14:35:26,642 : batch 2 : Trial 67 timed out.
+[INFO] 2018-01-20 14:35:33,946 : batch 8 : Trial 365 timed out.
+[INFO] 2018-01-20 14:35:59,323 : batch 11 : Trial 514 timed out.
+[INFO] 2018-01-20 14:37:58,377 : batch 7 : Trial 317 timed out.
+[INFO] 2018-01-20 14:38:52,486 : batch 6 : Trial 268 timed out.
+[INFO] 2018-01-20 14:40:07,910 : batch 16 : Trial 762 timed out.
+[INFO] 2018-01-20 14:40:42,259 : batch 14 : Trial 663 timed out.
+[INFO] 2018-01-20 14:41:03,272 : batch 3 : Trial 117 timed out.
+[INFO] 2018-01-20 14:44:26,399 : batch 1 : Trial 19 timed out.
+[INFO] 2018-01-20 14:46:19,376 : batch 5 : Trial 216 timed out.
+[INFO] 2018-01-20 14:47:15,311 : batch 4 : Trial 167 timed out.
+[INFO] 2018-01-20 14:50:19,197 : batch 9 : Trial 415 timed out.
+[INFO] 2018-01-20 14:50:30,594 : batch 12 : Trial 566 timed out.
+[INFO] 2018-01-20 14:52:06,250 : batch 13 : Trial 616 timed out.
+[INFO] 2018-01-20 14:52:16,916 : batch 2 : Trial 68 timed out.
+[INFO] 2018-01-20 14:54:38,202 : batch 10 : Trial 465 timed out.
+[INFO] 2018-01-20 14:56:01,417 : batch 15 : Trial 713 timed out.
+[INFO] 2018-01-20 14:56:49,851 : batch 18 : Trial 862 timed out.
+[INFO] 2018-01-20 14:57:05,984 : batch 6 : Trial 269 timed out.
+[INFO] 2018-01-20 14:57:07,189 : batch 7 : Trial 318 timed out.
+[INFO] 2018-01-20 14:57:29,456 : batch 8 : Trial 366 timed out.
+[INFO] 2018-01-20 14:57:43,444 : batch 17 : Trial 812 timed out.
+[INFO] 2018-01-20 15:00:31,091 : batch 11 : Trial 515 timed out.
+[INFO] 2018-01-20 15:02:05,367 : batch 1 : Trial 20 timed out.
+[INFO] 2018-01-20 15:03:59,009 : batch 14 : Trial 664 timed out.
+[INFO] 2018-01-20 15:06:08,565 : batch 4 : Trial 168 timed out.
+[INFO] 2018-01-20 15:07:02,531 : batch 3 : Trial 118 timed out.
+[INFO] 2018-01-20 15:07:23,235 : batch 5 : Trial 217 timed out.
+[INFO] 2018-01-20 15:09:41,253 : batch 16 : Trial 763 timed out.
+[INFO] 2018-01-20 15:10:29,059 : batch 9 : Trial 416 timed out.
+[INFO] 2018-01-20 15:10:30,157 : batch 2 : Trial 69 timed out.
+[INFO] 2018-01-20 15:11:21,499 : batch 13 : Trial 617 timed out.
+[INFO] 2018-01-20 15:11:31,161 : batch 12 : Trial 567 timed out.
+[INFO] 2018-01-20 15:15:20,009 : batch 6 : Trial 270 timed out.
+[INFO] 2018-01-20 15:16:11,574 : batch 8 : Trial 367 timed out.
+[INFO] 2018-01-20 15:16:12,992 : batch 7 : Trial 319 timed out.
+[INFO] 2018-01-20 15:16:49,115 : batch 10 : Trial 466 timed out.
+[INFO] 2018-01-20 15:19:19,794 : batch 1 : Trial 21 timed out.
+[INFO] 2018-01-20 15:21:19,210 : batch 15 : Trial 714 timed out.
+[INFO] 2018-01-20 15:24:15,931 : batch 11 : Trial 516 timed out.
+[INFO] 2018-01-20 15:25:29,786 : batch 3 : Trial 119 timed out.
+[INFO] 2018-01-20 15:25:45,394 : batch 18 : Trial 863 timed out.
+[INFO] 2018-01-20 15:26:42,525 : batch 4 : Trial 169 timed out.
+[INFO] 2018-01-20 15:26:52,874 : batch 14 : Trial 665 timed out.
+[INFO] 2018-01-20 15:26:58,507 : batch 17 : Trial 813 timed out.
+[INFO] 2018-01-20 15:27:36,205 : batch 5 : Trial 218 timed out.
+[INFO] 2018-01-20 15:29:19,529 : batch 2 : Trial 70 timed out.
+[INFO] 2018-01-20 15:31:16,986 : batch 12 : Trial 568 timed out.
+[INFO] 2018-01-20 15:32:31,629 : batch 13 : Trial 618 timed out.
+[INFO] 2018-01-20 15:33:22,955 : batch 9 : Trial 417 timed out.
+[INFO] 2018-01-20 15:33:53,929 : batch 6 : Trial 271 timed out.
+[INFO] 2018-01-20 15:35:00,271 : batch 7 : Trial 320 timed out.
+[INFO] 2018-01-20 15:36:40,956 : batch 1 : Trial 22 timed out.
+[INFO] 2018-01-20 15:36:48,545 : batch 16 : Trial 764 timed out.
+[INFO] 2018-01-20 15:38:26,053 : batch 8 : Trial 368 timed out.
+[INFO] 2018-01-20 15:40:04,292 : batch 10 : Trial 467 timed out.
+[INFO] 2018-01-20 15:45:52,258 : batch 15 : Trial 715 timed out.
+[INFO] 2018-01-20 15:46:13,948 : batch 11 : Trial 517 timed out.
+[INFO] 2018-01-20 15:46:21,246 : batch 5 : Trial 219 timed out.
+[INFO] 2018-01-20 15:46:27,980 : batch 4 : Trial 170 timed out.
+[INFO] 2018-01-20 15:46:42,427 : batch 3 : Trial 120 timed out.
+[INFO] 2018-01-20 15:48:34,167 : batch 2 : Trial 71 timed out.
+[INFO] 2018-01-20 15:50:58,898 : batch 14 : Trial 666 timed out.
+[INFO] 2018-01-20 15:51:05,893 : batch 12 : Trial 569 timed out.
+[INFO] 2018-01-20 15:52:45,355 : batch 6 : Trial 272 timed out.
+[INFO] 2018-01-20 15:53:36,096 : batch 18 : Trial 864 timed out.
+[INFO] 2018-01-20 15:53:44,780 : batch 13 : Trial 619 timed out.
+[INFO] 2018-01-20 15:54:15,404 : batch 7 : Trial 321 timed out.
+[INFO] 2018-01-20 15:54:35,930 : batch 1 : Trial 23 timed out.
+[INFO] 2018-01-20 15:55:04,639 : batch 9 : Trial 418 timed out.
+[INFO] 2018-01-20 15:56:40,659 : batch 17 : Trial 814 timed out.
+[INFO] 2018-01-20 16:00:26,210 : batch 8 : Trial 369 timed out.
+[INFO] 2018-01-20 16:01:33,463 : batch 10 : Trial 468 timed out.
+[INFO] 2018-01-20 16:02:49,374 : batch 16 : Trial 765 timed out.
+[INFO] 2018-01-20 16:02:54,875 : batch 4 : Trial 171 timed out.
+[INFO] 2018-01-20 16:06:33,769 : batch 3 : Trial 121 timed out.
+[INFO] 2018-01-20 16:06:35,811 : batch 5 : Trial 220 timed out.
+[INFO] 2018-01-20 16:07:44,179 : batch 2 : Trial 72 timed out.
+[INFO] 2018-01-20 16:09:44,644 : batch 11 : Trial 518 timed out.
+[INFO] 2018-01-20 16:11:16,122 : batch 15 : Trial 716 timed out.
+[INFO] 2018-01-20 16:12:05,195 : batch 12 : Trial 570 timed out.
+[INFO] 2018-01-20 16:12:44,062 : batch 1 : Trial 24 timed out.
+[INFO] 2018-01-20 16:13:52,072 : batch 7 : Trial 322 timed out.
+[INFO] 2018-01-20 16:14:33,092 : batch 13 : Trial 620 timed out.
+[INFO] 2018-01-20 16:16:59,984 : batch 14 : Trial 667 timed out.
+[INFO] 2018-01-20 16:17:31,779 : batch 9 : Trial 419 timed out.
+[INFO] 2018-01-20 16:17:55,351 : batch 6 : Trial 273 timed out.
+[INFO] 2018-01-20 16:21:53,819 : batch 8 : Trial 370 timed out.
+[INFO] 2018-01-20 16:22:46,373 : batch 17 : Trial 815 timed out.
+[INFO] 2018-01-20 16:22:51,132 : batch 10 : Trial 469 timed out.
+[INFO] 2018-01-20 16:22:52,236 : batch 18 : Trial 865 timed out.
+[INFO] 2018-01-20 16:23:52,074 : batch 4 : Trial 172 timed out.
+[INFO] 2018-01-20 16:24:08,264 : batch 5 : Trial 221 timed out.
+[INFO] 2018-01-20 16:25:29,405 : batch 2 : Trial 73 timed out.
+[INFO] 2018-01-20 16:26:40,298 : batch 3 : Trial 122 timed out.
+[INFO] 2018-01-20 16:29:39,973 : batch 16 : Trial 766 timed out.
+[INFO] 2018-01-20 16:29:40,408 : batch 1 : Trial 25 timed out.
+[INFO] 2018-01-20 16:31:35,604 : batch 12 : Trial 571 timed out.
+[INFO] 2018-01-20 16:32:51,713 : batch 7 : Trial 323 timed out.
+[INFO] 2018-01-20 16:33:52,742 : batch 11 : Trial 519 timed out.
+[INFO] 2018-01-20 16:35:51,088 : batch 13 : Trial 621 timed out.
+[INFO] 2018-01-20 16:36:48,658 : batch 6 : Trial 274 timed out.
+[INFO] 2018-01-20 16:38:55,761 : batch 9 : Trial 420 timed out.
+[INFO] 2018-01-20 16:39:00,646 : batch 15 : Trial 717 timed out.
+[INFO] 2018-01-20 16:39:10,175 : batch 14 : Trial 668 timed out.
+[INFO] 2018-01-20 16:42:22,980 : batch 2 : Trial 74 timed out.
+[INFO] 2018-01-20 16:43:11,443 : batch 8 : Trial 371 timed out.
+[INFO] 2018-01-20 16:43:52,768 : batch 5 : Trial 222 timed out.
+[INFO] 2018-01-20 16:43:59,294 : batch 4 : Trial 173 timed out.
+[INFO] 2018-01-20 16:44:41,004 : batch 10 : Trial 470 timed out.
+[INFO] 2018-01-20 16:46:33,943 : batch 3 : Trial 123 timed out.
+[INFO] 2018-01-20 16:47:37,363 : batch 1 : Trial 26 timed out.
+[INFO] 2018-01-20 16:50:35,057 : batch 18 : Trial 866 timed out.
+[INFO] 2018-01-20 16:51:02,489 : batch 12 : Trial 572 timed out.
+[INFO] 2018-01-20 16:51:22,028 : batch 7 : Trial 324 timed out.
+[INFO] 2018-01-20 16:53:27,937 : batch 6 : Trial 275 timed out.
+[INFO] 2018-01-20 16:54:30,501 : batch 17 : Trial 816 timed out.
+[INFO] 2018-01-20 16:55:56,109 : batch 16 : Trial 767 timed out.
+[INFO] 2018-01-20 16:56:33,378 : batch 11 : Trial 520 timed out.
+[INFO] 2018-01-20 16:57:46,482 : batch 13 : Trial 622 timed out.
+[INFO] 2018-01-20 17:01:05,801 : batch 4 : Trial 174 timed out.
+[INFO] 2018-01-20 17:01:22,252 : batch 5 : Trial 223 timed out.
+[INFO] 2018-01-20 17:01:24,858 : batch 9 : Trial 421 timed out.
+[INFO] 2018-01-20 17:02:02,396 : batch 2 : Trial 75 timed out.
+[INFO] 2018-01-20 17:03:17,217 : batch 14 : Trial 669 timed out.
+[INFO] 2018-01-20 17:05:22,256 : batch 1 : Trial 27 timed out.
+[INFO] 2018-01-20 17:05:31,130 : batch 8 : Trial 372 timed out.
+[INFO] 2018-01-20 17:06:16,210 : batch 10 : Trial 471 timed out.
+[INFO] 2018-01-20 17:06:23,774 : batch 15 : Trial 718 timed out.
+[INFO] 2018-01-20 17:09:24,715 : batch 7 : Trial 325 timed out.
+[INFO] 2018-01-20 17:11:25,777 : batch 12 : Trial 573 timed out.
+[INFO] 2018-01-20 17:11:52,604 : batch 6 : Trial 276 timed out.
+[INFO] 2018-01-20 17:18:31,894 : batch 13 : Trial 623 timed out.
+[INFO] 2018-01-20 17:18:39,624 : batch 3 : Trial 124 timed out.
+[INFO] 2018-01-20 17:19:09,647 : batch 11 : Trial 521 timed out.
+[INFO] 2018-01-20 17:19:49,143 : batch 18 : Trial 867 timed out.
+[INFO] 2018-01-20 17:19:55,592 : batch 16 : Trial 768 timed out.
+[INFO] 2018-01-20 17:20:17,634 : batch 4 : Trial 175 timed out.
+[INFO] 2018-01-20 17:20:52,353 : batch 2 : Trial 76 timed out.
+[INFO] 2018-01-20 17:21:15,552 : batch 5 : Trial 224 timed out.
+[INFO] 2018-01-20 17:22:20,062 : batch 1 : Trial 28 timed out.
+[INFO] 2018-01-20 17:23:44,935 : batch 17 : Trial 817 timed out.
+[INFO] 2018-01-20 17:24:19,403 : batch 9 : Trial 422 timed out.
+[INFO] 2018-01-20 17:26:17,221 : batch 14 : Trial 670 timed out.
+[INFO] 2018-01-20 17:27:48,621 : batch 8 : Trial 373 timed out.
+[INFO] 2018-01-20 17:28:06,917 : batch 7 : Trial 326 timed out.
+[INFO] 2018-01-20 17:28:22,342 : batch 10 : Trial 472 timed out.
+[INFO] 2018-01-20 17:28:57,901 : batch 6 : Trial 277 timed out.
+[INFO] 2018-01-20 17:30:57,313 : batch 12 : Trial 574 timed out.
+[INFO] 2018-01-20 17:31:58,520 : batch 15 : Trial 719 timed out.
+[INFO] 2018-01-20 17:37:39,895 : batch 3 : Trial 125 timed out.
+[INFO] 2018-01-20 17:39:05,963 : batch 2 : Trial 77 timed out.
+[INFO] 2018-01-20 17:39:21,754 : batch 4 : Trial 176 timed out.
+[INFO] 2018-01-20 17:39:26,598 : batch 5 : Trial 225 timed out.
+[INFO] 2018-01-20 17:40:13,608 : batch 13 : Trial 624 timed out.
+[INFO] 2018-01-20 17:40:35,381 : batch 1 : Trial 29 timed out.
+[INFO] 2018-01-20 17:42:11,719 : batch 11 : Trial 522 timed out.
+[INFO] 2018-01-20 17:46:49,772 : batch 7 : Trial 327 timed out.
+[INFO] 2018-01-20 17:46:51,670 : batch 16 : Trial 769 timed out.
+[INFO] 2018-01-20 17:46:53,844 : batch 9 : Trial 423 timed out.
+[INFO] 2018-01-20 17:47:42,925 : batch 6 : Trial 278 timed out.
+[INFO] 2018-01-20 17:49:14,363 : batch 8 : Trial 374 timed out.
+[INFO] 2018-01-20 17:49:29,281 : batch 18 : Trial 868 timed out.
+[INFO] 2018-01-20 17:50:28,531 : batch 12 : Trial 575 timed out.
+[INFO] 2018-01-20 17:50:43,492 : batch 10 : Trial 473 timed out.
+[INFO] 2018-01-20 17:51:44,696 : batch 14 : Trial 671 timed out.
+[INFO] 2018-01-20 17:52:37,276 : batch 17 : Trial 818 timed out.
+[INFO] 2018-01-20 17:55:53,658 : batch 15 : Trial 720 timed out.
+[INFO] 2018-01-20 17:56:41,566 : batch 3 : Trial 126 timed out.
+[INFO] 2018-01-20 17:57:33,368 : batch 4 : Trial 177 timed out.
+[INFO] 2018-01-20 17:57:42,722 : batch 5 : Trial 226 timed out.
+[INFO] 2018-01-20 17:57:50,560 : batch 1 : Trial 30 timed out.
+[INFO] 2018-01-20 17:58:49,002 : batch 2 : Trial 78 timed out.
+[INFO] 2018-01-20 18:01:17,113 : batch 13 : Trial 625 timed out.
+[INFO] 2018-01-20 18:04:15,657 : batch 11 : Trial 523 timed out.
+[INFO] 2018-01-20 18:05:35,234 : batch 7 : Trial 328 timed out.
+[INFO] 2018-01-20 18:05:41,688 : batch 6 : Trial 279 timed out.
+[INFO] 2018-01-20 18:09:04,370 : batch 9 : Trial 424 timed out.
+[INFO] 2018-01-20 18:10:08,026 : batch 10 : Trial 474 timed out.
+[INFO] 2018-01-20 18:10:58,720 : batch 12 : Trial 576 timed out.
+[INFO] 2018-01-20 18:11:11,291 : batch 8 : Trial 375 timed out.
+[INFO] 2018-01-20 18:15:29,109 : batch 1 : Trial 31 timed out.
+[INFO] 2018-01-20 18:15:29,936 : batch 5 : Trial 227 timed out.
+[INFO] 2018-01-20 18:15:43,572 : batch 16 : Trial 770 timed out.
+[INFO] 2018-01-20 18:15:51,864 : batch 14 : Trial 672 timed out.
+[INFO] 2018-01-20 18:16:37,399 : batch 18 : Trial 869 timed out.
+[INFO] 2018-01-20 18:17:18,644 : batch 4 : Trial 178 timed out.
+[INFO] 2018-01-20 18:17:35,159 : batch 3 : Trial 127 timed out.
+[INFO] 2018-01-20 18:18:39,219 : batch 2 : Trial 79 timed out.
+[INFO] 2018-01-20 18:20:13,775 : batch 17 : Trial 819 timed out.
+[INFO] 2018-01-20 18:21:59,658 : batch 15 : Trial 721 timed out.
+[INFO] 2018-01-20 18:22:59,335 : batch 13 : Trial 626 timed out.
+[INFO] 2018-01-20 18:23:45,359 : batch 6 : Trial 280 timed out.
+[INFO] 2018-01-20 18:24:50,849 : batch 7 : Trial 329 timed out.
+[INFO] 2018-01-20 18:27:21,252 : batch 11 : Trial 524 timed out.
+[INFO] 2018-01-20 18:30:25,310 : batch 12 : Trial 577 timed out.
+[INFO] 2018-01-20 18:32:34,162 : batch 9 : Trial 425 timed out.
+[INFO] 2018-01-20 18:33:15,727 : batch 8 : Trial 376 timed out.
+[INFO] 2018-01-20 18:33:19,486 : batch 1 : Trial 32 timed out.
+[INFO] 2018-01-20 18:34:24,783 : batch 10 : Trial 475 timed out.
+[INFO] 2018-01-20 18:35:36,014 : batch 3 : Trial 128 timed out.
+[INFO] 2018-01-20 18:36:37,214 : batch 2 : Trial 80 timed out.
+[INFO] 2018-01-20 18:37:22,900 : batch 5 : Trial 228 timed out.
+[INFO] 2018-01-20 18:38:06,082 : batch 4 : Trial 179 timed out.
+[INFO] 2018-01-20 18:40:12,054 : batch 14 : Trial 673 timed out.
+[INFO] 2018-01-20 18:40:48,835 : batch 16 : Trial 771 timed out.
+[INFO] 2018-01-20 18:41:45,427 : batch 6 : Trial 281 timed out.
+[INFO] 2018-01-20 18:44:09,974 : batch 18 : Trial 870 timed out.
+[INFO] 2018-01-20 18:44:19,262 : batch 7 : Trial 330 timed out.
+[INFO] 2018-01-20 18:44:44,703 : batch 13 : Trial 627 timed out.
+[INFO] 2018-01-20 18:46:58,406 : batch 17 : Trial 820 timed out.
+[INFO] 2018-01-20 18:48:32,813 : batch 15 : Trial 722 timed out.
+[INFO] 2018-01-20 18:49:50,199 : batch 12 : Trial 578 timed out.
+[INFO] 2018-01-20 18:51:04,562 : batch 1 : Trial 33 timed out.
+[INFO] 2018-01-20 18:51:37,215 : batch 11 : Trial 525 timed out.
+[INFO] 2018-01-20 18:54:04,281 : batch 9 : Trial 426 timed out.
+[INFO] 2018-01-20 18:54:59,511 : batch 8 : Trial 377 timed out.
+[INFO] 2018-01-20 18:55:07,777 : batch 3 : Trial 129 timed out.
+[INFO] 2018-01-20 18:56:05,744 : batch 2 : Trial 81 timed out.
+[INFO] 2018-01-20 18:56:44,008 : batch 5 : Trial 229 timed out.
+[INFO] 2018-01-20 18:57:52,119 : batch 10 : Trial 476 timed out.
+[INFO] 2018-01-20 18:58:00,708 : batch 4 : Trial 180 timed out.
+[INFO] 2018-01-20 19:00:33,244 : batch 6 : Trial 282 timed out.
+[INFO] 2018-01-20 19:02:35,398 : batch 7 : Trial 331 timed out.
+[INFO] 2018-01-20 19:04:09,308 : batch 14 : Trial 674 timed out.
+[INFO] 2018-01-20 19:05:48,654 : batch 13 : Trial 628 timed out.
+[INFO] 2018-01-20 19:08:36,411 : batch 16 : Trial 772 timed out.
+[INFO] 2018-01-20 19:08:52,052 : batch 1 : Trial 34 timed out.
+[INFO] 2018-01-20 19:09:18,116 : batch 12 : Trial 579 timed out.
+[INFO] 2018-01-20 19:12:01,691 : batch 3 : Trial 130 timed out.
+[INFO] 2018-01-20 19:13:46,922 : batch 18 : Trial 871 timed out.
+[INFO] 2018-01-20 19:15:18,315 : batch 9 : Trial 427 timed out.
+[INFO] 2018-01-20 19:15:36,621 : batch 11 : Trial 526 timed out.
+[INFO] 2018-01-20 19:15:57,444 : batch 2 : Trial 82 timed out.
+[INFO] 2018-01-20 19:16:03,173 : batch 8 : Trial 378 timed out.
+[INFO] 2018-01-20 19:16:06,526 : batch 17 : Trial 821 timed out.
+[INFO] 2018-01-20 19:16:22,301 : batch 4 : Trial 181 timed out.
+[INFO] 2018-01-20 19:17:29,187 : batch 5 : Trial 230 timed out.
+[INFO] 2018-01-20 19:18:40,034 : batch 15 : Trial 723 timed out.
+[INFO] 2018-01-20 19:19:34,899 : batch 6 : Trial 283 timed out.
+[INFO] 2018-01-20 19:19:44,277 : batch 10 : Trial 477 timed out.
+[INFO] 2018-01-20 19:20:57,392 : batch 7 : Trial 332 timed out.
+[INFO] 2018-01-20 19:25:15,560 : batch 1 : Trial 35 timed out.
+[INFO] 2018-01-20 19:26:39,704 : batch 13 : Trial 629 timed out.
+[INFO] 2018-01-20 19:28:59,322 : batch 3 : Trial 131 timed out.
+[INFO] 2018-01-20 19:29:40,264 : batch 12 : Trial 580 timed out.
+[INFO] 2018-01-20 19:29:58,661 : batch 14 : Trial 675 timed out.
+[INFO] 2018-01-20 19:34:37,754 : batch 16 : Trial 773 timed out.
+[INFO] 2018-01-20 19:34:53,058 : batch 2 : Trial 83 timed out.
+[INFO] 2018-01-20 19:36:37,759 : batch 4 : Trial 182 timed out.
+[INFO] 2018-01-20 19:37:38,440 : batch 8 : Trial 379 timed out.
+[INFO] 2018-01-20 19:37:42,374 : batch 6 : Trial 284 timed out.
+[INFO] 2018-01-20 19:38:03,803 : batch 5 : Trial 231 timed out.
+[INFO] 2018-01-20 19:38:15,272 : batch 9 : Trial 428 timed out.
+[INFO] 2018-01-20 19:39:47,659 : batch 11 : Trial 527 timed out.
+[INFO] 2018-01-20 19:40:23,231 : batch 7 : Trial 333 timed out.
+[INFO] 2018-01-20 19:40:37,091 : batch 10 : Trial 478 timed out.
+[INFO] 2018-01-20 19:42:24,340 : batch 1 : Trial 36 timed out.
+[INFO] 2018-01-20 19:43:25,579 : batch 18 : Trial 872 timed out.
+[INFO] 2018-01-20 19:44:47,124 : batch 15 : Trial 724 timed out.
+[INFO] 2018-01-20 19:44:52,974 : batch 17 : Trial 822 timed out.
+[INFO] 2018-01-20 19:45:27,274 : batch 3 : Trial 132 timed out.
+[INFO] 2018-01-20 19:48:06,326 : batch 13 : Trial 630 timed out.
+[INFO] 2018-01-20 19:50:36,698 : batch 12 : Trial 581 timed out.
+[INFO] 2018-01-20 19:52:57,479 : batch 14 : Trial 676 timed out.
+[INFO] 2018-01-20 19:55:10,184 : batch 6 : Trial 285 timed out.
+[INFO] 2018-01-20 19:55:14,456 : batch 4 : Trial 183 timed out.
+[INFO] 2018-01-20 19:55:41,148 : batch 2 : Trial 84 timed out.
+[INFO] 2018-01-20 19:58:26,981 : batch 5 : Trial 232 timed out.
+[INFO] 2018-01-20 19:58:32,893 : batch 1 : Trial 37 timed out.
+[INFO] 2018-01-20 19:59:28,173 : batch 7 : Trial 334 timed out.
+[INFO] 2018-01-20 19:59:29,958 : batch 8 : Trial 380 timed out.
+[INFO] 2018-01-20 20:00:20,195 : batch 9 : Trial 429 timed out.
+[INFO] 2018-01-20 20:03:38,584 : batch 11 : Trial 528 timed out.
+[INFO] 2018-01-20 20:03:43,144 : batch 3 : Trial 133 timed out.
+[INFO] 2018-01-20 20:04:24,944 : batch 16 : Trial 774 timed out.
+[INFO] 2018-01-20 20:04:25,339 : batch 10 : Trial 479 timed out.
+[INFO] 2018-01-20 20:09:13,555 : batch 13 : Trial 631 timed out.
+[INFO] 2018-01-20 20:10:05,894 : batch 15 : Trial 725 timed out.
+[INFO] 2018-01-20 20:10:08,834 : batch 12 : Trial 582 timed out.
+[INFO] 2018-01-20 20:13:27,012 : batch 17 : Trial 823 timed out.
+[INFO] 2018-01-20 20:13:43,842 : batch 18 : Trial 873 timed out.
+[INFO] 2018-01-20 20:14:01,393 : batch 6 : Trial 286 timed out.
+[INFO] 2018-01-20 20:14:07,352 : batch 2 : Trial 85 timed out.
+[INFO] 2018-01-20 20:15:37,356 : batch 4 : Trial 184 timed out.
+[INFO] 2018-01-20 20:15:59,049 : batch 1 : Trial 38 timed out.
+[INFO] 2018-01-20 20:16:54,278 : batch 5 : Trial 233 timed out.
+[INFO] 2018-01-20 20:17:38,058 : batch 14 : Trial 677 timed out.
+[INFO] 2018-01-20 20:17:51,479 : batch 7 : Trial 335 timed out.
+[INFO] 2018-01-20 20:21:40,358 : batch 8 : Trial 381 timed out.
+[INFO] 2018-01-20 20:22:00,341 : batch 9 : Trial 430 timed out.
+[INFO] 2018-01-20 20:23:23,992 : batch 3 : Trial 134 timed out.
+[INFO] 2018-01-20 20:26:34,154 : batch 10 : Trial 480 timed out.
+[INFO] 2018-01-20 20:27:46,094 : batch 11 : Trial 529 timed out.
+[INFO] 2018-01-20 20:29:52,410 : batch 12 : Trial 583 timed out.
+[INFO] 2018-01-20 20:31:09,658 : batch 13 : Trial 632 timed out.
+[INFO] 2018-01-20 20:32:06,436 : batch 6 : Trial 287 timed out.
+[INFO] 2018-01-20 20:32:53,891 : batch 16 : Trial 775 timed out.
+[INFO] 2018-01-20 20:33:54,525 : batch 2 : Trial 86 timed out.
+[INFO] 2018-01-20 20:33:55,952 : batch 1 : Trial 39 timed out.
+[INFO] 2018-01-20 20:36:00,614 : batch 7 : Trial 336 timed out.
+[INFO] 2018-01-20 20:36:10,158 : batch 4 : Trial 185 timed out.
+[INFO] 2018-01-20 20:37:41,093 : batch 5 : Trial 234 timed out.
+[INFO] 2018-01-20 20:39:23,274 : batch 15 : Trial 726 timed out.
+[INFO] 2018-01-20 20:39:52,394 : batch 18 : Trial 874 timed out.
+[INFO] 2018-01-20 20:41:53,724 : batch 3 : Trial 135 timed out.
+[INFO] 2018-01-20 20:42:45,050 : batch 8 : Trial 382 timed out.
+[INFO] 2018-01-20 20:43:33,952 : batch 17 : Trial 824 timed out.
+[INFO] 2018-01-20 20:44:12,756 : batch 14 : Trial 678 timed out.
+[INFO] 2018-01-20 20:45:18,424 : batch 9 : Trial 431 timed out.
+[INFO] 2018-01-20 20:47:33,739 : batch 10 : Trial 481 timed out.
+[INFO] 2018-01-20 20:49:48,273 : batch 12 : Trial 584 timed out.
+[INFO] 2018-01-20 20:50:11,950 : batch 1 : Trial 40 timed out.
+[INFO] 2018-01-20 20:50:51,074 : batch 6 : Trial 288 timed out.
+[INFO] 2018-01-20 20:51:22,279 : batch 11 : Trial 530 timed out.
+[INFO] 2018-01-20 20:51:55,229 : batch 13 : Trial 633 timed out.
+[INFO] 2018-01-20 20:53:24,306 : batch 2 : Trial 87 timed out.
+[INFO] 2018-01-20 20:55:02,594 : batch 7 : Trial 337 timed out.
+[INFO] 2018-01-20 20:56:24,935 : batch 4 : Trial 186 timed out.
+[INFO] 2018-01-20 20:57:23,483 : batch 5 : Trial 235 timed out.
+[INFO] 2018-01-20 20:58:45,551 : batch 16 : Trial 776 timed out.
+[INFO] 2018-01-20 21:03:37,044 : batch 3 : Trial 136 timed out.
+[INFO] 2018-01-20 21:04:11,734 : batch 8 : Trial 383 timed out.
+[INFO] 2018-01-20 21:05:26,428 : batch 15 : Trial 727 timed out.
+[INFO] 2018-01-20 21:07:39,690 : batch 9 : Trial 432 timed out.
+[INFO] 2018-01-20 21:08:11,873 : batch 1 : Trial 41 timed out.
+[INFO] 2018-01-20 21:09:20,501 : batch 6 : Trial 289 timed out.
+[INFO] 2018-01-20 21:09:42,436 : batch 18 : Trial 875 timed out.
+[INFO] 2018-01-20 21:09:50,631 : batch 12 : Trial 585 timed out.
+[INFO] 2018-01-20 21:10:51,004 : batch 14 : Trial 679 timed out.
+[INFO] 2018-01-20 21:10:58,743 : batch 10 : Trial 482 timed out.
+[INFO] 2018-01-20 21:11:05,320 : batch 17 : Trial 825 timed out.
+[INFO] 2018-01-20 21:12:46,125 : batch 2 : Trial 88 timed out.
+[INFO] 2018-01-20 21:13:11,217 : batch 7 : Trial 338 timed out.
+[INFO] 2018-01-20 21:14:44,748 : batch 13 : Trial 634 timed out.
+[INFO] 2018-01-20 21:15:34,231 : batch 4 : Trial 187 timed out.
+[INFO] 2018-01-20 21:16:04,828 : batch 11 : Trial 531 timed out.
+[INFO] 2018-01-20 21:16:33,024 : batch 5 : Trial 236 timed out.
+[INFO] 2018-01-20 21:23:26,015 : batch 3 : Trial 137 timed out.
+[INFO] 2018-01-20 21:24:05,644 : batch 1 : Trial 42 timed out.
+[INFO] 2018-01-20 21:24:59,004 : batch 8 : Trial 384 timed out.
+[INFO] 2018-01-20 21:26:09,591 : batch 16 : Trial 777 timed out.
+[INFO] 2018-01-20 21:28:00,247 : batch 6 : Trial 290 timed out.
+[INFO] 2018-01-20 21:28:31,543 : batch 12 : Trial 586 timed out.
+[INFO] 2018-01-20 21:31:14,991 : batch 15 : Trial 728 timed out.
+[INFO] 2018-01-20 21:31:16,601 : batch 9 : Trial 433 timed out.
+[INFO] 2018-01-20 21:32:03,176 : batch 7 : Trial 339 timed out.
+[INFO] 2018-01-20 21:32:11,419 : batch 2 : Trial 89 timed out.
+[INFO] 2018-01-20 21:32:30,322 : batch 4 : Trial 188 timed out.
+[INFO] 2018-01-20 21:33:07,327 : batch 10 : Trial 483 timed out.
+[INFO] 2018-01-20 21:35:43,917 : batch 13 : Trial 635 timed out.
+[INFO] 2018-01-20 21:36:34,001 : batch 14 : Trial 680 timed out.
+[INFO] 2018-01-20 21:36:55,556 : batch 5 : Trial 237 timed out.
+[INFO] 2018-01-20 21:38:24,050 : batch 11 : Trial 532 timed out.
+[INFO] 2018-01-20 21:39:20,581 : batch 18 : Trial 876 timed out.
+[INFO] 2018-01-20 21:40:23,024 : batch 1 : Trial 43 timed out.
+[INFO] 2018-01-20 21:40:44,804 : batch 3 : Trial 138 timed out.
+[INFO] 2018-01-20 21:41:19,409 : batch 17 : Trial 826 timed out.
+[INFO] 2018-01-20 21:47:05,433 : batch 6 : Trial 291 timed out.
+[INFO] 2018-01-20 21:48:04,626 : batch 8 : Trial 385 timed out.
+[INFO] 2018-01-20 21:48:12,750 : batch 12 : Trial 587 timed out.
+[INFO] 2018-01-20 21:50:41,990 : batch 7 : Trial 340 timed out.
+[INFO] 2018-01-20 21:51:21,938 : batch 2 : Trial 90 timed out.
+[INFO] 2018-01-20 21:53:06,671 : batch 4 : Trial 189 timed out.
+[INFO] 2018-01-20 21:53:33,798 : batch 9 : Trial 434 timed out.
+[INFO] 2018-01-20 21:53:55,097 : batch 16 : Trial 778 timed out.
+[INFO] 2018-01-20 21:54:00,101 : batch 10 : Trial 484 timed out.
+[INFO] 2018-01-20 21:57:26,224 : batch 5 : Trial 238 timed out.
+[INFO] 2018-01-20 21:57:40,047 : batch 3 : Trial 139 timed out.
+[INFO] 2018-01-20 21:58:02,605 : batch 15 : Trial 729 timed out.
+[INFO] 2018-01-20 21:59:10,472 : batch 1 : Trial 44 timed out.
+[INFO] 2018-01-20 22:01:36,664 : batch 14 : Trial 681 timed out.
+[INFO] 2018-01-20 22:02:28,949 : batch 11 : Trial 533 timed out.
+[INFO] 2018-01-20 22:05:15,326 : batch 6 : Trial 292 timed out.
+[INFO] 2018-01-20 22:05:46,906 : batch 18 : Trial 877 timed out.
+[INFO] 2018-01-20 22:07:34,914 : batch 13 : Trial 636 timed out.
+[INFO] 2018-01-20 22:08:07,531 : batch 12 : Trial 588 timed out.
+[INFO] 2018-01-20 22:10:12,401 : batch 7 : Trial 341 timed out.
+[INFO] 2018-01-20 22:10:22,267 : batch 2 : Trial 91 timed out.
+[INFO] 2018-01-20 22:10:28,019 : batch 8 : Trial 386 timed out.
+[INFO] 2018-01-20 22:11:54,124 : batch 4 : Trial 190 timed out.
+[INFO] 2018-01-20 22:15:51,130 : batch 10 : Trial 485 timed out.
+[INFO] 2018-01-20 22:16:32,877 : batch 16 : Trial 779 timed out.
+[INFO] 2018-01-20 22:16:33,289 : batch 9 : Trial 435 timed out.
+[INFO] 2018-01-20 22:17:06,628 : batch 1 : Trial 45 timed out.
+[INFO] 2018-01-20 22:17:36,778 : batch 3 : Trial 140 timed out.
+[INFO] 2018-01-20 22:17:43,802 : batch 5 : Trial 239 timed out.
+[INFO] 2018-01-20 22:22:42,940 : batch 11 : Trial 534 timed out.
+[INFO] 2018-01-20 22:23:23,525 : batch 17 : Trial 827 timed out.
+[INFO] 2018-01-20 22:24:30,666 : batch 15 : Trial 730 timed out.
+[INFO] 2018-01-20 22:24:43,429 : batch 6 : Trial 293 timed out.
+[INFO] 2018-01-20 22:28:47,664 : batch 14 : Trial 682 timed out.
+[INFO] 2018-01-20 22:29:14,247 : batch 13 : Trial 637 timed out.
+[INFO] 2018-01-20 22:30:04,202 : batch 12 : Trial 589 timed out.
+[INFO] 2018-01-20 22:31:36,672 : batch 4 : Trial 191 timed out.
+[INFO] 2018-01-20 22:32:10,114 : batch 7 : Trial 342 timed out.
+[INFO] 2018-01-20 22:33:41,891 : batch 8 : Trial 387 timed out.
+[INFO] 2018-01-20 22:34:05,348 : batch 18 : Trial 878 timed out.
+[INFO] 2018-01-20 22:34:27,110 : batch 1 : Trial 46 timed out.
+[INFO] 2018-01-20 22:37:48,502 : batch 10 : Trial 486 timed out.
+[INFO] 2018-01-20 22:38:38,504 : batch 16 : Trial 780 timed out.
+[INFO] 2018-01-20 22:39:25,591 : batch 5 : Trial 240 timed out.
+[INFO] 2018-01-20 22:39:34,604 : batch 9 : Trial 436 timed out.
+[INFO] 2018-01-20 22:40:58,636 : batch 2 : Trial 92 timed out.
+[INFO] 2018-01-20 22:42:04,973 : batch 6 : Trial 294 timed out.
+[INFO] 2018-01-20 22:46:05,778 : batch 11 : Trial 535 timed out.
+[INFO] 2018-01-20 22:49:00,554 : batch 15 : Trial 731 timed out.
+[INFO] 2018-01-20 22:49:24,341 : batch 3 : Trial 141 timed out.
+[INFO] 2018-01-20 22:49:45,173 : batch 13 : Trial 638 timed out.
+[INFO] 2018-01-20 22:49:48,420 : batch 12 : Trial 590 timed out.
+[INFO] 2018-01-20 22:51:09,259 : batch 4 : Trial 192 timed out.
+[INFO] 2018-01-20 22:52:03,742 : batch 1 : Trial 47 timed out.
+[INFO] 2018-01-20 22:53:18,504 : batch 7 : Trial 343 timed out.
+[INFO] 2018-01-20 22:53:54,129 : batch 14 : Trial 683 timed out.
+[INFO] 2018-01-20 22:56:00,456 : batch 17 : Trial 828 timed out.
+[INFO] 2018-01-20 22:56:07,193 : batch 8 : Trial 388 timed out.
+[INFO] 2018-01-20 22:58:05,204 : batch 2 : Trial 93 timed out.
+[INFO] 2018-01-20 22:59:11,972 : batch 10 : Trial 487 timed out.
+[INFO] 2018-01-20 23:00:00,910 : batch 6 : Trial 295 timed out.
+[INFO] 2018-01-20 23:01:08,236 : batch 16 : Trial 781 timed out.
+[INFO] 2018-01-20 23:01:09,493 : batch 5 : Trial 241 timed out.
+[INFO] 2018-01-20 23:03:13,152 : batch 18 : Trial 879 timed out.
+[INFO] 2018-01-20 23:03:30,640 : batch 9 : Trial 437 timed out.
+[INFO] 2018-01-20 23:08:55,736 : batch 11 : Trial 536 timed out.
+[INFO] 2018-01-20 23:09:34,393 : batch 1 : Trial 48 timed out.
+[INFO] 2018-01-20 23:09:36,109 : batch 13 : Trial 639 timed out.
+[INFO] 2018-01-20 23:09:46,017 : batch 12 : Trial 591 timed out.
+[INFO] 2018-01-20 23:10:06,377 : batch 3 : Trial 142 timed out.
+[INFO] 2018-01-20 23:11:25,977 : batch 4 : Trial 193 timed out.
+[INFO] 2018-01-20 23:14:17,821 : batch 7 : Trial 344 timed out.
+[INFO] 2018-01-20 23:15:19,200 : batch 15 : Trial 732 timed out.
+[INFO] 2018-01-20 23:16:27,296 : batch 2 : Trial 94 timed out.
+[INFO] 2018-01-20 23:18:27,783 : batch 6 : Trial 296 timed out.
+[INFO] 2018-01-20 23:18:46,409 : batch 10 : Trial 488 timed out.
+[INFO] 2018-01-20 23:18:51,941 : batch 8 : Trial 389 timed out.
+[INFO] 2018-01-20 23:18:58,932 : batch 14 : Trial 684 timed out.
+[INFO] 2018-01-20 23:22:24,797 : batch 16 : Trial 782 timed out.
+[INFO] 2018-01-20 23:26:14,751 : batch 9 : Trial 438 timed out.
+[INFO] 2018-01-20 23:26:21,664 : batch 17 : Trial 829 timed out.
+[INFO] 2018-01-20 23:26:44,496 : batch 1 : Trial 49 timed out.
+[INFO] 2018-01-20 23:30:21,711 : batch 3 : Trial 143 timed out.
+[INFO] 2018-01-20 23:30:35,852 : batch 12 : Trial 592 timed out.
+[INFO] 2018-01-20 23:30:43,605 : batch 13 : Trial 640 timed out.
+[INFO] 2018-01-20 23:31:37,038 : batch 18 : Trial 880 timed out.
+[INFO] 2018-01-20 23:31:37,713 : batch 4 : Trial 194 timed out.
+[INFO] 2018-01-20 23:32:24,415 : batch 11 : Trial 537 timed out.
+[INFO] 2018-01-20 23:33:54,514 : batch 5 : Trial 242 timed out.
+[INFO] 2018-01-20 23:36:00,703 : batch 6 : Trial 297 timed out.
+[INFO] 2018-01-20 23:36:05,392 : batch 2 : Trial 95 timed out.
+[INFO] 2018-01-20 23:36:32,732 : batch 7 : Trial 345 timed out.
+[INFO] 2018-01-20 23:40:53,857 : batch 10 : Trial 489 timed out.
+[INFO] 2018-01-20 23:41:56,605 : batch 15 : Trial 733 timed out.
+[INFO] 2018-01-20 23:43:16,207 : batch 8 : Trial 390 timed out.
+[INFO] 2018-01-20 23:43:38,609 : batch 14 : Trial 685 timed out.
+[INFO] 2018-01-20 23:44:28,761 : batch 16 : Trial 783 timed out.
+[INFO] 2018-01-20 23:47:20,716 : batch 3 : Trial 144 timed out.
+[INFO] 2018-01-20 23:48:06,629 : batch 9 : Trial 439 timed out.
+[INFO] 2018-01-20 23:51:14,741 : batch 12 : Trial 593 timed out.
+[INFO] 2018-01-20 23:51:33,407 : batch 13 : Trial 641 timed out.
+[INFO] 2018-01-20 23:51:45,499 : batch 4 : Trial 195 timed out.
+[INFO] 2018-01-20 23:53:08,337 : batch 6 : Trial 298 timed out.
+[INFO] 2018-01-20 23:54:24,873 : batch 1 : Trial 50 timed out.
+[INFO] 2018-01-20 23:55:05,312 : batch 5 : Trial 243 timed out.
+[INFO] 2018-01-20 23:55:50,539 : batch 2 : Trial 96 timed out.
+[INFO] 2018-01-20 23:55:53,197 : batch 17 : Trial 830 timed out.
+[INFO] 2018-01-20 23:56:42,962 : batch 11 : Trial 538 timed out.
+[INFO] 2018-01-20 23:57:43,936 : batch 7 : Trial 346 timed out.
+[INFO] 2018-01-21 00:00:11,018 : batch 18 : Trial 881 timed out.
+[INFO] 2018-01-21 00:02:24,698 : batch 10 : Trial 490 timed out.
+[INFO] 2018-01-21 00:04:35,903 : batch 8 : Trial 391 timed out.
+[INFO] 2018-01-21 00:06:43,719 : batch 16 : Trial 784 timed out.
+[INFO] 2018-01-21 00:06:47,763 : batch 15 : Trial 734 timed out.
+[INFO] 2018-01-21 00:09:11,742 : batch 3 : Trial 145 timed out.
+[INFO] 2018-01-21 00:09:24,992 : batch 14 : Trial 686 timed out.
+[INFO] 2018-01-21 00:10:42,288 : batch 12 : Trial 594 timed out.
+[INFO] 2018-01-21 00:10:59,611 : batch 4 : Trial 196 timed out.
+[INFO] 2018-01-21 00:11:00,370 : batch 9 : Trial 440 timed out.
+[INFO] 2018-01-21 00:11:39,466 : batch 6 : Trial 299 timed out.
+[INFO] 2018-01-21 00:12:50,583 : batch 13 : Trial 642 timed out.
+[INFO] 2018-01-21 00:13:09,021 : batch 5 : Trial 244 timed out.
+[INFO] 2018-01-21 00:15:34,906 : batch 2 : Trial 97 timed out.
+[INFO] 2018-01-21 00:18:57,323 : batch 11 : Trial 539 timed out.
+[INFO] 2018-01-21 00:19:04,973 : batch 7 : Trial 347 timed out.
+[INFO] 2018-01-21 00:23:28,835 : batch 17 : Trial 831 timed out.
+[INFO] 2018-01-21 00:24:10,598 : batch 10 : Trial 491 timed out.
+[INFO] 2018-01-21 00:27:11,173 : batch 8 : Trial 392 timed out.
+[INFO] 2018-01-21 00:27:49,572 : batch 18 : Trial 882 timed out.
+[INFO] 2018-01-21 00:28:35,659 : batch 16 : Trial 785 timed out.
+[INFO] 2018-01-21 00:29:02,703 : batch 3 : Trial 146 timed out.
+[INFO] 2018-01-21 00:30:12,583 : batch 6 : Trial 300 timed out.
+[INFO] 2018-01-21 00:30:19,512 : batch 4 : Trial 197 timed out.
+[INFO] 2018-01-21 00:30:42,644 : batch 12 : Trial 595 timed out.
+[INFO] 2018-01-21 00:31:21,410 : batch 5 : Trial 245 timed out.
+[INFO] 2018-01-21 00:32:03,798 : batch 9 : Trial 441 timed out.
+[INFO] 2018-01-21 00:32:04,582 : batch 14 : Trial 687 timed out.
+[INFO] 2018-01-21 00:32:22,159 : batch 29 : Trial 1401 done.
+[INFO] 2018-01-21 00:32:24,802 : batch 15 : Trial 735 timed out.
+[INFO] 2018-01-21 00:32:45,935 : batch 29 : Trial 1402 done.
+[INFO] 2018-01-21 00:34:07,431 : batch 13 : Trial 643 timed out.
+[INFO] 2018-01-21 00:34:34,675 : batch 30 : Trial 1451 done.
+[INFO] 2018-01-21 00:35:44,526 : batch 2 : Trial 98 timed out.
+[INFO] 2018-01-21 00:36:58,849 : batch 30 : Trial 1452 done.
+[INFO] 2018-01-21 00:37:44,665 : batch 30 : Trial 1453 done.
+[INFO] 2018-01-21 00:38:43,666 : batch 30 : Trial 1454 done.
+[INFO] 2018-01-21 00:39:44,945 : batch 7 : Trial 348 timed out.
+[INFO] 2018-01-21 00:41:01,689 : batch 30 : Trial 1455 done.
+[INFO] 2018-01-21 00:41:43,963 : batch 11 : Trial 540 timed out.
+[INFO] 2018-01-21 00:41:46,425 : batch 19 : Trial 901 timed out.
+[INFO] 2018-01-21 00:42:11,061 : batch 28 : Trial 1351 done.
+[INFO] 2018-01-21 00:43:39,383 : batch 20 : Trial 951 timed out.
+[INFO] 2018-01-21 00:44:18,650 : batch 21 : Trial 1001 timed out.
+[INFO] 2018-01-21 00:44:27,271 : batch 22 : Trial 1051 timed out.
+[INFO] 2018-01-21 00:46:32,143 : batch 25 : Trial 1201 timed out.
+[INFO] 2018-01-21 00:47:19,098 : batch 26 : Trial 1251 timed out.
+[INFO] 2018-01-21 00:47:51,550 : batch 27 : Trial 1301 timed out.
+[INFO] 2018-01-21 00:48:09,374 : batch 10 : Trial 492 timed out.
+[INFO] 2018-01-21 00:48:57,915 : batch 29 : Trial 1403 timed out.
+[INFO] 2018-01-21 00:49:07,833 : batch 23 : Trial 1101 timed out.
+[INFO] 2018-01-21 00:49:28,770 : batch 29 : Trial 1404 done.
+[INFO] 2018-01-21 00:49:50,090 : batch 3 : Trial 147 timed out.
+[INFO] 2018-01-21 00:50:09,557 : batch 4 : Trial 198 timed out.
+[INFO] 2018-01-21 00:50:38,602 : batch 24 : Trial 1151 timed out.
+[INFO] 2018-01-21 00:50:50,298 : batch 8 : Trial 393 timed out.
+[INFO] 2018-01-21 00:53:26,960 : batch 9 : Trial 442 timed out.
+[INFO] 2018-01-21 00:53:31,612 : batch 16 : Trial 786 timed out.
+[INFO] 2018-01-21 00:54:20,076 : batch 12 : Trial 596 timed out.
+[INFO] 2018-01-21 00:55:22,326 : batch 17 : Trial 832 timed out.
+[INFO] 2018-01-21 00:55:55,350 : batch 2 : Trial 99 timed out.
+[INFO] 2018-01-21 00:57:56,754 : batch 19 : Trial 902 timed out.
+[INFO] 2018-01-21 00:58:31,089 : batch 28 : Trial 1352 timed out.
+[INFO] 2018-01-21 00:59:35,869 : batch 13 : Trial 644 timed out.
+[INFO] 2018-01-21 01:00:51,354 : batch 28 : Trial 1353 done.
+[INFO] 2018-01-21 01:00:55,050 : batch 30 : Trial 1456 timed out.
+[INFO] 2018-01-21 01:01:58,036 : batch 20 : Trial 952 timed out.
+[INFO] 2018-01-21 01:02:20,342 : batch 25 : Trial 1202 timed out.
+[INFO] 2018-01-21 01:02:39,305 : batch 14 : Trial 688 timed out.
+[INFO] 2018-01-21 01:04:18,410 : batch 15 : Trial 736 timed out.
+[INFO] 2018-01-21 01:04:28,756 : batch 26 : Trial 1252 timed out.
+[INFO] 2018-01-21 01:05:05,539 : batch 27 : Trial 1302 timed out.
+[INFO] 2018-01-21 01:05:46,598 : batch 25 : Trial 1203 done.
+[INFO] 2018-01-21 01:05:59,352 : batch 5 : Trial 246 timed out.
+[INFO] 2018-01-21 01:06:21,311 : batch 7 : Trial 349 timed out.
+[INFO] 2018-01-21 01:07:45,812 : batch 18 : Trial 883 timed out.
+[INFO] 2018-01-21 01:07:59,034 : batch 29 : Trial 1405 timed out.
+[INFO] 2018-01-21 01:08:15,767 : batch 22 : Trial 1052 timed out.
+[INFO] 2018-01-21 01:08:30,056 : batch 21 : Trial 1002 timed out.
+[INFO] 2018-01-21 01:08:31,740 : batch 27 : Trial 1303 done.
+[INFO] 2018-01-21 01:09:18,516 : batch 29 : Trial 1406 done.
+[INFO] 2018-01-21 01:09:31,240 : batch 3 : Trial 148 timed out.
+[INFO] 2018-01-21 01:12:05,158 : batch 11 : Trial 541 timed out.
+[INFO] 2018-01-21 01:12:33,652 : batch 4 : Trial 199 timed out.
+[INFO] 2018-01-21 01:14:15,921 : batch 10 : Trial 493 timed out.
+[INFO] 2018-01-21 01:14:40,935 : batch 8 : Trial 394 timed out.
+[INFO] 2018-01-21 01:15:36,637 : batch 23 : Trial 1102 timed out.
+[INFO] 2018-01-21 01:16:31,555 : batch 28 : Trial 1354 timed out.
+[INFO] 2018-01-21 01:16:40,066 : batch 19 : Trial 903 timed out.
+[INFO] 2018-01-21 01:16:58,192 : batch 28 : Trial 1355 done.
+[INFO] 2018-01-21 01:17:12,751 : batch 2 : Trial 100 timed out.
+[INFO] 2018-01-21 01:17:22,594 : batch 12 : Trial 597 timed out.
+[INFO] 2018-01-21 01:17:36,733 : batch 24 : Trial 1152 timed out.
+[INFO] 2018-01-21 01:19:44,325 : batch 16 : Trial 787 timed out.
+[INFO] 2018-01-21 01:21:02,081 : batch 26 : Trial 1253 timed out.
+[INFO] 2018-01-21 01:21:22,952 : batch 30 : Trial 1457 timed out.
+[INFO] 2018-01-21 01:21:53,382 : batch 20 : Trial 953 timed out.
+[INFO] 2018-01-21 01:22:00,653 : batch 9 : Trial 443 timed out.
+[INFO] 2018-01-21 01:22:10,812 : batch 25 : Trial 1204 timed out.
+[INFO] 2018-01-21 01:23:26,348 : batch 13 : Trial 645 timed out.
+[INFO] 2018-01-21 01:23:40,199 : batch 5 : Trial 247 timed out.
+[INFO] 2018-01-21 01:24:22,789 : batch 27 : Trial 1304 timed out.
+[INFO] 2018-01-21 01:27:33,049 : batch 29 : Trial 1407 timed out.
+[INFO] 2018-01-21 01:29:48,335 : batch 21 : Trial 1003 timed out.
+[INFO] 2018-01-21 01:29:50,247 : batch 17 : Trial 833 timed out.
+[INFO] 2018-01-21 01:30:55,366 : batch 22 : Trial 1053 timed out.
+[INFO] 2018-01-21 01:30:58,572 : batch 7 : Trial 350 timed out.
+[INFO] 2018-01-21 01:31:13,824 : batch 29 : Trial 1408 done.
+[INFO] 2018-01-21 01:31:27,874 : batch 29 : Trial 1409 done.
+[INFO] 2018-01-21 01:33:10,603 : batch 3 : Trial 149 timed out.
+[INFO] 2018-01-21 01:33:21,039 : batch 14 : Trial 689 timed out.
+[INFO] 2018-01-21 01:33:38,535 : batch 15 : Trial 737 timed out.
+[INFO] 2018-01-21 01:34:42,156 : batch 8 : Trial 395 timed out.
+[INFO] 2018-01-21 01:35:19,409 : batch 28 : Trial 1356 timed out.
+[INFO] 2018-01-21 01:35:33,507 : batch 4 : Trial 200 timed out.
+[INFO] 2018-01-21 01:35:44,320 : batch 10 : Trial 494 timed out.
+[INFO] 2018-01-21 01:36:35,165 : batch 19 : Trial 904 timed out.
+[INFO] 2018-01-21 01:38:55,635 : batch 11 : Trial 542 timed out.
+[INFO] 2018-01-21 01:39:31,353 : batch 18 : Trial 884 timed out.
+[INFO] 2018-01-21 01:39:55,990 : batch 12 : Trial 598 timed out.
+[INFO] 2018-01-21 01:40:13,700 : batch 23 : Trial 1103 timed out.
+[INFO] 2018-01-21 01:40:19,043 : batch 26 : Trial 1254 timed out.
+[INFO] 2018-01-21 01:40:59,647 : batch 20 : Trial 954 timed out.
+[INFO] 2018-01-21 01:41:12,004 : batch 30 : Trial 1458 timed out.
+[INFO] 2018-01-21 01:41:30,658 : batch 27 : Trial 1305 done.
+[INFO] 2018-01-21 01:43:30,477 : batch 5 : Trial 248 timed out.
+[INFO] 2018-01-21 01:44:21,840 : batch 26 : Trial 1255 done.
+[INFO] 2018-01-21 01:46:14,643 : batch 24 : Trial 1153 timed out.
+[INFO] 2018-01-21 01:47:02,370 : batch 30 : Trial 1459 done.
+[INFO] 2018-01-21 01:47:43,887 : batch 16 : Trial 788 timed out.
+[INFO] 2018-01-21 01:48:06,290 : batch 30 : Trial 1460 done.
+[INFO] 2018-01-21 01:48:46,930 : batch 9 : Trial 444 timed out.
+[INFO] 2018-01-21 01:48:53,647 : batch 21 : Trial 1004 timed out.
+[INFO] 2018-01-21 01:48:54,083 : batch 13 : Trial 646 timed out.
+[INFO] 2018-01-21 01:49:26,868 : batch 29 : Trial 1410 timed out.
+[INFO] 2018-01-21 01:49:47,283 : batch 29 : Trial 1411 done.
+[INFO] 2018-01-21 01:50:03,772 : batch 29 : Trial 1412 done.
+[INFO] 2018-01-21 01:50:36,147 : batch 29 : Trial 1413 done.
+[INFO] 2018-01-21 01:51:49,125 : batch 28 : Trial 1357 timed out.
+[INFO] 2018-01-21 01:51:51,918 : batch 30 : Trial 1461 done.
+[INFO] 2018-01-21 01:53:25,514 : batch 3 : Trial 150 timed out.
+[INFO] 2018-01-21 01:53:26,837 : batch 25 : Trial 1205 timed out.
+[INFO] 2018-01-21 01:53:42,911 : batch 25 : Trial 1206 done.
+[INFO] 2018-01-21 01:54:02,049 : batch 22 : Trial 1054 timed out.
+[INFO] 2018-01-21 01:54:04,961 : batch 25 : Trial 1207 done.
+[INFO] 2018-01-21 01:55:16,990 : batch 19 : Trial 905 timed out.
+[INFO] 2018-01-21 01:58:31,496 : batch 10 : Trial 495 timed out.
+[INFO] 2018-01-21 01:58:35,347 : batch 8 : Trial 396 timed out.
+[INFO] 2018-01-21 01:58:38,684 : batch 14 : Trial 690 timed out.
+[INFO] 2018-01-21 01:59:59,320 : batch 27 : Trial 1306 timed out.
+[INFO] 2018-01-21 02:00:15,399 : batch 26 : Trial 1256 timed out.
+[INFO] 2018-01-21 02:00:16,202 : batch 11 : Trial 543 timed out.
+[INFO] 2018-01-21 02:00:18,737 : batch 20 : Trial 955 timed out.
+[INFO] 2018-01-21 02:01:50,643 : batch 15 : Trial 738 timed out.
+[INFO] 2018-01-21 02:02:12,224 : batch 12 : Trial 599 timed out.
+[INFO] 2018-01-21 02:02:13,513 : batch 17 : Trial 834 timed out.
+[INFO] 2018-01-21 02:02:34,756 : batch 5 : Trial 249 timed out.
+[INFO] 2018-01-21 02:04:12,101 : batch 26 : Trial 1257 done.
+[INFO] 2018-01-21 02:04:26,456 : batch 23 : Trial 1104 timed out.
+[INFO] 2018-01-21 02:08:32,419 : batch 28 : Trial 1358 timed out.
+[INFO] 2018-01-21 02:08:42,119 : batch 29 : Trial 1414 timed out.
+[INFO] 2018-01-21 02:09:06,872 : batch 29 : Trial 1415 done.
+[INFO] 2018-01-21 02:09:09,259 : batch 30 : Trial 1462 timed out.
+[INFO] 2018-01-21 02:09:19,895 : batch 30 : Trial 1463 done.
+[INFO] 2018-01-21 02:09:57,963 : batch 30 : Trial 1464 done.
+[INFO] 2018-01-21 02:10:16,793 : batch 18 : Trial 885 timed out.
+[INFO] 2018-01-21 02:10:30,598 : batch 29 : Trial 1416 done.
+[INFO] 2018-01-21 02:10:58,452 : batch 24 : Trial 1154 timed out.
+[INFO] 2018-01-21 02:11:01,128 : batch 29 : Trial 1417 done.
+[INFO] 2018-01-21 02:12:13,616 : batch 21 : Trial 1005 timed out.
+[INFO] 2018-01-21 02:12:16,245 : batch 13 : Trial 647 timed out.
+[INFO] 2018-01-21 02:12:37,727 : batch 29 : Trial 1418 done.
+[INFO] 2018-01-21 02:12:40,841 : batch 16 : Trial 789 timed out.
+[INFO] 2018-01-21 02:13:17,673 : batch 9 : Trial 445 timed out.
+[INFO] 2018-01-21 02:13:21,618 : batch 22 : Trial 1055 timed out.
+[INFO] 2018-01-21 02:14:06,925 : batch 19 : Trial 906 timed out.
+[INFO] 2018-01-21 02:14:35,014 : batch 25 : Trial 1208 timed out.
+[INFO] 2018-01-21 02:19:52,549 : batch 20 : Trial 956 timed out.
+[INFO] 2018-01-21 02:19:57,544 : batch 26 : Trial 1258 timed out.
+[INFO] 2018-01-21 02:20:15,023 : batch 8 : Trial 397 timed out.
+[INFO] 2018-01-21 02:21:03,089 : batch 10 : Trial 496 timed out.
+[INFO] 2018-01-21 02:21:59,840 : batch 5 : Trial 250 timed out.
+[INFO] 2018-01-21 02:23:50,883 : batch 27 : Trial 1307 timed out.
+[INFO] 2018-01-21 02:24:30,625 : batch 11 : Trial 544 timed out.
+[INFO] 2018-01-21 02:25:06,106 : batch 14 : Trial 691 timed out.
+[INFO] 2018-01-21 02:25:06,558 : batch 12 : Trial 600 timed out.
+[INFO] 2018-01-21 02:26:34,052 : batch 15 : Trial 739 timed out.
+[INFO] 2018-01-21 02:27:34,764 : batch 28 : Trial 1359 timed out.
+[INFO] 2018-01-21 02:28:37,047 : batch 30 : Trial 1465 timed out.
+[INFO] 2018-01-21 02:30:25,239 : batch 23 : Trial 1105 timed out.
+[INFO] 2018-01-21 02:31:04,247 : batch 30 : Trial 1466 done.
+[INFO] 2018-01-21 02:31:09,207 : batch 29 : Trial 1419 timed out.
+[INFO] 2018-01-21 02:31:25,431 : batch 30 : Trial 1467 done.
+[INFO] 2018-01-21 02:32:49,028 : batch 19 : Trial 907 timed out.
+[INFO] 2018-01-21 02:33:21,877 : batch 25 : Trial 1209 timed out.
+[INFO] 2018-01-21 02:33:54,404 : batch 17 : Trial 835 timed out.
+[INFO] 2018-01-21 02:33:55,066 : batch 21 : Trial 1006 timed out.
+[INFO] 2018-01-21 02:34:14,709 : batch 30 : Trial 1468 done.
+[INFO] 2018-01-21 02:34:33,887 : batch 30 : Trial 1469 done.
+[INFO] 2018-01-21 02:35:49,091 : batch 22 : Trial 1056 timed out.
+[INFO] 2018-01-21 02:36:18,443 : batch 20 : Trial 957 timed out.
+[INFO] 2018-01-21 02:36:20,205 : batch 13 : Trial 648 timed out.
+[INFO] 2018-01-21 02:37:47,298 : batch 9 : Trial 446 timed out.
+[INFO] 2018-01-21 02:38:05,823 : batch 16 : Trial 790 timed out.
+[INFO] 2018-01-21 02:38:24,611 : batch 24 : Trial 1155 timed out.
+[INFO] 2018-01-21 02:39:00,375 : batch 26 : Trial 1259 timed out.
+[INFO] 2018-01-21 02:39:03,534 : batch 20 : Trial 958 done.
+[INFO] 2018-01-21 02:40:07,511 : batch 18 : Trial 886 timed out.
+[INFO] 2018-01-21 02:41:34,924 : batch 27 : Trial 1308 timed out.
+[INFO] 2018-01-21 02:41:51,882 : batch 10 : Trial 497 timed out.
+[INFO] 2018-01-21 02:42:39,461 : batch 8 : Trial 398 timed out.
+[INFO] 2018-01-21 02:43:46,141 : batch 27 : Trial 1309 done.
+[INFO] 2018-01-21 02:47:58,120 : batch 11 : Trial 545 timed out.
+[INFO] 2018-01-21 02:48:17,379 : batch 29 : Trial 1420 timed out.
+[INFO] 2018-01-21 02:49:13,029 : batch 25 : Trial 1210 timed out.
+[INFO] 2018-01-21 02:49:26,668 : batch 25 : Trial 1211 done.
+[INFO] 2018-01-21 02:49:39,982 : batch 30 : Trial 1470 done.
+[INFO] 2018-01-21 02:50:12,602 : batch 25 : Trial 1212 done.
+[INFO] 2018-01-21 02:50:31,649 : batch 25 : Trial 1213 done.
+[INFO] 2018-01-21 02:50:42,395 : batch 28 : Trial 1360 timed out.
+[INFO] 2018-01-21 02:50:49,345 : batch 14 : Trial 692 timed out.
+[INFO] 2018-01-21 02:51:50,843 : batch 19 : Trial 908 timed out.
+[INFO] 2018-01-21 02:52:49,750 : batch 23 : Trial 1106 timed out.
+[INFO] 2018-01-21 02:53:23,548 : batch 15 : Trial 740 timed out.
+[INFO] 2018-01-21 02:56:35,779 : batch 21 : Trial 1007 timed out.
+[INFO] 2018-01-21 02:57:08,196 : batch 26 : Trial 1260 timed out.
+[INFO] 2018-01-21 02:57:10,416 : batch 22 : Trial 1057 timed out.
+[INFO] 2018-01-21 02:57:15,944 : batch 20 : Trial 959 timed out.
+[INFO] 2018-01-21 02:57:26,610 : batch 26 : Trial 1261 done.
+[INFO] 2018-01-21 02:58:26,852 : batch 13 : Trial 649 timed out.
+[INFO] 2018-01-21 03:00:12,465 : batch 27 : Trial 1310 timed out.
+[INFO] 2018-01-21 03:00:24,790 : batch 9 : Trial 447 timed out.
+[INFO] 2018-01-21 03:01:01,512 : batch 30 : Trial 1471 done.
+[INFO] 2018-01-21 03:01:13,377 : batch 26 : Trial 1262 done.
+[INFO] 2018-01-21 03:01:25,952 : batch 30 : Trial 1472 done.
+[INFO] 2018-01-21 03:02:11,965 : batch 26 : Trial 1263 done.
+[INFO] 2018-01-21 03:02:29,135 : batch 16 : Trial 791 timed out.
+[INFO] 2018-01-21 03:04:32,203 : batch 8 : Trial 399 timed out.
+[INFO] 2018-01-21 03:04:38,974 : batch 17 : Trial 836 timed out.
+[INFO] 2018-01-21 03:05:29,846 : batch 10 : Trial 498 timed out.
+[INFO] 2018-01-21 03:06:23,416 : batch 25 : Trial 1214 timed out.
+[INFO] 2018-01-21 03:06:25,359 : batch 24 : Trial 1156 timed out.
+[INFO] 2018-01-21 03:06:45,651 : batch 29 : Trial 1421 timed out.
+[INFO] 2018-01-21 03:08:27,169 : batch 28 : Trial 1361 timed out.
+[INFO] 2018-01-21 03:09:28,257 : batch 19 : Trial 909 timed out.
+[INFO] 2018-01-21 03:12:44,691 : batch 18 : Trial 887 timed out.
+[INFO] 2018-01-21 03:13:54,068 : batch 11 : Trial 546 timed out.
+[INFO] 2018-01-21 03:16:08,269 : batch 20 : Trial 960 timed out.
+[INFO] 2018-01-21 03:16:14,620 : batch 27 : Trial 1311 timed out.
+[INFO] 2018-01-21 03:16:31,004 : batch 27 : Trial 1312 done.
+[INFO] 2018-01-21 03:16:42,414 : batch 14 : Trial 693 timed out.
+[INFO] 2018-01-21 03:17:08,187 : batch 22 : Trial 1058 timed out.
+[INFO] 2018-01-21 03:17:55,602 : batch 21 : Trial 1008 timed out.
+[INFO] 2018-01-21 03:18:39,604 : batch 30 : Trial 1473 timed out.
+[INFO] 2018-01-21 03:19:36,327 : batch 23 : Trial 1107 timed out.
+[INFO] 2018-01-21 03:20:05,780 : batch 15 : Trial 741 timed out.
+[INFO] 2018-01-21 03:20:53,332 : batch 13 : Trial 650 timed out.
+[INFO] 2018-01-21 03:21:01,792 : batch 26 : Trial 1264 timed out.
+[INFO] 2018-01-21 03:21:15,792 : batch 9 : Trial 448 timed out.
+[INFO] 2018-01-21 03:22:24,610 : batch 30 : Trial 1474 done.
+[INFO] 2018-01-21 03:25:06,164 : batch 25 : Trial 1215 timed out.
+[INFO] 2018-01-21 03:25:15,708 : batch 28 : Trial 1362 timed out.
+[INFO] 2018-01-21 03:25:23,871 : batch 29 : Trial 1422 timed out.
+[INFO] 2018-01-21 03:25:57,066 : batch 19 : Trial 910 timed out.
+[INFO] 2018-01-21 03:26:09,671 : batch 16 : Trial 792 timed out.
+[INFO] 2018-01-21 03:27:45,118 : batch 8 : Trial 400 timed out.
+[INFO] 2018-01-21 03:28:18,698 : batch 10 : Trial 499 timed out.
+[INFO] 2018-01-21 03:32:33,307 : batch 27 : Trial 1313 timed out.
+[INFO] 2018-01-21 03:33:03,151 : batch 24 : Trial 1157 timed out.
+[INFO] 2018-01-21 03:34:30,779 : batch 27 : Trial 1314 done.
+[INFO] 2018-01-21 03:34:31,974 : batch 20 : Trial 961 timed out.
+[INFO] 2018-01-21 03:34:51,633 : batch 17 : Trial 837 timed out.
+[INFO] 2018-01-21 03:35:55,879 : batch 22 : Trial 1059 timed out.
+[INFO] 2018-01-21 03:38:06,012 : batch 11 : Trial 547 timed out.
+[INFO] 2018-01-21 03:39:57,558 : batch 26 : Trial 1265 timed out.
+[INFO] 2018-01-21 03:40:31,795 : batch 21 : Trial 1009 timed out.
+[INFO] 2018-01-21 03:40:41,040 : batch 14 : Trial 694 timed out.
+[INFO] 2018-01-21 03:41:58,724 : batch 29 : Trial 1423 timed out.
+[INFO] 2018-01-21 03:42:46,012 : batch 18 : Trial 888 timed out.
+[INFO] 2018-01-21 03:44:15,732 : batch 23 : Trial 1108 timed out.
+[INFO] 2018-01-21 03:44:17,788 : batch 25 : Trial 1216 timed out.
+[INFO] 2018-01-21 03:44:36,575 : batch 19 : Trial 911 timed out.
+[INFO] 2018-01-21 03:46:28,999 : batch 9 : Trial 449 timed out.
+[INFO] 2018-01-21 03:47:45,413 : batch 28 : Trial 1363 timed out.
+[INFO] 2018-01-21 03:48:16,756 : batch 30 : Trial 1475 timed out.
+[INFO] 2018-01-21 03:48:29,299 : batch 29 : Trial 1424 done.
+[INFO] 2018-01-21 03:48:29,470 : batch 30 : Trial 1476 done.
+[INFO] 2018-01-21 03:48:43,886 : batch 15 : Trial 742 timed out.
+[INFO] 2018-01-21 03:50:15,542 : batch 16 : Trial 793 timed out.
+[INFO] 2018-01-21 03:51:40,630 : batch 27 : Trial 1315 timed out.
+[INFO] 2018-01-21 03:52:50,566 : batch 10 : Trial 500 timed out.
+[INFO] 2018-01-21 03:56:17,704 : batch 22 : Trial 1060 timed out.
+[INFO] 2018-01-21 03:56:56,458 : batch 24 : Trial 1158 timed out.
+[INFO] 2018-01-21 03:59:49,235 : batch 26 : Trial 1266 timed out.
+[INFO] 2018-01-21 04:00:50,115 : batch 21 : Trial 1010 timed out.
+[INFO] 2018-01-21 04:02:10,837 : batch 11 : Trial 548 timed out.
+[INFO] 2018-01-21 04:02:35,547 : batch 19 : Trial 912 timed out.
+[INFO] 2018-01-21 04:02:42,354 : batch 20 : Trial 962 timed out.
+[INFO] 2018-01-21 04:03:16,975 : batch 14 : Trial 695 timed out.
+[INFO] 2018-01-21 04:03:38,628 : batch 25 : Trial 1217 timed out.
+[INFO] 2018-01-21 04:03:53,182 : batch 28 : Trial 1364 timed out.
+[INFO] 2018-01-21 04:04:07,717 : batch 17 : Trial 838 timed out.
+[INFO] 2018-01-21 04:05:50,399 : batch 30 : Trial 1477 timed out.
+[INFO] 2018-01-21 04:07:57,598 : batch 27 : Trial 1316 timed out.
+[INFO] 2018-01-21 04:08:38,041 : batch 9 : Trial 450 timed out.
+[INFO] 2018-01-21 04:08:51,682 : batch 18 : Trial 889 timed out.
+[INFO] 2018-01-21 04:09:35,459 : batch 23 : Trial 1109 timed out.
+[INFO] 2018-01-21 04:12:54,174 : batch 29 : Trial 1425 timed out.
+[INFO] 2018-01-21 04:14:00,216 : batch 16 : Trial 794 timed out.
+[INFO] 2018-01-21 04:17:14,376 : batch 22 : Trial 1061 timed out.
+[INFO] 2018-01-21 04:18:25,645 : batch 15 : Trial 743 timed out.
+[INFO] 2018-01-21 04:18:57,074 : batch 19 : Trial 913 timed out.
+[INFO] 2018-01-21 04:19:02,146 : batch 26 : Trial 1267 timed out.
+[INFO] 2018-01-21 04:21:04,157 : batch 20 : Trial 963 timed out.
+[INFO] 2018-01-21 04:21:50,205 : batch 30 : Trial 1478 timed out.
+[INFO] 2018-01-21 04:22:05,099 : batch 28 : Trial 1365 timed out.
+[INFO] 2018-01-21 04:22:28,039 : batch 11 : Trial 549 timed out.
+[INFO] 2018-01-21 04:22:33,937 : batch 24 : Trial 1159 timed out.
+[INFO] 2018-01-21 04:22:48,544 : batch 20 : Trial 964 done.
+[INFO] 2018-01-21 04:23:13,680 : batch 25 : Trial 1218 timed out.
+[INFO] 2018-01-21 04:23:20,895 : batch 30 : Trial 1479 done.
+[INFO] 2018-01-21 04:23:28,743 : batch 25 : Trial 1219 done.
+[INFO] 2018-01-21 04:24:38,234 : batch 21 : Trial 1011 timed out.
+[INFO] 2018-01-21 04:24:49,423 : batch 27 : Trial 1317 timed out.
+[INFO] 2018-01-21 04:26:15,192 : batch 14 : Trial 696 timed out.
+[INFO] 2018-01-21 04:32:06,018 : batch 17 : Trial 839 timed out.
+[INFO] 2018-01-21 04:34:48,509 : batch 23 : Trial 1110 timed out.
+[INFO] 2018-01-21 04:34:50,789 : batch 26 : Trial 1268 timed out.
+[INFO] 2018-01-21 04:36:09,242 : batch 18 : Trial 890 timed out.
+[INFO] 2018-01-21 04:36:14,448 : batch 27 : Trial 1318 done.
+[INFO] 2018-01-21 04:36:20,337 : batch 22 : Trial 1062 timed out.
+[INFO] 2018-01-21 04:37:30,172 : batch 16 : Trial 795 timed out.
+[INFO] 2018-01-21 04:37:45,277 : batch 19 : Trial 914 timed out.
+[INFO] 2018-01-21 04:38:01,387 : batch 28 : Trial 1366 timed out.
+[INFO] 2018-01-21 04:38:35,505 : batch 29 : Trial 1426 timed out.
+[INFO] 2018-01-21 04:39:12,835 : batch 29 : Trial 1427 done.
+[INFO] 2018-01-21 04:39:40,049 : batch 25 : Trial 1220 timed out.
+[INFO] 2018-01-21 04:41:49,233 : batch 20 : Trial 965 timed out.
+[INFO] 2018-01-21 04:43:43,703 : batch 24 : Trial 1160 timed out.
+[INFO] 2018-01-21 04:45:06,016 : batch 21 : Trial 1012 timed out.
+[INFO] 2018-01-21 04:45:10,900 : batch 15 : Trial 744 timed out.
+[INFO] 2018-01-21 04:45:43,197 : batch 11 : Trial 550 timed out.
+[INFO] 2018-01-21 04:45:59,676 : batch 29 : Trial 1428 done.
+[INFO] 2018-01-21 04:50:03,996 : batch 14 : Trial 697 timed out.
+[INFO] 2018-01-21 04:51:23,583 : batch 26 : Trial 1269 timed out.
+[INFO] 2018-01-21 04:51:47,496 : batch 27 : Trial 1319 timed out.
+[INFO] 2018-01-21 04:55:17,311 : batch 28 : Trial 1367 timed out.
+[INFO] 2018-01-21 04:56:02,290 : batch 30 : Trial 1480 timed out.
+[INFO] 2018-01-21 04:56:22,222 : batch 19 : Trial 915 timed out.
+[INFO] 2018-01-21 04:57:01,857 : batch 23 : Trial 1111 timed out.
+[INFO] 2018-01-21 04:58:09,189 : batch 20 : Trial 966 timed out.
+[INFO] 2018-01-21 04:59:29,702 : batch 22 : Trial 1063 timed out.
+[INFO] 2018-01-21 04:59:57,344 : batch 25 : Trial 1221 timed out.
+[INFO] 2018-01-21 05:00:48,798 : batch 16 : Trial 796 timed out.
+[INFO] 2018-01-21 05:02:00,333 : batch 17 : Trial 840 timed out.
+[INFO] 2018-01-21 05:02:32,162 : batch 18 : Trial 891 timed out.
+[INFO] 2018-01-21 05:03:28,948 : batch 29 : Trial 1429 timed out.
+[INFO] 2018-01-21 05:05:47,043 : batch 29 : Trial 1430 done.
+[INFO] 2018-01-21 05:06:06,201 : batch 21 : Trial 1013 timed out.
+[INFO] 2018-01-21 05:07:43,935 : batch 29 : Trial 1431 done.
+[INFO] 2018-01-21 05:08:12,389 : batch 26 : Trial 1270 timed out.
+[INFO] 2018-01-21 05:08:33,946 : batch 24 : Trial 1161 timed out.
+[INFO] 2018-01-21 05:09:53,355 : batch 29 : Trial 1432 done.
+[INFO] 2018-01-21 05:09:56,845 : batch 27 : Trial 1320 timed out.
+[INFO] 2018-01-21 05:10:19,004 : batch 15 : Trial 745 timed out.
+[INFO] 2018-01-21 05:11:04,184 : batch 28 : Trial 1368 timed out.
+[INFO] 2018-01-21 05:11:40,396 : batch 29 : Trial 1433 done.
+[INFO] 2018-01-21 05:11:57,698 : batch 14 : Trial 698 timed out.
+[INFO] 2018-01-21 05:12:13,203 : batch 29 : Trial 1434 done.
+[INFO] 2018-01-21 05:12:39,172 : batch 29 : Trial 1435 done.
+[INFO] 2018-01-21 05:12:42,872 : batch 30 : Trial 1481 timed out.
+[INFO] 2018-01-21 05:13:08,137 : batch 30 : Trial 1482 done.
+[INFO] 2018-01-21 05:13:30,684 : batch 29 : Trial 1436 done.
+[INFO] 2018-01-21 05:14:53,610 : batch 19 : Trial 916 timed out.
+[INFO] 2018-01-21 05:14:58,645 : batch 20 : Trial 967 timed out.
+[INFO] 2018-01-21 05:15:48,324 : batch 25 : Trial 1222 timed out.
+[INFO] 2018-01-21 05:21:32,610 : batch 22 : Trial 1064 timed out.
+[INFO] 2018-01-21 05:22:55,439 : batch 23 : Trial 1112 timed out.
+[INFO] 2018-01-21 05:23:03,681 : batch 16 : Trial 797 timed out.
+[INFO] 2018-01-21 05:24:54,232 : batch 26 : Trial 1271 timed out.
+[INFO] 2018-01-21 05:26:56,034 : batch 28 : Trial 1369 timed out.
+[INFO] 2018-01-21 05:28:28,912 : batch 21 : Trial 1014 timed out.
+[INFO] 2018-01-21 05:29:58,848 : batch 27 : Trial 1321 timed out.
+[INFO] 2018-01-21 05:30:01,195 : batch 17 : Trial 841 timed out.
+[INFO] 2018-01-21 05:30:03,281 : batch 29 : Trial 1437 timed out.
+[INFO] 2018-01-21 05:31:39,934 : batch 29 : Trial 1438 done.
+[INFO] 2018-01-21 05:31:58,176 : batch 14 : Trial 699 timed out.
+[INFO] 2018-01-21 05:32:21,526 : batch 24 : Trial 1162 timed out.
+[INFO] 2018-01-21 05:33:33,055 : batch 18 : Trial 892 timed out.
+[INFO] 2018-01-21 05:33:40,605 : batch 30 : Trial 1483 timed out.
+[INFO] 2018-01-21 05:33:50,531 : batch 30 : Trial 1484 done.
+[INFO] 2018-01-21 05:34:25,150 : batch 25 : Trial 1223 timed out.
+[INFO] 2018-01-21 05:35:13,717 : batch 19 : Trial 917 timed out.
+[INFO] 2018-01-21 05:35:45,522 : batch 20 : Trial 968 timed out.
+[INFO] 2018-01-21 05:36:16,912 : batch 15 : Trial 746 timed out.
+[INFO] 2018-01-21 05:41:15,927 : batch 22 : Trial 1065 timed out.
+[INFO] 2018-01-21 05:43:02,940 : batch 28 : Trial 1370 timed out.
+[INFO] 2018-01-21 05:43:35,336 : batch 26 : Trial 1272 timed out.
+[INFO] 2018-01-21 05:43:42,769 : batch 16 : Trial 798 timed out.
+[INFO] 2018-01-21 05:47:32,922 : batch 27 : Trial 1322 timed out.
+[INFO] 2018-01-21 05:48:05,541 : batch 23 : Trial 1113 timed out.
+[INFO] 2018-01-21 05:48:33,655 : batch 29 : Trial 1439 done.
+[INFO] 2018-01-21 05:49:02,811 : batch 21 : Trial 1015 timed out.
+[INFO] 2018-01-21 05:49:25,884 : batch 29 : Trial 1440 done.
+[INFO] 2018-01-21 05:50:40,433 : batch 25 : Trial 1224 timed out.
+[INFO] 2018-01-21 05:51:20,764 : batch 29 : Trial 1441 done.
+[INFO] 2018-01-21 05:52:53,557 : batch 14 : Trial 700 timed out.
+[INFO] 2018-01-21 05:54:12,403 : batch 19 : Trial 918 timed out.
+[INFO] 2018-01-21 05:55:19,020 : batch 20 : Trial 969 timed out.
+[INFO] 2018-01-21 05:55:52,606 : batch 17 : Trial 842 timed out.
+[INFO] 2018-01-21 05:55:54,627 : batch 24 : Trial 1163 timed out.
+[INFO] 2018-01-21 06:00:03,141 : batch 28 : Trial 1371 timed out.
+[INFO] 2018-01-21 06:00:19,942 : batch 26 : Trial 1273 timed out.
+[INFO] 2018-01-21 06:00:48,608 : batch 22 : Trial 1066 timed out.
+[INFO] 2018-01-21 06:01:23,727 : batch 18 : Trial 893 timed out.
+[INFO] 2018-01-21 06:03:30,022 : batch 30 : Trial 1485 timed out.
+[INFO] 2018-01-21 06:03:33,426 : batch 26 : Trial 1274 done.
+[INFO] 2018-01-21 06:04:04,413 : batch 30 : Trial 1486 done.
+[INFO] 2018-01-21 06:05:16,105 : batch 15 : Trial 747 timed out.
+[INFO] 2018-01-21 06:06:20,555 : batch 16 : Trial 799 timed out.
+[INFO] 2018-01-21 06:07:18,123 : batch 27 : Trial 1323 timed out.
+[INFO] 2018-01-21 06:07:50,349 : batch 27 : Trial 1324 done.
+[INFO] 2018-01-21 06:08:09,980 : batch 29 : Trial 1442 done.
+[INFO] 2018-01-21 06:08:34,308 : batch 29 : Trial 1443 done.
+[INFO] 2018-01-21 06:09:05,711 : batch 21 : Trial 1016 timed out.
+[INFO] 2018-01-21 06:09:16,516 : batch 25 : Trial 1225 timed out.
+[INFO] 2018-01-21 06:12:57,148 : batch 19 : Trial 919 timed out.
+[INFO] 2018-01-21 06:12:58,047 : batch 23 : Trial 1114 timed out.
+[INFO] 2018-01-21 06:14:45,492 : batch 20 : Trial 970 timed out.
+[INFO] 2018-01-21 06:17:20,862 : batch 28 : Trial 1372 timed out.
+[INFO] 2018-01-21 06:19:01,544 : batch 24 : Trial 1164 timed out.
+[INFO] 2018-01-21 06:19:47,333 : batch 26 : Trial 1275 timed out.
+[INFO] 2018-01-21 06:20:22,125 : batch 17 : Trial 843 timed out.
+[INFO] 2018-01-21 06:22:09,091 : batch 22 : Trial 1067 timed out.
+[INFO] 2018-01-21 06:25:57,931 : batch 27 : Trial 1325 timed out.
+[INFO] 2018-01-21 06:26:15,759 : batch 27 : Trial 1326 done.
+[INFO] 2018-01-21 06:26:39,283 : batch 18 : Trial 894 timed out.
+[INFO] 2018-01-21 06:27:18,526 : batch 25 : Trial 1226 timed out.
+[INFO] 2018-01-21 06:27:51,500 : batch 25 : Trial 1227 done.
+[INFO] 2018-01-21 06:27:58,369 : batch 16 : Trial 800 timed out.
+[INFO] 2018-01-21 06:29:31,908 : batch 30 : Trial 1487 timed out.
+[INFO] 2018-01-21 06:30:34,774 : batch 21 : Trial 1017 timed out.
+[INFO] 2018-01-21 06:30:57,186 : batch 25 : Trial 1228 done.
+[INFO] 2018-01-21 06:31:25,405 : batch 25 : Trial 1229 done.
+[INFO] 2018-01-21 06:31:45,832 : batch 19 : Trial 920 timed out.
+[INFO] 2018-01-21 06:32:06,036 : batch 15 : Trial 748 timed out.
+[INFO] 2018-01-21 06:32:27,881 : batch 29 : Trial 1444 timed out.
+[INFO] 2018-01-21 06:33:21,635 : batch 28 : Trial 1373 timed out.
+[INFO] 2018-01-21 06:34:13,285 : batch 20 : Trial 971 timed out.
+[INFO] 2018-01-21 06:34:43,717 : batch 29 : Trial 1445 done.
+[INFO] 2018-01-21 06:35:33,712 : batch 23 : Trial 1115 timed out.
+[INFO] 2018-01-21 06:40:29,050 : batch 24 : Trial 1165 timed out.
+[INFO] 2018-01-21 06:41:00,584 : batch 22 : Trial 1068 timed out.
+[INFO] 2018-01-21 06:43:32,677 : batch 17 : Trial 844 timed out.
+[INFO] 2018-01-21 06:46:12,332 : batch 30 : Trial 1488 timed out.
+[INFO] 2018-01-21 06:48:04,817 : batch 26 : Trial 1276 timed out.
+[INFO] 2018-01-21 06:48:33,315 : batch 26 : Trial 1277 done.
+[INFO] 2018-01-21 06:48:44,969 : batch 26 : Trial 1278 done.
+[INFO] 2018-01-21 06:49:21,740 : batch 26 : Trial 1279 done.
+[INFO] 2018-01-21 06:49:49,233 : batch 28 : Trial 1374 timed out.
+[INFO] 2018-01-21 06:49:55,368 : batch 25 : Trial 1230 timed out.
+[INFO] 2018-01-21 06:50:23,285 : batch 19 : Trial 921 timed out.
+[INFO] 2018-01-21 06:50:24,510 : batch 21 : Trial 1018 timed out.
+[INFO] 2018-01-21 06:52:16,365 : batch 26 : Trial 1280 done.
+[INFO] 2018-01-21 06:52:18,833 : batch 20 : Trial 972 timed out.
+[INFO] 2018-01-21 06:52:32,335 : batch 26 : Trial 1281 done.
+[INFO] 2018-01-21 06:52:33,256 : batch 29 : Trial 1446 timed out.
+[INFO] 2018-01-21 06:52:50,056 : batch 18 : Trial 895 timed out.
+[INFO] 2018-01-21 06:54:22,407 : batch 29 : Trial 1447 done.
+[INFO] 2018-01-21 06:55:11,572 : batch 26 : Trial 1282 done.
+[INFO] 2018-01-21 06:56:53,775 : batch 15 : Trial 749 timed out.
+[INFO] 2018-01-21 06:58:42,020 : batch 23 : Trial 1116 timed out.
+[INFO] 2018-01-21 06:59:50,491 : batch 27 : Trial 1327 timed out.
+[INFO] 2018-01-21 07:00:52,741 : batch 22 : Trial 1069 timed out.
+[INFO] 2018-01-21 07:01:57,864 : batch 24 : Trial 1166 timed out.
+[INFO] 2018-01-21 07:02:23,534 : batch 26 : Trial 1283 done.
+[INFO] 2018-01-21 07:05:29,205 : batch 25 : Trial 1231 timed out.
+[INFO] 2018-01-21 07:05:42,250 : batch 28 : Trial 1375 timed out.
+[INFO] 2018-01-21 07:06:38,686 : batch 17 : Trial 845 timed out.
+[INFO] 2018-01-21 07:08:29,556 : batch 19 : Trial 922 timed out.
+[INFO] 2018-01-21 07:10:03,817 : batch 21 : Trial 1019 timed out.
+[INFO] 2018-01-21 07:10:25,002 : batch 29 : Trial 1448 timed out.
+[INFO] 2018-01-21 07:10:46,215 : batch 20 : Trial 973 timed out.
+[INFO] 2018-01-21 07:10:51,724 : batch 29 : Trial 1449 done.
+[INFO] 2018-01-21 07:12:25,459 : batch 30 : Trial 1489 timed out.
+[INFO] 2018-01-21 07:17:24,749 : batch 27 : Trial 1328 timed out.
+[INFO] 2018-01-21 07:17:41,773 : batch 27 : Trial 1329 done.
+[INFO] 2018-01-21 07:19:45,971 : batch 22 : Trial 1070 timed out.
+[INFO] 2018-01-21 07:20:33,183 : batch 26 : Trial 1284 timed out.
+[INFO] 2018-01-21 07:20:51,998 : batch 23 : Trial 1117 timed out.
+[INFO] 2018-01-21 07:21:44,057 : batch 28 : Trial 1376 timed out.
+[INFO] 2018-01-21 07:21:45,176 : batch 25 : Trial 1232 timed out.
+[INFO] 2018-01-21 07:22:06,696 : batch 18 : Trial 896 timed out.
+[INFO] 2018-01-21 07:23:25,778 : batch 24 : Trial 1167 timed out.
+[INFO] 2018-01-21 07:23:49,024 : batch 27 : Trial 1330 done.
+[INFO] 2018-01-21 07:27:01,309 : batch 15 : Trial 750 timed out.
+[INFO] 2018-01-21 07:27:21,458 : batch 19 : Trial 923 timed out.
+[INFO] 2018-01-21 07:27:32,355 : batch 29 : Trial 1450 timed out.
+[INFO] 2018-01-21 07:29:05,541 : batch 17 : Trial 846 timed out.
+[INFO] 2018-01-21 07:29:35,670 : batch 30 : Trial 1490 timed out.
+[INFO] 2018-01-21 07:29:53,859 : batch 21 : Trial 1020 timed out.
+[INFO] 2018-01-21 07:30:02,197 : batch 19 : Trial 924 done.
+[INFO] 2018-01-21 07:30:58,302 : batch 20 : Trial 974 timed out.
+[INFO] 2018-01-21 07:33:04,622 : batch 25 : Trial 1233 done.
+[INFO] 2018-01-21 07:33:18,606 : batch 25 : Trial 1234 done.
+[INFO] 2018-01-21 07:36:46,162 : batch 26 : Trial 1285 timed out.
+[INFO] 2018-01-21 07:38:02,856 : batch 28 : Trial 1377 timed out.
+[INFO] 2018-01-21 07:38:34,072 : batch 26 : Trial 1286 done.
+[INFO] 2018-01-21 07:38:54,068 : batch 26 : Trial 1287 done.
+[INFO] 2018-01-21 07:39:47,937 : batch 27 : Trial 1331 timed out.
+[INFO] 2018-01-21 07:40:04,553 : batch 22 : Trial 1071 timed out.
+[INFO] 2018-01-21 07:40:58,028 : batch 26 : Trial 1288 done.
+[INFO] 2018-01-21 07:42:56,695 : batch 23 : Trial 1118 timed out.
+[INFO] 2018-01-21 07:43:03,001 : batch 26 : Trial 1289 done.
+[INFO] 2018-01-21 07:44:12,700 : batch 24 : Trial 1168 timed out.
+[INFO] 2018-01-21 07:47:04,919 : batch 30 : Trial 1491 timed out.
+[INFO] 2018-01-21 07:47:39,591 : batch 21 : Trial 1021 timed out.
+[INFO] 2018-01-21 07:47:42,663 : batch 18 : Trial 897 timed out.
+[INFO] 2018-01-21 07:49:14,806 : batch 30 : Trial 1492 done.
+[INFO] 2018-01-21 07:49:23,959 : batch 20 : Trial 975 timed out.
+[INFO] 2018-01-21 07:51:02,566 : batch 25 : Trial 1235 timed out.
+[INFO] 2018-01-21 07:51:14,870 : batch 25 : Trial 1236 done.
+[INFO] 2018-01-21 07:52:44,350 : batch 17 : Trial 847 timed out.
+[INFO] 2018-01-21 07:53:51,827 : batch 28 : Trial 1378 timed out.
+[INFO] 2018-01-21 07:54:07,806 : batch 28 : Trial 1379 done.
+[INFO] 2018-01-21 07:55:48,656 : batch 27 : Trial 1332 timed out.
+[INFO] 2018-01-21 07:59:38,522 : batch 22 : Trial 1072 timed out.
+[INFO] 2018-01-21 08:00:25,029 : batch 26 : Trial 1290 timed out.
+[INFO] 2018-01-21 08:01:59,651 : batch 19 : Trial 925 timed out.
+[INFO] 2018-01-21 08:02:41,225 : batch 26 : Trial 1291 done.
+[INFO] 2018-01-21 08:03:06,279 : batch 26 : Trial 1292 done.
+[INFO] 2018-01-21 08:03:59,989 : batch 23 : Trial 1119 timed out.
+[INFO] 2018-01-21 08:05:07,283 : batch 24 : Trial 1169 timed out.
+[INFO] 2018-01-21 08:06:18,289 : batch 30 : Trial 1493 timed out.
+[INFO] 2018-01-21 08:06:23,445 : batch 21 : Trial 1022 timed out.
+[INFO] 2018-01-21 08:07:23,209 : batch 20 : Trial 976 timed out.
+[INFO] 2018-01-21 08:08:35,814 : batch 25 : Trial 1237 timed out.
+[INFO] 2018-01-21 08:08:36,311 : batch 30 : Trial 1494 done.
+[INFO] 2018-01-21 08:08:57,838 : batch 30 : Trial 1495 done.
+[INFO] 2018-01-21 08:10:24,923 : batch 28 : Trial 1380 timed out.
+[INFO] 2018-01-21 08:11:16,107 : batch 27 : Trial 1333 timed out.
+[INFO] 2018-01-21 08:12:18,881 : batch 18 : Trial 898 timed out.
+[INFO] 2018-01-21 08:15:11,238 : batch 30 : Trial 1496 done.
+[INFO] 2018-01-21 08:17:02,867 : batch 17 : Trial 848 timed out.
+[INFO] 2018-01-21 08:18:32,758 : batch 22 : Trial 1073 timed out.
+[INFO] 2018-01-21 08:20:27,046 : batch 26 : Trial 1293 timed out.
+[INFO] 2018-01-21 08:20:53,876 : batch 19 : Trial 926 timed out.
+[INFO] 2018-01-21 08:24:18,072 : batch 25 : Trial 1238 timed out.
+[INFO] 2018-01-21 08:25:17,416 : batch 21 : Trial 1023 timed out.
+[INFO] 2018-01-21 08:25:31,335 : batch 23 : Trial 1120 timed out.
+[INFO] 2018-01-21 08:26:15,567 : batch 20 : Trial 977 timed out.
+[INFO] 2018-01-21 08:26:55,012 : batch 24 : Trial 1170 timed out.
+[INFO] 2018-01-21 08:27:57,477 : batch 28 : Trial 1381 timed out.
+[INFO] 2018-01-21 08:28:31,001 : batch 27 : Trial 1334 timed out.
+[INFO] 2018-01-21 08:32:09,200 : batch 30 : Trial 1497 timed out.
+[INFO] 2018-01-21 08:34:42,732 : batch 30 : Trial 1498 done.
+[INFO] 2018-01-21 08:34:53,053 : batch 18 : Trial 899 timed out.
+[INFO] 2018-01-21 08:35:07,993 : batch 30 : Trial 1499 done.
+[INFO] 2018-01-21 08:38:17,158 : batch 22 : Trial 1074 timed out.
+[INFO] 2018-01-21 08:38:25,770 : batch 19 : Trial 927 timed out.
+[INFO] 2018-01-21 08:39:18,974 : batch 26 : Trial 1294 timed out.
+[INFO] 2018-01-21 08:39:33,906 : batch 17 : Trial 849 timed out.
+[INFO] 2018-01-21 08:41:47,206 : batch 25 : Trial 1239 timed out.
+[INFO] 2018-01-21 08:42:03,405 : batch 25 : Trial 1240 done.
+[INFO] 2018-01-21 08:44:02,443 : batch 20 : Trial 978 timed out.
+[INFO] 2018-01-21 08:44:13,329 : batch 28 : Trial 1382 timed out.
+[INFO] 2018-01-21 08:44:51,796 : batch 23 : Trial 1121 timed out.
+[INFO] 2018-01-21 08:45:44,711 : batch 21 : Trial 1024 timed out.
+[INFO] 2018-01-21 08:48:37,864 : batch 24 : Trial 1171 timed out.
+[INFO] 2018-01-21 08:52:33,868 : batch 27 : Trial 1335 timed out.
+[INFO] 2018-01-21 08:53:43,175 : batch 30 : Trial 1500 timed out.
+[INFO] 2018-01-21 08:54:29,584 : batch 27 : Trial 1336 done.
+[INFO] 2018-01-21 08:55:50,067 : batch 26 : Trial 1295 timed out.
+[INFO] 2018-01-21 08:56:25,950 : batch 19 : Trial 928 timed out.
+[INFO] 2018-01-21 08:57:57,997 : batch 25 : Trial 1241 timed out.
+[INFO] 2018-01-21 08:58:22,838 : batch 22 : Trial 1075 timed out.
+[INFO] 2018-01-21 08:58:27,815 : batch 25 : Trial 1242 done.
+[INFO] 2018-01-21 09:00:02,038 : batch 18 : Trial 900 timed out.
+[INFO] 2018-01-21 09:00:06,386 : batch 20 : Trial 979 timed out.
+[INFO] 2018-01-21 09:00:41,761 : batch 28 : Trial 1383 timed out.
+[INFO] 2018-01-21 09:00:54,515 : batch 28 : Trial 1384 done.
+[INFO] 2018-01-21 09:03:01,250 : batch 17 : Trial 850 timed out.
+[INFO] 2018-01-21 09:04:10,956 : batch 21 : Trial 1025 timed out.
+[INFO] 2018-01-21 09:07:02,486 : batch 23 : Trial 1122 timed out.
+[INFO] 2018-01-21 09:09:19,472 : batch 24 : Trial 1172 timed out.
+[INFO] 2018-01-21 09:11:31,767 : batch 26 : Trial 1296 timed out.
+[INFO] 2018-01-21 09:12:16,682 : batch 19 : Trial 929 timed out.
+[INFO] 2018-01-21 09:14:29,376 : batch 27 : Trial 1337 timed out.
+[INFO] 2018-01-21 09:15:02,141 : batch 25 : Trial 1243 timed out.
+[INFO] 2018-01-21 09:16:12,534 : batch 20 : Trial 980 timed out.
+[INFO] 2018-01-21 09:16:12,965 : batch 27 : Trial 1338 done.
+[INFO] 2018-01-21 09:17:33,583 : batch 22 : Trial 1076 timed out.
+[INFO] 2018-01-21 09:20:22,225 : batch 28 : Trial 1385 timed out.
+[INFO] 2018-01-21 09:24:53,039 : batch 21 : Trial 1026 timed out.
+[INFO] 2018-01-21 09:26:56,183 : batch 26 : Trial 1297 timed out.
+[INFO] 2018-01-21 09:27:03,706 : batch 23 : Trial 1123 timed out.
+[INFO] 2018-01-21 09:27:14,711 : batch 26 : Trial 1298 done.
+[INFO] 2018-01-21 09:30:10,925 : batch 19 : Trial 930 timed out.
+[INFO] 2018-01-21 09:30:19,874 : batch 24 : Trial 1173 timed out.
+[INFO] 2018-01-21 09:32:37,946 : batch 25 : Trial 1244 timed out.
+[INFO] 2018-01-21 09:33:09,846 : batch 25 : Trial 1245 done.
+[INFO] 2018-01-21 09:34:20,368 : batch 20 : Trial 981 timed out.
+[INFO] 2018-01-21 09:34:30,439 : batch 27 : Trial 1339 timed out.
+[INFO] 2018-01-21 09:35:57,136 : batch 22 : Trial 1077 timed out.
+[INFO] 2018-01-21 09:42:54,457 : batch 28 : Trial 1386 timed out.
+[INFO] 2018-01-21 09:45:09,452 : batch 21 : Trial 1027 timed out.
+[INFO] 2018-01-21 09:45:21,011 : batch 26 : Trial 1299 timed out.
+[INFO] 2018-01-21 09:47:38,944 : batch 19 : Trial 931 timed out.
+[INFO] 2018-01-21 09:47:59,388 : batch 23 : Trial 1124 timed out.
+[INFO] 2018-01-21 09:49:35,769 : batch 25 : Trial 1246 timed out.
+[INFO] 2018-01-21 09:50:20,341 : batch 20 : Trial 982 timed out.
+[INFO] 2018-01-21 09:50:39,228 : batch 24 : Trial 1174 timed out.
+[INFO] 2018-01-21 09:52:23,463 : batch 27 : Trial 1340 timed out.
+[INFO] 2018-01-21 09:53:16,222 : batch 22 : Trial 1078 timed out.
+[INFO] 2018-01-21 10:01:18,332 : batch 26 : Trial 1300 timed out.
+[INFO] 2018-01-21 10:03:41,310 : batch 21 : Trial 1028 timed out.
+[INFO] 2018-01-21 10:05:20,623 : batch 19 : Trial 932 timed out.
+[INFO] 2018-01-21 10:05:38,422 : batch 25 : Trial 1247 timed out.
+[INFO] 2018-01-21 10:05:44,420 : batch 19 : Trial 933 done.
+[INFO] 2018-01-21 10:07:37,531 : batch 28 : Trial 1387 timed out.
+[INFO] 2018-01-21 10:08:15,346 : batch 20 : Trial 983 timed out.
+[INFO] 2018-01-21 10:09:21,764 : batch 23 : Trial 1125 timed out.
+[INFO] 2018-01-21 10:10:04,046 : batch 24 : Trial 1175 timed out.
+[INFO] 2018-01-21 10:13:17,107 : batch 22 : Trial 1079 timed out.
+[INFO] 2018-01-21 10:19:56,790 : batch 27 : Trial 1341 timed out.
+[INFO] 2018-01-21 10:20:06,171 : batch 27 : Trial 1342 done.
+[INFO] 2018-01-21 10:20:24,640 : batch 27 : Trial 1343 done.
+[INFO] 2018-01-21 10:20:43,307 : batch 21 : Trial 1029 timed out.
+[INFO] 2018-01-21 10:22:29,430 : batch 25 : Trial 1248 timed out.
+[INFO] 2018-01-21 10:23:03,417 : batch 19 : Trial 934 timed out.
+[INFO] 2018-01-21 10:24:02,767 : batch 25 : Trial 1249 done.
+[INFO] 2018-01-21 10:25:24,635 : batch 28 : Trial 1388 timed out.
+[INFO] 2018-01-21 10:27:04,417 : batch 20 : Trial 984 timed out.
+[INFO] 2018-01-21 10:29:29,360 : batch 23 : Trial 1126 timed out.
+[INFO] 2018-01-21 10:30:16,223 : batch 24 : Trial 1176 timed out.
+[INFO] 2018-01-21 10:31:53,400 : batch 22 : Trial 1080 timed out.
+[INFO] 2018-01-21 10:37:54,256 : batch 27 : Trial 1344 timed out.
+[INFO] 2018-01-21 10:39:58,521 : batch 21 : Trial 1030 timed out.
+[INFO] 2018-01-21 10:40:01,329 : batch 27 : Trial 1345 done.
+[INFO] 2018-01-21 10:40:19,498 : batch 27 : Trial 1346 done.
+[INFO] 2018-01-21 10:41:24,583 : batch 19 : Trial 935 timed out.
+[INFO] 2018-01-21 10:42:02,325 : batch 25 : Trial 1250 timed out.
+[INFO] 2018-01-21 10:43:14,746 : batch 19 : Trial 936 done.
+[INFO] 2018-01-21 10:45:23,376 : batch 28 : Trial 1389 timed out.
+[INFO] 2018-01-21 10:45:44,644 : batch 20 : Trial 985 timed out.
+[INFO] 2018-01-21 10:46:19,288 : batch 28 : Trial 1390 done.
+[INFO] 2018-01-21 10:50:22,704 : batch 23 : Trial 1127 timed out.
+[INFO] 2018-01-21 10:50:59,280 : batch 24 : Trial 1177 timed out.
+[INFO] 2018-01-21 10:51:58,802 : batch 22 : Trial 1081 timed out.
+[INFO] 2018-01-21 10:59:03,154 : batch 21 : Trial 1031 timed out.
+[INFO] 2018-01-21 11:00:37,195 : batch 19 : Trial 937 timed out.
+[INFO] 2018-01-21 11:02:04,800 : batch 20 : Trial 986 timed out.
+[INFO] 2018-01-21 11:05:22,278 : batch 28 : Trial 1391 timed out.
+[INFO] 2018-01-21 11:06:30,537 : batch 27 : Trial 1347 timed out.
+[INFO] 2018-01-21 11:11:20,745 : batch 24 : Trial 1178 timed out.
+[INFO] 2018-01-21 11:11:47,297 : batch 22 : Trial 1082 timed out.
+[INFO] 2018-01-21 11:11:58,187 : batch 23 : Trial 1128 timed out.
+[INFO] 2018-01-21 11:17:58,273 : batch 21 : Trial 1032 timed out.
+[INFO] 2018-01-21 11:19:01,007 : batch 19 : Trial 938 timed out.
+[INFO] 2018-01-21 11:20:04,223 : batch 20 : Trial 987 timed out.
+[INFO] 2018-01-21 11:22:36,677 : batch 27 : Trial 1348 timed out.
+[INFO] 2018-01-21 11:28:05,878 : batch 28 : Trial 1392 timed out.
+[INFO] 2018-01-21 11:30:42,084 : batch 28 : Trial 1393 done.
+[INFO] 2018-01-21 11:31:38,159 : batch 24 : Trial 1179 timed out.
+[INFO] 2018-01-21 11:32:16,215 : batch 22 : Trial 1083 timed out.
+[INFO] 2018-01-21 11:32:42,225 : batch 23 : Trial 1129 timed out.
+[INFO] 2018-01-21 11:37:04,623 : batch 19 : Trial 939 timed out.
+[INFO] 2018-01-21 11:37:59,899 : batch 20 : Trial 988 timed out.
+[INFO] 2018-01-21 11:40:15,913 : batch 21 : Trial 1033 timed out.
+[INFO] 2018-01-21 11:47:13,255 : batch 27 : Trial 1349 timed out.
+[INFO] 2018-01-21 11:52:10,476 : batch 24 : Trial 1180 timed out.
+[INFO] 2018-01-21 11:52:18,773 : batch 22 : Trial 1084 timed out.
+[INFO] 2018-01-21 11:54:23,088 : batch 19 : Trial 940 timed out.
+[INFO] 2018-01-21 11:54:28,763 : batch 23 : Trial 1130 timed out.
+[INFO] 2018-01-21 11:57:20,883 : batch 28 : Trial 1394 timed out.
+[INFO] 2018-01-21 11:57:39,434 : batch 28 : Trial 1395 done.
+[INFO] 2018-01-21 11:58:18,519 : batch 21 : Trial 1034 timed out.
+[INFO] 2018-01-21 11:58:24,880 : batch 20 : Trial 989 timed out.
+[INFO] 2018-01-21 12:04:29,610 : batch 27 : Trial 1350 timed out.
+[INFO] 2018-01-21 12:11:06,414 : batch 22 : Trial 1085 timed out.
+[INFO] 2018-01-21 12:12:21,559 : batch 19 : Trial 941 timed out.
+[INFO] 2018-01-21 12:12:38,882 : batch 24 : Trial 1181 timed out.
+[INFO] 2018-01-21 12:15:17,619 : batch 28 : Trial 1396 timed out.
+[INFO] 2018-01-21 12:15:23,491 : batch 23 : Trial 1131 timed out.
+[INFO] 2018-01-21 12:15:44,021 : batch 21 : Trial 1035 timed out.
+[INFO] 2018-01-21 12:15:47,836 : batch 28 : Trial 1397 done.
+[INFO] 2018-01-21 12:15:50,245 : batch 20 : Trial 990 timed out.
+[INFO] 2018-01-21 12:16:17,791 : batch 28 : Trial 1398 done.
+[INFO] 2018-01-21 12:29:57,000 : batch 22 : Trial 1086 timed out.
+[INFO] 2018-01-21 12:30:28,919 : batch 19 : Trial 942 timed out.
+[INFO] 2018-01-21 12:31:49,579 : batch 20 : Trial 991 timed out.
+[INFO] 2018-01-21 12:32:41,151 : batch 24 : Trial 1182 timed out.
+[INFO] 2018-01-21 12:33:51,779 : batch 21 : Trial 1036 timed out.
+[INFO] 2018-01-21 12:35:58,878 : batch 23 : Trial 1132 timed out.
+[INFO] 2018-01-21 12:38:00,080 : batch 28 : Trial 1399 timed out.
+[INFO] 2018-01-21 12:38:25,169 : batch 28 : Trial 1400 done.
+[INFO] 2018-01-21 12:47:16,066 : batch 19 : Trial 943 timed out.
+[INFO] 2018-01-21 12:49:58,010 : batch 20 : Trial 992 timed out.
+[INFO] 2018-01-21 12:51:42,323 : batch 21 : Trial 1037 timed out.
+[INFO] 2018-01-21 12:53:40,912 : batch 24 : Trial 1183 timed out.
+[INFO] 2018-01-21 12:55:42,885 : batch 23 : Trial 1133 timed out.
+[INFO] 2018-01-21 12:59:53,283 : batch 22 : Trial 1087 timed out.
+[INFO] 2018-01-21 13:05:47,005 : batch 19 : Trial 944 timed out.
+[INFO] 2018-01-21 13:08:14,154 : batch 20 : Trial 993 timed out.
+[INFO] 2018-01-21 13:09:40,394 : batch 21 : Trial 1038 timed out.
+[INFO] 2018-01-21 13:13:43,024 : batch 24 : Trial 1184 timed out.
+[INFO] 2018-01-21 13:16:40,983 : batch 23 : Trial 1134 timed out.
+[INFO] 2018-01-21 13:18:16,731 : batch 22 : Trial 1088 timed out.
+[INFO] 2018-01-21 13:23:37,213 : batch 19 : Trial 945 timed out.
+[INFO] 2018-01-21 13:25:38,204 : batch 20 : Trial 994 timed out.
+[INFO] 2018-01-21 13:28:51,728 : batch 21 : Trial 1039 timed out.
+[INFO] 2018-01-21 13:34:33,805 : batch 24 : Trial 1185 timed out.
+[INFO] 2018-01-21 13:36:05,365 : batch 22 : Trial 1089 timed out.
+[INFO] 2018-01-21 13:36:33,665 : batch 23 : Trial 1135 timed out.
+[INFO] 2018-01-21 13:41:08,829 : batch 19 : Trial 946 timed out.
+[INFO] 2018-01-21 13:41:08,997 : batch 20 : Trial 995 timed out.
+[INFO] 2018-01-21 13:47:57,297 : batch 21 : Trial 1040 timed out.
+[INFO] 2018-01-21 13:54:35,743 : batch 22 : Trial 1090 timed out.
+[INFO] 2018-01-21 13:55:34,067 : batch 24 : Trial 1186 timed out.
+[INFO] 2018-01-21 13:56:48,464 : batch 23 : Trial 1136 timed out.
+[INFO] 2018-01-21 13:58:59,150 : batch 20 : Trial 996 timed out.
+[INFO] 2018-01-21 13:59:02,126 : batch 19 : Trial 947 timed out.
+[INFO] 2018-01-21 14:06:33,751 : batch 21 : Trial 1041 timed out.
+[INFO] 2018-01-21 14:13:41,464 : batch 22 : Trial 1091 timed out.
+[INFO] 2018-01-21 14:15:32,585 : batch 24 : Trial 1187 timed out.
+[INFO] 2018-01-21 14:17:19,986 : batch 20 : Trial 997 timed out.
+[INFO] 2018-01-21 14:17:36,385 : batch 19 : Trial 948 timed out.
+[INFO] 2018-01-21 14:18:28,428 : batch 23 : Trial 1137 timed out.
+[INFO] 2018-01-21 14:25:46,710 : batch 21 : Trial 1042 timed out.
+[INFO] 2018-01-21 14:32:25,294 : batch 22 : Trial 1092 timed out.
+[INFO] 2018-01-21 14:35:06,040 : batch 20 : Trial 998 timed out.
+[INFO] 2018-01-21 14:35:17,068 : batch 19 : Trial 949 timed out.
+[INFO] 2018-01-21 14:35:20,900 : batch 24 : Trial 1188 timed out.
+[INFO] 2018-01-21 14:39:17,743 : batch 23 : Trial 1138 timed out.
+[INFO] 2018-01-21 14:42:24,911 : batch 21 : Trial 1043 timed out.
+[INFO] 2018-01-21 14:50:25,782 : batch 22 : Trial 1093 timed out.
+[INFO] 2018-01-21 14:51:37,633 : batch 19 : Trial 950 timed out.
+[INFO] 2018-01-21 14:53:28,349 : batch 20 : Trial 999 timed out.
+[INFO] 2018-01-21 14:56:34,066 : batch 24 : Trial 1189 timed out.
+[INFO] 2018-01-21 14:59:24,850 : batch 23 : Trial 1139 timed out.
+[INFO] 2018-01-21 15:01:05,209 : batch 21 : Trial 1044 timed out.
+[INFO] 2018-01-21 15:08:59,290 : batch 22 : Trial 1094 timed out.
+[INFO] 2018-01-21 15:10:39,250 : batch 20 : Trial 1000 timed out.
+[INFO] 2018-01-21 15:16:01,155 : batch 24 : Trial 1190 timed out.
+[INFO] 2018-01-21 15:19:35,514 : batch 21 : Trial 1045 timed out.
+[INFO] 2018-01-21 15:19:56,522 : batch 23 : Trial 1140 timed out.
+[INFO] 2018-01-21 15:27:44,553 : batch 22 : Trial 1095 timed out.
+[INFO] 2018-01-21 15:36:51,612 : batch 24 : Trial 1191 timed out.
+[INFO] 2018-01-21 15:37:46,607 : batch 21 : Trial 1046 timed out.
+[INFO] 2018-01-21 15:39:53,767 : batch 23 : Trial 1141 timed out.
+[INFO] 2018-01-21 15:45:43,121 : batch 22 : Trial 1096 timed out.
+[INFO] 2018-01-21 15:55:54,059 : batch 21 : Trial 1047 timed out.
+[INFO] 2018-01-21 15:56:49,916 : batch 24 : Trial 1192 timed out.
+[INFO] 2018-01-21 16:00:29,163 : batch 23 : Trial 1142 timed out.
+[INFO] 2018-01-21 16:04:11,399 : batch 22 : Trial 1097 timed out.
+[INFO] 2018-01-21 16:14:37,399 : batch 21 : Trial 1048 timed out.
+[INFO] 2018-01-21 16:17:34,435 : batch 24 : Trial 1193 timed out.
+[INFO] 2018-01-21 16:21:01,991 : batch 23 : Trial 1143 timed out.
+[INFO] 2018-01-21 16:22:12,622 : batch 22 : Trial 1098 timed out.
+[INFO] 2018-01-21 16:32:13,387 : batch 21 : Trial 1049 timed out.
+[INFO] 2018-01-21 16:37:44,863 : batch 24 : Trial 1194 timed out.
+[INFO] 2018-01-21 16:39:47,379 : batch 22 : Trial 1099 timed out.
+[INFO] 2018-01-21 16:41:17,342 : batch 23 : Trial 1144 timed out.
+[INFO] 2018-01-21 16:50:30,225 : batch 21 : Trial 1050 timed out.
+[INFO] 2018-01-21 16:56:59,490 : batch 24 : Trial 1195 timed out.
+[INFO] 2018-01-21 16:57:44,828 : batch 22 : Trial 1100 timed out.
+[INFO] 2018-01-21 17:01:12,383 : batch 23 : Trial 1145 timed out.
+[INFO] 2018-01-21 17:18:43,301 : batch 24 : Trial 1196 timed out.
+[INFO] 2018-01-21 17:22:10,856 : batch 23 : Trial 1146 timed out.
+[INFO] 2018-01-21 17:39:58,040 : batch 24 : Trial 1197 timed out.
+[INFO] 2018-01-21 17:43:15,585 : batch 23 : Trial 1147 timed out.
+[INFO] 2018-01-21 18:00:16,725 : batch 24 : Trial 1198 timed out.
+[INFO] 2018-01-21 18:02:42,249 : batch 23 : Trial 1148 timed out.
+[INFO] 2018-01-21 18:20:46,570 : batch 24 : Trial 1199 timed out.
+[INFO] 2018-01-21 18:23:10,489 : batch 23 : Trial 1149 timed out.
+[INFO] 2018-01-21 18:41:34,254 : batch 24 : Trial 1200 timed out.
+[INFO] 2018-01-21 18:43:05,114 : batch 23 : Trial 1150 timed out.
+[INFO] 2018-01-21 22:00:39,075 : batch 33 : Trial 1601 done.
+[INFO] 2018-01-21 22:00:40,713 : batch 34 : Trial 1651 done.
+[INFO] 2018-01-21 22:00:46,366 : batch 33 : Trial 1602 done.
+[INFO] 2018-01-21 22:00:47,977 : batch 34 : Trial 1652 done.
+[INFO] 2018-01-21 22:00:50,091 : batch 33 : Trial 1603 done.
+[INFO] 2018-01-21 22:00:50,948 : batch 34 : Trial 1653 done.
+[INFO] 2018-01-21 22:00:51,952 : batch 36 : Trial 1751 done.
+[INFO] 2018-01-21 22:00:53,636 : batch 33 : Trial 1604 done.
+[INFO] 2018-01-21 22:00:56,814 : batch 34 : Trial 1654 done.
+[INFO] 2018-01-21 22:00:59,565 : batch 37 : Trial 1801 done.
+[INFO] 2018-01-21 22:01:00,767 : batch 33 : Trial 1605 done.
+[INFO] 2018-01-21 22:01:01,557 : batch 35 : Trial 1701 done.
+[INFO] 2018-01-21 22:01:03,350 : batch 38 : Trial 1851 done.
+[INFO] 2018-01-21 22:01:03,474 : batch 34 : Trial 1655 done.
+[INFO] 2018-01-21 22:01:05,830 : batch 33 : Trial 1606 done.
+[INFO] 2018-01-21 22:01:09,163 : batch 34 : Trial 1656 done.
+[INFO] 2018-01-21 22:01:14,437 : batch 34 : Trial 1657 done.
+[INFO] 2018-01-21 22:01:15,307 : batch 33 : Trial 1607 done.
+[INFO] 2018-01-21 22:01:22,416 : batch 33 : Trial 1608 done.
+[INFO] 2018-01-21 22:01:22,655 : batch 38 : Trial 1852 done.
+[INFO] 2018-01-21 22:01:23,084 : batch 36 : Trial 1752 done.
+[INFO] 2018-01-21 22:01:24,869 : batch 34 : Trial 1658 done.
+[INFO] 2018-01-21 22:01:28,229 : batch 33 : Trial 1609 done.
+[INFO] 2018-01-21 22:01:31,176 : batch 34 : Trial 1659 done.
+[INFO] 2018-01-21 22:01:33,772 : batch 33 : Trial 1610 done.
+[INFO] 2018-01-21 22:01:35,440 : batch 37 : Trial 1802 done.
+[INFO] 2018-01-21 22:01:36,019 : batch 34 : Trial 1660 done.
+[INFO] 2018-01-21 22:01:40,124 : batch 33 : Trial 1611 done.
+[INFO] 2018-01-21 22:01:41,352 : batch 34 : Trial 1661 done.
+[INFO] 2018-01-21 22:01:45,112 : batch 33 : Trial 1612 done.
+[INFO] 2018-01-21 22:01:47,413 : batch 41 : Trial 2001 done.
+[INFO] 2018-01-21 22:01:50,641 : batch 33 : Trial 1613 done.
+[INFO] 2018-01-21 22:01:51,332 : batch 34 : Trial 1662 done.
+[INFO] 2018-01-21 22:01:55,442 : batch 33 : Trial 1614 done.
+[INFO] 2018-01-21 22:01:55,612 : batch 37 : Trial 1803 done.
+[INFO] 2018-01-21 22:02:02,222 : batch 33 : Trial 1615 done.
+[INFO] 2018-01-21 22:02:02,655 : batch 34 : Trial 1663 done.
+[INFO] 2018-01-21 22:02:05,335 : batch 37 : Trial 1804 done.
+[INFO] 2018-01-21 22:02:13,542 : batch 33 : Trial 1616 done.
+[INFO] 2018-01-21 22:02:14,109 : batch 34 : Trial 1664 done.
+[INFO] 2018-01-21 22:02:18,403 : batch 34 : Trial 1665 done.
+[INFO] 2018-01-21 22:02:22,994 : batch 33 : Trial 1617 done.
+[INFO] 2018-01-21 22:02:23,002 : batch 34 : Trial 1666 done.
+[INFO] 2018-01-21 22:02:28,451 : batch 33 : Trial 1618 done.
+[INFO] 2018-01-21 22:02:31,680 : batch 33 : Trial 1619 done.
+[INFO] 2018-01-21 22:02:37,500 : batch 35 : Trial 1702 done.
+[INFO] 2018-01-21 22:02:42,552 : batch 37 : Trial 1805 done.
+[INFO] 2018-01-21 22:02:42,664 : batch 33 : Trial 1620 done.
+[INFO] 2018-01-21 22:02:44,802 : batch 35 : Trial 1703 done.
+[INFO] 2018-01-21 22:02:47,208 : batch 33 : Trial 1621 done.
+[INFO] 2018-01-21 22:02:48,738 : batch 34 : Trial 1667 done.
+[INFO] 2018-01-21 22:02:52,829 : batch 33 : Trial 1622 done.
+[INFO] 2018-01-21 22:02:54,569 : batch 33 : Trial 1623 done.
+[INFO] 2018-01-21 22:02:56,138 : batch 35 : Trial 1704 done.
+[INFO] 2018-01-21 22:02:58,730 : batch 34 : Trial 1668 done.
+[INFO] 2018-01-21 22:02:59,061 : batch 37 : Trial 1806 done.
+[INFO] 2018-01-21 22:02:59,804 : batch 33 : Trial 1624 done.
+[INFO] 2018-01-21 22:03:04,040 : batch 34 : Trial 1669 done.
+[INFO] 2018-01-21 22:03:10,388 : batch 33 : Trial 1625 done.
+[INFO] 2018-01-21 22:03:11,786 : batch 34 : Trial 1670 done.
+[INFO] 2018-01-21 22:03:16,032 : batch 35 : Trial 1705 done.
+[INFO] 2018-01-21 22:03:16,967 : batch 38 : Trial 1853 done.
+[INFO] 2018-01-21 22:03:17,869 : batch 33 : Trial 1626 done.
+[INFO] 2018-01-21 22:03:22,356 : batch 32 : Trial 1551 done.
+[INFO] 2018-01-21 22:03:23,520 : batch 33 : Trial 1627 done.
+[INFO] 2018-01-21 22:03:23,986 : batch 34 : Trial 1671 done.
+[INFO] 2018-01-21 22:03:26,284 : batch 35 : Trial 1706 done.
+[INFO] 2018-01-21 22:03:27,132 : batch 34 : Trial 1672 done.
+[INFO] 2018-01-21 22:03:28,987 : batch 33 : Trial 1628 done.
+[INFO] 2018-01-21 22:03:33,006 : batch 34 : Trial 1673 done.
+[INFO] 2018-01-21 22:03:33,919 : batch 37 : Trial 1807 done.
+[INFO] 2018-01-21 22:03:35,273 : batch 35 : Trial 1707 done.
+[INFO] 2018-01-21 22:03:38,545 : batch 34 : Trial 1674 done.
+[INFO] 2018-01-21 22:03:43,589 : batch 38 : Trial 1854 done.
+[INFO] 2018-01-21 22:03:50,400 : batch 34 : Trial 1675 done.
+[INFO] 2018-01-21 22:03:52,230 : batch 37 : Trial 1808 done.
+[INFO] 2018-01-21 22:03:57,234 : batch 38 : Trial 1855 done.
+[INFO] 2018-01-21 22:03:58,199 : batch 34 : Trial 1676 done.
+[INFO] 2018-01-21 22:04:00,275 : batch 36 : Trial 1753 done.
+[INFO] 2018-01-21 22:04:04,352 : batch 34 : Trial 1677 done.
+[INFO] 2018-01-21 22:04:09,162 : batch 37 : Trial 1809 done.
+[INFO] 2018-01-21 22:04:13,325 : batch 38 : Trial 1856 done.
+[INFO] 2018-01-21 22:04:13,425 : batch 36 : Trial 1754 done.
+[INFO] 2018-01-21 22:04:15,632 : batch 34 : Trial 1678 done.
+[INFO] 2018-01-21 22:04:19,206 : batch 34 : Trial 1679 done.
+[INFO] 2018-01-21 22:04:30,343 : batch 34 : Trial 1680 done.
+[INFO] 2018-01-21 22:04:34,696 : batch 34 : Trial 1681 done.
+[INFO] 2018-01-21 22:04:35,056 : batch 38 : Trial 1857 done.
+[INFO] 2018-01-21 22:04:39,316 : batch 34 : Trial 1682 done.
+[INFO] 2018-01-21 22:04:43,922 : batch 34 : Trial 1683 done.
+[INFO] 2018-01-21 22:04:52,249 : batch 34 : Trial 1684 done.
+[INFO] 2018-01-21 22:04:56,573 : batch 34 : Trial 1685 done.
+[INFO] 2018-01-21 22:05:03,560 : batch 38 : Trial 1858 done.
+[INFO] 2018-01-21 22:05:09,915 : batch 38 : Trial 1859 done.
+[INFO] 2018-01-21 22:05:10,156 : batch 34 : Trial 1686 done.
+[INFO] 2018-01-21 22:05:15,622 : batch 34 : Trial 1687 done.
+[INFO] 2018-01-21 22:05:19,460 : batch 34 : Trial 1688 done.
+[INFO] 2018-01-21 22:05:20,036 : batch 38 : Trial 1860 done.
+[INFO] 2018-01-21 22:05:27,793 : batch 41 : Trial 2002 done.
+[INFO] 2018-01-21 22:05:29,302 : batch 38 : Trial 1861 done.
+[INFO] 2018-01-21 22:05:33,259 : batch 35 : Trial 1708 done.
+[INFO] 2018-01-21 22:05:38,499 : batch 38 : Trial 1862 done.
+[INFO] 2018-01-21 22:05:38,970 : batch 35 : Trial 1709 done.
+[INFO] 2018-01-21 22:05:44,524 : batch 34 : Trial 1689 done.
+[INFO] 2018-01-21 22:05:46,509 : batch 35 : Trial 1710 done.
+[INFO] 2018-01-21 22:05:50,703 : batch 33 : Trial 1629 done.
+[INFO] 2018-01-21 22:05:50,918 : batch 38 : Trial 1863 done.
+[INFO] 2018-01-21 22:05:51,900 : batch 34 : Trial 1690 done.
+[INFO] 2018-01-21 22:05:52,307 : batch 35 : Trial 1711 done.
+[INFO] 2018-01-21 22:05:57,254 : batch 34 : Trial 1691 done.
+[INFO] 2018-01-21 22:05:59,023 : batch 33 : Trial 1630 done.
+[INFO] 2018-01-21 22:05:59,839 : batch 35 : Trial 1712 done.
+[INFO] 2018-01-21 22:06:01,667 : batch 34 : Trial 1692 done.
+[INFO] 2018-01-21 22:06:02,519 : batch 38 : Trial 1864 done.
+[INFO] 2018-01-21 22:06:04,144 : batch 34 : Trial 1693 done.
+[INFO] 2018-01-21 22:06:05,513 : batch 35 : Trial 1713 done.
+[INFO] 2018-01-21 22:06:07,122 : batch 33 : Trial 1631 done.
+[INFO] 2018-01-21 22:06:13,990 : batch 33 : Trial 1632 done.
+[INFO] 2018-01-21 22:06:16,275 : batch 38 : Trial 1865 done.
+[INFO] 2018-01-21 22:06:16,552 : batch 35 : Trial 1714 done.
+[INFO] 2018-01-21 22:06:18,418 : batch 33 : Trial 1633 done.
+[INFO] 2018-01-21 22:06:26,143 : batch 33 : Trial 1634 done.
+[INFO] 2018-01-21 22:06:26,374 : batch 37 : Trial 1810 done.
+[INFO] 2018-01-21 22:06:29,696 : batch 34 : Trial 1694 done.
+[INFO] 2018-01-21 22:06:37,635 : batch 33 : Trial 1635 done.
+[INFO] 2018-01-21 22:06:40,639 : batch 38 : Trial 1866 done.
+[INFO] 2018-01-21 22:06:43,583 : batch 34 : Trial 1695 done.
+[INFO] 2018-01-21 22:06:43,954 : batch 33 : Trial 1636 done.
+[INFO] 2018-01-21 22:06:49,856 : batch 34 : Trial 1696 done.
+[INFO] 2018-01-21 22:06:58,176 : batch 38 : Trial 1867 done.
+[INFO] 2018-01-21 22:07:11,338 : batch 38 : Trial 1868 done.
+[INFO] 2018-01-21 22:07:24,864 : batch 38 : Trial 1869 done.
+[INFO] 2018-01-21 22:07:35,192 : batch 46 : Trial 2251 done.
+[INFO] 2018-01-21 22:07:40,454 : batch 35 : Trial 1715 done.
+[INFO] 2018-01-21 22:07:53,765 : batch 35 : Trial 1716 done.
+[INFO] 2018-01-21 22:08:57,750 : batch 38 : Trial 1870 done.
+[INFO] 2018-01-21 22:09:06,747 : batch 38 : Trial 1871 done.
+[INFO] 2018-01-21 22:09:07,252 : batch 34 : Trial 1697 done.
+[INFO] 2018-01-21 22:09:12,391 : batch 34 : Trial 1698 done.
+[INFO] 2018-01-21 22:09:23,634 : batch 34 : Trial 1699 done.
+[INFO] 2018-01-21 22:09:30,551 : batch 33 : Trial 1637 done.
+[INFO] 2018-01-21 22:09:31,468 : batch 34 : Trial 1700 done.
+[INFO] 2018-01-21 22:09:35,396 : batch 33 : Trial 1638 done.
+[INFO] 2018-01-21 22:09:41,422 : batch 37 : Trial 1811 done.
+[INFO] 2018-01-21 22:09:42,011 : batch 33 : Trial 1639 done.
+[INFO] 2018-01-21 22:09:47,125 : batch 33 : Trial 1640 done.
+[INFO] 2018-01-21 22:09:52,761 : batch 33 : Trial 1641 done.
+[INFO] 2018-01-21 22:09:56,615 : batch 37 : Trial 1812 done.
+[INFO] 2018-01-21 22:10:19,801 : batch 33 : Trial 1642 done.
+[INFO] 2018-01-21 22:10:24,402 : batch 37 : Trial 1813 done.
+[INFO] 2018-01-21 22:10:30,107 : batch 33 : Trial 1643 done.
+[INFO] 2018-01-21 22:10:36,127 : batch 38 : Trial 1872 done.
+[INFO] 2018-01-21 22:10:42,756 : batch 33 : Trial 1644 done.
+[INFO] 2018-01-21 22:10:49,216 : batch 33 : Trial 1645 done.
+[INFO] 2018-01-21 22:10:51,952 : batch 38 : Trial 1873 done.
+[INFO] 2018-01-21 22:10:59,788 : batch 33 : Trial 1646 done.
+[INFO] 2018-01-21 22:11:03,509 : batch 37 : Trial 1814 done.
+[INFO] 2018-01-21 22:11:07,146 : batch 33 : Trial 1647 done.
+[INFO] 2018-01-21 22:11:14,849 : batch 33 : Trial 1648 done.
+[INFO] 2018-01-21 22:11:22,727 : batch 38 : Trial 1874 done.
+[INFO] 2018-01-21 22:11:22,985 : batch 33 : Trial 1649 done.
+[INFO] 2018-01-21 22:11:27,465 : batch 33 : Trial 1650 done.
+[INFO] 2018-01-21 22:11:32,944 : batch 38 : Trial 1875 done.
+[INFO] 2018-01-21 22:11:49,370 : batch 38 : Trial 1876 done.
+[INFO] 2018-01-21 22:12:17,248 : batch 38 : Trial 1877 done.
+[INFO] 2018-01-21 22:13:37,643 : batch 37 : Trial 1815 done.
+[INFO] 2018-01-21 22:13:48,198 : batch 37 : Trial 1816 done.
+[INFO] 2018-01-21 22:14:20,408 : batch 37 : Trial 1817 done.
+[INFO] 2018-01-21 22:14:37,943 : batch 37 : Trial 1818 done.
+[INFO] 2018-01-21 22:14:48,200 : batch 37 : Trial 1819 done.
+[INFO] 2018-01-21 22:15:15,864 : batch 37 : Trial 1820 done.
+[INFO] 2018-01-21 22:15:30,442 : batch 37 : Trial 1821 done.
+[INFO] 2018-01-21 22:15:45,771 : batch 37 : Trial 1822 done.
+[INFO] 2018-01-21 22:16:22,808 : batch 37 : Trial 1823 done.
+[INFO] 2018-01-21 22:17:05,029 : batch 37 : Trial 1824 done.
+[INFO] 2018-01-21 22:17:23,255 : batch 37 : Trial 1825 done.
+[INFO] 2018-01-21 22:17:35,105 : batch 37 : Trial 1826 done.
+[INFO] 2018-01-21 22:17:59,386 : batch 37 : Trial 1827 done.
+[INFO] 2018-01-21 22:18:12,207 : batch 31 : Trial 1501 timed out.
+[INFO] 2018-01-21 22:18:29,902 : batch 31 : Trial 1502 done.
+[INFO] 2018-01-21 22:18:48,037 : batch 40 : Trial 1951 timed out.
+[INFO] 2018-01-21 22:18:50,152 : batch 31 : Trial 1503 done.
+[INFO] 2018-01-21 22:19:10,872 : batch 44 : Trial 2151 timed out.
+[INFO] 2018-01-21 22:19:33,573 : batch 39 : Trial 1901 timed out.
+[INFO] 2018-01-21 22:20:11,095 : batch 42 : Trial 2051 timed out.
+[INFO] 2018-01-21 22:20:22,965 : batch 37 : Trial 1828 done.
+[INFO] 2018-01-21 22:20:59,456 : batch 43 : Trial 2101 timed out.
+[INFO] 2018-01-21 22:21:08,628 : batch 45 : Trial 2201 timed out.
+[INFO] 2018-01-21 22:21:39,678 : batch 47 : Trial 2301 timed out.
+[INFO] 2018-01-21 22:21:59,989 : batch 36 : Trial 1755 timed out.
+[INFO] 2018-01-21 22:22:25,426 : batch 44 : Trial 2152 done.
+[INFO] 2018-01-21 22:22:26,135 : batch 32 : Trial 1552 timed out.
+[INFO] 2018-01-21 22:22:36,934 : batch 32 : Trial 1553 done.
+[INFO] 2018-01-21 22:22:38,916 : batch 41 : Trial 2003 timed out.
+[INFO] 2018-01-21 22:22:44,028 : batch 39 : Trial 1902 done.
+[INFO] 2018-01-21 22:22:52,264 : batch 36 : Trial 1756 done.
+[INFO] 2018-01-21 22:23:56,094 : batch 39 : Trial 1903 done.
+[INFO] 2018-01-21 22:24:00,782 : batch 48 : Trial 2351 timed out.
+[INFO] 2018-01-21 22:25:17,186 : batch 35 : Trial 1717 timed out.
+[INFO] 2018-01-21 22:25:24,292 : batch 35 : Trial 1718 done.
+[INFO] 2018-01-21 22:25:46,723 : batch 35 : Trial 1719 done.
+[INFO] 2018-01-21 22:26:06,716 : batch 35 : Trial 1720 done.
+[INFO] 2018-01-21 22:26:13,299 : batch 36 : Trial 1757 done.
+[INFO] 2018-01-21 22:26:24,507 : batch 35 : Trial 1721 done.
+[INFO] 2018-01-21 22:26:29,347 : batch 36 : Trial 1758 done.
+[INFO] 2018-01-21 22:26:40,317 : batch 35 : Trial 1722 done.
+[INFO] 2018-01-21 22:27:02,789 : batch 35 : Trial 1723 done.
+[INFO] 2018-01-21 22:27:27,574 : batch 35 : Trial 1724 done.
+[INFO] 2018-01-21 22:27:35,767 : batch 36 : Trial 1759 done.
+[INFO] 2018-01-21 22:27:46,132 : batch 36 : Trial 1760 done.
+[INFO] 2018-01-21 22:27:59,189 : batch 36 : Trial 1761 done.
+[INFO] 2018-01-21 22:29:43,099 : batch 46 : Trial 2252 timed out.
+[INFO] 2018-01-21 22:30:36,610 : batch 36 : Trial 1762 done.
+[INFO] 2018-01-21 22:30:43,791 : batch 38 : Trial 1878 timed out.
+[INFO] 2018-01-21 22:31:14,389 : batch 38 : Trial 1879 done.
+[INFO] 2018-01-21 22:32:35,139 : batch 36 : Trial 1763 done.
+[INFO] 2018-01-21 22:32:48,332 : batch 36 : Trial 1764 done.
+[INFO] 2018-01-21 22:33:17,631 : batch 36 : Trial 1765 done.
+[INFO] 2018-01-21 22:33:38,847 : batch 36 : Trial 1766 done.
+[INFO] 2018-01-21 22:33:51,655 : batch 36 : Trial 1767 done.
+[INFO] 2018-01-21 22:34:41,854 : batch 38 : Trial 1880 done.
+[INFO] 2018-01-21 22:35:05,850 : batch 38 : Trial 1881 done.
+[INFO] 2018-01-21 22:35:32,880 : batch 46 : Trial 2253 done.
+[INFO] 2018-01-21 22:35:41,284 : batch 38 : Trial 1882 done.
+[INFO] 2018-01-21 22:36:05,085 : batch 38 : Trial 1883 done.
+[INFO] 2018-01-21 22:36:25,941 : batch 38 : Trial 1884 done.
+[INFO] 2018-01-21 22:36:46,422 : batch 31 : Trial 1504 timed out.
+[INFO] 2018-01-21 22:36:47,137 : batch 38 : Trial 1885 done.
+[INFO] 2018-01-21 22:36:55,166 : batch 31 : Trial 1505 done.
+[INFO] 2018-01-21 22:36:55,529 : batch 36 : Trial 1768 done.
+[INFO] 2018-01-21 22:37:08,522 : batch 31 : Trial 1506 done.
+[INFO] 2018-01-21 22:37:13,066 : batch 40 : Trial 1952 timed out.
+[INFO] 2018-01-21 22:37:20,431 : batch 38 : Trial 1886 done.
+[INFO] 2018-01-21 22:37:31,729 : batch 36 : Trial 1769 done.
+[INFO] 2018-01-21 22:37:50,243 : batch 37 : Trial 1829 timed out.
+[INFO] 2018-01-21 22:37:59,031 : batch 37 : Trial 1830 done.
+[INFO] 2018-01-21 22:38:07,262 : batch 31 : Trial 1507 done.
+[INFO] 2018-01-21 22:38:14,978 : batch 37 : Trial 1831 done.
+[INFO] 2018-01-21 22:38:29,951 : batch 45 : Trial 2202 timed out.
+[INFO] 2018-01-21 22:39:37,309 : batch 40 : Trial 1953 done.
+[INFO] 2018-01-21 22:39:46,825 : batch 37 : Trial 1832 done.
+[INFO] 2018-01-21 22:40:42,681 : batch 42 : Trial 2052 timed out.
+[INFO] 2018-01-21 22:40:43,267 : batch 37 : Trial 1833 done.
+[INFO] 2018-01-21 22:41:01,442 : batch 37 : Trial 1834 done.
+[INFO] 2018-01-21 22:41:03,372 : batch 32 : Trial 1554 timed out.
+[INFO] 2018-01-21 22:41:13,260 : batch 37 : Trial 1835 done.
+[INFO] 2018-01-21 22:41:23,678 : batch 32 : Trial 1555 done.
+[INFO] 2018-01-21 22:41:25,345 : batch 37 : Trial 1836 done.
+[INFO] 2018-01-21 22:41:32,012 : batch 44 : Trial 2153 timed out.
+[INFO] 2018-01-21 22:41:35,532 : batch 43 : Trial 2102 timed out.
+[INFO] 2018-01-21 22:41:40,842 : batch 42 : Trial 2053 done.
+[INFO] 2018-01-21 22:41:55,678 : batch 31 : Trial 1508 done.
+[INFO] 2018-01-21 22:42:09,972 : batch 47 : Trial 2302 timed out.
+[INFO] 2018-01-21 22:42:33,172 : batch 41 : Trial 2004 timed out.
+[INFO] 2018-01-21 22:42:40,802 : batch 45 : Trial 2203 done.
+[INFO] 2018-01-21 22:43:01,835 : batch 39 : Trial 1904 timed out.
+[INFO] 2018-01-21 22:44:34,659 : batch 31 : Trial 1509 done.
+[INFO] 2018-01-21 22:44:41,249 : batch 35 : Trial 1725 timed out.
+[INFO] 2018-01-21 22:44:47,760 : batch 35 : Trial 1726 done.
+[INFO] 2018-01-21 22:44:54,614 : batch 31 : Trial 1510 done.
+[INFO] 2018-01-21 22:44:54,862 : batch 35 : Trial 1727 done.
+[INFO] 2018-01-21 22:45:12,336 : batch 31 : Trial 1511 done.
+[INFO] 2018-01-21 22:45:19,175 : batch 35 : Trial 1728 done.
+[INFO] 2018-01-21 22:45:32,433 : batch 35 : Trial 1729 done.
+[INFO] 2018-01-21 22:45:43,047 : batch 35 : Trial 1730 done.
+[INFO] 2018-01-21 22:45:49,960 : batch 42 : Trial 2054 done.
+[INFO] 2018-01-21 22:45:53,320 : batch 35 : Trial 1731 done.
+[INFO] 2018-01-21 22:46:01,923 : batch 35 : Trial 1732 done.
+[INFO] 2018-01-21 22:46:56,031 : batch 41 : Trial 2005 done.
+[INFO] 2018-01-21 22:47:12,578 : batch 48 : Trial 2352 timed out.
+[INFO] 2018-01-21 22:47:55,659 : batch 35 : Trial 1733 done.
+[INFO] 2018-01-21 22:48:07,522 : batch 35 : Trial 1734 done.
+[INFO] 2018-01-21 22:48:17,531 : batch 35 : Trial 1735 done.
+[INFO] 2018-01-21 22:48:29,596 : batch 35 : Trial 1736 done.
+[INFO] 2018-01-21 22:48:39,364 : batch 35 : Trial 1737 done.
+[INFO] 2018-01-21 22:48:57,208 : batch 35 : Trial 1738 done.
+[INFO] 2018-01-21 22:49:12,078 : batch 35 : Trial 1739 done.
+[INFO] 2018-01-21 22:49:27,435 : batch 35 : Trial 1740 done.
+[INFO] 2018-01-21 22:49:36,472 : batch 35 : Trial 1741 done.
+[INFO] 2018-01-21 22:49:48,882 : batch 35 : Trial 1742 done.
+[INFO] 2018-01-21 22:50:10,991 : batch 37 : Trial 1837 done.
+[INFO] 2018-01-21 22:50:32,781 : batch 37 : Trial 1838 done.
+[INFO] 2018-01-21 22:56:18,193 : batch 36 : Trial 1770 timed out.
+[INFO] 2018-01-21 22:56:20,875 : batch 46 : Trial 2254 timed out.
+[INFO] 2018-01-21 22:56:36,891 : batch 36 : Trial 1771 done.
+[INFO] 2018-01-21 22:56:44,225 : batch 36 : Trial 1772 done.
+[INFO] 2018-01-21 22:56:48,371 : batch 38 : Trial 1887 timed out.
+[INFO] 2018-01-21 22:57:02,167 : batch 36 : Trial 1773 done.
+[INFO] 2018-01-21 22:57:05,705 : batch 40 : Trial 1954 timed out.
+[INFO] 2018-01-21 22:59:39,218 : batch 44 : Trial 2154 timed out.
+[INFO] 2018-01-21 22:59:42,135 : batch 36 : Trial 1774 done.
+[INFO] 2018-01-21 22:59:45,382 : batch 38 : Trial 1888 done.
+[INFO] 2018-01-21 22:59:55,682 : batch 36 : Trial 1775 done.
+[INFO] 2018-01-21 23:00:01,534 : batch 38 : Trial 1889 done.
+[INFO] 2018-01-21 23:00:17,968 : batch 32 : Trial 1556 timed out.
+[INFO] 2018-01-21 23:00:22,734 : batch 36 : Trial 1776 done.
+[INFO] 2018-01-21 23:00:54,416 : batch 36 : Trial 1777 done.
+[INFO] 2018-01-21 23:01:05,853 : batch 36 : Trial 1778 done.
+[INFO] 2018-01-21 23:01:41,988 : batch 36 : Trial 1779 done.
+[INFO] 2018-01-21 23:01:46,938 : batch 43 : Trial 2103 timed out.
+[INFO] 2018-01-21 23:02:00,342 : batch 36 : Trial 1780 done.
+[INFO] 2018-01-21 23:02:03,959 : batch 39 : Trial 1905 timed out.
+[INFO] 2018-01-21 23:02:45,420 : batch 45 : Trial 2204 timed out.
+[INFO] 2018-01-21 23:03:05,583 : batch 31 : Trial 1512 timed out.
+[INFO] 2018-01-21 23:04:20,265 : batch 42 : Trial 2055 timed out.
+[INFO] 2018-01-21 23:05:15,753 : batch 36 : Trial 1781 done.
+[INFO] 2018-01-21 23:05:25,338 : batch 47 : Trial 2303 timed out.
+[INFO] 2018-01-21 23:05:46,968 : batch 36 : Trial 1782 done.
+[INFO] 2018-01-21 23:06:14,912 : batch 36 : Trial 1783 done.
+[INFO] 2018-01-21 23:06:25,292 : batch 36 : Trial 1784 done.
+[INFO] 2018-01-21 23:06:55,669 : batch 42 : Trial 2056 done.
+[INFO] 2018-01-21 23:06:59,618 : batch 36 : Trial 1785 done.
+[INFO] 2018-01-21 23:07:51,220 : batch 37 : Trial 1839 timed out.
+[INFO] 2018-01-21 23:08:02,876 : batch 37 : Trial 1840 done.
+[INFO] 2018-01-21 23:08:10,015 : batch 37 : Trial 1841 done.
+[INFO] 2018-01-21 23:08:14,735 : batch 41 : Trial 2006 timed out.
+[INFO] 2018-01-21 23:08:23,283 : batch 37 : Trial 1842 done.
+[INFO] 2018-01-21 23:09:00,684 : batch 36 : Trial 1786 done.
+[INFO] 2018-01-21 23:09:01,718 : batch 37 : Trial 1843 done.
+[INFO] 2018-01-21 23:09:07,700 : batch 37 : Trial 1844 done.
+[INFO] 2018-01-21 23:09:12,471 : batch 36 : Trial 1787 done.
+[INFO] 2018-01-21 23:09:28,349 : batch 35 : Trial 1743 timed out.
+[INFO] 2018-01-21 23:09:33,970 : batch 36 : Trial 1788 done.
+[INFO] 2018-01-21 23:09:52,310 : batch 35 : Trial 1744 done.
+[INFO] 2018-01-21 23:10:06,938 : batch 35 : Trial 1745 done.
+[INFO] 2018-01-21 23:10:24,558 : batch 48 : Trial 2353 timed out.
+[INFO] 2018-01-21 23:10:42,324 : batch 35 : Trial 1746 done.
+[INFO] 2018-01-21 23:11:17,144 : batch 35 : Trial 1747 done.
+[INFO] 2018-01-21 23:11:51,551 : batch 36 : Trial 1789 done.
+[INFO] 2018-01-21 23:14:40,257 : batch 36 : Trial 1790 done.
+[INFO] 2018-01-21 23:14:48,029 : batch 40 : Trial 1955 timed out.
+[INFO] 2018-01-21 23:15:09,226 : batch 40 : Trial 1956 done.
+[INFO] 2018-01-21 23:15:19,674 : batch 36 : Trial 1791 done.
+[INFO] 2018-01-21 23:15:31,428 : batch 36 : Trial 1792 done.
+[INFO] 2018-01-21 23:15:40,491 : batch 36 : Trial 1793 done.
+[INFO] 2018-01-21 23:15:58,648 : batch 36 : Trial 1794 done.
+[INFO] 2018-01-21 23:16:15,523 : batch 36 : Trial 1795 done.
+[INFO] 2018-01-21 23:16:41,247 : batch 36 : Trial 1796 done.
+[INFO] 2018-01-21 23:16:41,856 : batch 32 : Trial 1557 timed out.
+[INFO] 2018-01-21 23:16:51,844 : batch 36 : Trial 1797 done.
+[INFO] 2018-01-21 23:17:01,389 : batch 36 : Trial 1798 done.
+[INFO] 2018-01-21 23:17:22,927 : batch 36 : Trial 1799 done.
+[INFO] 2018-01-21 23:17:40,789 : batch 36 : Trial 1800 done.
+[INFO] 2018-01-21 23:18:24,855 : batch 38 : Trial 1890 timed out.
+[INFO] 2018-01-21 23:18:58,588 : batch 38 : Trial 1891 done.
+[INFO] 2018-01-21 23:19:06,688 : batch 46 : Trial 2255 timed out.
+[INFO] 2018-01-21 23:19:09,446 : batch 43 : Trial 2104 timed out.
+[INFO] 2018-01-21 23:19:20,047 : batch 38 : Trial 1892 done.
+[INFO] 2018-01-21 23:19:30,114 : batch 38 : Trial 1893 done.
+[INFO] 2018-01-21 23:19:42,352 : batch 38 : Trial 1894 done.
+[INFO] 2018-01-21 23:20:09,051 : batch 38 : Trial 1895 done.
+[INFO] 2018-01-21 23:20:21,002 : batch 38 : Trial 1896 done.
+[INFO] 2018-01-21 23:20:39,936 : batch 39 : Trial 1906 timed out.
+[INFO] 2018-01-21 23:21:51,354 : batch 31 : Trial 1513 timed out.
+[INFO] 2018-01-21 23:22:15,422 : batch 31 : Trial 1514 done.
+[INFO] 2018-01-21 23:22:42,047 : batch 39 : Trial 1907 done.
+[INFO] 2018-01-21 23:24:30,343 : batch 45 : Trial 2205 timed out.
+[INFO] 2018-01-21 23:24:58,335 : batch 42 : Trial 2057 timed out.
+[INFO] 2018-01-21 23:26:15,922 : batch 44 : Trial 2155 timed out.
+[INFO] 2018-01-21 23:26:36,021 : batch 37 : Trial 1845 timed out.
+[INFO] 2018-01-21 23:26:45,027 : batch 41 : Trial 2007 timed out.
+[INFO] 2018-01-21 23:27:16,776 : batch 37 : Trial 1846 done.
+[INFO] 2018-01-21 23:27:21,118 : batch 47 : Trial 2304 timed out.
+[INFO] 2018-01-21 23:27:44,926 : batch 37 : Trial 1847 done.
+[INFO] 2018-01-21 23:27:58,086 : batch 37 : Trial 1848 done.
+[INFO] 2018-01-21 23:28:13,905 : batch 37 : Trial 1849 done.
+[INFO] 2018-01-21 23:29:31,842 : batch 35 : Trial 1748 timed out.
+[INFO] 2018-01-21 23:30:02,936 : batch 35 : Trial 1749 done.
+[INFO] 2018-01-21 23:30:41,977 : batch 35 : Trial 1750 done.
+[INFO] 2018-01-21 23:30:51,101 : batch 37 : Trial 1850 done.
+[INFO] 2018-01-21 23:31:47,944 : batch 40 : Trial 1957 timed out.
+[INFO] 2018-01-21 23:32:47,443 : batch 48 : Trial 2354 timed out.
+[INFO] 2018-01-21 23:34:04,847 : batch 32 : Trial 1558 timed out.
+[INFO] 2018-01-21 23:38:16,245 : batch 38 : Trial 1897 timed out.
+[INFO] 2018-01-21 23:40:14,881 : batch 31 : Trial 1515 timed out.
+[INFO] 2018-01-21 23:40:25,390 : batch 43 : Trial 2105 timed out.
+[INFO] 2018-01-21 23:40:27,386 : batch 38 : Trial 1898 done.
+[INFO] 2018-01-21 23:40:48,552 : batch 46 : Trial 2256 timed out.
+[INFO] 2018-01-21 23:40:49,109 : batch 38 : Trial 1899 done.
+[INFO] 2018-01-21 23:41:13,571 : batch 38 : Trial 1900 done.
+[INFO] 2018-01-21 23:41:53,199 : batch 39 : Trial 1908 timed out.
+[INFO] 2018-01-21 23:42:29,433 : batch 31 : Trial 1516 done.
+[INFO] 2018-01-21 23:43:22,888 : batch 42 : Trial 2058 timed out.
+[INFO] 2018-01-21 23:43:55,078 : batch 42 : Trial 2059 done.
+[INFO] 2018-01-21 23:44:30,297 : batch 42 : Trial 2060 done.
+[INFO] 2018-01-21 23:44:36,867 : batch 41 : Trial 2008 timed out.
+[INFO] 2018-01-21 23:44:40,954 : batch 31 : Trial 1517 done.
+[INFO] 2018-01-21 23:44:51,015 : batch 44 : Trial 2156 timed out.
+[INFO] 2018-01-21 23:45:20,668 : batch 42 : Trial 2061 done.
+[INFO] 2018-01-21 23:46:38,874 : batch 31 : Trial 1518 done.
+[INFO] 2018-01-21 23:46:39,290 : batch 45 : Trial 2206 timed out.
+[INFO] 2018-01-21 23:46:49,234 : batch 31 : Trial 1519 done.
+[INFO] 2018-01-21 23:47:13,083 : batch 31 : Trial 1520 done.
+[INFO] 2018-01-21 23:48:31,170 : batch 40 : Trial 1958 timed out.
+[INFO] 2018-01-21 23:48:55,857 : batch 42 : Trial 2062 done.
+[INFO] 2018-01-21 23:49:46,419 : batch 32 : Trial 1559 timed out.
+[INFO] 2018-01-21 23:50:11,982 : batch 32 : Trial 1560 done.
+[INFO] 2018-01-21 23:50:36,530 : batch 40 : Trial 1959 done.
+[INFO] 2018-01-21 23:50:49,541 : batch 47 : Trial 2305 timed out.
+[INFO] 2018-01-21 23:51:06,251 : batch 42 : Trial 2063 done.
+[INFO] 2018-01-21 23:52:01,502 : batch 42 : Trial 2064 done.
+[INFO] 2018-01-21 23:53:39,668 : batch 48 : Trial 2355 timed out.
+[INFO] 2018-01-21 23:59:23,810 : batch 43 : Trial 2106 timed out.
+[INFO] 2018-01-21 23:59:40,632 : batch 39 : Trial 1909 timed out.
+[INFO] 2018-01-22 00:00:30,284 : batch 39 : Trial 1910 done.
+[INFO] 2018-01-22 00:01:36,662 : batch 46 : Trial 2257 timed out.
+[INFO] 2018-01-22 00:02:52,833 : batch 41 : Trial 2009 timed out.
+[INFO] 2018-01-22 00:03:01,100 : batch 31 : Trial 1521 timed out.
+[INFO] 2018-01-22 00:03:38,902 : batch 44 : Trial 2157 timed out.
+[INFO] 2018-01-22 00:03:40,924 : batch 31 : Trial 1522 done.
+[INFO] 2018-01-22 00:04:40,637 : batch 44 : Trial 2158 done.
+[INFO] 2018-01-22 00:06:33,548 : batch 31 : Trial 1523 done.
+[INFO] 2018-01-22 00:06:51,679 : batch 31 : Trial 1524 done.
+[INFO] 2018-01-22 00:07:19,534 : batch 45 : Trial 2207 timed out.
+[INFO] 2018-01-22 00:07:47,012 : batch 32 : Trial 1561 timed out.
+[INFO] 2018-01-22 00:09:02,197 : batch 40 : Trial 1960 timed out.
+[INFO] 2018-01-22 00:10:36,549 : batch 42 : Trial 2065 timed out.
+[INFO] 2018-01-22 00:11:16,703 : batch 40 : Trial 1961 done.
+[INFO] 2018-01-22 00:12:01,454 : batch 47 : Trial 2306 timed out.
+[INFO] 2018-01-22 00:13:56,295 : batch 48 : Trial 2356 timed out.
+[INFO] 2018-01-22 00:17:03,446 : batch 43 : Trial 2107 timed out.
+[INFO] 2018-01-22 00:18:00,991 : batch 39 : Trial 1911 timed out.
+[INFO] 2018-01-22 00:18:26,888 : batch 39 : Trial 1912 done.
+[INFO] 2018-01-22 00:19:29,868 : batch 39 : Trial 1913 done.
+[INFO] 2018-01-22 00:20:55,410 : batch 46 : Trial 2258 timed out.
+[INFO] 2018-01-22 00:21:05,841 : batch 41 : Trial 2010 timed out.
+[INFO] 2018-01-22 00:23:02,401 : batch 31 : Trial 1525 timed out.
+[INFO] 2018-01-22 00:23:47,597 : batch 44 : Trial 2159 timed out.
+[INFO] 2018-01-22 00:24:42,479 : batch 41 : Trial 2011 done.
+[INFO] 2018-01-22 00:25:06,475 : batch 32 : Trial 1562 timed out.
+[INFO] 2018-01-22 00:25:15,088 : batch 32 : Trial 1563 done.
+[INFO] 2018-01-22 00:25:19,407 : batch 31 : Trial 1526 done.
+[INFO] 2018-01-22 00:26:53,513 : batch 32 : Trial 1564 done.
+[INFO] 2018-01-22 00:27:18,565 : batch 32 : Trial 1565 done.
+[INFO] 2018-01-22 00:28:29,462 : batch 41 : Trial 2012 done.
+[INFO] 2018-01-22 00:28:30,914 : batch 45 : Trial 2208 timed out.
+[INFO] 2018-01-22 00:29:54,394 : batch 40 : Trial 1962 timed out.
+[INFO] 2018-01-22 00:30:13,982 : batch 40 : Trial 1963 done.
+[INFO] 2018-01-22 00:30:34,734 : batch 42 : Trial 2066 timed out.
+[INFO] 2018-01-22 00:31:25,253 : batch 41 : Trial 2013 done.
+[INFO] 2018-01-22 00:33:14,093 : batch 47 : Trial 2307 timed out.
+[INFO] 2018-01-22 00:34:24,104 : batch 48 : Trial 2357 timed out.
+[INFO] 2018-01-22 00:34:37,043 : batch 41 : Trial 2014 done.
+[INFO] 2018-01-22 00:36:09,469 : batch 43 : Trial 2108 timed out.
+[INFO] 2018-01-22 00:36:59,325 : batch 39 : Trial 1914 timed out.
+[INFO] 2018-01-22 00:38:58,090 : batch 43 : Trial 2109 done.
+[INFO] 2018-01-22 00:40:19,808 : batch 46 : Trial 2259 timed out.
+[INFO] 2018-01-22 00:42:47,539 : batch 31 : Trial 1527 timed out.
+[INFO] 2018-01-22 00:42:49,403 : batch 46 : Trial 2260 done.
+[INFO] 2018-01-22 00:43:01,094 : batch 44 : Trial 2160 timed out.
+[INFO] 2018-01-22 00:44:43,781 : batch 31 : Trial 1528 done.
+[INFO] 2018-01-22 00:44:44,298 : batch 46 : Trial 2261 done.
+[INFO] 2018-01-22 00:44:46,202 : batch 32 : Trial 1566 timed out.
+[INFO] 2018-01-22 00:47:31,244 : batch 42 : Trial 2067 done.
+[INFO] 2018-01-22 00:47:55,905 : batch 40 : Trial 1964 timed out.
+[INFO] 2018-01-22 00:48:16,102 : batch 40 : Trial 1965 done.
+[INFO] 2018-01-22 00:48:43,805 : batch 45 : Trial 2209 timed out.
+[INFO] 2018-01-22 00:52:31,223 : batch 41 : Trial 2015 timed out.
+[INFO] 2018-01-22 00:55:46,315 : batch 47 : Trial 2308 timed out.
+[INFO] 2018-01-22 00:56:37,163 : batch 41 : Trial 2016 done.
+[INFO] 2018-01-22 00:56:58,746 : batch 48 : Trial 2358 timed out.
+[INFO] 2018-01-22 00:59:15,181 : batch 43 : Trial 2110 timed out.
+[INFO] 2018-01-22 01:01:04,344 : batch 44 : Trial 2161 timed out.
+[INFO] 2018-01-22 01:02:01,167 : batch 32 : Trial 1567 timed out.
+[INFO] 2018-01-22 01:02:45,683 : batch 31 : Trial 1529 timed out.
+[INFO] 2018-01-22 01:02:59,267 : batch 31 : Trial 1530 done.
+[INFO] 2018-01-22 01:03:13,012 : batch 31 : Trial 1531 done.
+[INFO] 2018-01-22 01:03:32,924 : batch 31 : Trial 1532 done.
+[INFO] 2018-01-22 01:04:07,276 : batch 31 : Trial 1533 done.
+[INFO] 2018-01-22 01:04:10,609 : batch 32 : Trial 1568 done.
+[INFO] 2018-01-22 01:04:22,213 : batch 31 : Trial 1534 done.
+[INFO] 2018-01-22 01:04:26,170 : batch 32 : Trial 1569 done.
+[INFO] 2018-01-22 01:05:05,675 : batch 46 : Trial 2262 timed out.
+[INFO] 2018-01-22 01:05:57,604 : batch 40 : Trial 1966 timed out.
+[INFO] 2018-01-22 01:06:04,022 : batch 42 : Trial 2068 timed out.
+[INFO] 2018-01-22 01:06:14,118 : batch 39 : Trial 1915 timed out.
+[INFO] 2018-01-22 01:07:15,104 : batch 42 : Trial 2069 done.
+[INFO] 2018-01-22 01:08:15,419 : batch 42 : Trial 2070 done.
+[INFO] 2018-01-22 01:08:47,335 : batch 45 : Trial 2210 timed out.
+[INFO] 2018-01-22 01:09:41,179 : batch 42 : Trial 2071 done.
+[INFO] 2018-01-22 01:15:21,558 : batch 41 : Trial 2017 timed out.
+[INFO] 2018-01-22 01:15:49,727 : batch 47 : Trial 2309 timed out.
+[INFO] 2018-01-22 01:18:01,049 : batch 43 : Trial 2111 timed out.
+[INFO] 2018-01-22 01:19:44,470 : batch 44 : Trial 2162 timed out.
+[INFO] 2018-01-22 01:21:24,972 : batch 32 : Trial 1570 timed out.
+[INFO] 2018-01-22 01:21:45,442 : batch 32 : Trial 1571 done.
+[INFO] 2018-01-22 01:21:55,372 : batch 32 : Trial 1572 done.
+[INFO] 2018-01-22 01:22:34,399 : batch 31 : Trial 1535 timed out.
+[INFO] 2018-01-22 01:23:31,201 : batch 39 : Trial 1916 timed out.
+[INFO] 2018-01-22 01:23:53,051 : batch 40 : Trial 1967 timed out.
+[INFO] 2018-01-22 01:25:06,694 : batch 46 : Trial 2263 timed out.
+[INFO] 2018-01-22 01:25:31,881 : batch 39 : Trial 1917 done.
+[INFO] 2018-01-22 01:25:54,124 : batch 39 : Trial 1918 done.
+[INFO] 2018-01-22 01:26:06,212 : batch 40 : Trial 1968 done.
+[INFO] 2018-01-22 01:28:07,586 : batch 42 : Trial 2072 timed out.
+[INFO] 2018-01-22 01:28:22,418 : batch 45 : Trial 2211 timed out.
+[INFO] 2018-01-22 01:28:26,921 : batch 39 : Trial 1919 done.
+[INFO] 2018-01-22 01:31:02,012 : batch 46 : Trial 2264 done.
+[INFO] 2018-01-22 01:33:13,365 : batch 48 : Trial 2359 timed out.
+[INFO] 2018-01-22 01:33:24,120 : batch 41 : Trial 2018 timed out.
+[INFO] 2018-01-22 01:34:49,956 : batch 43 : Trial 2112 timed out.
+[INFO] 2018-01-22 01:35:48,549 : batch 41 : Trial 2019 done.
+[INFO] 2018-01-22 01:37:42,027 : batch 47 : Trial 2310 timed out.
+[INFO] 2018-01-22 01:38:09,399 : batch 44 : Trial 2163 timed out.
+[INFO] 2018-01-22 01:38:29,965 : batch 31 : Trial 1536 timed out.
+[INFO] 2018-01-22 01:40:33,529 : batch 32 : Trial 1573 timed out.
+[INFO] 2018-01-22 01:43:34,222 : batch 40 : Trial 1969 timed out.
+[INFO] 2018-01-22 01:44:20,160 : batch 39 : Trial 1920 timed out.
+[INFO] 2018-01-22 01:47:07,142 : batch 42 : Trial 2073 timed out.
+[INFO] 2018-01-22 01:47:40,825 : batch 45 : Trial 2212 timed out.
+[INFO] 2018-01-22 01:48:21,860 : batch 42 : Trial 2074 done.
+[INFO] 2018-01-22 01:49:12,185 : batch 42 : Trial 2075 done.
+[INFO] 2018-01-22 01:49:40,064 : batch 32 : Trial 1574 done.
+[INFO] 2018-01-22 01:49:58,022 : batch 32 : Trial 1575 done.
+[INFO] 2018-01-22 01:50:08,608 : batch 32 : Trial 1576 done.
+[INFO] 2018-01-22 01:51:43,961 : batch 32 : Trial 1577 done.
+[INFO] 2018-01-22 01:52:20,473 : batch 46 : Trial 2265 timed out.
+[INFO] 2018-01-22 01:52:39,477 : batch 43 : Trial 2113 timed out.
+[INFO] 2018-01-22 01:52:58,985 : batch 42 : Trial 2076 done.
+[INFO] 2018-01-22 01:53:18,398 : batch 41 : Trial 2020 timed out.
+[INFO] 2018-01-22 01:54:12,314 : batch 32 : Trial 1578 done.
+[INFO] 2018-01-22 01:54:16,273 : batch 41 : Trial 2021 done.
+[INFO] 2018-01-22 01:54:17,587 : batch 48 : Trial 2360 timed out.
+[INFO] 2018-01-22 01:54:37,545 : batch 32 : Trial 1579 done.
+[INFO] 2018-01-22 01:55:09,313 : batch 41 : Trial 2022 done.
+[INFO] 2018-01-22 01:55:35,087 : batch 42 : Trial 2077 done.
+[INFO] 2018-01-22 01:56:13,307 : batch 31 : Trial 1537 timed out.
+[INFO] 2018-01-22 01:56:26,835 : batch 31 : Trial 1538 done.
+[INFO] 2018-01-22 01:56:54,951 : batch 31 : Trial 1539 done.
+[INFO] 2018-01-22 01:57:05,034 : batch 31 : Trial 1540 done.
+[INFO] 2018-01-22 01:57:06,084 : batch 47 : Trial 2311 timed out.
+[INFO] 2018-01-22 01:57:07,223 : batch 42 : Trial 2078 done.
+[INFO] 2018-01-22 01:57:17,296 : batch 31 : Trial 1541 done.
+[INFO] 2018-01-22 01:57:43,180 : batch 41 : Trial 2023 done.
+[INFO] 2018-01-22 01:58:36,536 : batch 44 : Trial 2164 timed out.
+[INFO] 2018-01-22 02:00:37,944 : batch 41 : Trial 2024 done.
+[INFO] 2018-01-22 02:01:14,028 : batch 39 : Trial 1921 timed out.
+[INFO] 2018-01-22 02:02:11,349 : batch 40 : Trial 1970 timed out.
+[INFO] 2018-01-22 02:02:43,849 : batch 40 : Trial 1971 done.
+[INFO] 2018-01-22 02:07:43,111 : batch 45 : Trial 2213 timed out.
+[INFO] 2018-01-22 02:09:59,692 : batch 45 : Trial 2214 done.
+[INFO] 2018-01-22 02:11:26,075 : batch 43 : Trial 2114 timed out.
+[INFO] 2018-01-22 02:12:05,629 : batch 32 : Trial 1580 timed out.
+[INFO] 2018-01-22 02:12:23,154 : batch 46 : Trial 2266 timed out.
+[INFO] 2018-01-22 02:14:34,536 : batch 31 : Trial 1542 timed out.
+[INFO] 2018-01-22 02:14:49,429 : batch 48 : Trial 2361 timed out.
+[INFO] 2018-01-22 02:14:56,375 : batch 31 : Trial 1543 done.
+[INFO] 2018-01-22 02:15:15,787 : batch 31 : Trial 1544 done.
+[INFO] 2018-01-22 02:15:36,736 : batch 31 : Trial 1545 done.
+[INFO] 2018-01-22 02:15:48,504 : batch 42 : Trial 2079 timed out.
+[INFO] 2018-01-22 02:17:55,894 : batch 47 : Trial 2312 timed out.
+[INFO] 2018-01-22 02:18:37,254 : batch 44 : Trial 2165 timed out.
+[INFO] 2018-01-22 02:18:44,881 : batch 41 : Trial 2025 timed out.
+[INFO] 2018-01-22 02:19:10,341 : batch 39 : Trial 1922 timed out.
+[INFO] 2018-01-22 02:20:43,282 : batch 40 : Trial 1972 timed out.
+[INFO] 2018-01-22 02:29:10,262 : batch 45 : Trial 2215 timed out.
+[INFO] 2018-01-22 02:29:14,728 : batch 32 : Trial 1581 timed out.
+[INFO] 2018-01-22 02:30:11,958 : batch 43 : Trial 2115 timed out.
+[INFO] 2018-01-22 02:31:27,623 : batch 32 : Trial 1582 done.
+[INFO] 2018-01-22 02:31:45,284 : batch 32 : Trial 1583 done.
+[INFO] 2018-01-22 02:31:53,354 : batch 31 : Trial 1546 timed out.
+[INFO] 2018-01-22 02:31:54,496 : batch 32 : Trial 1584 done.
+[INFO] 2018-01-22 02:32:05,972 : batch 31 : Trial 1547 done.
+[INFO] 2018-01-22 02:32:16,515 : batch 32 : Trial 1585 done.
+[INFO] 2018-01-22 02:32:23,492 : batch 46 : Trial 2267 timed out.
+[INFO] 2018-01-22 02:33:42,474 : batch 42 : Trial 2080 timed out.
+[INFO] 2018-01-22 02:36:49,479 : batch 48 : Trial 2362 timed out.
+[INFO] 2018-01-22 02:37:03,806 : batch 41 : Trial 2026 timed out.
+[INFO] 2018-01-22 02:37:12,980 : batch 39 : Trial 1923 timed out.
+[INFO] 2018-01-22 02:38:28,155 : batch 44 : Trial 2166 timed out.
+[INFO] 2018-01-22 02:38:34,611 : batch 47 : Trial 2313 timed out.
+[INFO] 2018-01-22 02:39:02,511 : batch 40 : Trial 1973 timed out.
+[INFO] 2018-01-22 02:40:35,024 : batch 40 : Trial 1974 done.
+[INFO] 2018-01-22 02:48:14,227 : batch 32 : Trial 1586 timed out.
+[INFO] 2018-01-22 02:48:19,104 : batch 45 : Trial 2216 timed out.
+[INFO] 2018-01-22 02:48:23,117 : batch 43 : Trial 2116 timed out.
+[INFO] 2018-01-22 02:49:13,120 : batch 31 : Trial 1548 timed out.
+[INFO] 2018-01-22 02:51:59,116 : batch 46 : Trial 2268 timed out.
+[INFO] 2018-01-22 02:51:59,968 : batch 42 : Trial 2081 timed out.
+[INFO] 2018-01-22 02:52:38,896 : batch 42 : Trial 2082 done.
+[INFO] 2018-01-22 02:52:55,452 : batch 45 : Trial 2217 done.
+[INFO] 2018-01-22 02:55:04,660 : batch 39 : Trial 1924 timed out.
+[INFO] 2018-01-22 02:55:24,425 : batch 41 : Trial 2027 timed out.
+[INFO] 2018-01-22 02:55:51,353 : batch 46 : Trial 2269 done.
+[INFO] 2018-01-22 02:57:44,178 : batch 44 : Trial 2167 timed out.
+[INFO] 2018-01-22 02:57:47,378 : batch 48 : Trial 2363 timed out.
+[INFO] 2018-01-22 02:58:15,296 : batch 41 : Trial 2028 done.
+[INFO] 2018-01-22 02:59:01,279 : batch 40 : Trial 1975 timed out.
+[INFO] 2018-01-22 03:00:56,717 : batch 47 : Trial 2314 timed out.
+[INFO] 2018-01-22 03:01:10,341 : batch 40 : Trial 1976 done.
+[INFO] 2018-01-22 03:01:42,422 : batch 41 : Trial 2029 done.
+[INFO] 2018-01-22 03:06:04,047 : batch 32 : Trial 1587 timed out.
+[INFO] 2018-01-22 03:06:24,877 : batch 32 : Trial 1588 done.
+[INFO] 2018-01-22 03:06:35,711 : batch 32 : Trial 1589 done.
+[INFO] 2018-01-22 03:06:49,569 : batch 31 : Trial 1549 timed out.
+[INFO] 2018-01-22 03:07:05,799 : batch 31 : Trial 1550 done.
+[INFO] 2018-01-22 03:07:14,682 : batch 43 : Trial 2117 timed out.
+[INFO] 2018-01-22 03:11:49,618 : batch 42 : Trial 2083 timed out.
+[INFO] 2018-01-22 03:13:26,034 : batch 45 : Trial 2218 timed out.
+[INFO] 2018-01-22 03:14:41,756 : batch 42 : Trial 2084 done.
+[INFO] 2018-01-22 03:15:25,853 : batch 42 : Trial 2085 done.
+[INFO] 2018-01-22 03:16:01,746 : batch 46 : Trial 2270 timed out.
+[INFO] 2018-01-22 03:16:08,038 : batch 39 : Trial 1925 timed out.
+[INFO] 2018-01-22 03:16:32,397 : batch 44 : Trial 2168 timed out.
+[INFO] 2018-01-22 03:16:42,443 : batch 39 : Trial 1926 done.
+[INFO] 2018-01-22 03:17:55,051 : batch 40 : Trial 1977 timed out.
+[INFO] 2018-01-22 03:18:19,530 : batch 48 : Trial 2364 timed out.
+[INFO] 2018-01-22 03:18:29,040 : batch 40 : Trial 1978 done.
+[INFO] 2018-01-22 03:19:42,196 : batch 39 : Trial 1927 done.
+[INFO] 2018-01-22 03:21:06,377 : batch 41 : Trial 2030 timed out.
+[INFO] 2018-01-22 03:22:15,545 : batch 47 : Trial 2315 timed out.
+[INFO] 2018-01-22 03:22:28,057 : batch 32 : Trial 1590 timed out.
+[INFO] 2018-01-22 03:25:22,649 : batch 43 : Trial 2118 timed out.
+[INFO] 2018-01-22 03:33:39,200 : batch 42 : Trial 2086 timed out.
+[INFO] 2018-01-22 03:35:34,570 : batch 44 : Trial 2169 timed out.
+[INFO] 2018-01-22 03:35:43,653 : batch 42 : Trial 2087 done.
+[INFO] 2018-01-22 03:36:06,020 : batch 46 : Trial 2271 timed out.
+[INFO] 2018-01-22 03:36:50,670 : batch 40 : Trial 1979 timed out.
+[INFO] 2018-01-22 03:37:17,232 : batch 42 : Trial 2088 done.
+[INFO] 2018-01-22 03:37:54,913 : batch 39 : Trial 1928 timed out.
+[INFO] 2018-01-22 03:38:43,459 : batch 48 : Trial 2365 timed out.
+[INFO] 2018-01-22 03:39:02,595 : batch 40 : Trial 1980 done.
+[INFO] 2018-01-22 03:39:37,528 : batch 32 : Trial 1591 timed out.
+[INFO] 2018-01-22 03:40:41,005 : batch 41 : Trial 2031 timed out.
+[INFO] 2018-01-22 03:41:53,429 : batch 32 : Trial 1592 done.
+[INFO] 2018-01-22 03:41:54,833 : batch 47 : Trial 2316 timed out.
+[INFO] 2018-01-22 03:42:18,131 : batch 32 : Trial 1593 done.
+[INFO] 2018-01-22 03:43:29,506 : batch 43 : Trial 2119 timed out.
+[INFO] 2018-01-22 03:47:02,446 : batch 45 : Trial 2219 timed out.
+[INFO] 2018-01-22 03:52:24,972 : batch 44 : Trial 2170 timed out.
+[INFO] 2018-01-22 03:55:04,420 : batch 39 : Trial 1929 timed out.
+[INFO] 2018-01-22 03:55:05,045 : batch 46 : Trial 2272 timed out.
+[INFO] 2018-01-22 03:55:17,601 : batch 39 : Trial 1930 done.
+[INFO] 2018-01-22 03:55:40,237 : batch 39 : Trial 1931 done.
+[INFO] 2018-01-22 03:56:00,480 : batch 42 : Trial 2089 timed out.
+[INFO] 2018-01-22 03:56:52,853 : batch 40 : Trial 1981 timed out.
+[INFO] 2018-01-22 03:57:51,868 : batch 48 : Trial 2366 timed out.
+[INFO] 2018-01-22 03:58:11,768 : batch 32 : Trial 1594 timed out.
+[INFO] 2018-01-22 03:58:26,268 : batch 41 : Trial 2032 timed out.
+[INFO] 2018-01-22 03:58:49,377 : batch 32 : Trial 1595 done.
+[INFO] 2018-01-22 04:00:27,671 : batch 32 : Trial 1596 done.
+[INFO] 2018-01-22 04:00:37,139 : batch 32 : Trial 1597 done.
+[INFO] 2018-01-22 04:00:49,329 : batch 32 : Trial 1598 done.
+[INFO] 2018-01-22 04:00:59,459 : batch 32 : Trial 1599 done.
+[INFO] 2018-01-22 04:01:58,263 : batch 43 : Trial 2120 timed out.
+[INFO] 2018-01-22 04:02:35,354 : batch 47 : Trial 2317 timed out.
+[INFO] 2018-01-22 04:06:52,323 : batch 45 : Trial 2220 timed out.
+[INFO] 2018-01-22 04:11:41,463 : batch 44 : Trial 2171 timed out.
+[INFO] 2018-01-22 04:13:14,713 : batch 39 : Trial 1932 timed out.
+[INFO] 2018-01-22 04:14:16,382 : batch 42 : Trial 2090 timed out.
+[INFO] 2018-01-22 04:14:25,718 : batch 40 : Trial 1982 timed out.
+[INFO] 2018-01-22 04:14:58,781 : batch 46 : Trial 2273 timed out.
+[INFO] 2018-01-22 04:16:32,329 : batch 32 : Trial 1600 timed out.
+[INFO] 2018-01-22 04:16:55,231 : batch 42 : Trial 2091 done.
+[INFO] 2018-01-22 04:17:22,539 : batch 41 : Trial 2033 timed out.
+[INFO] 2018-01-22 04:17:42,438 : batch 42 : Trial 2092 done.
+[INFO] 2018-01-22 04:18:08,870 : batch 41 : Trial 2034 done.
+[INFO] 2018-01-22 04:18:11,044 : batch 48 : Trial 2367 timed out.
+[INFO] 2018-01-22 04:20:02,515 : batch 43 : Trial 2121 timed out.
+[INFO] 2018-01-22 04:20:11,130 : batch 42 : Trial 2093 done.
+[INFO] 2018-01-22 04:20:45,906 : batch 42 : Trial 2094 done.
+[INFO] 2018-01-22 04:22:38,137 : batch 42 : Trial 2095 done.
+[INFO] 2018-01-22 04:22:50,920 : batch 47 : Trial 2318 timed out.
+[INFO] 2018-01-22 04:23:32,409 : batch 42 : Trial 2096 done.
+[INFO] 2018-01-22 04:26:18,168 : batch 45 : Trial 2221 timed out.
+[INFO] 2018-01-22 04:29:53,838 : batch 44 : Trial 2172 timed out.
+[INFO] 2018-01-22 04:32:05,507 : batch 39 : Trial 1933 timed out.
+[INFO] 2018-01-22 04:32:21,237 : batch 40 : Trial 1983 timed out.
+[INFO] 2018-01-22 04:34:56,444 : batch 41 : Trial 2035 timed out.
+[INFO] 2018-01-22 04:35:22,850 : batch 46 : Trial 2274 timed out.
+[INFO] 2018-01-22 04:35:32,248 : batch 41 : Trial 2036 done.
+[INFO] 2018-01-22 04:38:19,560 : batch 48 : Trial 2368 timed out.
+[INFO] 2018-01-22 04:38:28,625 : batch 43 : Trial 2122 timed out.
+[INFO] 2018-01-22 04:39:54,084 : batch 42 : Trial 2097 timed out.
+[INFO] 2018-01-22 04:42:57,227 : batch 47 : Trial 2319 timed out.
+[INFO] 2018-01-22 04:46:24,902 : batch 45 : Trial 2222 timed out.
+[INFO] 2018-01-22 04:48:16,834 : batch 44 : Trial 2173 timed out.
+[INFO] 2018-01-22 04:49:21,852 : batch 39 : Trial 1934 timed out.
+[INFO] 2018-01-22 04:50:02,581 : batch 40 : Trial 1984 timed out.
+[INFO] 2018-01-22 04:53:44,936 : batch 41 : Trial 2037 timed out.
+[INFO] 2018-01-22 04:54:40,996 : batch 46 : Trial 2275 timed out.
+[INFO] 2018-01-22 04:55:12,919 : batch 43 : Trial 2123 timed out.
+[INFO] 2018-01-22 04:55:47,332 : batch 41 : Trial 2038 done.
+[INFO] 2018-01-22 04:56:26,182 : batch 46 : Trial 2276 done.
+[INFO] 2018-01-22 04:57:40,223 : batch 42 : Trial 2098 timed out.
+[INFO] 2018-01-22 04:58:40,004 : batch 41 : Trial 2039 done.
+[INFO] 2018-01-22 04:58:41,235 : batch 42 : Trial 2099 done.
+[INFO] 2018-01-22 04:58:54,641 : batch 48 : Trial 2369 timed out.
+[INFO] 2018-01-22 05:00:58,802 : batch 42 : Trial 2100 done.
+[INFO] 2018-01-22 05:03:09,991 : batch 47 : Trial 2320 timed out.
+[INFO] 2018-01-22 05:05:29,567 : batch 45 : Trial 2223 timed out.
+[INFO] 2018-01-22 05:07:14,304 : batch 39 : Trial 1935 timed out.
+[INFO] 2018-01-22 05:07:37,124 : batch 40 : Trial 1985 timed out.
+[INFO] 2018-01-22 05:08:07,371 : batch 40 : Trial 1986 done.
+[INFO] 2018-01-22 05:08:11,415 : batch 44 : Trial 2174 timed out.
+[INFO] 2018-01-22 05:09:31,298 : batch 45 : Trial 2224 done.
+[INFO] 2018-01-22 05:10:03,016 : batch 40 : Trial 1987 done.
+[INFO] 2018-01-22 05:13:36,210 : batch 43 : Trial 2124 timed out.
+[INFO] 2018-01-22 05:13:50,204 : batch 45 : Trial 2225 done.
+[INFO] 2018-01-22 05:15:24,354 : batch 46 : Trial 2277 timed out.
+[INFO] 2018-01-22 05:16:58,183 : batch 41 : Trial 2040 timed out.
+[INFO] 2018-01-22 05:19:51,403 : batch 48 : Trial 2370 timed out.
+[INFO] 2018-01-22 05:20:08,635 : batch 41 : Trial 2041 done.
+[INFO] 2018-01-22 05:24:21,653 : batch 47 : Trial 2321 timed out.
+[INFO] 2018-01-22 05:24:39,146 : batch 39 : Trial 1936 timed out.
+[INFO] 2018-01-22 05:26:38,376 : batch 39 : Trial 1937 done.
+[INFO] 2018-01-22 05:26:48,028 : batch 44 : Trial 2175 timed out.
+[INFO] 2018-01-22 05:27:48,885 : batch 40 : Trial 1988 timed out.
+[INFO] 2018-01-22 05:31:54,990 : batch 43 : Trial 2125 timed out.
+[INFO] 2018-01-22 05:32:58,610 : batch 45 : Trial 2226 timed out.
+[INFO] 2018-01-22 05:35:01,833 : batch 46 : Trial 2278 timed out.
+[INFO] 2018-01-22 05:38:28,419 : batch 41 : Trial 2042 timed out.
+[INFO] 2018-01-22 05:40:16,089 : batch 48 : Trial 2371 timed out.
+[INFO] 2018-01-22 05:45:05,867 : batch 39 : Trial 1938 timed out.
+[INFO] 2018-01-22 05:45:17,888 : batch 39 : Trial 1939 done.
+[INFO] 2018-01-22 05:45:28,608 : batch 40 : Trial 1989 timed out.
+[INFO] 2018-01-22 05:45:29,339 : batch 47 : Trial 2322 timed out.
+[INFO] 2018-01-22 05:46:25,272 : batch 44 : Trial 2176 timed out.
+[INFO] 2018-01-22 05:50:31,179 : batch 43 : Trial 2126 timed out.
+[INFO] 2018-01-22 05:53:11,246 : batch 46 : Trial 2279 timed out.
+[INFO] 2018-01-22 05:54:01,561 : batch 45 : Trial 2227 timed out.
+[INFO] 2018-01-22 05:56:19,020 : batch 41 : Trial 2043 timed out.
+[INFO] 2018-01-22 06:00:39,090 : batch 48 : Trial 2372 timed out.
+[INFO] 2018-01-22 06:03:00,394 : batch 39 : Trial 1940 timed out.
+[INFO] 2018-01-22 06:03:57,037 : batch 45 : Trial 2228 done.
+[INFO] 2018-01-22 06:04:27,415 : batch 40 : Trial 1990 timed out.
+[INFO] 2018-01-22 06:06:15,437 : batch 44 : Trial 2177 timed out.
+[INFO] 2018-01-22 06:06:19,177 : batch 47 : Trial 2323 timed out.
+[INFO] 2018-01-22 06:07:43,093 : batch 43 : Trial 2127 timed out.
+[INFO] 2018-01-22 06:11:18,599 : batch 43 : Trial 2128 done.
+[INFO] 2018-01-22 06:13:00,924 : batch 46 : Trial 2280 timed out.
+[INFO] 2018-01-22 06:15:20,033 : batch 41 : Trial 2044 timed out.
+[INFO] 2018-01-22 06:16:08,774 : batch 41 : Trial 2045 done.
+[INFO] 2018-01-22 06:18:46,989 : batch 41 : Trial 2046 done.
+[INFO] 2018-01-22 06:20:42,440 : batch 39 : Trial 1941 timed out.
+[INFO] 2018-01-22 06:21:18,686 : batch 41 : Trial 2047 done.
+[INFO] 2018-01-22 06:22:12,496 : batch 40 : Trial 1991 timed out.
+[INFO] 2018-01-22 06:22:16,554 : batch 41 : Trial 2048 done.
+[INFO] 2018-01-22 06:22:24,923 : batch 48 : Trial 2373 timed out.
+[INFO] 2018-01-22 06:23:11,156 : batch 45 : Trial 2229 timed out.
+[INFO] 2018-01-22 06:25:20,126 : batch 44 : Trial 2178 timed out.
+[INFO] 2018-01-22 06:26:49,200 : batch 47 : Trial 2324 timed out.
+[INFO] 2018-01-22 06:29:54,432 : batch 43 : Trial 2129 timed out.
+[INFO] 2018-01-22 06:33:09,929 : batch 46 : Trial 2281 timed out.
+[INFO] 2018-01-22 06:37:03,271 : batch 46 : Trial 2282 done.
+[INFO] 2018-01-22 06:38:13,354 : batch 39 : Trial 1942 timed out.
+[INFO] 2018-01-22 06:39:52,972 : batch 40 : Trial 1992 timed out.
+[INFO] 2018-01-22 06:40:47,922 : batch 41 : Trial 2049 timed out.
+[INFO] 2018-01-22 06:40:50,986 : batch 45 : Trial 2230 timed out.
+[INFO] 2018-01-22 06:41:36,731 : batch 41 : Trial 2050 done.
+[INFO] 2018-01-22 06:43:25,842 : batch 48 : Trial 2374 timed out.
+[INFO] 2018-01-22 06:43:53,748 : batch 44 : Trial 2179 timed out.
+[INFO] 2018-01-22 06:46:51,845 : batch 47 : Trial 2325 timed out.
+[INFO] 2018-01-22 06:48:39,325 : batch 43 : Trial 2130 timed out.
+[INFO] 2018-01-22 06:56:08,664 : batch 39 : Trial 1943 timed out.
+[INFO] 2018-01-22 06:57:23,754 : batch 40 : Trial 1993 timed out.
+[INFO] 2018-01-22 06:57:40,033 : batch 46 : Trial 2283 timed out.
+[INFO] 2018-01-22 07:01:39,093 : batch 45 : Trial 2231 timed out.
+[INFO] 2018-01-22 07:03:00,248 : batch 44 : Trial 2180 timed out.
+[INFO] 2018-01-22 07:04:10,244 : batch 48 : Trial 2375 timed out.
+[INFO] 2018-01-22 07:07:14,706 : batch 47 : Trial 2326 timed out.
+[INFO] 2018-01-22 07:07:58,211 : batch 43 : Trial 2131 timed out.
+[INFO] 2018-01-22 07:12:55,950 : batch 39 : Trial 1944 timed out.
+[INFO] 2018-01-22 07:14:33,573 : batch 40 : Trial 1994 timed out.
+[INFO] 2018-01-22 07:16:49,669 : batch 46 : Trial 2284 timed out.
+[INFO] 2018-01-22 07:22:05,876 : batch 44 : Trial 2181 timed out.
+[INFO] 2018-01-22 07:22:47,210 : batch 45 : Trial 2232 timed out.
+[INFO] 2018-01-22 07:24:16,335 : batch 48 : Trial 2376 timed out.
+[INFO] 2018-01-22 07:28:53,265 : batch 43 : Trial 2132 timed out.
+[INFO] 2018-01-22 07:29:40,369 : batch 47 : Trial 2327 timed out.
+[INFO] 2018-01-22 07:30:15,209 : batch 39 : Trial 1945 timed out.
+[INFO] 2018-01-22 07:31:48,608 : batch 40 : Trial 1995 timed out.
+[INFO] 2018-01-22 07:33:15,923 : batch 39 : Trial 1946 done.
+[INFO] 2018-01-22 07:37:20,882 : batch 46 : Trial 2285 timed out.
+[INFO] 2018-01-22 07:41:07,935 : batch 44 : Trial 2182 timed out.
+[INFO] 2018-01-22 07:42:00,336 : batch 45 : Trial 2233 timed out.
+[INFO] 2018-01-22 07:47:42,948 : batch 48 : Trial 2377 timed out.
+[INFO] 2018-01-22 07:47:52,033 : batch 43 : Trial 2133 timed out.
+[INFO] 2018-01-22 07:49:15,984 : batch 40 : Trial 1996 timed out.
+[INFO] 2018-01-22 07:50:19,876 : batch 47 : Trial 2328 timed out.
+[INFO] 2018-01-22 07:52:31,898 : batch 39 : Trial 1947 timed out.
+[INFO] 2018-01-22 07:52:45,586 : batch 39 : Trial 1948 done.
+[INFO] 2018-01-22 07:54:54,142 : batch 46 : Trial 2286 timed out.
+[INFO] 2018-01-22 07:59:33,762 : batch 44 : Trial 2183 timed out.
+[INFO] 2018-01-22 08:01:47,836 : batch 45 : Trial 2234 timed out.
+[INFO] 2018-01-22 08:05:46,099 : batch 45 : Trial 2235 done.
+[INFO] 2018-01-22 08:06:07,646 : batch 43 : Trial 2134 timed out.
+[INFO] 2018-01-22 08:07:08,307 : batch 40 : Trial 1997 timed out.
+[INFO] 2018-01-22 08:07:16,115 : batch 48 : Trial 2378 timed out.
+[INFO] 2018-01-22 08:07:33,401 : batch 40 : Trial 1998 done.
+[INFO] 2018-01-22 08:09:53,710 : batch 40 : Trial 1999 done.
+[INFO] 2018-01-22 08:10:09,080 : batch 47 : Trial 2329 timed out.
+[INFO] 2018-01-22 08:10:41,725 : batch 39 : Trial 1949 timed out.
+[INFO] 2018-01-22 08:14:38,756 : batch 46 : Trial 2287 timed out.
+[INFO] 2018-01-22 08:17:59,827 : batch 44 : Trial 2184 timed out.
+[INFO] 2018-01-22 08:24:48,919 : batch 43 : Trial 2135 timed out.
+[INFO] 2018-01-22 08:25:01,326 : batch 45 : Trial 2236 timed out.
+[INFO] 2018-01-22 08:26:57,987 : batch 48 : Trial 2379 timed out.
+[INFO] 2018-01-22 08:27:12,028 : batch 40 : Trial 2000 timed out.
+[INFO] 2018-01-22 08:28:29,484 : batch 39 : Trial 1950 timed out.
+[INFO] 2018-01-22 08:29:48,401 : batch 47 : Trial 2330 timed out.
+[INFO] 2018-01-22 08:33:59,273 : batch 46 : Trial 2288 timed out.
+[INFO] 2018-01-22 08:35:36,492 : batch 44 : Trial 2185 timed out.
+[INFO] 2018-01-22 08:37:12,272 : batch 46 : Trial 2289 done.
+[INFO] 2018-01-22 08:43:21,369 : batch 43 : Trial 2136 timed out.
+[INFO] 2018-01-22 08:46:57,865 : batch 48 : Trial 2380 timed out.
+[INFO] 2018-01-22 08:49:50,278 : batch 47 : Trial 2331 timed out.
+[INFO] 2018-01-22 08:52:06,425 : batch 45 : Trial 2237 timed out.
+[INFO] 2018-01-22 08:53:55,478 : batch 44 : Trial 2186 timed out.
+[INFO] 2018-01-22 08:56:07,924 : batch 46 : Trial 2290 timed out.
+[INFO] 2018-01-22 08:56:33,006 : batch 45 : Trial 2238 done.
+[INFO] 2018-01-22 09:01:30,670 : batch 43 : Trial 2137 timed out.
+[INFO] 2018-01-22 09:07:35,468 : batch 48 : Trial 2381 timed out.
+[INFO] 2018-01-22 09:10:02,937 : batch 47 : Trial 2332 timed out.
+[INFO] 2018-01-22 09:10:41,565 : batch 44 : Trial 2187 timed out.
+[INFO] 2018-01-22 09:15:13,775 : batch 46 : Trial 2291 timed out.
+[INFO] 2018-01-22 09:16:17,235 : batch 45 : Trial 2239 timed out.
+[INFO] 2018-01-22 09:16:48,044 : batch 46 : Trial 2292 done.
+[INFO] 2018-01-22 09:19:26,383 : batch 43 : Trial 2138 timed out.
+[INFO] 2018-01-22 09:26:53,088 : batch 48 : Trial 2382 timed out.
+[INFO] 2018-01-22 09:28:47,624 : batch 44 : Trial 2188 timed out.
+[INFO] 2018-01-22 09:29:33,506 : batch 47 : Trial 2333 timed out.
+[INFO] 2018-01-22 09:36:13,331 : batch 45 : Trial 2240 timed out.
+[INFO] 2018-01-22 09:36:48,319 : batch 46 : Trial 2293 timed out.
+[INFO] 2018-01-22 09:37:32,945 : batch 43 : Trial 2139 timed out.
+[INFO] 2018-01-22 09:40:20,406 : batch 46 : Trial 2294 done.
+[INFO] 2018-01-22 09:46:38,526 : batch 44 : Trial 2189 timed out.
+[INFO] 2018-01-22 09:47:07,936 : batch 48 : Trial 2383 timed out.
+[INFO] 2018-01-22 09:48:52,006 : batch 47 : Trial 2334 timed out.
+[INFO] 2018-01-22 09:55:42,981 : batch 43 : Trial 2140 timed out.
+[INFO] 2018-01-22 09:56:49,454 : batch 45 : Trial 2241 timed out.
+[INFO] 2018-01-22 09:59:15,355 : batch 46 : Trial 2295 timed out.
+[INFO] 2018-01-22 10:05:08,451 : batch 44 : Trial 2190 timed out.
+[INFO] 2018-01-22 10:07:15,921 : batch 48 : Trial 2384 timed out.
+[INFO] 2018-01-22 10:08:53,114 : batch 47 : Trial 2335 timed out.
+[INFO] 2018-01-22 10:15:06,860 : batch 43 : Trial 2141 timed out.
+[INFO] 2018-01-22 10:16:16,378 : batch 45 : Trial 2242 timed out.
+[INFO] 2018-01-22 10:18:15,990 : batch 46 : Trial 2296 timed out.
+[INFO] 2018-01-22 10:24:16,835 : batch 44 : Trial 2191 timed out.
+[INFO] 2018-01-22 10:26:55,834 : batch 48 : Trial 2385 timed out.
+[INFO] 2018-01-22 10:29:20,483 : batch 47 : Trial 2336 timed out.
+[INFO] 2018-01-22 10:32:59,617 : batch 43 : Trial 2142 timed out.
+[INFO] 2018-01-22 10:36:38,467 : batch 45 : Trial 2243 timed out.
+[INFO] 2018-01-22 10:37:30,064 : batch 46 : Trial 2297 timed out.
+[INFO] 2018-01-22 10:42:48,069 : batch 44 : Trial 2192 timed out.
+[INFO] 2018-01-22 10:47:12,615 : batch 48 : Trial 2386 timed out.
+[INFO] 2018-01-22 10:49:01,459 : batch 47 : Trial 2337 timed out.
+[INFO] 2018-01-22 10:51:17,594 : batch 43 : Trial 2143 timed out.
+[INFO] 2018-01-22 10:56:47,518 : batch 46 : Trial 2298 timed out.
+[INFO] 2018-01-22 10:56:48,310 : batch 45 : Trial 2244 timed out.
+[INFO] 2018-01-22 11:00:28,184 : batch 44 : Trial 2193 timed out.
+[INFO] 2018-01-22 11:00:39,040 : batch 45 : Trial 2245 done.
+[INFO] 2018-01-22 11:05:11,486 : batch 45 : Trial 2246 done.
+[INFO] 2018-01-22 11:06:28,522 : batch 48 : Trial 2387 timed out.
+[INFO] 2018-01-22 11:08:26,502 : batch 47 : Trial 2338 timed out.
+[INFO] 2018-01-22 11:09:39,930 : batch 43 : Trial 2144 timed out.
+[INFO] 2018-01-22 11:16:24,682 : batch 46 : Trial 2299 timed out.
+[INFO] 2018-01-22 11:19:10,240 : batch 44 : Trial 2194 timed out.
+[INFO] 2018-01-22 11:24:39,535 : batch 45 : Trial 2247 timed out.
+[INFO] 2018-01-22 11:26:50,746 : batch 43 : Trial 2145 timed out.
+[INFO] 2018-01-22 11:27:22,924 : batch 48 : Trial 2388 timed out.
+[INFO] 2018-01-22 11:29:10,928 : batch 47 : Trial 2339 timed out.
+[INFO] 2018-01-22 11:35:49,179 : batch 46 : Trial 2300 timed out.
+[INFO] 2018-01-22 11:37:07,342 : batch 44 : Trial 2195 timed out.
+[INFO] 2018-01-22 11:43:47,802 : batch 45 : Trial 2248 timed out.
+[INFO] 2018-01-22 11:45:31,640 : batch 43 : Trial 2146 timed out.
+[INFO] 2018-01-22 11:47:32,923 : batch 48 : Trial 2389 timed out.
+[INFO] 2018-01-22 11:49:56,866 : batch 47 : Trial 2340 timed out.
+[INFO] 2018-01-22 11:53:46,736 : batch 44 : Trial 2196 timed out.
+[INFO] 2018-01-22 11:54:42,011 : batch 44 : Trial 2197 done.
+[INFO] 2018-01-22 12:02:55,121 : batch 45 : Trial 2249 timed out.
+[INFO] 2018-01-22 12:03:47,084 : batch 43 : Trial 2147 timed out.
+[INFO] 2018-01-22 12:06:34,949 : batch 48 : Trial 2390 timed out.
+[INFO] 2018-01-22 12:09:14,878 : batch 47 : Trial 2341 timed out.
+[INFO] 2018-01-22 12:11:33,864 : batch 44 : Trial 2198 timed out.
+[INFO] 2018-01-22 12:22:03,209 : batch 43 : Trial 2148 timed out.
+[INFO] 2018-01-22 12:22:09,013 : batch 45 : Trial 2250 timed out.
+[INFO] 2018-01-22 12:26:05,157 : batch 48 : Trial 2391 timed out.
+[INFO] 2018-01-22 12:29:38,681 : batch 44 : Trial 2199 timed out.
+[INFO] 2018-01-22 12:29:52,073 : batch 47 : Trial 2342 timed out.
+[INFO] 2018-01-22 12:40:16,883 : batch 43 : Trial 2149 timed out.
+[INFO] 2018-01-22 12:45:36,163 : batch 48 : Trial 2392 timed out.
+[INFO] 2018-01-22 12:48:54,782 : batch 44 : Trial 2200 timed out.
+[INFO] 2018-01-22 12:49:02,678 : batch 47 : Trial 2343 timed out.
+[INFO] 2018-01-22 12:59:26,688 : batch 43 : Trial 2150 timed out.
+[INFO] 2018-01-22 13:05:02,605 : batch 48 : Trial 2393 timed out.
+[INFO] 2018-01-22 13:08:37,198 : batch 47 : Trial 2344 timed out.
+[INFO] 2018-01-22 13:24:51,368 : batch 48 : Trial 2394 timed out.
+[INFO] 2018-01-22 13:28:30,059 : batch 47 : Trial 2345 timed out.
+[INFO] 2018-01-22 13:45:06,862 : batch 48 : Trial 2395 timed out.
+[INFO] 2018-01-22 13:47:44,399 : batch 47 : Trial 2346 timed out.
+[INFO] 2018-01-22 14:05:19,526 : batch 48 : Trial 2396 timed out.
+[INFO] 2018-01-22 14:07:41,037 : batch 47 : Trial 2347 timed out.
+[INFO] 2018-01-22 14:25:37,681 : batch 48 : Trial 2397 timed out.
+[INFO] 2018-01-22 14:27:48,141 : batch 47 : Trial 2348 timed out.
+[INFO] 2018-01-22 14:44:58,808 : batch 48 : Trial 2398 timed out.
+[INFO] 2018-01-22 14:48:38,712 : batch 47 : Trial 2349 timed out.
+[INFO] 2018-01-22 15:04:58,415 : batch 48 : Trial 2399 timed out.
+[INFO] 2018-01-22 15:08:13,995 : batch 47 : Trial 2350 timed out.
+[INFO] 2018-01-22 15:24:44,742 : batch 48 : Trial 2400 timed out.
