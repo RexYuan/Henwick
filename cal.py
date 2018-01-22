@@ -30,7 +30,7 @@ dx = np.ones(len(omega_range) * len(lins_range))
 dy = np.ones(len(omega_range) * len(lins_range))
 dz = [v for vs in record.values() for v in vs.values()]
 
-ax.bar3d(x, y, z, dx, dy, dz, shade=True)
+ax.bar3d(x, y, z, dx, dy, dz, shade=True, edgecolor='black', linewidth=1.5)
 
 ax.set_title('Timeout(=15m) result out of 100 trials')
 ax.set_xlabel('|omega|')
@@ -44,7 +44,7 @@ ax.set_zticks(range(0,101,10))
 ax.set_xticklabels(omega_range)
 ax.set_yticklabels(lins_range)
 
-ax.view_init(20, -140)
+ax.view_init(10, -140)
 
 plt.savefig("bar3d.svg", format="svg")
 #plt.show()
