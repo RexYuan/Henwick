@@ -16,18 +16,21 @@ def test(lins, target):
     tmp = []
     x = HNpc(lins, target)
     while len(tmp) < len(rets):
+        # infinite loop
         if x == False:
-            print('e',end=' ')
+            print('e',end=' ') # not possible now
+        # sub optimal
         elif x[0] not in rets:
-            print('n',end=' ')
+            print('sub:', end=' ')
         else:
             tmp.append(x[0])
+        print(x[2])
         x = HNpc(lins, target)
     print()
     for t in tmp:
         print(t)
         #print(ls(target,tc(ret)))
-
+'''
 # counter
 lins1 = [
 'afbced',
@@ -124,3 +127,7 @@ lins7 = [
 print('test7')
 test(lins7,'acdb')
 print()
+'''
+
+ls = ['abfce','bafce','abcfe','abfec']
+test(ls,'abfce')
