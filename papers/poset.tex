@@ -5,9 +5,10 @@
 \begin{document}
 
 \title{Poset Paper}
-\author{Bow-yow Wang \and Chih-chen Yuan}
-\institute{Institute of Information Science, Academia Sinica?
-\email{email?}}
+\author{Bow-yaw Wang \and Chih-chen Yuan \and someone}
+\institute{Institute of Information Science\\
+Academia Sinica\\
+\email{\{bywang,rex\}@iis.sinica.edu}}
 \maketitle
 
 \begin{abstract}
@@ -19,31 +20,31 @@ Intro part here
 
 \section{Preliminaries}
 
-A partial order is a binary relation that is reflexive, antisymmetric, and transitive. A set $\mathrm{\Omega}$ on which a partial order $\leq$ is defined is called a partially ordered set, or poset for short. For simplicity, we discuss a poset in terms of a binary structure $\mathcal{P} = (\mathrm{\Omega}, \leq)$; we refer to members of $\mathrm{\Omega}$ as elements of $\mathcal{P}$ and, where specificity is desired, to $\mathrm{\Omega}$ as $\mathrm{\Omega}_{\mathcal{P}}$ and $\leq$ as $\leq_{\mathcal{P}}$.
+A partial order is a binary relation that is reflexive, antisymmetric, and transitive. A set $\mathrm{\Omega}$ equipped with a partial order $\leq$ is called a partially ordered set or poset, described in terms of a binary structure $\mathcal{P} = (\mathrm{\Omega}, \leq)$; we refer to members of $\mathrm{\Omega}$ as elements of $\mathcal{P}$ and, where specificity is desired, to $\mathrm{\Omega}$ as $\mathrm{\Omega}_{\mathcal{P}}$ and $\leq$ as $\leq_{\mathcal{P}}$.
 
 \begin{example}
     For the following definition, consider the poset $\mathcal{P}$ over $\{a,b,c,d\}$ with $a \leq b$; $a \leq c$; $a \leq d$; $b \leq d$; and $c \leq d$.
 \end{example}
 
-The cover relation $\prec$ of a poset $\mathcal{P}$ describes the case of immediate successor; that is, it is the order relation with transitivity removed?: for $x, y \in \mathcal{P}$, $x \prec y$ iff $x \leq y \wedge \not\exists z \in \mathcal{P}, x \leq z \wedge z \leq y$. For *Example 1*, the cover relation includes $a \prec b$; $a \prec c$; $b \prec d$; and $c \prec d$. Note that $(a, d)$ is absent in the cover relation.
+The cover relation $\prec$ of a poset $\mathcal{P}$ is the transitive reduction of the order relation; it describes the case of immediate successor: for $x, y \in \mathcal{P}$, $x \prec y$ iff $x \leq y \wedge \not\exists z \in \mathcal{P}, x \leq z \wedge z \leq y$. For *Example 1*, the cover relation includes $a \prec b$; $a \prec c$; $b \prec d$; and $c \prec d$. Note that $(a, d)$ is absent in $\prec$.
 
-In addition, we describe the case of incomparability for a poset $\mathcal{P}$ with $\parallel$: for $x, y \in \mathcal{P}$, $x \parallel y$ iff $x \not\leq y \wedge y \not\leq x$. For *Example 1*, there is $b \parallel c$.
+In addition, we describe the case of incomparability in a poset $\mathcal{P}$ with $\parallel$: for $x, y \in \mathcal{P}$, $x \parallel y$ iff $x \not\leq y \wedge y \not\leq x$. For *Example 1*, there is $b \parallel c$.
 
-A Hasse diagram $\mathcal{H}$ sums up a poset $\mathcal{P} = (\mathrm{\Omega}, \leq)$ in terms of a directed acyclic graph $\mathcal{H} = (\mathrm{V},\mathrm{E})$, where the nodes $\mathrm{V} = \mathrm{\Omega}$ and the edges $\mathrm{E} = \prec$. *Figure 1* shows the Hasse diagram of *Example 1*.
+A Hasse diagram $\mathcal{H}$ sums up a poset $\mathcal{P} = (\mathrm{\Omega}, \leq)$ with a directed acyclic graph $\mathcal{H} = (\mathrm{V},\mathrm{E})$, where the nodes $\mathrm{V} = \mathrm{\Omega}$ and the edges $\mathrm{E} = \prec$. *Figure 1* shows the Hasse diagram of *Example 1*.
 
 \begin{example}
     For the following definition, consider the poset $\mathcal{L}$ over $\{a,b,c,d\}$ with $a \leq b$; $a \leq c$; $a \leq d$; $b \leq c$; $b \leq d$; and $c \leq d$. The Hasse diagram is shown in *Figure 2*.
 \end{example}
 
-A partial order that is also total is called a linear order. By definition, there is no incomparable pairs in a linear order. Note that the Hasse diagram of a linear order is a chain. For simplicity, we represent a linear order in string form. For *Example 2*, we write $abcd$.
+A partial order that is also total is called a linear order; every pair of elements are comparable in a linear order. Note that the Hasse diagram of a linear order is a chain. For simplicity, we represent a linear order in string form. For *Example 2*, we write $abcd$.
 
 \begin{theorem}
     (Szpilrajn Theorem) For a partial order $\mathcal{P}$, there exists a linear order $\mathcal{L}$ that extends $\mathcal{P}$; that is, $\leq_{\mathcal{P}} \subseteq \leq_{\mathcal{L}}$.
 \end{theorem}
 
-For a poset $\mathcal{P}$, a linear order $\mathcal{L}$ that extends $\mathcal{P}$ is called a linear extension(or linearization) of $\mathcal{P}$, and we write $\mathcal{P} \sqsubseteq \mathcal{L}$ iff $\mathcal{L}$ is a linear extension of $\mathcal{P}$. For example, for $\mathcal{P}$ from *Example 1* and $\mathcal{L}$ from *Example 2*, $\mathcal{P} \sqsubseteq \mathcal{L}$.
+For a poset $\mathcal{P}$, a linear order $\mathcal{L}$ that extends $\mathcal{P}$ is called a linear extension or linearization of $\mathcal{P}$, and we write $\mathcal{P} \sqsubseteq \mathcal{L}$ iff $\mathcal{L}$ is a linear extension of $\mathcal{P}$. For example, for $\mathcal{P}$ from *Example 1* and $\mathcal{L}$ from *Example 2*, $\mathcal{P} \sqsubseteq \mathcal{L}$.
 
-The set of all linearizations of $\mathcal{P}$ is denoted $\mathcal{L}(\mathcal{P})$. We shall consider it the language specified by $\mathcal{P}$. By *Theorem 1*, $\mathcal{L}(\mathcal{P}) \neq \emptyset$. Note that a linearization of a poset is equivalent to a topological sort of the Hasse diagram for that poset. For $\mathcal{P}$ from *Example 1*, $\mathcal{L}(\mathcal{P}) = \{abcd, acbd\}$.
+The set of all linearizations of $\mathcal{P}$ is denoted $\mathcal{L}(\mathcal{P})$. We shall consider it the language of a poset[Appendix]. By *Theorem 1*, $\mathcal{L}(\mathcal{P}) \neq \emptyset$. Note that a linearization of a poset is equivalent to a topological sort of the Hasse diagram of that poset. For $\mathcal{P}$ from *Example 1*, $\mathcal{L}(\mathcal{P}) = \{abcd, acbd\}$.
 
 The swap relation $\leftrightarrow$ between linear orders with shared universe is defined as: for linear orders $\mathcal{L}_{1}, \mathcal{L}_{2}$ and $x, y \in \mathrm{\Omega}$, $\mathcal{L}_{1} \leftrightarrow_{x, y} \mathcal{L}_{2}$ iff $x \prec_{\mathcal{L}_{1}} y \wedge y \prec_{\mathcal{L}_{2}} x$. For example, $abcd \leftrightarrow_{b, c} acbd$. Note that $\leftrightarrow$ is symmetric.
 
@@ -57,7 +58,7 @@ That's it? should we move the swap things to motivations?
 
 \section{Motivation}
 
-Given a poset $\mathcal{P}$, finding $|\mathcal{L}(\mathcal{P})|$ is proved by Brightwell and Winkler to be #P-complete. Pruesse and Ruskey gives a algorithm for generating $\mathcal{L}(\mathcal{P})$ in constant amortized time.
+Given a poset $\mathcal{P}$, finding $|\mathcal{L}(\mathcal{P})|$ is proved by Brightwell and Winkler to be \#P-complete. Pruesse and Ruskey gives a algorithm for generating $\mathcal{L}(\mathcal{P})$ in constant amortized time.
 
 Heath mining poset: generating poset one
 
