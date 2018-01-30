@@ -2,10 +2,10 @@
 
 import os
 
-with open('new_exp_template.py') as fp:
+with open('poset_experiment/new_exp_template.py') as fp:
     rest = fp.read()
 
-os.system("mkdir poset_new_exp_batch")
+os.mkdir("poset_new_exp_batch")
 os.system("cp poset_cover.py poset_new_exp_batch/")
 
 i = 1
