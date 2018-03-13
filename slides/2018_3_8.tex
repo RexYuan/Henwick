@@ -1,9 +1,14 @@
 \documentclass{beamer}
+
+\usetheme{CambridgeUS}
+
 \usepackage[utf8]{inputenc}
+\usepackage{datetime}
 \usepackage{amsmath}
 \usepackage{tikz}
 
-\usetheme{CambridgeUS}
+\newdate{date}{09}{03}{2018}
+\date{\displaydate{date}}
 
 \tikzstyle{vertex} = [fill,shape=circle,node distance=40pt]
 \tikzstyle{edge} = [fill,opacity=.5,fill opacity=.5,line cap=round, line join=round, line width=25pt]
@@ -13,6 +18,15 @@
 \pgfsetlayers{background,main}
 
 \begin{document}
+
+\begin{frame}
+\begin{itemize}
+    \item $k$-anonymity Defined
+    \item $k$-anonymity-test is in P
+    \item 3-anonymity is NP-hard (Meyerson \& Williams)
+    \item 2-anonymity is in P (Blocki \& Williams)
+\end{itemize}
+\end{frame}
 
 \begin{frame}
 \frametitle{$k$-anonymity Defined}
@@ -26,11 +40,40 @@ For a suppressor $t$ and a database $V$, $t(V) = \{t(v) : v \in V\}$. If $t(V)$ 
 \end{frame}
 
 \begin{frame}
+\frametitle{$k$-anonymity-test is in P}
+A database $V$ is $k$-anonymous iff, for all $v \in V$, there exist a subset $S \subseteq V$ of size $k$ such that, for all $s,s' \in S$, $s=s'$.\\~\\
+
+\begin{block}{INSTANCE: $k$-anonymity-test}
+Given a databse $V$ with column names $D$, is $\Pi_{Q} V$ $k$-anonymous for all $Q \subseteq D$.
+\end{block}
+
+It's in P.
+\end{frame}
+
+\begin{frame}
+\frametitle{$k$-anonymity-test is in P}
+\alert{(INSTANCE)} Given a databse $V$ with column names $D$, is $\Pi_{Q} V$ $k$-anonymous for all $Q \subseteq D$.\\~\\
+
+\begin{block}{Sweeney's Lemma: remove columns can only make it k-anonymous}
+For relational table $RT$ of $m$-tuples with column names $D$, if $\Pi_{H} RT$ is k-anonymous, then $\Pi_{K} RT$ is k-anonymous, for $H, K \subseteq D$ with $|H|>|K|$.
+\end{block}
+
+\alert{Naive Algorithm}
+Check the case of QI=$D$. It runs in $\mathcal{O}(n^2mk)$.\\~\\
+
+\alert{Proof}
+\begin{itemize}
+    \item If it checks out: then it is k-anonymous \alert{for all possible QIs}, with Sweeney's Lemma.
+    \item If it fails: then it is not k-anonymous \alert{for the QI of all attributes}.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
 \frametitle{3-anonymity is NP-hard}
 NP-hardness is shown by reduction from 3-dimensional perfect matching to 3-anonymity.\\~\\
 
 \begin{block}{INSTANCE: 3-dimensional perfect matching (NP-complete)}
-Given a 3-uniform hypergraph $H = (U, E)$, is there a subset of hyperedges $S \subseteq E$ of size $|U|/3$ such that each vertex of $U$ is contained in exactly one hyperedge of $S$?
+Given a simple 3-uniform hypergraph $H = (U, E)$, is there a subset of hyperedges $S \subseteq E$ of size $|U|/3$ such that each vertex of $U$ is contained in exactly one hyperedge of $S$?
 \end{block}
 
 \begin{block}{INSTANCE: 3-anonymity}
@@ -153,8 +196,14 @@ Since, for all $e_j \in M$, $|e| = 3$, there are exactly 3 identical tuples $v, 
 \begin{frame}
 \frametitle{3-anonymity is NP-hard}
 \alert{(Goal)} $H$ has a 3-dimensional perfect matching iff there exists a $t$ such that $t(V)$ is 3-anonymous with $l = n(m-1)$.\\
-\alert{(Right to left)}
+\alert{(Right to left)} Select as hyperedges the identical tuples in $t(V)$ and we're done.\\~\\
 
+\alert{Note} This is the case where $|\Sigma| \leq n$, but it's also NP-hard for the cases of $|\Sigma| = 3$ and $|\Sigma| = 2$; see REU Summer 2007 slides for an overview.
+\end{frame}
+
+\begin{frame}
+\frametitle{2-anonymity is in P}
+Reduction to polynomial time "Simplex Matching" algorithm.
 \end{frame}
 
 \end{document}
