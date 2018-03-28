@@ -22,7 +22,7 @@ QUESTION:   Does $C$ contain a cover for $S$ of size $K$ or less, i.e., a subset
 
 \subsection*{k-QID}
 INSTANCE: A finite set of $m$-tuples of database $\mathcal{D}$ with an $m$-tuple of column names $\mathcal{C}$ and an $m$-tuple of finite sets of column domains $\mathcal{F}$, such that $\mathcal{D} \subseteq \bigtimes_{F \in \mathcal{F}} F$ and, for all $F \in \mathcal{F}$, $|\mathcal{D}| \leq |F|$; a positive integer $k$.\\
-QUESTION: Is there a finite set $I \subseteq \mathrm{set}(\mathcal{F})$ with $|I| = k$ such that $|\Pi_{I} D| = |D|$?
+QUESTION: Is there a finite set $I \subseteq \mathrm{set}(\mathcal{C})$ with $|I| = k$ such that $|\Pi_{I} D| = |D|$?
 
 \subsection*{Construction}
 Given an instance of \textbf{MINIMUM COVER}, construct a database $\mathcal{D}$ with $\mathrm{tuple}(C)$ as columns and $\mathrm{tuple}(S\cup\{\bot\})$ as rows. For the content of the database, let

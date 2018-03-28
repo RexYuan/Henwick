@@ -1,0 +1,82 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{CJKutf8}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{hyperref}
+\usepackage{color}
+\usepackage[most]{tcolorbox}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{centernot}
+\usepackage{extsizes}
+\usepackage{datetime}
+\usepackage{mathabx}
+\usepackage{tikz}
+\usepackage[linesnumbered,lined,boxed,commentsnumbered,vlined]{algorithm2e}
+\usepackage{parskip}
+
+\newdate{date}{31}{03}{2018}
+
+\renewcommand{\implies}{\rightarrow}
+
+\newcommand{\bicond}{\leftrightarrow}
+
+\begin{document}
+\displaydate{date}
+
+\section*{min-QID}
+\textbf{INSTANCE}\\A finite set of $m$-tuples of database $\mathcal{D}$ with an $m$-tuple of column names $\mathcal{C}$ and an $m$-tuple of finite sets of column domains $\mathcal{F}$, such that $\mathcal{D} \subseteq \bigtimes_{F \in \mathcal{F}} F$ and, for all $F \in \mathcal{F}$, $|\mathcal{D}| \leq |F|$.
+
+\noindent\textbf{QUESTION}\\What is the finite set $I \subseteq \mathrm{set}(\mathcal{C})$ with minimal $|I|$ such that $|\Pi_{I} D| = |D|$?
+
+Cf. \textbf{k-QID}:
+
+\noindent\textbf{QUESTION}\\Is there a finite set $I \subseteq \mathrm{set}(\mathcal{C})$ with $|I| = k$ such that $|\Pi_{I} D| = |D|$?
+
+\begin{center}\emph{Is function problem always at least as hard as decision problem?}\end{center}
+
+\subsection*{Algorithm}
+Here's what I call the "Choose \& Pick Algorithm".\\
+\begin{algorithm}[H]
+    \DontPrintSemicolon
+    \KwData{An instance of \textbf{min-QID}.}
+    \KwResult{A set of columns that completely identifies the database.}
+    $goal = |\Pi_{\mathcal{C}} \mathcal{D}|$\;
+    $fields = \mathcal{C}$\;
+    $found = True$\;
+    \While{$found$}
+    {
+        $found = False$\;
+        \For{$next \in combinations(fields,|fields|-1)$}
+        {
+            \If{$|\Pi_{next} \mathcal{D}| = goal$}
+            {
+                $found = True$\;
+                $fields = next$\;
+                break\;
+            }
+        }
+    }
+    return $fields$\;
+\caption{Choose \& Pick Algorithm}
+\end{algorithm}
+
+\subsection*{Example}
+ex
+
+\subsubsection*{Visualization}
+viz
+
+\subsection*{Run time}
+time
+
+\subsection*{Soundness}
+sound
+
+\subsection*{What went wrong?}
+
+\end{document}
