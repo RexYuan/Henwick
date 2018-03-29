@@ -25,10 +25,12 @@
 
 \newcommand{\bicond}{\leftrightarrow}
 
+\newcolumntype{M}[1]{>{\centering\arraybackslash}m{#1}}
+
 \begin{document}
 \displaydate{date}
 
-\section*{min-QID}
+\subsection*{minimum-QID}
 \textbf{INSTANCE}\\A finite set of $m$-tuples of database $\mathcal{D}$ with an $m$-tuple of column names $\mathcal{C}$ and an $m$-tuple of finite sets of column domains $\mathcal{F}$, such that $\mathcal{D} \subseteq \bigtimes_{F \in \mathcal{F}} F$ and, for all $F \in \mathcal{F}$, $|\mathcal{D}| \leq |F|$.
 
 \noindent\textbf{QUESTION}\\What is the finite set $I \subseteq \mathrm{set}(\mathcal{C})$ with minimal $|I|$ such that $|\Pi_{I} D| = |D|$?
@@ -37,13 +39,10 @@ Cf. \textbf{k-QID}:
 
 \noindent\textbf{QUESTION}\\Is there a finite set $I \subseteq \mathrm{set}(\mathcal{C})$ with $|I| = k$ such that $|\Pi_{I} D| = |D|$?
 
-\begin{center}\emph{Is function problem always at least as hard as decision problem?}\end{center}
-
 \subsection*{Algorithm}
-Here's what I call the "Choose \& Pick Algorithm".\\
 \begin{algorithm}[H]
     \DontPrintSemicolon
-    \KwData{An instance of \textbf{min-QID}.}
+    \KwData{A database.}
     \KwResult{A set of columns that completely identifies the database.}
     $goal = |\Pi_{\mathcal{C}} \mathcal{D}|$\;
     $fields = \mathcal{C}$\;
@@ -62,21 +61,94 @@ Here's what I call the "Choose \& Pick Algorithm".\\
         }
     }
     return $fields$\;
-\caption{Choose \& Pick Algorithm}
 \end{algorithm}
 
+The running time is $\mathcal{O}(\Sigma_{i=1}^{|\mathcal{D}|} \binom{i}{i-1}) = \mathcal{O}(|\mathcal{D}|^2)$.
+
 \subsection*{Example}
-ex
+Consider
+\begin{center}
+    \begin{tabular}{ | M{3em} | M{3em} | M{3em} | M{3em} | M{3em} | }
+    \hline
+    a & b & c & d & e\\
+    \hline
+    x & 1 & y & y & z\\
+    x & x & y & 2 & z\\
+    x & 3 & y & y & z\\
+    x & x & y & 4 & z\\
+    x & 5 & y & y & z\\
+    \hline
+    \end{tabular}
+\end{center}
 
-\subsubsection*{Visualization}
-viz
+The correct minimum QID is (b,d) and the algorithm finds it by choosing
+\begin{center}
+    \begin{tabular}{ | M{3em} | M{3em} | M{3em} | M{3em} | M{3em} | M{3em} | }
+    \hline
+    a & b & c & d & e & yes\\
+    a & b & c & d &   & yes\\
+    a & b & c &   &   & no\\
+      & b & c & d &   & yes\\
+      & b & c &   &   & no\\
+      & b &   & d &   & yes\\
+      & b &   &   &   & no\\
+      &   &   & d &   & no\\
+    \hline
+    \end{tabular}
+\end{center}
 
-\subsection*{Run time}
-time
+\subsection*{It's wrong}
+The function problem is at least as hard as decision problem. So it must be that the algorithm is either incorrect or superpolynomial. It turns out that it is incorrect. It does not solve the \textbf{minimum-QID}. Instead, it solves something else.
 
-\subsection*{Soundness}
-sound
+It finds a "minimal QID" $C$ such that for all $C' \subsetneq C$, $C'$ is not a QID. So it may not find the global optimum but a local one.
 
-\subsection*{What went wrong?}
+\newpage
+\subsection*{Counter-example}
+Consider
+\begin{center}
+    \begin{tabular}{ | M{3em} | M{3em} | M{3em} | M{3em} | M{3em} | }
+    \hline
+    a & b & c & d & e\\
+    \hline
+    x & 1 & x & 6 & x\\
+    x & x & 2 & 7 & x\\
+    x & 3 & x & 8 & x\\
+    x & x & 4 & x & 9\\
+    5 & x & x & x & 0\\
+    \hline
+    \end{tabular}
+\end{center}
+
+The correct minimum QID is (d,e) and the algorithm finds (a,b,c)
+\begin{center}
+    \begin{tabular}{ | M{3em} | M{3em} | M{3em} | M{3em} | M{3em} | M{3em} | }
+    \hline
+    a & b & c & d & e & yes\\
+    a & b & c & d &   & yes\\
+    a & b & c &   &   & yes\\
+    a & b &   &   &   & no\\
+      & b & c &   &   & no\\
+    a &   & c &   &   & no\\
+    \hline
+    \end{tabular}
+\end{center}
+
+\subsection*{So, what now?}
+This alone doesn't really look to me like something that can be turned into a randomized or approximation algorithm with useful bounds, but I don't think this is useless. Also, is this some sort of heuristics? For example, what if we allow backtracking? Such as
+\begin{center}
+    $\vdots$
+
+    \begin{tabular}{ | M{3em} | M{3em} | M{3em} | M{3em} | M{3em} | M{3em} | }
+    a &   & c & d &   & yes\\
+    a &   & c &   &   & no\\
+      &   & c & d &   & no\\
+    a &   &   & d &   & no\\
+    a & b &   & d &   & no\\
+      & b & c & d &   & no\\
+      & b & c & d & e & yes\\
+    \end{tabular}
+
+    $\vdots$
+\end{center}
 
 \end{document}
