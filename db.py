@@ -71,8 +71,8 @@ goal_distinct_rows = 1364624
 
 def get_row_count(fields):
     connection = pymysql.connect(host='localhost',
-                             user='root',
-                             password='',
+                             user='rex',
+                             password='rex',
                              db='census99',
                              cursorclass=pymysql.cursors.DictCursor)
     with connection.cursor() as cursor:
@@ -88,8 +88,8 @@ def get_row_count(fields):
         return False
 
 if __name__ == '__main__':
-    with Pool(processes=3) as pool:
-        ret = pool.map(get_row_count, combinations(fields, 38))
+    with Pool(processes=30) as pool:
+        ret = pool.map(get_row_count, combinations(fields, 34))
         print(any(ret))
 
 
