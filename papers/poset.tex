@@ -13,28 +13,34 @@
 
 \captionsetup{compatibility=false}
 
-\DeclarePairedDelimiter\set\{\}
+\DeclarePairedDelimiter{\set}{\{}{\}}
+\DeclarePairedDelimiter{\tuple}{(}{)}
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
 
 \let\oldleq\leq
-\let\covered\prec
-\let\incomp\parallel
-\let\lext\sqsubseteq
-\renewcommand{\implies}{\rightarrow}
 \renewcommand{\leq}[1][]{\oldleq_{#1}}
+\renewcommand{\implies}{\rightarrow}
+
 \newcommand{\bicond}{\leftrightarrow}
 \newcommand{\poset}[1]{\mathcal{#1}}
 \newcommand{\uni}[1][]{\Omega_{#1}}
-\newcommand{\lang}[1]{\mathcal{L}(#1)}
+\newcommand{\lang}[1]{L(#1)}
 \newcommand{\lin}[1]{\texttt{#1}}
 \newcommand{\swap}[1][]{\leftrightarrow_{#1}}
-\newcommand{\sgraph}[1]{\mathcal{G}(#1)}
+\newcommand{\sgraph}[1]{G(#1)}
+\newcommand{\lext}{\sqsubseteq}
+\newcommand{\incomp}{\parallel}
+\newcommand{\covered}{\prec}
+\newcommand{\complmt}[1]{\overline{#1}}
+\newcommand{\satvar}[2]{\mathtt{X}_{#1}^{#2}}
+\newcommand{\bigo}[1]{\mathcal{O}(#1)}
 
 \begin{document}
 
 \title{Poset Paper}
 \author{Bow-yaw Wang\inst{1} \and Chih-chen Yuan\inst{2}}
 \institute{Academia Sinica, Taiwan\\ \and
-National Taiwan Normal University, Taiwan\\}
+National Taiwan Normal University, Taiwan}
 \maketitle
 
 \begin{abstract}
@@ -45,12 +51,12 @@ hello world
 Intro part here
 
 \section{Preliminaries}
-A \emph{partial order} is a binary relation that is reflexive, antisymmetric, and transitive. A partially ordered set or poset is a binary structure $\poset{P} = (\uni, \leq)$ where the \emph{universe} $\uni$ is a set and $\leq$ is a partial order on $\uni$; we refer to members of $\uni$ as elements of $\poset{P}$ and, where specificity is desired, to $\uni$ as $\uni[
+A \emph{partial order} is a binary relation that is reflexive, antisymmetric, and transitive. A partially ordered set or poset is a binary structure $\poset{P} = \tuple{\uni, \leq}$ where the \emph{universe} $\uni$ is a set and $\leq$ is a partial order on $\uni$; we refer to members of $\uni$ as elements of $\poset{P}$ and, where specificity is desired, to $\uni$ as $\uni[
 \poset{P}]$ and $\leq$ as $\leq[\poset{P}]$.
 
 % example:posetp
 \begin{example}
-    For the following definition, consider the poset $\poset{P}$ over $\set{a,b,c,d}$ with $a \leq b$; $a \leq c$; $a \leq d$; $b \leq d$; and $c \leq d$. Figure~\ref{figure:posetp} describes $\poset{P}$ with a graph $(V,E) = (\Omega,\covered)$.
+    For the following definition, consider the poset $\poset{P}$ over $\set{a,b,c,d}$ with $a \leq b$; $a \leq c$; $a \leq d$; $b \leq d$; and $c \leq d$. Figure~\ref{figure:posetp} describes $\poset{P}$ with a graph $\tuple{V,E} = \tuple{\Omega,\covered}$.
     \label{example:posetp}
 \end{example}
 
@@ -75,13 +81,13 @@ A \emph{partial order} is a binary relation that is reflexive, antisymmetric, an
     \label{figure:posetp}
 \end{figure}
 
-The \emph{cover} relation $\covered$ of a poset $\poset{P}$ is the transitive reduction of the order relation; it describes the case of immediate successor: for $x, y \in \poset{P}$, $x \covered y$ iff $x \leq y \wedge \not\exists z \in \poset{P}, x \leq z \wedge z \leq y$. For Example~\ref{example:posetp}, the covered relation includes $a \covered b$; $a \covered c$; $b \covered d$; and $c \covered d$. Note that $(a,d)$ is absent in $\covered$.
+The \emph{cover} relation $\covered$ of a poset $\poset{P}$ is the transitive reduction of the order relation; it describes the case of immediate successor: for $x, y \in \poset{P}$, $x \covered y$ iff $x \leq y \wedge \not\exists z \in \poset{P}, x \leq z \wedge z \leq y$. For Example~\ref{example:posetp}, the covered relation includes $a \covered b$; $a \covered c$; $b \covered d$; and $c \covered d$. Note that $\tuple{a,d}$ is absent in $\covered$.
 
 In addition, we describe the case of \emph{incomparability} in a poset $\poset{P}$ with $\incomp$: for $x, y \in \poset{P}$, $x \incomp y$ iff $x \not\leq y \wedge y \not\leq x$. For Example~\ref{example:posetp}, there is $b \incomp c$.
 
 % example:posetl
 \begin{example}
-    For the following definition, consider the poset $\poset{L}$ over $\set{a,b,c,d}$ with $a \leq b$; $a \leq c$; $a \leq d$; $b \leq c$; $b \leq d$; and $c \leq d$. Figure~\ref{figure:posetl} represents $\poset{L}$ with a graph $(V,E) = (\uni,\covered)$.
+    For the following definition, consider the poset $\poset{L}$ over $\set{a,b,c,d}$ with $a \leq b$; $a \leq c$; $a \leq d$; $b \leq c$; $b \leq d$; and $c \leq d$. Figure~\ref{figure:posetl} represents $\poset{L}$ with a graph $\tuple{V,E} = \tuple{\uni,\covered}$.
     \label{example:posetl}
 \end{example}
 
@@ -109,19 +115,19 @@ A partial order that is also total is called a \emph{linear order}; every pair o
 
 For a poset $\poset{P}$, a linear order $\poset{L}$ that extends $\poset{P}$ is called a \emph{linear extension} or \emph{linearization} of $\poset{P}$, and we write $\poset{P} \lext \poset{L}$ iff $\poset{L}$ is a linearization of $\poset{P}$. For example, for $\poset{P}$ from Example~\ref{example:posetp} and $\poset{L}$ from Example~\ref{example:posetl}, $\poset{P} \lext \poset{L}$. Note that a linearization of a poset is equivalent to a topological sort of the graph describing that poset.
 
-The set of all linearizations of $\poset{P}$ is denoted $\lang{\poset{P}}$. We shall consider it the \emph{language} of a poset. For $\poset{P}$ from Example~\ref{example:posetp}, $\lang{\poset{P}} = \set{\lin{abcd},\lin{acbd}}$.
+The set of all linearizations of $\poset{P}$ is denoted $\lang{\poset{P}}$. We shall consider it the \emph{language} of a poset. For $\poset{P}$ from Example~\ref{example:posetp}, $\lang{\poset{P}} = \set{\lin{abcd},\lin{acbd}}$. For $\poset{L}$ from Example~\ref{example:posetl}, $\lang{\poset{L}} = \set{\lin{abcd}}$.
 
-Now, we are ready to give the problem definition of the \emph{Poset Cover Problem}.
+Now, we are ready to give the definition of \emph{Poset Cover Problem}.
 
 % definition:pcp
 \begin{definition}[Poset Cover Problem]
-    Given a set of linear orders $\Upsilon$, find a set of partial orders $C$, called a cover, such that $|C|$ is minimal and $\Upsilon = \bigcup_{\poset{P} \in C} \lang{\poset{P}}$.
+    Given a set of linear orders $\Upsilon$, find a set of partial orders $C$, called a cover, such that $\abs{C}$ is minimal and $\Upsilon = \bigcup_{\poset{P} \in C} \lang{\poset{P}}$.
     \label{definition:pcp}
 \end{definition}
 
 % example:cover example
 \begin{example}
-    Given the set of linear orders $\set{\lin{abfce},\lin{bafce},\lin{abcfe},\lin{abfec}}$ over $\set{a,b,c,f,e}$, a minimal poset cover $C$ of two posets $\poset{A},\poset{B}$ is shown in Figure~\ref{figure:cover example c} with ${\lang{\poset{A}} = \set{\lin{abfce},\lin{abcfe},\lin{abfec}}}$ and ${\lang{\poset{B}} = \set{\lin{bafce}}}$.
+    Given the set of linear orders $\set{\lin{abfce},\lin{bafce},\lin{abcfe},\lin{abfec}}$ over $\set{a,b,c,f,e}$, a minimal poset cover of two posets $\poset{A},\poset{B}$ is shown in Figure~\ref{figure:cover example c} with ${\lang{\poset{A}} = \set{\lin{abfce},\lin{abcfe},\lin{abfec}}}$ and ${\lang{\poset{B}} = \set{\lin{bafce}}}$.
     \label{example:cover example}
 \end{example}
 
@@ -147,7 +153,7 @@ Now, we are ready to give the problem definition of the \emph{Poset Cover Proble
             \draw[edge] (3) -- (4);
             \draw[edge] (2) -- (5);
             \end{tikzpicture}
-            \caption{Poset $\poset{A}$.}
+            \caption*{Poset $\poset{A}$}
         \end{subfigure}%
         \begin{subfigure}[b]{0.4\textwidth}
             \centering
@@ -166,9 +172,9 @@ Now, we are ready to give the problem definition of the \emph{Poset Cover Proble
             \draw[edge] (8) -- (9);
             \draw[edge] (9) -- (10);
             \end{tikzpicture}
-            \caption{Poset $\poset{B}$.}
+            \caption*{Poset $\poset{B}$}
         \end{subfigure}
-        \caption{Cover $C$.}
+        \caption{A minimal cover.}
         \label{figure:cover example c}
     \end{subfigure}%
     % figure:cover example c'
@@ -191,7 +197,7 @@ Now, we are ready to give the problem definition of the \emph{Poset Cover Proble
             \draw[edge] (3) -- (4);
             \draw[edge] (2) -- (5);
             \end{tikzpicture}
-            \caption{Poset $\poset{C}$.}
+            \caption*{Poset $\poset{C}$}
         \end{subfigure}%
         \begin{subfigure}[b]{0.4\textwidth}
             \centering
@@ -210,26 +216,26 @@ Now, we are ready to give the problem definition of the \emph{Poset Cover Proble
             \draw[edge] (8) -- (9);
             \draw[edge] (9) -- (10);
             \end{tikzpicture}
-            \caption{Poset $\poset{D}$.}
+            \caption*{Poset $\poset{D}$}
         \end{subfigure}
-        \caption{Cover $C'$.}
+        \caption{Another minimal cover.}
         \label{figure:cover example c'}
     \end{subfigure}
     \caption{Minimal covers for the set $\set{\lin{abfce},\lin{bafce},\lin{abcfe},\lin{abfec}}$.}
     \label{figure:cover example}
 \end{figure}
 
-Note that a minimal poset cover may not be unique and the languages of the posets in a cover may overlap. For Example~\ref{example:cover example}, there is another minimal poset cover $C'$ shown in Figure~\ref{figure:cover example c'} with overlapping languages of posets $\poset{C},\poset{D}$ with ${\lang{\poset{C}} = \set{\lin{abfce},\lin{abcfe},\lin{abfec}}}$ and ${\lang{\poset{D}} = \set{\lin{abfce},\lin{bafce}}}$.
+A minimal poset cover may not be unique and the languages of the posets in a cover may overlap. For Example~\ref{example:cover example}, there is another minimal poset cover, shown in Figure~\ref{figure:cover example c'}, with overlapping languages ${\lang{\poset{C}} = \set{\lin{abfce},\lin{abcfe},\lin{abfec}}}$ and ${\lang{\poset{D}} = \set{\lin{abfce},\lin{bafce}}}$.
 
 \section{Swap Graph}
-% NOTE: redo
-Since the poset cover problem is proved to be NP-complete, we decided to utilize the power of SAT solvers. However, a naive encoding would easily result in superpolynomial reduction. An efficient encoding requires some preprocessing using notions introduced as follows.
+% NOTE: re-write a better intro
+*Since the poset cover problem is proved to be NP-complete, we decided to utilize the power of SAT solvers. However, a naive encoding would easily result in superpolynomial reduction. An efficient encoding requires some preprocessing using notions introduced as follows.
 
 % put naive here?
 
-The \emph{swap} relation $\swap$ describes the case of ``off by one swap'' between linear orders with shared universe: for linear orders $\poset{L}_1$~and~$\poset{L}_2$, $\poset{L}_1~\swap~\poset{L}_2$ iff there are $x, y \in \uni$ such that $\leq[\poset{L}_1] \cap \leq[\poset{L}_2] = {(\leq[\poset{L}_1] \cup \leq[\poset{L}_2])} - \set{(x,y),(y,x)}$; where specificity is desired, we write $\swap[x,y]$. For example, \lin{abcd} $\swap[b,c]$ \lin{acbd}. Note that $\swap$ is symmetric.
+The \emph{swap} relation $\swap$ describes the case of ``off by one swap'' between linear orders with shared universe: for linear orders $\poset{L}_1$~and~$\poset{L}_2$, $\poset{L}_1~\swap~\poset{L}_2$ iff there are $x, y \in \uni$ such that $\leq[\poset{L}_1] \cap \leq[\poset{L}_2] = {(\leq[\poset{L}_1] \cup \leq[\poset{L}_2])} - \set{(x,y),(y,x)}$; to specify which $x,y$ induce* the relation, we write $\swap[x,y]$. For example, \lin{abcd} $\swap[b,c]$ \lin{acbd}. Note that $\swap$ is symmetric.
 
-For a set of linear orders $\Upsilon$, the \emph{swap graph} $\sgraph{\Upsilon}$ of it is the undirected graph $(V,E) = (\Upsilon,\swap)$. Figure~\ref{figure:graphlp} shows the swap graph of $\lang{\poset{P}}$ for $\poset{P}$ from Example~\ref{example:posetp}. The swap graph of the linearizations of a single poset is connected.
+For a set of linear orders $\Upsilon$, the \emph{swap graph} $\sgraph{\Upsilon}$ of it is the undirected graph $\tuple{V,E} = \tuple{\Upsilon,\swap}$. Figure~\ref{figure:graphlp} shows the swap graph $\sgraph{\lang{\poset{P}}}$ for $\poset{P}$ from Example~\ref{example:posetp}. Note that a swap graph built from the language of a poset is connected.
 
 % figure:graphlp
 \begin{figure}
@@ -243,17 +249,70 @@ For a set of linear orders $\Upsilon$, the \emph{swap graph} $\sgraph{\Upsilon}$
     \node[vertex] (2) at (2,0) {\lin{acbd}};
     \draw[edge] (1) -- (2);
     \end{tikzpicture}
-    \caption{Swap graph of $\lang{\poset{P}}$ for $\poset{P}$ from Example~\ref{example:posetp}.}
+    \caption{Swap graph $\sgraph{\lang{\poset{P}}}$ for $\poset{P}$ from Example~\ref{example:posetp}.}
     \label{figure:graphlp}
 \end{figure}
 
-We use the property that swap graphs are connected to avoid the exponential result of naive encoding.
+% put encoding here
+% NOTE what we'll arrive at ? what do we get out of it ?
+*Now we reduce the poset cover problem to SAT. To find the minimal cover, we query SAT solver with increasing number of posets in our cover, starting from 1.
 
-% put proposition here?
+% prop var
+Let $C$ denote the cover. For all posets $\poset{P} \in C$ and $x \neq y \in \uni$, we encode as $\satvar{x,y}{\poset{P}}$ the case that $x \leq[\poset{P}] y$.
+
+% poset_cover.py : poset_axioms
+First off, for the poset axioms, we encode antisymmetry as
+$$
+\bigwedge_{\poset{P} \in C} \bigwedge_{x \neq y \in \uni} \neg (\satvar{x,y}{\poset{P}} \wedge \satvar{y,x}{\poset{P}})
+$$
+and transitivity as
+$$
+\bigwedge_{\poset{P} \in C} \bigwedge_{x \neq y \neq z \in \uni}
+\satvar{x,y}{\poset{P}} \wedge \satvar{y,z}{\poset{P}} \implies \satvar{x,z}{\poset{P}}
+$$
+and omit reflexivity for simplicity*.
+
+% NOTE this is bad bad bad. must do bettter
+*The poset cover problem can now be restated in logical formulae.
+
+Let $\Upsilon$ denote the input set of linear orders. We encode its solution constraints, $\Upsilon = \bigcup_{\poset{P} \in C} \lang{\poset{P}}$, in a twofold manner, by separately encoding $\Upsilon \subseteq \bigcup_{\poset{P} \in C} \lang{\poset{P}}$ and $\Upsilon \supseteq \bigcup_{\poset{P} \in C} \lang{\poset{P}}$.
+
+% poset_cover.py : le_constraints
+For $\Upsilon \subseteq \bigcup_{\poset{P} \in C} \lang{\poset{P}}$, it effectively states that for all $\poset{L} \in \Upsilon$, there is some $\poset{P} \in C$ such that $\poset{P} \lext \poset{L}$. We encode it as
+$$
+\bigwedge_{\poset{L} \in \Upsilon} \bigvee_{\poset{P} \in C} \bigwedge_{x,y \in \complmt{\leq[\poset{L}]}} \neg \mathtt{P}_{x,y}^{\poset{P}}
+$$
+by interpreting $\lext$ in its contrapositive form*.
+
+For $\Upsilon \supseteq \bigcup_{\poset{P} \in C} \lang{\poset{P}}$, conversely, it states that for all $\poset{L} \not\in \Upsilon$, for all $\poset{P} \in C$, $\poset{P} \not\lext \poset{L}$. A naive encoding such as
+$$
+\bigwedge_{\poset{L} \in \complmt{\Upsilon}} \bigwedge_{\poset{P} \in C} \neg \bigwedge_{x,y \in \complmt{\leq[\poset{L}]}} \neg \mathtt{P}_{x,y}^{\poset{P}}
+$$
+would result in factorial blow-up as all the absent permutations* $\abs{\complmt{\Upsilon}} \in \bigo{\abs{\uni}! - \abs{\Upsilon}}$. However, we can exploit the property that a swap graph of poset language is connected to avoid this, by ``insulating'' each connected component $\upsilon \subseteq \Upsilon$ with a \emph{barrier}* set $bar(\upsilon) = \set{\poset{L} \in (\Upsilon - \upsilon) \mid \text{there is } \poset{L}' \in \upsilon \text{ s.t. } \poset{L}' \swap \poset{L}}$ and encoding the constraint as
+$$
+\bigwedge_{\upsilon \in comp(\Upsilon)} \bigwedge_{\poset{L} \in bar(\upsilon)} \bigwedge_{\poset{P} \in C} \neg \bigwedge_{x,y \in \complmt{\leq[\poset{L}]}} \neg \mathtt{P}_{x,y}^{\poset{P}}
+$$
+where $comp(\Upsilon)$ is the family of all connected components in $\Upsilon$.
+
+% whats a proposition?
+% should i be like: given xxx yyy and such that ...
+% should i draw an image illustrating barriers?
+\begin{proposition}
+    Barrier encoding entails naive encoding; that is,
+    \begin{align*}
+        & \forall_{\upsilon \in comp(\Upsilon)} \forall_{\poset{L} \in bar(\upsilon)} \forall_{\poset{P} \in C} \poset{P} \not\lext \poset{L}\\
+        \models & \forall_{\poset{L} \not\in \Upsilon} \forall_{\poset{P} \in C} \poset{P} \not\lext \poset{L}
+    \end{align*}
+\end{proposition}
+\begin{proof}
+    We shall give a simple proof by contradiction. Suppose barrier encoding holds. Suppose naive encoding does not hold. Then there are some $\poset{L} \not\in \Upsilon$ and $\poset{P} \in C$ such that $\poset{P} \lext \poset{L}$. Per assumption, $\poset{L} \not\in bar(\upsilon)$ for all components $\upsilon$, but then $\sgraph{\lang{\poset{P}}}$ is not connected, a contradiction.
+\end{proof}
 
 % put new encoding here?
+Barrier encoding is polynomial in the size of $\Upsilon$ since $\abs{bar(\upsilon)} \in \bigo{\abs{\upsilon} \times \abs{\uni}}$ for all $\upsilon$.
 
 % where to put sat iff proof?
+How do I do this part exactly? It's true by def?
 
 %########################################
 
