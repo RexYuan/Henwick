@@ -10,13 +10,16 @@ import pymysql.cursors
 
 from census99_attr import *
 
+status_path = 'k_status.txt'
+log_path = 'k_log.txt'
+
 def min_qid(trial, fields, goal):
     t1 = time()
 
     logger = logging.getLogger("goal[{:>7}]:trial[{:>2}]".format(goal, trial))
     logger.setLevel(logging.DEBUG)
 
-    status_fh = logging.FileHandler('k_status.txt')
+    status_fh = logging.FileHandler(status_path)
     status_sh = logging.StreamHandler()
 
     status_fh.setLevel(logging.INFO)
@@ -44,7 +47,7 @@ def min_qid(trial, fields, goal):
             logger.debug(choose)
 
             for fs in combinations(froma, choose):
-                sql = ("SELECT COUNT(DISTINCT {}"+",{}"*(choose-1)+") FROM people").format(*fs)
+                sql = ("SELECT COUNT(DISTINCT {}"+",{}"*(choose-1)+") FROM PEOPLE").format(*fs)
                 cursor.execute(sql)
                 result = cursor.fetchone()
                 row_count = list(result.values())[0]
@@ -83,7 +86,7 @@ if __name__ == '__main__':
         logger = logging.getLogger("goal[{:>7}]".format(goal))
         logger.setLevel(logging.DEBUG)
 
-        status_fh = logging.FileHandler('k_log.txt')
+        status_fh = logging.FileHandler(log_path)
         status_sh = logging.StreamHandler()
 
         status_fh.setLevel(logging.INFO)
