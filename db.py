@@ -68,6 +68,7 @@ ordered_fields = [
      ('C020_AGE', 17), ('C123_OCCUPATION', 39), ('C122_INDUSTRY', 80)]
 
 goal_distinct_rows = 1364624
+goal_distinct_rows = int(goal_distinct_rows * 0.9)
 
 def get_row_count(fields):
     connection = pymysql.connect(host='localhost',
