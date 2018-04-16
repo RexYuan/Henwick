@@ -1,5 +1,6 @@
 
 import logging
+import sys
 from multiprocessing import Pool
 from itertools import combinations, repeat, islice, count
 from random import shuffle
@@ -68,7 +69,7 @@ def min_qid(trial, fields, goal):
 def shuffled(fields):
     tmp = list(fields)
     while True:
-        yield tmp
+        yield tmp.copy()
         shuffle(tmp)
 
 if __name__ == '__main__':
@@ -98,6 +99,10 @@ if __name__ == '__main__':
 
         logger.addHandler(status_fh)
         logger.addHandler(status_sh)
+
+        def ex_log_handler(type, value, tb):
+            logger.exception("Uncaught exception: {}".format(str(value)))
+        sys.excepthook = ex_log_handler
 
         logger.info("Starting...")
 
