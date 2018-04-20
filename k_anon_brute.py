@@ -13,7 +13,7 @@ def check_fields(fields, goal):
                                  db='census99',
                                  cursorclass=pymysql.cursors.DictCursor)
     with connection.cursor() as cursor:
-        sql = ("SELECT COUNT(DISTINCT {}"+",{}"*(len(fields)-1)+") FROM people").format(*fields)
+        sql = ("SELECT COUNT(DISTINCT {}"+",{}"*(len(fields)-1)+") FROM PEOPLE").format(*fields)
         cursor.execute(sql)
         result = cursor.fetchone()
         row_count = list(result.values())[0]
