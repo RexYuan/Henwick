@@ -24,9 +24,19 @@ def check_fields(fields, goal):
         return False
 
 if __name__ == '__main__':
-    goal = max_distinct_rows
-    choose = 39
-    with Pool(processes=3) as pool:
+    goal = int(max_distinct_rows * 0.1)
+    choose = 5
+    procs = 30
+
+    print('====> size 5')
+    with Pool(processes=procs) as pool:
         ret = pool.starmap(check_fields, zip(combinations(fields, choose), repeat(goal)))
-        print(any(ret))
         list(map(print, filter(None, ret)))
+        print(any(ret))
+
+    choose = 4
+    print('\n\n====> size 4')
+    with Pool(processes=procs) as pool:
+        ret = pool.starmap(check_fields, zip(combinations(fields, choose), repeat(goal)))
+        list(map(print, filter(None, ret)))
+        print(any(ret))
