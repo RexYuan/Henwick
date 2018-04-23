@@ -1,0 +1,141 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{CJKutf8}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{hyperref}
+\usepackage{color}
+\usepackage[most]{tcolorbox}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{centernot}
+\usepackage{extsizes}
+\usepackage{datetime}
+\usepackage{mathabx}
+\usepackage{tikz}
+\usepackage[linesnumbered,lined,boxed,commentsnumbered,vlined]{algorithm2e}
+\usepackage{parskip}
+
+\newdate{date}{27}{04}{2018}
+
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+
+\renewcommand{\implies}{\rightarrow}
+
+\newcommand{\bicond}{\leftrightarrow}
+\newcommand{\bye}[1]{}
+
+\newcolumntype{M}[1]{>{\centering\arraybackslash}m{#1}}
+
+\begin{document}
+\displaydate{date}
+
+\section*{Summary}
+
+Ran 1000 trials for each of 10\%, 25\%, 50\%, 75\%, and 100\% cases within 39 relevant fields. Found the case to be minimum for 10\% and 100\% with brute force. There are in total 3618831 rows, of which 1364624 are distinct. Queries check for the condition $\geq \floor{1364624 \times P}$ for some percentage $P$.
+
+\begin{itemize}
+\item Minimum QID for 100\% case. Size: 35.\\
+\textbf{\begin{CJK}{UTF8}{bsmi}C010：性別、C020：年齡、C032：國籍、C050：婚姻狀況、C060：與戶長關係、C071：教育狀況、C072：教育程度、C073：是否上幼稚園(學齡前兒童)、C081：國語、C082：閩南語、C083：客家語、C084：原住民族語、C085：其他、C091：國語、C092：閩南語、C093：客家語、C094：原住民族語、C095：其他、C100：五年前居住地點、C110：主要家計負責人、C121：工作狀況、C122：行業、C123：職業、C132：工作或求學地點、C141：子女人數、C142：子女居住地點、C151：吃飯、C152：上下床、C153：更換衣服、C154：上廁所、C155：洗澡、C156：在室內外走動、C157：家事活動能力、C160：是否為原住民族、C170：是否為身心障礙\end{CJK}}.
+\item Minimum QID size for 10\% case. Size: 5.\\
+\textbf{\begin{CJK}{UTF8}{bsmi}C020：年齡、C060：與戶長關係、C072：教育程度、C122：行業、C123：職業\end{CJK}}\\
+and
+\\
+\textbf{\begin{CJK}{UTF8}{bsmi}C020：年齡、C072：教育程度、C122：行業、C123：職業、C141：子女人數\end{CJK}}.
+\end{itemize}
+
+\newpage
+\section*{Results}
+10\% case. Minimal size: 5. \# of distinct sizes: 21.
+\begin{center}
+    \begin{tabular}{ | M{3em} | M{3em} | M{3em} | M{3em} | M{3em} | M{3em} | }
+    \hline
+    Size & Count & Size & Count & Size & Count\\
+    \hline
+    10 & 111 & 12 & 72 & 6 & 20\\
+    11 & 96 & 8 & 66 & 21 & 12\\
+    13 & 89 & 17 & 54 & 22 & 4\\
+    14 & 85 & 18 & 48 & \textbf{5} & 3\\
+    15 & 85 & 7 & 43 & 23 & 1\\
+    9 & 84 & 19 & 30 & 24 & 1\\
+    16 & 74 & 20 & 21 & 25 & 1\\
+    \hline
+    \end{tabular}
+\end{center}
+
+25\% case. Minimal size: 8. \# of distinct sizes: 20.
+\begin{center}
+    \begin{tabular}{ | M{3em} | M{3em} | M{3em} | M{3em} | M{3em} | M{3em} | }
+    \hline
+    Size & Count & Size & Count & Size & Count\\
+    \hline
+    13 & 100 & 19 & 69 & 23 & 15\\
+    14 & 97 & 11 & 67 & \textbf{8} & 12\\
+    15 & 96 & 20 & 46 & 24 & 11\\
+    17 & 92 & 10 & 43 & 26 & 5\\
+    16 & 86 & 21 & 37 & 25 & 4\\
+    12 & 84 & 22 & 32 & 27 & 3\\
+    18 & 74 & 9 & 27 &  & \\
+    \hline
+    \end{tabular}
+\end{center}
+
+50\% case. Minimal size: 10. \# of distinct sizes: 21.
+\begin{center}
+    \begin{tabular}{ | M{3em} | M{3em} | M{3em} | M{3em} | M{3em} | M{3em} | }
+    \hline
+    Size & Count & Size & Count & Size & Count\\
+    \hline
+    20 & 116 & 22 & 65 & 12 & 12\\
+    18 & 110 & 23 & 60 & 27 & 12\\
+    19 & 106 & 24 & 48 & 28 & 6\\
+    17 & 97 & 14 & 47 & 11 & 5\\
+    21 & 93 & 13 & 27 & \textbf{10} & 1\\
+    16 & 88 & 25 & 23 & 29 & 1\\
+    15 & 66 & 26 & 16 & 31 & 1\\
+    \hline
+    \end{tabular}
+\end{center}
+
+\newpage
+75\% case. Minimal size: 15. \# of distinct sizes: 18.
+\begin{center}
+    \begin{tabular}{ | M{3em} | M{3em} | M{3em} | M{3em} | M{3em} | M{3em} | }
+    \hline
+    Size & Count & Size & Count & Size & Count\\
+    \hline
+    21 & 119 & 26 & 69 & 29 & 16\\
+    20 & 109 & 18 & 64 & 32 & 15\\
+    23 & 98 & 27 & 46 & 16 & 12\\
+    24 & 95 & 17 & 37 & \textbf{15} & 2\\
+    22 & 92 & 28 & 31 &  &\\
+    25 & 79 & 30 & 25 &  &\\
+    19 & 69 & 31 & 22 &  &\\
+    \hline
+    \end{tabular}
+\end{center}
+
+100\% case. Minimal size: 35. \# of distinct sizes: 1.
+\begin{center}
+    \begin{tabular}{ | M{3em} | M{3em} | M{3em} | M{3em} | M{3em} | M{3em} | }
+    \hline
+    Size & Count\\
+    \hline
+    35 & 1000\\
+    \hline
+    \end{tabular}
+\end{center}
+
+\bye{
+
+QID for 100%
+min result: 35
+# of distinct results: 1
+# of each results desc
+* 35  1000
+}
+\end{document}
