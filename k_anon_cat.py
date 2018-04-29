@@ -43,6 +43,23 @@ def get_value(fields):
 
 def get_row(fvaluesls):
     row_counts = []
+
+    logger = logging.getLogger("main")
+    logger.setLevel(logging.DEBUG)
+
+    status_fh = logging.FileHandler(log_path)
+    status_sh = logging.StreamHandler()
+
+    status_fh.setLevel(logging.INFO)
+    status_sh.setLevel(logging.DEBUG)
+
+    status_formatter = logging.Formatter('[%(levelname)s] %(asctime)s : %(name)s : %(message)s')
+    status_fh.setFormatter(status_formatter)
+    status_sh.setFormatter(status_formatter)
+
+    logger.addHandler(status_fh)
+    #logger.addHandler(status_sh)
+
     connection = pymysql.connect(host='localhost',
                                  user='rex',
                                  password='rex',
@@ -63,23 +80,7 @@ def get_row(fvaluesls):
 
             row_counts.append(row_count)
 
-            logger = logging.getLogger("field[{}]".format(fvalues))
-            logger.setLevel(logging.DEBUG)
-
-            status_fh = logging.FileHandler(log_path)
-            status_sh = logging.StreamHandler()
-
-            status_fh.setLevel(logging.INFO)
-            status_sh.setLevel(logging.DEBUG)
-
-            status_formatter = logging.Formatter('[%(levelname)s] %(asctime)s : %(name)s : %(message)s')
-            status_fh.setFormatter(status_formatter)
-            status_sh.setFormatter(status_formatter)
-
-            logger.addHandler(status_fh)
-            #logger.addHandler(status_sh)
-
-            logger.info(str(row_count))
+            logger.info("{} : {}".format(fvalues, row_count))
 
     connection.close()
 
