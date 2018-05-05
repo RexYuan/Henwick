@@ -128,7 +128,7 @@ A linear poset $\poset{L}$ that extends a poset $\poset{P}$ is called a \emph{li
 
 Every poset admits a set of linearizations. The set of all linearizations of a poset $\poset{P}$ is denoted $\lang{\poset{P}}$. We shall consider it the \emph{language} of $\poset{P}$. For $\poset{P}$ from Example~\ref{example:posetp}, we have $\lang{\poset{P}} = \set{\lin{abcd},\lin{acbd}}$. For $\poset{L}$ from Example~\ref{example:posetl}, $\lang{\poset{L}} = \set{\lin{abcd}}$.
 
-Now, we are ready to give the definition of \emph{Poset Cover Problem}.
+Now, we are ready to define \emph{Poset Cover Problem}.
 
 % definition:pcp
 \begin{definition}[Poset Cover Problem]
@@ -265,18 +265,20 @@ For posets $\poset{P},\poset{L}$ with $\poset{P} \lext \poset{L}$, we encode axi
 \[
 \bigwedge_{x \neq y \in \uni} \satvar{x,y}{\poset{P}} \implies \satvar{x,y}{\poset{L}}
 \]
-Within logical formulae, we shall abuse the notation $\poset{P} \lext \poset{L}$ as macro for the above formula.
+Within logical formulae, we shall abuse the notation $\poset{P} \lext \poset{L}$ as a macro for the above formula.
+
+\comment{I'm not sure if this is okay but it can reduce one quantifier in later formulae}
 
 \subsection{Problem Constraints}
-Our goal is to find a minimal set $C$ of posets such that $\bigcup_{\poset{P} \in C} \lang{\poset{P}}$ is equal to the input set of linear posets $\Upsilon$. To ensure we find the minimal cover, we encode the case of some size of $C$, starting from 1, and incrementally query SAT solver.
+Our goal is to find a minimal set $C$ of posets such that $\bigcup_{\poset{P} \in C} \lang{\poset{P}}$ is equal to the input set of linear posets $\Upsilon$. To ensure we find the minimal cover, we encode the case when $\abs{C} = k$, starting from $k = 1$, and incrementally query SAT solver.
 
 \begin{enumerate}
-    \item Let $\abs{C} = 1$.
+    \item Let $k = 1$.
     \item Encode the case and query solver.
-    \item If solution is found, we are done. Else, let $\abs{C} = \abs{C}+1$ and go to step 2.
+    \item If a solution is found, we are done. Else, let $k = k+1$ and go to step 2.
 \end{enumerate}
 
-The poset cover problem can now be restated in logical formulae. Given $\Upsilon$ and the size of the cover $k$, we first construct $k$ posets by encoding their axioms. Next, we encode axioms for all the posets in $\Upsilon$ and then specify their order relation accordingly.
+The poset cover problem can now be restated in logical formulae. Given $\Upsilon$ and the size of the cover $k$, we first construct $k$ posets by encoding their axioms. Next, we encode axioms for all the posets in $\Upsilon$ and then specify their order relations accordingly.
 
 We shall encode the problem constraints, $\Upsilon = \bigcup_{\poset{P} \in C} \lang{\poset{P}}$, in a twofold manner, by separately constraining $\Upsilon \subseteq \bigcup_{\poset{P} \in C} \lang{\poset{P}}$ and $\Upsilon \supseteq \bigcup_{\poset{P} \in C} \lang{\poset{P}}$.
 
@@ -323,21 +325,21 @@ For a set of linear posets $\Upsilon$, the \emph{swap graph} $\sgraph{\Upsilon}$
 \end{figure}
 \vspace{-15px}
 
-We can exploit this property that a swap graph of poset language is connected to avoid exponential blow-up, by ``insulating'' each closed* connected component $\upsilon \subseteq \sgraph{\Upsilon}$ with a \emph{barrier} set $bar(\upsilon) = \set{\poset{L} \!\not\in\! \upsilon \mid \text{there is } \poset{L}' \!\in\! \upsilon \text{ such that } \poset{L}' \swap \poset{L}}$. To abuse the notation once more*, we denote by $bar(\Upsilon)$ the set $\bigcup_{\upsilon \in comp(\Upsilon)} bar(\upsilon)$, where $comp(\Upsilon)$ is the family of all closed connected components in $\Upsilon$.
+We can exploit this property that a swap graph of poset language is connected to avoid exponential blow-up, by ``insulating'' each closed* connected component $\upsilon \subseteq \sgraph{\Upsilon}$ with a set $moat(\upsilon) = \set{\poset{L} \!\not\in\! \upsilon \mid \text{there is } \poset{L}' \!\in\! \upsilon \text{ such that } \poset{L}' \swap \poset{L}}$ that encloses it. We denote* by $moat(\Upsilon)$ the set $\bigcup_{\upsilon \in comp(\Upsilon)} moat(\upsilon)$, where $comp(\Upsilon)$ is the family of all closed connected components in $\Upsilon$.
 
-\comment{(1) Is ``closed'' connected component an accepted term?\\(2) I try $bar(\Upsilon)$ to reduce one quantifer. Is this actually better/clearer?}
+\comment{(1) Is ``closed'' connected component an accepted term?\\(2) I replaced ``barrier'' with ``moat''.\\(3) I try $moat(\Upsilon)$ to reduce one quantifer. Is this actually better/clearer?}
 
 An alternative way to encode $\Upsilon \supseteq \bigcup_{\poset{P} \in C} \lang{\poset{P}}$ is then
 \[
-\bigwedge_{\poset{L} \in bar(\Upsilon)} \bigwedge_{\poset{P} \in C} \poset{P} \not\lext \poset{L}
+\bigwedge_{\poset{L} \in moat(\Upsilon)} \bigwedge_{\poset{P} \in C} \poset{P} \not\lext \poset{L}
 \]
-This is polynomial in $\abs{\Upsilon}$ since $\abs{bar(\Upsilon)} \in \bigo{\abs{\Upsilon} \cdot \abs{\uni}}$ as the worst case is where every component is of size 1 and hence its barrier contains all the posets which are one swap away from it.
+This is polynomial in $\abs{\Upsilon}$ since $\abs{moat(\Upsilon)} \!\in\! \bigo{\abs{\Upsilon} \!\cdot\! \abs{\uni}}$ as the worst case is where every component is of size 1 and hence its moat contains all the posets which are one swap away from it.
 
 \begin{proposition}
     Swap graph method is equivalent to naive method.
 \end{proposition}
 \begin{proof}
-    Suppose the barrier constraints hold. If the naive constraints do not hold, then there are some $\poset{L} \!\not\in\! \Upsilon$ and $\poset{P} \!\in\! C$ such that $\poset{P} \lext \poset{L}$. Per assumption, $\poset{L} \!\not\in\! bar(\Upsilon)$, but then $\sgraph{\lang{\poset{P}}}$ is not connected, a contradiction. The converse holds by definition, as $bar(\Upsilon) \subseteq \complmt{\Upsilon}$.
+    Suppose the moat constraints hold. If the naive constraints do not hold, then there are some $\poset{L} \!\not\in\! \Upsilon$ and $\poset{P} \!\in\! C$ such that $\poset{P} \lext \poset{L}$. Per assumption, $\poset{L} \!\not\in\! moat(\Upsilon)$, but then $\sgraph{\lang{\poset{P}}}$ is not connected, a contradiction. The converse holds by definition, as $moat(\Upsilon) \subseteq \complmt{\Upsilon}$.
 \end{proof}
 
 \subsection{Some More Improvements}
@@ -350,7 +352,11 @@ by interpreting $\lext$ in its contrapositive form*.
 
 % divide and conquer
 
+% think, what's more?
 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \bye{
 \section{Problem Definition?or Poset covered Problem}
 
