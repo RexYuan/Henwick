@@ -8,6 +8,10 @@
 \usepackage{parskip}
 \usepackage{tikz}
 \usepackage{subcaption}
+\usepackage{graphicx}
+
+\graphicspath{ {images/} }
+%\DeclareGraphicsExtensions{.png,.pdf}
 
 \usetikzlibrary{arrows}
 
@@ -259,13 +263,18 @@ and transitivity with
 \bigwedge_{x \neq y \neq z \in \uni}
 \satvar{x,y}{\poset{P}} \wedge \satvar{y,z}{\poset{P}} \implies \satvar{x,z}{\poset{P}}
 \]
+Moreover, if $\poset{P}$ is linear, we have to add on top of that
+\[
+\bigwedge_{x \neq y \in \uni} \satvar{x,y}{\poset{P}} \vee \satvar{y,x}{\poset{P}}
+\]
 
 \subsubsection{Linearization Constraints}
-For posets $\poset{P},\poset{L}$ with $\poset{P} \lext \poset{L}$, we encode axioms for both $\poset{P}$ and $\poset{L}$ and add per definition
+For posets $\poset{P},\poset{L}$ with $\poset{P} \lext \poset{L}$, we encode axioms for both $\poset{P}$ and $\poset{L}$ and add
 \[
 \bigwedge_{x \neq y \in \uni} \satvar{x,y}{\poset{P}} \implies \satvar{x,y}{\poset{L}}
 \]
 Within logical formulae, we shall abuse the notation $\poset{P} \lext \poset{L}$ as a macro for the above formula.
+\label{subsubsec:linear}
 
 \comment{I'm not sure if this is okay but it can reduce one quantifier in later formulae}
 
@@ -278,7 +287,7 @@ Our goal is to find a minimal set $C$ of posets such that $\bigcup_{\poset{P} \i
     \item If a solution is found, we are done. Else, let $k = k+1$ and go to step 2.
 \end{enumerate}
 
-The poset cover problem can now be restated in logical formulae. Given $\Upsilon$ and the size of the cover $k$, we first construct $k$ posets by encoding their axioms. Next, we encode axioms for all the posets in $\Upsilon$ and then specify their order relations accordingly.
+The poset cover problem can now be restated in logical formulae. Given $\Upsilon$ and the size of the cover $k$, we first construct $k$ posets by encoding their axioms. Next, we encode axioms for all the linear posets in $\Upsilon$ and then specify their given order relations accordingly.
 
 We shall encode the problem constraints, $\Upsilon = \bigcup_{\poset{P} \in C} \lang{\poset{P}}$, in a twofold manner, by separately constraining $\Upsilon \subseteq \bigcup_{\poset{P} \in C} \lang{\poset{P}}$ and $\Upsilon \supseteq \bigcup_{\poset{P} \in C} \lang{\poset{P}}$.
 
@@ -307,7 +316,6 @@ The \emph{swap} relation $\swap$ describes the case of ``off by one swap'' betwe
 
 For a set of linear posets $\Upsilon$, the \emph{swap graph} $\sgraph{\Upsilon}$ of it is the undirected graph $\tuple{V,E} = \tuple{\Upsilon,\swap}$. Figure~\ref{figure:graphlp} shows the swap graph $\sgraph{\lang{\poset{P}}}$ for $\poset{P}$ from Example~\ref{example:posetp}. Conveniently, a swap graph built from the language of a poset is connected.
 
-\vspace{-15px}
 % figure:graphlp
 \begin{figure}
     \centering
@@ -342,40 +350,46 @@ This is polynomial in $\abs{\Upsilon}$ since $\abs{moat(\Upsilon)} \!\in\! \bigo
     Suppose the moat constraints hold. If the naive constraints do not hold, then there are some $\poset{L} \!\not\in\! \Upsilon$ and $\poset{P} \!\in\! C$ such that $\poset{P} \lext \poset{L}$. Per assumption, $\poset{L} \!\not\in\! moat(\Upsilon)$, but then $\sgraph{\lang{\poset{P}}}$ is not connected, a contradiction. The converse holds by definition, as $moat(\Upsilon) \subseteq \complmt{\Upsilon}$.
 \end{proof}
 
+Despite its complexity, in practice, when $\abs{\uni}! \!\approx\! \abs{\Upsilon}$, it is better off to revert back to the naive method.
+
 \subsection{Some More Improvements}
-% var better
-We encode it as
+Recall in section \ref{subsubsec:linear}, when encoding linear posets, we had to enforce total comparability by adding more clauses. We can avoid this since this requirement, combined with antisymmetry, is equivalent to
 \[
-\bigwedge_{\poset{L} \in \Upsilon} \bigvee_{\poset{P} \in C} \bigwedge_{x,y \in \complmt{\leq[\poset{L}]}} \neg \mathtt{P}_{x,y}^{\poset{P}}
+\bigwedge_{x \neq y \in \uni} \satvar{x,y}{\poset{P}} \oplus \satvar{y,x}{\poset{P}}
 \]
-by interpreting $\lext$ in its contrapositive form*.
+In fact, we can even avoid encoding linearizations altogether. To encode $\poset{P} \lext \poset{L}$, we had to encode axioms for both posets. However, since the problem input includes complete order relation $\leq[\poset{L}]$ of all given $\poset{L} \!\in\! \Upsilon$, we can skip encoding $\poset{L}$ by taking the contraposition of $\lext$ and encode $\poset{P} \lext \poset{L}$ with
+\[
+\bigwedge_{x,y \in \complmt{\leq[\poset{L}]}} \neg \satvar{x,y}{\poset{P}}
+\]
+Moreover, with swap graph method, we need not encode the entire problem input in one go. Instead, we can tackle each component $\upsilon \!\in\! comp(\Upsilon)$ individually, which could further reduce the number of clauses, with trade-off with the number of queries polynomial in $\abs{\Upsilon}$, especially when $\Upsilon$ is sparse.
 
-% divide and conquer
+\bye{
+\section{Example}
+ncurses example
+}
 
-% think, what's more?
+\section{Experimentation}
+To test the limits of our method, we experimented on randomly generated input using the z3 theorem prover from Microsoft Research. Also, as input with sparse swap graph can be quickly divided and reduced to smaller problems, we restricted our input to those with single connected swap graphs.
+
+We ran 100 trials, with solver timeout set to 15 minutes, on each of the different settings of universe size $\abs{\uni}$ and input size $\abs{\Upsilon}$. Figure~\ref{figure:exp} shows the number of timeouts out of 100 trials in each case.
 
 
+% figure:exp
+\begin{figure}
+    \centering
+    \includegraphics[width=0.9\linewidth]{bar3d_cropped}
+    \caption{Experimental results.}
+    \label{figure:exp}
+\end{figure}
+\vspace{-15px}
+
+From the results,
+
+\section{Conclusions}
+The results were disappointing.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \bye{
-\section{Problem Definition?or Poset covered Problem}
-
-
-The poset covered problem is: given a set of linearizations $\Upsilon$, find a set of posets $\mathcal{C}$, called a covered, such that $\Upsilon = \bigcup_{P \in C} \mathcal{L}(P)$ and that $\abs{\mathcal{C}}$ is minimal.
-
-\begin{theorem}
-    insulating barrier method where?
-\end{theorem}
-
-\section{SAT Encoding Part}
-We use the boolean logic of z3 SMT solver from MS research. Since poset is connected, by contraposition, we can first divide and conquer on connected components of the swap graph, by solving each component individually.
-
-We then check with incrementing number of posets to find the minimal number of posets to covered each component. We first encode the axioms of posets; namely, reflexivity, antisymmetry, and transitivity. Next, we encode the extension constraint with contraposition from input linearizations to reduce the number of variables. Finally, we encode the non-extension constraint with negation of extension constraint on the insulating barrier.
-
-\section{Exp Part}
-NOTE: how do i put graph here?
-
-\section{Conclusions}
 
 \section{References}
 NOTE: how to use list?

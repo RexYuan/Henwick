@@ -39,8 +39,10 @@ for lins, omega, k, d, r in stats:
 #for lins, vals in poset_omega_record.items():
 #    print(("{:>3}" + "{:>4} " * len(vals)).format(lins, *vals.values()))
 
-fig = plt.figure(figsize=(32, 36))
-ax = fig.add_subplot(321, projection='3d')
+#fig = plt.figure(figsize=(32, 36))
+#ax = fig.add_subplot(321, projection='3d')
+fig = plt.figure(figsize=(8, 8))
+ax = fig.add_subplot(111, projection='3d')
 
 coordinates = np.meshgrid(np.arange(len(omega_range)), np.arange(len(lins_range)))
 
@@ -52,12 +54,13 @@ dx = np.ones(len(omega_range) * len(lins_range))
 dy = np.ones(len(omega_range) * len(lins_range))
 dz = [v for vs in record.values() for v in vs.values()]
 
-ax.bar3d(x, y, z, dx, dy, dz, shade=True, edgecolor='black', linewidth=1.5)
+# specifying colors: https://matplotlib.org/examples/color/named_colors.html
+ax.bar3d(x, y, z, dx, dy, dz, shade=True, edgecolor='black', linewidth=1.5, color='gainsboro')
 
-ax.set_title('Timeout(=15m) result out of 100 trials')
-ax.set_xlabel('|omega|')
-ax.set_ylabel('|lins|')
-ax.set_zlabel('#timeout')
+#ax.set_title('#Timeout(=15m) result out of 100 trials')
+ax.set_xlabel('universe size')
+ax.set_ylabel('# of linearizations')
+ax.set_zlabel('# of timeouts')
 
 ax.set_xticks([i+0.5 for i in range(len(omega_range))])
 ax.set_yticks([i+0.5 for i in range(len(lins_range))])
@@ -67,7 +70,7 @@ ax.set_xticklabels(omega_range)
 ax.set_yticklabels(lins_range)
 
 ax.view_init(8.75, -140)
-
+'''
 #####
 ax = fig.add_subplot(322, projection='3d')
 
@@ -84,9 +87,12 @@ dz = [v for vs in poset_omega_record.values() for v in vs.values()]
 ax.bar3d(x, y, z, dx, dy, dz, shade=True, edgecolor='black', linewidth=1.5)
 
 ax.set_title('Timeout(=15m) result out of 100 trials')
-ax.set_xlabel('|omega|')
-ax.set_ylabel('#poset')
-ax.set_zlabel('#timeout')
+ax.set_xlabel('universe size')
+ax.set_ylabel('# of poset')
+ax.set_zlabel('# of timeout')
+ax.set_xlabel()
+ax.set_ylabel('linearization size')
+ax.set_zlabel('# of timeout')
 
 ax.set_xticks([i+0.5 for i in range(len(omega_range))])
 ax.set_yticks([i+0.5 for i in range(len(poset_range))])
@@ -214,5 +220,8 @@ ax.set_yticklabels(diameter_range)
 ax.view_init(8.75, 140)
 ###
 
-plt.savefig("new_summary_bar3d.svg", format="svg")
+plt.savefig("paper_summary_bar3d.svg", format="svg")
+#plt.show()
+'''
+plt.savefig("../papers/images/bar3d.svg", format="svg", transparent=True)
 #plt.show()

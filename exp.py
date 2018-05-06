@@ -1,22 +1,43 @@
+import pickle
 from poset_cover import poset_cover, is_swap
 from time import time
-from itertools import permutations
+from itertools import permutations, islice
 from random import sample, choice
+from multiprocessing import Pool
 
-lins = []
-tmp = choice(ps)
-last = tmp
-lins.append(tmp)
-while len(lins) < 100:
-    tmp = choice(ps)
-    if tmp not in lins and is_swap(tmp, last):
-        edge_count = 0
-        for l in lins:
-            if is_swap(tmp, l):
-                edge_count += 1
-        if edge_count == 1:
-            lins.append(tmp)
-            ps.remove(tmp)
-            last = tmp
+ele_size = 10
+lin_size = 30
+pickle_path = './poset.p'
+trials = 1
+procs = 3
 
-poset_cover(lins, render=True, timeout=10000, tau=False, dir='long')
+def get_rand_lins(lin_size, ele_size):
+    history = frozenset()
+
+    n = ele_size # the number of elements
+    y = lin_size # the number of linearizations
+
+    while True:
+        lins = []
+        s = list(map(str,range(n)))
+        lins = [''.join(s)]
+        while len(lins) < y:
+            ext = list(choice(lins))
+            swap = choice(list(range(n-1)))
+            s = s[:swap]+[s[swap+1]]+[s[swap]]+s[swap+2:]
+            if ''.join(s) not in lins:
+                lins.append(''.join(s))
+        lins = frozenset(lins)
+
+        if lins not in history:
+            history = frozenset([]) | history
+            yield lins
+
+def poset_cover_wrapper(lins):
+    # 5 mins
+    return poset_cover(list(lins), render=False, timeout=300000, runaway_timeout=True, getall=False)
+
+if __name__ == '__main__':
+    with Pool(processes=procs) as pool:
+        ret = pool.map(poset_cover_wrapper, islice(get_rand_lins(lin_size, ele_size), trials))
+        pickle.dump(ret, open(pickle_path, "wb"))
