@@ -117,7 +117,11 @@ def le_constraints(universe, name, lin):
     # code where a symbol may also not be a single character!!!
     for i,x in enumerate(lin):
         for y in lin[i+1:]:
-            ords.remove( (x,y) )
+            try:
+                ords.remove( (x,y) )
+            except:
+                #print((x,y), 'not in ords')
+                pass
 
     # build constraints on name : forall r not in <lin>, r not in <name>
     for r in ords:
