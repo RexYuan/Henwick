@@ -111,6 +111,10 @@ def le_constraints(universe, name, lin):
             ords.add( (x,y) )
 
     # set difference the relations from lin
+    # NOTE: this is WRONG. this only works with |uni| < 10 because an element
+    # may not be a single character!!!
+    # TODO: replace this with some method using tuples as I did in the angluin
+    # code where a symbol may also not be a single character!!!
     for i,x in enumerate(lin):
         for y in lin[i+1:]:
             ords.remove( (x,y) )

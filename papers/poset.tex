@@ -353,11 +353,11 @@ This is polynomial in $\abs{\Upsilon}$ since $\abs{moat(\Upsilon)} \!\in\! \bigo
 Despite its complexity, in practice, when $\abs{\uni}! \!\approx\! \abs{\Upsilon}$, it is better off to revert back to the naive method.
 
 \subsection{Some More Improvements}
-Recall in section \ref{subsubsec:linear}, when encoding linear posets, we had to enforce total comparability by adding more clauses. We can avoid this since this requirement, combined with antisymmetry, is equivalent to
+Recall in section \ref{subsubsec:linear}, when encoding linear posets, we had to enforce total comparability by adding more clauses. We can avoid this requirement since it, combined with antisymmetry, is equivalent to
 \[
 \bigwedge_{x \neq y \in \uni} \satvar{x,y}{\poset{P}} \oplus \satvar{y,x}{\poset{P}}
 \]
-In fact, we can even avoid encoding linearizations altogether. To encode $\poset{P} \lext \poset{L}$, we had to encode axioms for both posets. However, since the problem input includes complete order relation $\leq[\poset{L}]$ of all given $\poset{L} \!\in\! \Upsilon$, we can skip encoding $\poset{L}$ by taking the contraposition of $\lext$ and encode $\poset{P} \lext \poset{L}$ with
+In fact, we can even skip encoding linearizations altogether. To encode $\poset{P} \lext \poset{L}$, we had to encode axioms for both posets. However, since the problem input includes complete order relation $\leq[\poset{L}]$ of all given $\poset{L} \!\in\! \Upsilon$, we can disregard the $\poset{L}$ part by taking the contrapositive form of $\lext$ and encode $\poset{P} \lext \poset{L}$ with
 \[
 \bigwedge_{x,y \in \complmt{\leq[\poset{L}]}} \neg \satvar{x,y}{\poset{P}}
 \]
@@ -369,10 +369,9 @@ ncurses example
 }
 
 \section{Experimentation}
-To test the limits of our method, we experimented on randomly generated input using the z3 theorem prover from Microsoft Research. Also, as input with sparse swap graph can be quickly divided and reduced to smaller problems, we restricted our input to those with single connected swap graphs.
+To test the limits of our method, we experimented on distinct randomly generated inputs using the z3 theorem prover from Microsoft Research. Also, as inputs with a sparse swap graph can be quickly divided and reduced to smaller problems, we restricted our inputs to those with a single connected swap graph.
 
 We ran 100 trials, with solver timeout set to 15 minutes, on each of the different settings of universe size $\abs{\uni}$ and input size $\abs{\Upsilon}$. Figure~\ref{figure:exp} shows the number of timeouts out of 100 trials in each case.
-
 
 % figure:exp
 \begin{figure}
@@ -383,7 +382,7 @@ We ran 100 trials, with solver timeout set to 15 minutes, on each of the differe
 \end{figure}
 \vspace{-15px}
 
-From the results,
+Cases where $\abs{\Upsilon} \leq 20$ or $\abs{\uni} \leq 4$ are omitted because they gave no timeout under extensive testing (over 3000 trials) of combinations with the largest the other parameter.
 
 \section{Conclusions}
 The results were disappointing.

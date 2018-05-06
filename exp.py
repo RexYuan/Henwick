@@ -5,11 +5,11 @@ from itertools import permutations, islice
 from random import sample, choice
 from multiprocessing import Pool
 
-ele_size = 10
-lin_size = 30
+ele_size = 20
+lin_size = 20
 pickle_path = './poset.p'
-trials = 1
-procs = 3
+trials = 3000
+procs = 30
 
 def get_rand_lins(lin_size, ele_size):
     history = frozenset()
