@@ -15,6 +15,14 @@ CONTRA = BoolVal(False)
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
+'''
+logger.setLevel(logging.DEBUG)
+status_sh = logging.StreamHandler()
+status_sh.setLevel(logging.DEBUG)
+status_formatter = logging.Formatter('[%(levelname)s] %(asctime)s : %(name)s : %(message)s')
+status_sh.setFormatter(status_formatter)
+logger.addHandler(status_sh)
+'''
 
 def is_swap(s1, s2):
     '''
@@ -392,3 +400,10 @@ def poset_cover(lins, getall=False, timeout=None, runaway_timeout=False, render=
         logger.info("Failed, sorry! Total time = %s", round(time()-start_time,4))
 
     return covers
+'''
+if __name__ == '__main__':
+    from exp import get_rand_lins
+    from itertools import islice
+    lins = list(islice(get_rand_lins(20, 20),1))[0]
+    poset_cover(list(lins), render=False, timeout=300000, runaway_timeout=True, getall=False)
+'''

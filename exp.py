@@ -7,7 +7,7 @@ from multiprocessing import Pool
 
 ele_size = 20
 lin_size = 20
-pickle_path = './poset.p'
+pickle_path = '../poset.p'
 trials = 3000
 procs = 30
 
@@ -20,13 +20,16 @@ def get_rand_lins(lin_size, ele_size):
     while True:
         lins = []
         s = list(map(str,range(n)))
-        lins = [''.join(s)]
+        #lins = [''.join(s)]
+        lins = [tuple(s)]
         while len(lins) < y:
             ext = list(choice(lins))
             swap = choice(list(range(n-1)))
             s = s[:swap]+[s[swap+1]]+[s[swap]]+s[swap+2:]
-            if ''.join(s) not in lins:
-                lins.append(''.join(s))
+            #if ''.join(s) not in lins:
+            if tuple(s) not in lins:
+                lins.append(tuple(s))
+                #lins.append(''.join(s))
         lins = frozenset(lins)
 
         if lins not in history:
