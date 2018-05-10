@@ -58,9 +58,9 @@ dz = [v for vs in record.values() for v in vs.values()]
 ax.bar3d(x, y, z, dx, dy, dz, shade=True, edgecolor='black', linewidth=1.5, color='gainsboro')
 
 #ax.set_title('#Timeout(=15m) result out of 100 trials')
-ax.set_xlabel('universe size')
-ax.set_ylabel('# of linearizations')
-ax.set_zlabel('# of timeouts')
+ax.set_xlabel('universe size', fontsize=12)
+ax.set_ylabel('# of linearizations', fontsize=12)
+ax.set_zlabel('# of timeouts', fontsize=12)
 
 ax.set_xticks([i+0.5 for i in range(len(omega_range))])
 ax.set_yticks([i+0.5 for i in range(len(lins_range))])

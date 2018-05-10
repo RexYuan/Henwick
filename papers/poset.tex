@@ -9,6 +9,9 @@
 \usepackage{tikz}
 \usepackage{subcaption}
 \usepackage{graphicx}
+\usepackage{float}
+\usepackage{doi}
+\usepackage{minted}
 
 \graphicspath{ {images/} }
 %\DeclareGraphicsExtensions{.png,.pdf}
@@ -40,6 +43,8 @@
 \newcommand{\complmt}[1]{\overline{#1}}
 \newcommand{\satvar}[2]{\mathtt{X}_{#1}^{#2}}
 \newcommand{\bigo}[1]{\mathcal{O}(#1)}
+\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\subst}[2]{[#1/#2]}
 
 \begin{document}
 
@@ -67,13 +72,17 @@ A \emph{partial order} is a binary relation that is reflexive, antisymmetric, an
 
 % example:posetp
 \begin{example}
-    For the following definition, consider the poset $\poset{P}$ over $\set{a,b,c,d}$ with $a \leq b$\ ; $a \leq c$\ ; $a \leq d$\ ; $b \leq d$\ ; and $c \leq d$. Figure~\ref{figure:posetp} describes $\poset{P}$ with a graph $\tuple{V,E} = \tuple{\Omega,\covered}$.
+    For the following definition, consider the poset $\poset{P}$ over $\set{a,b,c,d}$ with $a \leq b$\ ; $a \leq c$\ ; $a \leq d$\ ; $b \leq d$\ ; and $c \leq d$.
     \label{example:posetp}
 \end{example}
 
-\vspace{-15px}
+The \emph{cover} relation $\covered$ of a poset $\poset{P}$ is the transitive reduction of its order relation; it describes the case of immediate successor: for $x, y \!\in\! \poset{P}$, $x \covered y$ if and only if $x \leq y$ and there is no $z \!\in\! \poset{P}$ such that $x \lneq z$ and $z \lneq y$. For Example~\ref{example:posetp}, the covered relation includes $a \covered b$\ ; $a \covered c$\ ; $b \covered d$\ ; and $c \covered d$. Note that $\tuple{a,d}$ is absent in $\covered$.
+
+Notice that a poset is equivalent to an acyclic directed graph. Figure~\ref{figure:posetp} describes $\poset{P}$ with a graph $\tuple{V,E} = \tuple{\Omega,\covered}$.
+
+%\vspace{-15px}
 % figure:posetp
-\begin{figure}
+\begin{figure}[H]
     \centering
     \begin{tikzpicture}
         [
@@ -92,11 +101,9 @@ A \emph{partial order} is a binary relation that is reflexive, antisymmetric, an
     \caption{Graph representation of $\poset{P}$ from Example~\ref{example:posetp}.}
     \label{figure:posetp}
 \end{figure}
-\vspace{-15px}
+%\vspace{-15px}
 
-The \emph{cover} relation $\covered$ of a poset $\poset{P}$ is the transitive reduction of its order relation; it describes the case of immediate successor: for $x, y \!\in\! \poset{P}$, $x \covered y$ if and only if $x \leq y$ and there is no $z \!\in\! \poset{P}$ such that $x \lneq z$ and $z \lneq y$. For Example~\ref{example:posetp}, the covered relation includes $a \covered b$\ ; $a \covered c$\ ; $b \covered d$\ ; and $c \covered d$. Note that $\tuple{a,d}$ is absent in $\covered$.
-
-In addition, we describe the case of \emph{incomparability} in a poset $\poset{P}$ with $\incomp$ relation: for $x, y \!\in\! \poset{P}$, $x \incomp y$ if and only if $x \nleq y$ and $y \nleq x$. For Example~\ref{example:posetp}, there is $b \incomp c$.
+%In addition, we describe the case of \emph{incomparability} in a poset $\poset{P}$ with $\incomp$ relation: for $x, y \!\in\! \poset{P}$, $x \incomp y$ if and only if $x \nleq y$ and $y \nleq x$. For Example~\ref{example:posetp}, there is $b \incomp c$.
 
 % example:posetl
 \begin{example}
@@ -104,9 +111,9 @@ In addition, we describe the case of \emph{incomparability} in a poset $\poset{P
     \label{example:posetl}
 \end{example}
 
-\vspace{-15px}
+%\vspace{-15px}
 % figure:posetl
-\begin{figure}
+\begin{figure}[H]
     \centering
     \begin{tikzpicture}
         [
@@ -124,7 +131,7 @@ In addition, we describe the case of \emph{incomparability} in a poset $\poset{P
     \caption{Graph representation of $\poset{L}$ from Example~\ref{example:posetl}.}
     \label{figure:posetl}
 \end{figure}
-\vspace{-15px}
+%\vspace{-15px}
 
 A partial order where every pair of elements is comparable is called a \emph{linear order}, and a poset $\poset{L}$ with such an order is called a \emph{linear poset}; that is, for $x, y \!\in\! \poset{L}$, $x \leq y$ or $y \leq x$. Note that the graph describing a linear poset is a path. For simplicity, we represent a linear poset in string form. For Example~\ref{example:posetl}, we write \lin{abcd}.
 
@@ -142,13 +149,13 @@ Now, we are ready to define \emph{Poset Cover Problem}.
 
 % example:cover example
 \begin{example}
-    Given the set of linear posets $\set{\lin{abfce},\lin{bafce},\lin{abcfe},\lin{abfec}}$ over $\set{a,b,c,f,e}$, a minimal poset cover of two posets $\poset{A},\poset{B}$ is shown in Figure~\ref{figure:cover example c} with ${\lang{\poset{A}} = \set{\lin{abfce},\lin{abcfe},\lin{abfec}}}$ and ${\lang{\poset{B}} = \set{\lin{bafce}}}$.
+    Given the set of linear posets $\set{\lin{abdce},\lin{badce},\lin{abcde},\lin{abdec}}$ over $\set{a,b,c,d,e}$, a minimal poset cover of two posets $\poset{A},\poset{B}$ is shown in Figure~\ref{figure:cover example c} with ${\lang{\poset{A}} = \set{\lin{abdce},\lin{abcde},\lin{abdec}}}$ and ${\lang{\poset{B}} = \set{\lin{badce}}}$.
     \label{example:cover example}
 \end{example}
 
-\vspace{-15px}
+%\vspace{-15px}
 % figure:cover example
-\begin{figure}
+\begin{figure}[H]
     % figure:cover example c
     \begin{subfigure}[b]{0.5\textwidth}
         \centering
@@ -161,7 +168,7 @@ Now, we are ready to define \emph{Poset Cover Problem}.
                 ]
             \node[vertex] (1) at (1,4) {$a$};
             \node[vertex] (2) at (1,3) {$b$};
-            \node[vertex] (3) at (0.5,2) {$f$};
+            \node[vertex] (3) at (0.5,2) {$d$};
             \node[vertex] (4) at (0.5,1) {$e$};
             \node[vertex] (5) at (1.5,2) {$c$};
             \draw[edge] (1) -- (2);
@@ -180,7 +187,7 @@ Now, we are ready to define \emph{Poset Cover Problem}.
                 ]
             \node[vertex] (6) at (4,4) {$b$};
             \node[vertex] (7) at (4,3) {$a$};
-            \node[vertex] (8) at (4,2) {$f$};
+            \node[vertex] (8) at (4,2) {$d$};
             \node[vertex] (9) at (4,1) {$c$};
             \node[vertex] (10) at (4,0) {$e$};
             \draw[edge] (6) -- (7);
@@ -205,7 +212,7 @@ Now, we are ready to define \emph{Poset Cover Problem}.
                 ]
             \node[vertex] (1) at (1,4) {$a$};
             \node[vertex] (2) at (1,3) {$b$};
-            \node[vertex] (3) at (0.5,2) {$f$};
+            \node[vertex] (3) at (0.5,2) {$d$};
             \node[vertex] (4) at (0.5,1) {$e$};
             \node[vertex] (5) at (1.5,2) {$c$};
             \draw[edge] (1) -- (2);
@@ -224,7 +231,7 @@ Now, we are ready to define \emph{Poset Cover Problem}.
                 ]
             \node[vertex] (6) at (3.5,4) {$a$};
             \node[vertex] (7) at (4.5,4) {$b$};
-            \node[vertex] (8) at (4,3) {$f$};
+            \node[vertex] (8) at (4,3) {$d$};
             \node[vertex] (9) at (4,2) {$c$};
             \node[vertex] (10) at (4,1) {$e$};
             \draw[edge] (6) -- (8);
@@ -237,15 +244,15 @@ Now, we are ready to define \emph{Poset Cover Problem}.
         \caption{Another minimal cover.}
         \label{figure:cover example c'}
     \end{subfigure}
-    \caption{Minimal covers for the set $\set{\lin{abfce},\lin{bafce},\lin{abcfe},\lin{abfec}}$.}
+    \caption{Minimal covers for the set $\set{\lin{abdce},\lin{badce},\lin{abcde},\lin{abdec}}$.}
     \label{figure:cover example}
 \end{figure}
-\vspace{-15px}
+%\vspace{-15px}
 
-A minimal poset cover may not be unique, and the languages of the posets in a cover may overlap. For Example~\ref{example:cover example}, there is another minimal poset cover, shown in Figure~\ref{figure:cover example c'}, with overlapping languages ${\lang{\poset{C}} = \set{\lin{abfce},\lin{abcfe},\lin{abfec}}}$ and ${\lang{\poset{D}} = \set{\lin{abfce},\lin{bafce}}}$.
+A minimal poset cover may not be unique, and the languages of the posets in a cover may overlap. For Example~\ref{example:cover example}, there is another minimal poset cover, shown in Figure~\ref{figure:cover example c'}, with overlapping languages ${\lang{\poset{C}} = \set{\lin{abdce},\lin{abcde},\lin{abdec}}}$ and ${\lang{\poset{D}} = \set{\lin{abdce},\lin{badce}}}$.
 
 \section{Reduction to SAT}
-Since the poset cover problem is proved to be NP-complete, we  reduce the problem to SAT to utilize the power of modern SAT solvers. However, a naive encoding would easily result in superpolynomial transformation. We shall first show where the naive encoding falls short and then present a more efficient method.
+Since the poset cover problem is proved to be NP-complete \cite{Lenwood&Heath}, we reduce the problem to SAT to utilize the power of modern SAT solvers. However, a naive encoding would easily result in superpolynomial transformation. We shall first show where the naive encoding falls short and then present a more efficient method.
 
 \subsection{Basic Constraints}
 Before getting into constraints given by the problem, here we give the definitions and constraints for the basic poset construction.
@@ -314,10 +321,10 @@ Since $\Upsilon \subseteq \bigcup_{\poset{P} \in C} \lang{\poset{P}}$ can be eff
 
 The \emph{swap} relation $\swap$ describes the case of ``off by one swap'' between linear posets with shared universe: for linear posets $\poset{L}_1,\poset{L}_2$, $\poset{L}_1 \swap \poset{L}_2$ if and only if there are $x, y \!\in\! \uni$ such that $\leq[\poset{L}_1] \cap \leq[\poset{L}_2] = {(\leq[\poset{L}_1] \cup \leq[\poset{L}_2])} - \set{\tuple{x,y},\tuple{y,x}}$; to specify which $x,y$ induce the relation, we write $\swap[x,y]$. For example, \lin{abcd} $\swap[b,c]$ \lin{acbd}. Note that $\swap$ is symmetric.
 
-For a set of linear posets $\Upsilon$, the \emph{swap graph} $\sgraph{\Upsilon}$ of it is the undirected graph $\tuple{V,E} = \tuple{\Upsilon,\swap}$. Figure~\ref{figure:graphlp} shows the swap graph $\sgraph{\lang{\poset{P}}}$ for $\poset{P}$ from Example~\ref{example:posetp}. Conveniently, a swap graph built from the language of a poset is connected.
+For a set of linear posets $\Upsilon$, the \emph{swap graph} $\sgraph{\Upsilon}$ of it is the undirected graph $\tuple{V,E} = \tuple{\Upsilon,\swap}$. Figure~\ref{figure:graphlp} shows the swap graph $\sgraph{\lang{\poset{P}}}$ for $\poset{P}$ from Example~\ref{example:posetp}. Conveniently, a swap graph built from the language of a poset is connected \cite{Ruskey,Pruesse&Ruskey,Lenwood&Heath}.
 
 % figure:graphlp
-\begin{figure}
+\begin{figure}[H]
     \centering
     \begin{tikzpicture}
         [
@@ -331,7 +338,7 @@ For a set of linear posets $\Upsilon$, the \emph{swap graph} $\sgraph{\Upsilon}$
     \caption{Swap graph $\sgraph{\lang{\poset{P}}}$ for $\poset{P}$ from Example~\ref{example:posetp}.}
     \label{figure:graphlp}
 \end{figure}
-\vspace{-15px}
+%\vspace{-15px}
 
 We can exploit this property that a swap graph of poset language is connected to avoid exponential blow-up, by ``insulating'' each closed* connected component $\upsilon \subseteq \sgraph{\Upsilon}$ with a set $moat(\upsilon) = \set{\poset{L} \!\not\in\! \upsilon \mid \text{there is } \poset{L}' \!\in\! \upsilon \text{ such that } \poset{L}' \swap \poset{L}}$ that encloses it. We denote* by $moat(\Upsilon)$ the set $\bigcup_{\upsilon \in comp(\Upsilon)} moat(\upsilon)$, where $comp(\Upsilon)$ is the family of all closed connected components in $\Upsilon$.
 
@@ -357,43 +364,82 @@ Recall in section \ref{subsubsec:linear}, when encoding linear posets, we had to
 \[
 \bigwedge_{x \neq y \in \uni} \satvar{x,y}{\poset{P}} \oplus \satvar{y,x}{\poset{P}}
 \]
-In fact, we can even skip encoding linearizations altogether. To encode $\poset{P} \lext \poset{L}$, we had to encode axioms for both posets. However, since the problem input includes complete order relation $\leq[\poset{L}]$ of all given $\poset{L} \!\in\! \Upsilon$, we can disregard the $\poset{L}$ part by taking the contrapositive form of $\lext$ and encode $\poset{P} \lext \poset{L}$ with
+To encode $\poset{P} \lext \poset{L}$, we had to encode axioms for both posets. However, since the problem input includes complete order relation $\leq[\poset{L}]$ of all given $\poset{L} \!\in\! \Upsilon$, we can skip the axioms and set each variables directly.
+
+In fact, it is even possible to skip encoding linearizations altogether. We can disregard the whole $\poset{L}$ part and lose all the variables for $\poset{L}$, by taking the contrapositive form of $\lext$, so we encode $\poset{P} \lext \poset{L}$ with
 \[
 \bigwedge_{x,y \in \complmt{\leq[\poset{L}]}} \neg \satvar{x,y}{\poset{P}}
 \]
-Moreover, with swap graph method, we need not encode the entire problem input in one go. Instead, we can tackle each component $\upsilon \!\in\! comp(\Upsilon)$ individually, which could further reduce the number of clauses, with trade-off with the number of queries polynomial in $\abs{\Upsilon}$, especially when $\Upsilon$ is sparse.
+Finally, with swap graph method, we need not encode the entire problem input in one go. Instead, we can tackle each component $\upsilon \!\in\! comp(\Upsilon)$ individually, which could further reduce the number of clauses, with trade-off with the number of queries polynomial in $\abs{\Upsilon}$, especially when $\Upsilon$ is sparse.
 
-\bye{
+\section{A Special Case}
+Although, in general, solving the poset cover problem is hard, in the case that the given set of linearizations constitutes the language of a single poset, the problem can be solved in polynomial time. We can consider this special case as an opening jab at the problem, returning if and once it succeeds.
+
+We know, corollarily from Szpilrajn Extension Theorem, which states that every poset has some linearizations ($\lang{\poset{P}} \neq \emptyset$), that a poset is exactly the intersection of all its linearizations; that is, $\leq[\poset{P}] = \bigcap_{\poset{L} \in \lang{\poset{P}}} \leq[\poset{L}]$ for any poset $\poset{P}$.
+
+\comment{they've done wrong. (i think?)\\so lets solve this? i have an idea}
+
+\subsection{Going with stages}
+
+\comment{is this a useful idea?}
+
 \section{Example}
-ncurses example
-pancake example
-shell script example
+Consider the following program, which creates a colored box inside the terminal screen and cycles three times through the colors red, green, and blue.
+
+\begin{minted}[linenos,frame=single,fontsize=\footnotesize]{c}
+#include <unistd.h>
+#include <ncurses.h>
+int main(int argc, char *argv[])
+{
+    // init options
+    initscr();
+    cbreak();
+    noecho();
+    nonl();
+    intrflush(stdscr, FALSE);
+    keypad(stdscr, TRUE);
+    curs_set(0);
+    // set colors
+    start_color();
+    init_pair(1, COLOR_WHITE, COLOR_RED);
+    init_pair(2, COLOR_WHITE, COLOR_GREEN);
+    init_pair(3, COLOR_WHITE, COLOR_BLUE);
+    // create window and go through colors
+    WINDOW* win = newwin(5, 15, 8, 4);
+    for (int i = 0; i < 9; i++, wrefresh(win), usleep(1000000))
+        wbkgd(win, COLOR_PAIR(i%3+1));
+    // wrap up
+    endwin();
+    return 0;
 }
+\end{minted}
+
+Lines 6--12 are a common initialization sequence with ncurses. Lines 14--17 initialize and define the colors to be used later. Lines 19--21 change the color of the box every second. Lines 23--24 end the program.
+
+\comment{but i'm not so sure if this is apropos now. too many things can change and change just interleavingly?}
 
 \section{Experimentation}
 To test the limits of our method, we experimented on distinct randomly generated inputs using the z3 theorem prover from Microsoft Research. Also, as inputs with a sparse swap graph can be quickly divided and reduced to smaller problems, we restricted our inputs to those with a single connected swap graph.
 
 We ran 100 trials, with solver timeout set to 15 minutes, on each of the different settings of universe size $\abs{\uni}$ and input size $\abs{\Upsilon}$. Figure~\ref{figure:exp} shows the number of timeouts out of 100 trials in each case.
 
+% TODO: fix this spacing mess
 % figure:exp
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.9\linewidth]{bar3d_cropped}
     \caption{Experimental results.}
     \label{figure:exp}
 \end{figure}
-\vspace{-15px}
 
-Cases where $\abs{\Upsilon} \leq 20$ or $\abs{\uni} \leq 4$ are omitted because they gave no timeout under extensive testing (over 3000 trials) of combinations with the largest the other parameter.
+Cases where $\abs{\Upsilon} \leq 20$ or $\abs{\uni} \leq 4$ are omitted because they gave no timeout under extensive testing (over 3000 trials) of combinations with the largest the other parameter ($\abs{\Upsilon} = 100$, $\abs{\uni} = 10$).
 
 \section{Conclusions}
-The results were disappointing.
+% this cannot be
+The results were disappointing. The next step is to find a way to scale this method and to find a practical use.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \bye{
-
-\section{References}
-NOTE: how to use list?
 
 \section{Appendix}
 
@@ -414,7 +460,7 @@ NOTE: how to use list?
 \end{theorem}
 
 \begin{theorem}
-    %(Szpilrajn Theorem) For a partial order $\poset{P}$, there exists a linear order $\mathcal{L}$ that extends $\poset{P}$; that is, $\leq_{\poset{P}} \subseteq \leq_{\mathcal{L}}$.
+    (Szpilrajn Theorem) For a partial order $\poset{P}$, there exists a linear order $\mathcal{L}$ that extends $\poset{P}$; that is, $\leq_{\poset{P}} \subseteq \leq_{\mathcal{L}}$.
     \label{theorem:szpilrajn}
 \end{theorem}
 
@@ -423,5 +469,9 @@ NOTE: how to use list?
 \end{theorem}
 
 }
+
+% NOTE: do we introduce the NP,#P complete of generation and counting lins which is what the most research has been done?
+\bibliography{poset}
+\bibliographystyle{splncs04}
 
 \end{document}
