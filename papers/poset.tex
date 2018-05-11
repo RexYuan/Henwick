@@ -135,7 +135,7 @@ Notice that a poset is equivalent to an acyclic directed graph. Figure~\ref{figu
 
 A partial order where every pair of elements is comparable is called a \emph{linear order}, and a poset $\poset{L}$ with such an order is called a \emph{linear poset}; that is, for $x, y \!\in\! \poset{L}$, $x \leq y$ or $y \leq x$. Note that the graph describing a linear poset is a path. For simplicity, we represent a linear poset in string form. For Example~\ref{example:posetl}, we write \lin{abcd}.
 
-A linear poset $\poset{L}$ that extends a poset $\poset{P}$ is called a \emph{linear extension} or \emph{linearization} of $\poset{P}$, denoted $\poset{P} \lext \poset{L}$; that is, for posets $\poset{P},\poset{L}$ with $\uni[P] \!=\! \uni[L]$, $\poset{P} \lext \poset{L}$ if and only if $\poset{L}$ is linear and $\leq[P] \>\subseteq\> \leq[L]$. For example, for $\poset{P}$ from Example~\ref{example:posetp} and $\poset{L}$ from Example~\ref{example:posetl}, $\poset{P} \lext \poset{L}$. Note that a linearization of a poset is equivalent to a topological sort of the graph describing that poset.
+A linear poset $\poset{L}$ that extends a poset $\poset{P}$ is called a \emph{linear extension} or \emph{linearization} of $\poset{P}$, denoted $\poset{P} \lext \poset{L}$; that is, for posets $\poset{P},\poset{L}$ with $\uni[P] \!=\! \uni[L]$, $\poset{P} \lext \poset{L}$ if and only if $\poset{L}$ is linear and $\leq[P] \>\subseteq\> \leq[L]$. For example, for $\poset{P}$ from Example~\ref{example:posetp} and $\poset{L}$ from Example~\ref{example:posetl}, we have $\poset{P} \lext \poset{L}$. Note that a linearization of a poset is equivalent to a topological sort of the graph describing that poset.
 
 Every poset admits a set of linearizations. The set of all linearizations of a poset $\poset{P}$ is denoted $\lang{\poset{P}}$. We shall consider it the \emph{language} of $\poset{P}$. For $\poset{P}$ from Example~\ref{example:posetp}, we have $\lang{\poset{P}} = \set{\lin{abcd},\lin{acbd}}$. For $\poset{L}$ from Example~\ref{example:posetl}, $\lang{\poset{L}} = \set{\lin{abcd}}$.
 
@@ -364,7 +364,7 @@ Recall in section \ref{subsubsec:linear}, when encoding linear posets, we had to
 \[
 \bigwedge_{x \neq y \in \uni} \satvar{x,y}{\poset{P}} \oplus \satvar{y,x}{\poset{P}}
 \]
-To encode $\poset{P} \lext \poset{L}$, we had to encode axioms for both posets. However, since the problem input includes complete order relation $\leq[\poset{L}]$ of all given $\poset{L} \!\in\! \Upsilon$, we can skip the axioms and set each variables directly.
+To encode $\poset{P} \lext \poset{L}$, we had to encode axioms for both posets. However, since the problem input includes complete order relation $\leq[\poset{L}]$ of all given $\poset{L} \!\in\! \Upsilon$, we can skip the axioms and set each variable directly.
 
 In fact, it is even possible to skip encoding linearizations altogether. We can disregard the whole $\poset{L}$ part and lose all the variables for $\poset{L}$, by taking the contrapositive form of $\lext$, so we encode $\poset{P} \lext \poset{L}$ with
 \[
@@ -377,11 +377,7 @@ Although, in general, solving the poset cover problem is hard, in the case that 
 
 We know, corollarily from Szpilrajn Extension Theorem, which states that every poset has some linearizations ($\lang{\poset{P}} \neq \emptyset$), that a poset is exactly the intersection of all its linearizations; that is, $\leq[\poset{P}] = \bigcap_{\poset{L} \in \lang{\poset{P}}} \leq[\poset{L}]$ for any poset $\poset{P}$.
 
-\comment{they've done wrong. (i think?)\\so lets solve this? i have an idea}
-
-\subsection{Going with stages}
-
-\comment{is this a useful idea?}
+\comment{they've done wrong. (i think?)\\so lets solve this? i have an idea\\(1) Linearizations are connected (known)\\(2) Linearizations are connected by exactly the ``bubble sort paths (to be defined)''\\(3) Algorithm: intersect the input then check all swapped neighbors with $\incomp$\\(4) All nodes along all bubble sort paths are present iff all swapped neighbors with $\incomp$ of input are present}
 
 \section{Example}
 Consider the following program, which creates a colored box inside the terminal screen and cycles three times through the colors red, green, and blue.
