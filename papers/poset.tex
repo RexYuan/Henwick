@@ -12,6 +12,7 @@
 \usepackage{float}
 \usepackage{doi}
 \usepackage{minted}
+\usepackage{appendix}
 
 \graphicspath{ {images/} }
 %\DeclareGraphicsExtensions{.png,.pdf}
@@ -38,13 +39,14 @@
 \newcommand{\swap}[1][]{\leftrightarrow_{#1}}
 \newcommand{\sgraph}[1]{G(#1)}
 \newcommand{\lext}{\sqsubseteq}
-\newcommand{\incomp}{\parallel}
-\newcommand{\covered}{\prec}
+\newcommand{\incomp}[1][]{\parallel_{#1}}
+\newcommand{\covered}[1][]{\prec_{#1}}
 \newcommand{\complmt}[1]{\overline{#1}}
 \newcommand{\satvar}[2]{\mathtt{X}_{#1}^{#2}}
 \newcommand{\bigo}[1]{\mathcal{O}(#1)}
 \newcommand{\code}[1]{\texttt{#1}}
-\newcommand{\subst}[2]{[#1/#2]}
+\newcommand{\swapfn}[2]{#1[#2]}
+\newcommand{\inv}[2]{inv(#1,#2)}
 
 \begin{document}
 
@@ -67,7 +69,7 @@ Intro part here
 % intro np completeness?
 
 \section{Preliminaries}
-A \emph{partial order} is a binary relation that is reflexive, antisymmetric, and transitive. A \emph{partially ordered set} or \emph{poset} is a binary structure $\poset{P} = \tuple{\uni, \leq}$ where the \emph{universe} $\uni$ is a set and $\leq$ is a partial order on $\uni$; we refer to members of $\uni$ as elements of $\poset{P}$ and, where specificity is desired, to $\uni$ as $\uni[
+A \emph{partial order} is a binary relation that is reflexive, antisymmetric, and transitive. A \emph{partially ordered set} or \emph{poset} is a binary relational structure $\poset{P} = \tuple{\uni, \leq}$ where the \emph{universe} $\uni$ is a set and $\leq$ is a partial order on $\uni$; we refer to members of $\uni$ as elements of $\poset{P}$ and, where specificity is desired, to $\uni$ as $\uni[
 \poset{P}]$ and $\leq$ as $\leq[\poset{P}]$.
 
 % example:posetp
@@ -102,8 +104,6 @@ Notice that a poset is equivalent to an acyclic directed graph. Figure~\ref{figu
     \label{figure:posetp}
 \end{figure}
 %\vspace{-15px}
-
-%In addition, we describe the case of \emph{incomparability} in a poset $\poset{P}$ with $\incomp$ relation: for $x, y \!\in\! \poset{P}$, $x \incomp y$ if and only if $x \nleq y$ and $y \nleq x$. For Example~\ref{example:posetp}, there is $b \incomp c$.
 
 % example:posetl
 \begin{example}
@@ -252,7 +252,7 @@ Now, we are ready to define \emph{Poset Cover Problem}.
 A minimal poset cover may not be unique, and the languages of the posets in a cover may overlap. For Example~\ref{example:cover example}, there is another minimal poset cover, shown in Figure~\ref{figure:cover example c'}, with overlapping languages ${\lang{\poset{C}} = \set{\lin{abdce},\lin{abcde},\lin{abdec}}}$ and ${\lang{\poset{D}} = \set{\lin{abdce},\lin{badce}}}$.
 
 \section{Reduction to SAT}
-Since the poset cover problem is proved to be NP-complete \cite{Lenwood&Heath}, we reduce the problem to SAT to utilize the power of modern SAT solvers. However, a naive encoding would easily result in superpolynomial transformation. We shall first show where the naive encoding falls short and then present a more efficient method.
+Since the poset cover problem is proved to be NP-complete \cite{VT1}, we reduce the problem to SAT to utilize the power of modern SAT solvers. However, a naive encoding would easily result in superpolynomial transformation. We shall first show where the naive encoding falls short and then present a more efficient method.
 
 \subsection{Basic Constraints}
 Before getting into constraints given by the problem, here we give the definitions and constraints for the basic poset construction.
@@ -319,9 +319,9 @@ Notice that encoding $\Upsilon \supseteq \bigcup_{\poset{P} \in C} \lang{\poset{
 \subsubsection{Swap Graph Method}
 Since $\Upsilon \subseteq \bigcup_{\poset{P} \in C} \lang{\poset{P}}$ can be efficiently encoded with naive method, we improve on encoding the other direction. We have devised, by building upon the idea of swap graph, a more efficient reduction that requires some preprocessing using notions defined as follows.
 
-The \emph{swap} relation $\swap$ describes the case of ``off by one swap'' between linear posets with shared universe: for linear posets $\poset{L}_1,\poset{L}_2$, $\poset{L}_1 \swap \poset{L}_2$ if and only if there are $x, y \!\in\! \uni$ such that $\leq[\poset{L}_1] \cap \leq[\poset{L}_2] = {(\leq[\poset{L}_1] \cup \leq[\poset{L}_2])} - \set{\tuple{x,y},\tuple{y,x}}$; to specify which $x,y$ induce the relation, we write $\swap[x,y]$. For example, \lin{abcd} $\swap[b,c]$ \lin{acbd}. Note that $\swap$ is symmetric.
+The \emph{adjacent transposition}, or \emph{swap}, relation $\swap$ describes the case of ``off by one swap'' between linear posets with shared universe: for linear posets $\poset{L}_1,\poset{L}_2$, $\poset{L}_1 \swap \poset{L}_2$ if and only if there are $x, y \!\in\! \uni$ such that $\leq[\poset{L}_1] \cap \leq[\poset{L}_2] = {(\leq[\poset{L}_1] \cup \leq[\poset{L}_2])} - \set{\tuple{x,y},\tuple{y,x}}$; to specify which $x,y$ induce the relation, we write $\swap[x,y]$. For example, \lin{abcd} $\swap[b,c]$ \lin{acbd}. Note that $\swap$ is symmetric.
 
-For a set of linear posets $\Upsilon$, the \emph{swap graph} $\sgraph{\Upsilon}$ of it is the undirected graph $\tuple{V,E} = \tuple{\Upsilon,\swap}$. Figure~\ref{figure:graphlp} shows the swap graph $\sgraph{\lang{\poset{P}}}$ for $\poset{P}$ from Example~\ref{example:posetp}. Conveniently, a swap graph built from the language of a poset is connected \cite{Ruskey,Pruesse&Ruskey,Lenwood&Heath}.
+For a set of linear posets $\Upsilon$, the \emph{swap graph} $\sgraph{\Upsilon}$ of it is the undirected graph $\tuple{V,E} = \tuple{\Upsilon,\swap}$. Figure~\ref{figure:graphlp} shows the swap graph $\sgraph{\lang{\poset{P}}}$ for $\poset{P}$ from Example~\ref{example:posetp}. Conveniently, a swap graph built from the language of a poset is connected \cite{R,PR,VT1}.
 
 % figure:graphlp
 \begin{figure}[H]
@@ -382,7 +382,7 @@ We know, corollarily from Szpilrajn Extension Theorem, which states that every p
 \section{Example}
 Consider the following program, which creates a colored box inside the terminal screen and cycles three times through the colors red, green, and blue.
 
-\begin{minted}[linenos,frame=single,fontsize=\footnotesize]{c}
+\begin{minted}[linenos,frame=single,fontsize=\footnotesize,style=bw]{c}
 #include <unistd.h>
 #include <ncurses.h>
 int main(int argc, char *argv[])
@@ -437,36 +437,60 @@ The results were disappointing. The next step is to find a way to scale this met
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \bye{
 
-\section{Appendix}
 
 \begin{theorem}
     Permutations and Nerode
 \end{theorem}
 
-\begin{theorem}
-    (Corollary of Szpilrajn extension theorem) For a partial order $\leq$, $\leq = \bigcap_{< \in \mathcal{E}(\leq)} <$.
-\end{theorem}
-
-\begin{theorem}
-    (Heath and Nema) If $x \incomp y$ for $\leq$ and there is $< \in \mathcal{E}(\leq)$ such that $x \covered y$ for $<$, then there is $<' \in \mathcal{E}(\leq)$ such that $y \covered x$ for $<'$.
-\end{theorem}
-
-\begin{theorem}
-    Swap graphs are connected by Kendall tau paths
-\end{theorem}
-
-\begin{theorem}
-    (Szpilrajn Theorem) For a partial order $\poset{P}$, there exists a linear order $\mathcal{L}$ that extends $\poset{P}$; that is, $\leq_{\poset{P}} \subseteq \leq_{\mathcal{L}}$.
-    \label{theorem:szpilrajn}
-\end{theorem}
-
-\begin{theorem}
-    (Pruesse? and Ruskey) For a poset $\poset{P}$, the swap graph $\mathcal{G}(\poset{P})$ is connected. cite???
-\end{theorem}
-
 }
 
-% NOTE: do we introduce the NP,#P complete of generation and counting lins which is what the most research has been done?
+\appendix
+\renewcommand{\thesection}{\appendixname~\Alph{section}}
+\section{Swap things}
+Here we define the \emph{swapping} function. For a linear poset $\poset{L}$ and some $x,y \!\in\! \uni$ with $x \covered y$, $\swapfn{\poset{L}}{x,y}$ is a linear poset $\poset{L}'$ such that $\poset{L} \swap[x,y] \poset{L}'$.
+
+A \emph{swapping sequence} of length $n$ from a linear poset $\poset{L}$ to a linear poset $\poset{L}'$ is a sequence of linear posets $\poset{L} = \poset{L}_0, \poset{L}_1, ... , \poset{L}_n = \poset{L}'$ obtained by collecting the breadcrumbs of recursively swapping $\poset{L}$ with some sequence of element pairs $x_1,y_1 \ ;\  ... \ ;\  x_n,y_n$ such that $\swapfn{\poset{L}}{x_1,y_1} ... [x_n,y_n] = \poset{L}'$; i.e., $\swapfn{\poset{L}}{x_1,y_1} ... [x_k,y_k] = \poset{L}_k$ for $0 < k < n$.
+
+The length of a minimal swapping sequence from $\poset{L}$ to $\poset{L}'$ is the inversion number $\inv{\poset{L}}{\poset{L}'}$ sorting $\poset{L}$ to $\poset{L}'$, as each swapping in a sequence either increases or decreases the inversion number by $1$ \cite{R}, and a minimal sequence is where it decreases every step; i.e., $\inv{\poset{L}_{k+1}}{\poset{L}'} = \inv{\poset{L}_k}{\poset{L}'} - 1$ for $0 \leq k < n$. It is also known as the Kendall tau distance, or the bubble-sort distance, between them, which counts the number of discordant pairs, i.e., inversions.
+
+In addition, we describe the case of \emph{incomparability} in a poset $\poset{P}$ with $\incomp$ relation: for $x, y \!\in\! \poset{P}$, $x \incomp y$ if and only if $x \nleq y$ and $y \nleq x$. For Example~\ref{example:posetp}, there is $b \incomp c$.
+
+\begin{lemma}
+    For posets $\poset{P},\poset{L}$ with $\poset{P} \lext \poset{L}$, if $\incomp[\poset{P}]\> \neq \emptyset$, then there is $x,y$ with $x \incomp[\poset{P}] y$ such that $x \covered[\poset{L}] y$.
+\end{lemma}
+
+\begin{lemma}[\cite{VT1}]
+    For posets $\poset{P},\poset{L}$ with $\poset{P} \lext \poset{L}$, if $x \incomp[\poset{P}] y$ and $x \covered[\poset{L}] y$, then there is $\poset{L}'$ such that $\poset{P} \lext \poset{L}'$ and $y \covered[\poset{L}'] x$.
+\end{lemma}
+
+\begin{lemma}
+    For posets $\poset{P},\poset{L},\poset{L}'$ with $\poset{L} \!\neq\! \poset{L}'$ and $\poset{P} \lext \poset{L},\poset{L}'$, $\leq[\poset{L}] \cap \leq[\poset{L}'] \subseteq\> \incomp[\poset{P}]$ and $\abs{\complmt{\leq[\poset{L}] \cap \leq[\poset{L}']}} = \inv{\poset{L}}{\poset{L}'}$.
+\end{lemma}
+
+\begin{lemma}
+    For posets $\poset{P},\poset{L},\poset{L}'$ with $\poset{L} \!\neq\! \poset{L}'$ and $\poset{P} \lext \poset{L},\poset{L}'$, their inversion set corresponds to the complement of their intersection.
+\end{lemma}
+
+\begin{lemma}[\cite{R}]
+    For posets $\poset{P},\poset{L},\poset{L}'$ with $\poset{L} \!\neq\! \poset{L}'$ and $\poset{P} \lext \poset{L},\poset{L}'$, the distance between $\poset{L}$ and $\poset{L}'$ in $\sgraph{\lang{\poset{P}}}$ is the length of a minimal swapping sequence from $\poset{L}$ to $\poset{L}'$.
+\end{lemma}
+
+\begin{lemma}
+    For posets $\poset{P},\poset{L},\poset{L}'$ with $\poset{L} \!\neq\! \poset{L}'$ and $\poset{P} \lext \poset{L},\poset{L}'$, for any minimal swapping sequence $\pi$ from $\poset{L}$ to $\poset{L}'$, we have $\poset{P} \lext \poset{L}''$ for all $\poset{L}'' \!\in\! \pi$.
+\end{lemma}
+
+\begin{theorem}
+    For a poset $\poset{P}$, $\sgraph{\lang{\poset{P}}}$ is connected by exactly all the minimal swapping sequences.
+\end{theorem}
+
+\begin{corollary}
+    For a set of linear posets $\Upsilon$, there is a poset $\poset{P}$ with $\lang{\poset{P}} = \Upsilon$ if and only if for all $\poset{L}, \poset{L}' \!\in\! \Upsilon$ and for all minimal swapping sequence $\pi$ from $\poset{L}$ to $\poset{L}'$, $\poset{L}'' \!\in\! \Upsilon$ for all $\poset{L}'' \!\in\! \pi$.
+\end{corollary}
+
+\begin{corollary}
+    For a set of linear posets $\Upsilon$, define $\poset{P}$ such that $\leq[\poset{P}] = \bigcap_{\poset{L} \in \Upsilon} \leq[\poset{L}]$. $\lang{\poset{P}} = \Upsilon$ if and only if for all $\poset{L} \!\in\! \Upsilon$ where $x \covered[\poset{L}] y$ and $x \incomp[\poset{P}] y$, $\swapfn{\poset{L}}{x,y} \!\in\! \Upsilon$.
+\end{corollary}
+
 \bibliography{poset}
 \bibliographystyle{splncs04}
 
