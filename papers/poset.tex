@@ -348,7 +348,10 @@ An alternative way to encode $\Upsilon \supseteq \bigcup_{\poset{P} \in C} \lang
 \[
 \bigwedge_{\poset{L} \in moat(\Upsilon)} \bigwedge_{\poset{P} \in C} \poset{P} \not\lext \poset{L}
 \]
-This is polynomial in $\abs{\Upsilon}$ since $\abs{moat(\Upsilon)} \!\in\! \bigo{\abs{\Upsilon} \!\cdot\! \abs{\uni}}$ as the worst case is where every component is of size 1 and hence its moat contains all the posets which are one swap away from it.
+
+\comment{Modified complexity justification}
+
+The construction of $\sgraph{\Upsilon}$ and $moat(\Upsilon)$ together costs $\bigo{\abs{\Upsilon} \!\cdot\! \abs{\uni}}$ by going through each $\poset{L} \!\in\! \Upsilon$ and checking if $\poset{L}' \!\in\! \Upsilon$ for all $\poset{L}' \swap[x,y] \poset{L}$ where $x \covered[\poset{L}] y$, assuming constant membership query of $\Upsilon$.
 
 \begin{proposition}
     Swap graph method is equivalent to naive method.
