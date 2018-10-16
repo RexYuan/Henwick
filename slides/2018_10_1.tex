@@ -1,0 +1,185 @@
+\documentclass{beamer}
+
+\usetheme{CambridgeUS}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{CJKutf8}
+\usepackage{datetime}
+\usepackage{tikz}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{color}
+\usepackage{array}
+
+\newcommand{\cjk}[1]{\begin{CJK}{UTF8}{bsmi}#1\end{CJK}}
+
+\newdate{date}{01}{10}{2018}
+\date{\displaydate{date}}
+
+\begin{document}
+
+\begin{frame}
+    \frametitle{Example Table}
+    \begin{center}
+        \begin{tabular}{ |c|c|c|c|c| }
+        \multicolumn{4}{c}{} & \multicolumn{1}{c}{\color{red}{$\downarrow$sensitive}}\\
+        \hline
+        name  & sex & age & passport & salary \\
+        \hline
+        Alice & F & 20-29 & 96273697 & 0-20k\\
+        Bob   & M & 20-29 & 53331879 & 80k-90k\\
+        Carol & F & 30-39 & 27429029 & 40k-50k\\
+        Dave  & M & 30-39 & 53286237 & 50k-60k\\
+        Eve   & F & 40-49 & 43485839 & 30k-40k\\
+        \hline
+        \end{tabular}
+    \end{center}
+\end{frame}
+
+\begin{frame}
+    \frametitle{IDentifier, as Intended}
+    \begin{center}
+        \begin{tabular}{ |>{\color{red}}c|c|c|>{\color{red}}c|c| }
+        \hline
+        name  & sex & age & passport & salary \\
+        \hline
+        Alice & F & 20-29 & 96273697 & 0-20k\\
+        Bob   & M & 20-29 & 53331879 & 80k-90k\\
+        Carol & F & 30-39 & 27429029 & 40k-50k\\
+        Dave  & M & 30-39 & 53286237 & 50k-60k\\
+        Eve   & F & 40-49 & 43485839 & 30k-40k\\
+        \hline
+        \end{tabular}
+    \end{center}
+\end{frame}
+
+\begin{frame}
+    \frametitle{IDentifier, as Intended}
+    \begin{center}
+        \begin{tabular}{ |>{\color{red}}c|c|c|>{\color{red}}c|c| }
+        \hline
+        name  & sex & age & passport & salary \\
+        \hline
+        ***** & F & 20-29 & ***** & 0-20k\\
+        ***** & M & 20-29 & ***** & 80k-90k\\
+        ***** & F & 30-39 & ***** & 40k-50k\\
+        ***** & M & 30-39 & ***** & 50k-60k\\
+        ***** & F & 40-49 & ***** & 30k-40k\\
+        \hline
+        \end{tabular}
+    \end{center}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Quasi-IDentifier}
+    \begin{center}
+        \begin{tabular}{ |c|>{\color{red}}c|>{\color{red}}c|c|c| }
+        \hline
+        name  & sex & age & passport & salary \\
+        \hline
+        ***** & F & 20-29 & ***** & 0-20k\\
+        ***** & M & 20-29 & ***** & 80k-90k\\
+        ***** & F & 30-39 & ***** & 40k-50k\\
+        ***** & M & 30-39 & ***** & 50k-60k\\
+        ***** & F & 40-49 & ***** & 30k-40k\\
+        \hline
+        \end{tabular}
+    \end{center}
+    \alert{Scenario.} I know my friend Alice is a female in her 20s. Then I know how much she makes.
+\end{frame}
+
+\begin{frame}
+    \frametitle{QID and $k$-anonymity}
+    \begin{center}
+        \begin{tabular}{ |c|>{\color{red}}c|>{\color{red}}c|c|>{\color{orange}}c| }
+        \hline
+        name  & sex & age & passport & salary \\
+        \hline
+        ***** & F & 20-29 & ***** & 0-20k\\
+        ***** & M & 20-29 & ***** & 80k-90k\\
+        ***** & F & 30-39 & ***** & 40k-50k\\
+        ***** & M & 30-39 & ***** & 50k-60k\\
+        ***** & F & 40-49 & ***** & 30k-40k\\
+        \hline
+        \end{tabular}
+    \end{center}
+
+    A \textit{quasi-identifier}(QID), a là Tore Dalenius(1986), is a set of attributes that \textbf{uniquely identifies} entries. In this example, there are two sets of QIDs: $\{sex, age\}$ and $\{salary\}$.
+
+    A privacy property that protects against this type of re-identification is $\textit{k-anonymity}$, which, per Latanya Sweeney(2002), holds if for every entry, there are at least $k-1$ other entries with the same values for some QID.
+\end{frame}
+
+\begin{frame}
+    \frametitle{$k$-anonymity Example}
+    \begin{center}
+        \begin{tabular}{ |c|c|c|c| }
+        \hline
+        name  & sex & age & salary \\
+        \hline
+        Frederick & M & 20-29 & 0-20k\\
+        Gabriel   & M & 20-29 & 80k-90k\\
+        Helen     & F & 30-39 & 40k-50k\\
+        Ingrid    & F & 30-39 & 50k-60k\\
+        \hline
+        \end{tabular}
+    \end{center}
+    This table conforms to $2$-anonymity with respect to QID $\{sex, age\}$.
+
+    \alert{Scenario.} Even if I know Frederick is a male in his 20s, I still can't be sure how much he makes.
+\end{frame}
+
+\begin{frame}
+    \frametitle{\cjk{2010 年人口及住宅普查}}
+    \begin{itemize}
+        \item We analyzed \cjk{全臺閩地區人口狀況資料檔 (/資料檔/p99c1.txt)}.
+        \item A total of 3,618,831 entries.
+        \item 48 fields, whereof 39 are relavant to the analysis.
+        \begin{itemize}
+            \item Such as age, sex, nationality, marital status, education status...
+        \end{itemize}
+        \item Fields are mostly boolean or categorical.
+        \item Specifications are in \cjk{/附件/99年人口及住宅普查-全臺閩地區格式}.
+        \vspace{20pt}
+        \item We found that of the 3,618,831 entries, there are only 1,364,624 distinct values.
+        \begin{itemize}
+            \item On average, for every individual, there are 2 other people that share the same values as that individual.
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{What We Found}
+    \begin{itemize}
+        \item The ``minimum'' QID, the smallest set of attributes that uniquely identifies all 1,364,624 distinct entries, is of size 35.
+        \begin{itemize}
+            \item \cjk{C010:性別、C020:年齡、C032:國籍、C050:婚姻狀況、C060: 與戶長關係、C071:教育狀況、C072:教育程度、C073:是否 上幼稚園(學齡前兒童)、C081:國語、C082:閩南語、C083:客 家語、C084:原住民族語、C085:其他、C091:國語、C092: 閩南語、C093:客家語、C094:原住民族語、C095:其他、C100: 五年前居住地點、C110:主要家計負責人、C121:工作狀況、C122: 行業、C123:職業、C132:工作或求學地點、C141:子女人數、C142: 子女居住地點、C151:吃飯、C152:上下床、C153:更換衣服、C154: 上廁所、C155:洗澡、C156:在室內外走動、C157:家事活動 能力、C160:是否為原住民族、C170:是否為身心障礙}.
+        \end{itemize}
+        \item This was found and verified in days.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{What We Found}
+    \begin{itemize}
+        \item We also found QIDs that distinguishes some percentage of the entries, that is, the QIDs that picks out some percentage of entries with distinct values.
+        \item For 10\%, there are two minimum sets of QIDs of size 5. This was found and verified in days.
+        \begin{itemize}
+            \item \cjk{C020(年齡), C060(與戶長關係), C072(教育程度), C122(行業), C123(職業)} and
+            \item \cjk{C020(年齡), C072(教育程度), C122(行業), C123(職業), C141(子女人數)}
+        \end{itemize}
+        \item Some small QIDs for other percentages (unverified):
+    \end{itemize}
+    \begin{center}
+        \begin{tabular}{ c|c }
+        percentage & QID size \\
+        \hline
+        25 & 8 \\
+        50 & 10\\
+        75 & 15\\
+        \end{tabular}
+    \end{center}
+\end{frame}
+
+\end{document}

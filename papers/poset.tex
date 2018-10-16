@@ -17,7 +17,9 @@
 \graphicspath{ {images/} }
 %\DeclareGraphicsExtensions{.png,.pdf}
 
-\usetikzlibrary{arrows}
+\usetikzlibrary{arrows,shapes,fit}
+\pgfdeclarelayer{background}
+\pgfsetlayers{background,main}
 
 \captionsetup{compatibility=false}
 
@@ -305,7 +307,7 @@ For $\Upsilon \subseteq \bigcup_{\poset{P} \in C} \lang{\poset{P}}$, it effectiv
 \bigwedge_{\poset{L} \in \Upsilon} \bigvee_{\poset{P} \in C} \poset{P} \lext \poset{L}
 \]
 
-For $\Upsilon \supseteq \bigcup_{\poset{P} \in C} \lang{\poset{P}}$, conversely, it states that every $\poset{L} \!\not\in\! \Upsilon$ is not a linearization of all $\poset{P} \!\in\! C$. This is encoded as
+For $\Upsilon \supseteq \bigcup_{\poset{P} \in C} \lang{\poset{P}}$, conversely, it states that every $\poset{L} \!\notin\! \Upsilon$ is not a linearization of all $\poset{P} \!\in\! C$. This is encoded as
 \[
 \bigwedge_{\poset{L} \in \complmt{\Upsilon}} \bigwedge_{\poset{P} \in C} \poset{P} \not\lext \poset{L}
 \]
@@ -340,7 +342,28 @@ For a set of linear posets $\Upsilon$, the \emph{swap graph} $\sgraph{\Upsilon}$
 \end{figure}
 %\vspace{-15px}
 
-We can exploit this property that a swap graph of poset language is connected to avoid exponential blow-up, by ``insulating'' each closed* connected component $\upsilon \subseteq \sgraph{\Upsilon}$ with a set $moat(\upsilon) = \set{\poset{L} \!\not\in\! \upsilon \mid \text{there is } \poset{L}' \!\in\! \upsilon \text{ such that } \poset{L}' \swap \poset{L}}$ that encloses it. We denote* by $moat(\Upsilon)$ the set $\bigcup_{\upsilon \in comp(\Upsilon)} moat(\upsilon)$, where $comp(\Upsilon)$ is the family of all closed connected components in $\Upsilon$.
+We can exploit this property that a swap graph of poset language is connected to avoid exponential blow-up, by ``insulating'' each closed* connected component $\upsilon \subseteq \sgraph{\Upsilon}$ with a set $moat(\upsilon) = \set{\poset{L} \!\notin\! \upsilon \mid \text{there is } \poset{L}' \!\in\! \upsilon \text{ such that } \poset{L}' \swap \poset{L}}$ that encloses it. We denote* by $moat(\Upsilon)$ the set $\bigcup_{\upsilon \in comp(\Upsilon)} moat(\upsilon)$, where $comp(\Upsilon)$ is the family of all closed connected components in $\Upsilon$.
+
+\begin{figure}[H]
+    %\centering
+    \begin{tikzpicture}
+        \node[draw,ellipse,minimum height=2.5cm,minimum width=1.5cm,fill=white] (comp1) at (8,4) {comp1};
+
+        \node[draw,ellipse,minimum height=2.5cm,minimum width=3.5cm,fill=white] (comp2) at (2,2) {comp2};
+
+        \begin{pgfonlayer}{background}
+            \node[draw,ellipse,minimum height=3.5cm,minimum width=2.5cm,fill=gray,fill opacity=0.2,text opacity=1] (comp1moat) at (8,4) {};
+            \node[above=0.5mm] at (comp1moat.south) {comp1};
+
+            \node[draw,ellipse,minimum height=3.5cm,minimum width=4.5cm,fill=gray,fill opacity=0.2,text opacity=1] (comp2moat) at (2,2) {};
+            \node[above=0.5mm] at (comp2moat.south) {comp2};
+        \end{pgfonlayer}
+
+        \node[draw,fit=(comp1moat)(comp2moat)] (x) {comp2};
+    \end{tikzpicture}
+    %\caption{Graph representation of $\poset{P}$ from %Example~\ref{example:posetp}.}
+    %\label{figure:posetp}
+\end{figure}
 
 \comment{(1) Is ``closed'' connected component an accepted term?\\(2) I replaced ``barrier'' with ``moat''.\\(3) I try $moat(\Upsilon)$ to reduce one quantifer. Is this actually better/clearer?}
 
@@ -357,7 +380,7 @@ The construction of $\sgraph{\Upsilon}$ and $moat(\Upsilon)$ together costs $\bi
     Swap graph method is equivalent to naive method.
 \end{proposition}
 \begin{proof}
-    Suppose the moat constraints hold. If the naive constraints do not hold, then there are some $\poset{L} \!\not\in\! \Upsilon$ and $\poset{P} \!\in\! C$ such that $\poset{P} \lext \poset{L}$. Per assumption, $\poset{L} \!\not\in\! moat(\Upsilon)$, but then $\sgraph{\lang{\poset{P}}}$ is not connected, a contradiction. The converse holds by definition, as $moat(\Upsilon) \subseteq \complmt{\Upsilon}$.
+    Suppose the moat constraints hold. If the naive constraints do not hold, then there are some $\poset{L} \!\notin\! \Upsilon$ and $\poset{P} \!\in\! C$ such that $\poset{P} \lext \poset{L}$. Per assumption, $\poset{L} \!\notin\! moat(\Upsilon)$, but then $\sgraph{\lang{\poset{P}}}$ is not connected, a contradiction. The converse holds by definition, as $moat(\Upsilon) \subseteq \complmt{\Upsilon}$.
 \end{proof}
 
 Despite its complexity, in practice, when $\abs{\uni}! \!\approx\! \abs{\Upsilon}$, it is better off to revert back to the naive method.
