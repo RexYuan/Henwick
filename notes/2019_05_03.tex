@@ -1,0 +1,87 @@
+\documentclass[12pt]{llncs}
+
+\usepackage{rex}
+
+\usepackage{stmaryrd}
+\usepackage[retainorgcmds]{IEEEtrantools}
+
+\DeclareMathOperator{\probability}{\mathsf{Pr}}
+\newcommand{\pr}[1]{\probability(#1)}
+\DeclareMathOperator{\reward}{\mathsf{R}}
+\newcommand{\rw}[1]{\reward(#1)}
+\DeclareMathOperator{\probing}{\mathbb{P}}
+\newcommand{\pb}[1]{\probing \llbracket #1 \rrbracket}
+\DeclareMathOperator{\expectedp}{\mathbb{EP}}
+\newcommand{\ep}[1]{\expectedp \llbracket #1 \rrbracket}
+\DeclareMathOperator{\weakp}{\mathsf{wp}}
+\renewcommand{\wp}[2]{\weakp[#1](#2)}
+\DeclareMathOperator{\expectedr}{\mathbb{ER}}
+\newcommand{\er}[1]{\expectedr \llbracket #1 \rrbracket}
+\DeclareMathOperator{\lexpectedr}{\mathbb{LER}}
+\newcommand{\ler}[1]{\lexpectedr \llbracket #1 \rrbracket}
+\DeclareMathOperator{\sink}{\mathtt{sink}}
+\DeclareMathOperator{\init}{\mathtt{init}}
+\DeclareMathOperator{\future}{\mathsf{F}}
+\renewcommand{\F}[1]{\future#1}
+
+\newdate{date}{3}{5}{2019}
+
+\begin{document}
+\displaydate{date}
+
+% NOTE::::: More general than theirs!
+% (1) normal case
+% (2) liberal case ER + PROB of divergence
+
+\begin{definition}
+Let $S$ be the program states in model $\sM$.
+A path is a sequence $\pi = s_1 s_2 s_3 ...$ permitted by $\sM$.
+A variable $v$ a function $v : S \mapsto \Reals$.
+Every non-empty finite path $\pi = s_1 ... s_i$ determines a
+probe state $p$ such that we take $v(p) = v(s_i)$ for any $v$.
+Henceforth a path is taken to contain a mix of normal program
+states and probe states.
+\end{definition}
+
+\begin{definition}
+The \emph{probed value} $\pb{v \mid \pi}$ of variable $v$
+regarding path $\pi$ is:
+\begin{itemize}
+\item if $\pi$ is finite,
+    \begin{itemize}
+    \item $v(p)$ where $p$ is the last probe state in $\pi$ and
+    \item undefined if there is no probe state in $\pi$;
+    \end{itemize}
+\item and, if $\pi$ is infinite,
+    \begin{itemize}
+    \item something %TODO
+    \item undefined if there is no probe state in $\pi$;
+    \end{itemize}
+\end{itemize}
+\end{definition}
+
+\begin{definition}
+The \emph{expected probed value} $\ep{v \mid T}$ of variable $v$
+regarding paths $T$ is:
+\[
+\sum_{\pi \in T} \pr{\pi} \pb{v \mid \pi}
+\]
+\end{definition}
+
+For a program $P$ without probe states and variable $v$, insert probe states $P_{\top}$ immediately after $\init$ and $P_{\bot}$ just before $\sink$:
+\begin{IEEEeqnarray*}{rCl}
+\er{\F{\sink} \mid P^{v}}
+& = & \sum_{\pi \in \F{\sink}} \pr{\pi} \rw{\pi} \\
+& = & \sum_{\pi \in \F{\sink}} \pr{\pi} \pb{v \mid \pi}
+= \ep{v \mid \F{\sink}}
+\end{IEEEeqnarray*}
+and
+\begin{IEEEeqnarray*}{rCl}
+\ler{\F{\sink} \mid P^{v}}
+& = & \er{\F{\sink} \mid P^{v}} + \pr{\neg \F{\sink} \mid P^{v}} \\
+& = & \er{\F{\sink} \mid P^{v}} + \sum_{\pi \in \neg \F{\sink}} \pr{\pi} \\
+& = & \er{\F{\sink} \mid P^{v}} + \sum_{\pi \in \neg\F{\sink}} \pr{\pi} \pb{1 \mid \pi} \\
+& = & \ep{v \mid \F{\sink}} + \ep{1 \mid \neg \F{\sink}}
+\end{IEEEeqnarray*}
+
+\end{document}

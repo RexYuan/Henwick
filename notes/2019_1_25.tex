@@ -1,0 +1,162 @@
+\documentclass[12pt]{llncs}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\usepackage{CJKutf8}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{hyperref}
+\usepackage{color}
+\usepackage[most]{tcolorbox}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{centernot}
+\usepackage{extsizes}
+\usepackage{datetime}
+\usepackage{mathabx}
+\usepackage{tikz}
+\usepackage[linesnumbered,lined,boxed,commentsnumbered,vlined]{algorithm2e}
+\usepackage{parskip}
+\usepackage{minted}
+\usepackage[varqu]{zi4}
+
+\usepackage{bussproofs}
+
+\newdate{date}{25}{1}{2019}
+
+\DeclarePairedDelimiter\set\{\}
+\DeclarePairedDelimiter\tuple()
+\DeclarePairedDelimiter\paren()
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+
+\renewcommand{\implies}{\rightarrow}
+
+\newcommand{\bicond}{\leftrightarrow}
+\newcommand{\smodels}{\vdash}
+\newcommand{\byrule}[1]{\RightLabel{\textit{#1}}}
+\newcommand{\bye}[1]{}
+\newcommand{\LeftToRight}{$\Longrightarrow$}
+\newcommand{\RightToLeft}{$\Longleftarrow$}
+\newcommand{\T}{{\textbf T}}
+\newcommand{\F}{{\textbf F}}
+\newcommand{\True}{{\textbf{True}}}
+\newcommand{\False}{{\textbf{False}}}
+\newcommand{\struct}[1]{\mathcal{#1}}
+\newcommand{\arity}[1]{\mathrm{ar}(#1)}
+\newcommand{\rank}[1]{\mathrm{qr}(#1)}
+\newcommand{\maxx}[1]{\mathrm{max}(#1)}
+\newcommand{\free}[1]{\mathrm{free}(#1)}
+\newcommand{\var}[1]{\mathrm{var}(#1)}
+\newcommand{\eqq}{\approx}
+\newcommand{\subst}[2]{[#1/#2]}
+\newcommand{\val}{\mathbf{val}}
+\newcommand{\modelof}[1]{\mathrm{Md}(#1)}
+\newcommand{\consequenceof}[1]{\mathrm{Cn}(#1)}
+\newcommand{\theoryof}[1]{\mathrm{Th}(#1)}
+\newcommand{\isomorph}{\cong}
+\newcommand{\FO}{\mathrm{FO}}
+\newcommand{\satof}[1]{\mathsf{SAT}(#1)}
+\newcommand{\finsatof}[1]{\textsf{FIN-SAT}(#1)}
+\newcommand{\validityof}[1]{\textsf{Validity}(#1)}
+\newcommand{\finvalidityof}[1]{\textsf{Finite-Validity}(#1)}
+\newcommand{\Robinson}{\mathsf{Q}}
+\newcommand{\Successor}{\mathsf{Succ}}
+\newcommand{\Proj}[1]{\Pi_{#1}}
+\newcommand{\Select}[1]{\sigma_{#1}}
+\newcommand{\LJoin}{\ltimes}
+\newcommand{\kA}{k\text{A}}
+
+\newcommand{\sA}{\struct{A}}
+\newcommand{\sB}{\struct{B}}
+\newcommand{\sN}{\struct{N}}
+\newcommand{\sM}{\struct{M}}
+
+\newcommand{\cC}{\mathcal{C}}
+\newcommand{\cD}{\mathcal{D}}
+\newcommand{\cF}{\mathcal{F}}
+\newcommand{\cW}{\mathcal{W}}
+\newcommand{\cQ}{\mathcal{Q}}
+\newcommand{\cR}{\mathcal{R}}
+
+\newcommand\aug{\fboxsep=-\fboxrule\!\!\!\fbox{\strut}\!\!\!}
+
+\newcolumntype{M}[1]{>{\centering\arraybackslash}m{#1}}
+
+\begin{document}
+\displaydate{date}
+
+\section{SQL Stuff}
+\begin{definition}
+Let $\cW = \tuple{\cC \cup \bigtimes\cF \cup (\bigtimes\cF)^{2}, \eqq, \leq, \Pi, \sigma, \ltimes, 1, 2, 3, ...}$ where
+\begin{itemize}
+    \item $\cC$ is a set of domain names
+    \item $\cF$ is a set of domain sets
+    \item $\eqq$ is a relation that compares entries
+    \item $\leq$ is a relation that compares cardinalities
+    \item $\Pi, \sigma, \ltimes$ are usual relational algebraic functions
+    \item $1, 2, 3, ...$ are constant sets with cardinalities $1, 2, 3, ...$
+\end{itemize}
+\end{definition}
+A database $\cD \in (\bigtimes\cF)^{2}$ is an embedding in $\cW$.
+
+\begin{definition}[$k$-Anonymity]
+For $k \in \set{1,2,3,...}$ and $\cQ \subseteq \cC$, a database $\cD$ is $k$-anonymous in regards to $\cQ$ iff it holds that
+\[
+\forall_{d \in \cD}
+\exists_{S \subseteq \cD}\ \
+(
+S \geq k \wedge
+\forall_{s \in S}\ \
+\Proj{\cQ} s \eqq \Proj{\cQ} d
+)
+\]
+\end{definition}
+A SQL query to discover all the values that violate $k$-Anonymity is
+\begin{minted}[frame=single,breaklines,autogobble,fontfamily=zi4,escapeinside=||,mathescape=true]{sql}
+SELECT |$\cQ$|, COUNT(*) AS count FROM |$\cD$| GROUP BY |$\cQ$| HAVING count < |$k$|
+\end{minted}
+
+\begin{definition}[$\ell$-Diversity]
+For $l \in \set{1,2,3,...}$ and $\cR \subseteq \cC - \cQ$, a database $\cD$ that's $k$-anonymous in regards to $\cQ$ is $\ell$-diverse in regards to $\cR$ iff it holds that
+\[
+\forall_{d \in \cD}
+\exists_{S \subseteq \cD}\ \
+(
+S \geq k \wedge
+\forall_{s \in S}\ \
+\Proj{\cQ} s \eqq \Proj{\cQ} d
+\wedge
+\Proj{\cR} S \geq \ell
+)
+\]
+\end{definition}
+A SQL query to discover all the values that violate $\ell$-Diversity is
+\begin{minted}[frame=single,breaklines,autogobble,fontfamily=zi4,escapeinside=||,mathescape=true]{sql}
+SELECT |$\cQ$|, COUNT(*) AS count FROM
+    (SELECT |$\cQ$| FROM |$\cD$| GROUP BY |$\cQ$,$\cR$|) AS T
+GROUP BY |$\cQ$| HAVING count < |$\ell$|
+\end{minted}
+
+\begin{definition}[$(X,Y)$-Privacy]
+For $k \in \set{1,2,3,...}$ and $X,Y \subseteq \cC$, a database is $(X,Y)$-anonymous for $k$ iff it holds that
+\[
+\forall_{d \in \cD}
+\exists_{S \subseteq \cD}\
+(
+\Proj{Y} S \geq k \wedge
+\forall_{s \in S}\
+\Proj{X} s \eqq \Proj{X} d
+)
+\]
+\end{definition}
+
+\begin{minted}[frame=single,breaklines,autogobble,fontfamily=zi4,escapeinside=||,mathescape=true]{sql}
+SELECT |$X$|, count(*) AS count FROM
+    (SELECT |$X$|, count(*) FROM |$\cD$| GROUP BY |$X,Y$|)
+AS T GROUP BY |$X$| HAVING count < |$k$|
+\end{minted}
+
+\end{document}

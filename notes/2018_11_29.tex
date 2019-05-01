@@ -1,0 +1,138 @@
+\documentclass[12pt]{llncs}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\usepackage{CJKutf8}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{hyperref}
+\usepackage{color}
+\usepackage[most]{tcolorbox}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{centernot}
+\usepackage{extsizes}
+\usepackage{datetime}
+\usepackage{mathabx}
+\usepackage{tikz}
+\usepackage[linesnumbered,lined,boxed,commentsnumbered,vlined]{algorithm2e}
+\usepackage{parskip}
+
+\usepackage{bussproofs}
+
+\newdate{date}{29}{11}{2018}
+
+\DeclarePairedDelimiter\set\{\}
+\DeclarePairedDelimiter\tuple()
+\DeclarePairedDelimiter\paren()
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+
+\renewcommand{\implies}{\rightarrow}
+
+\newcommand{\bicond}{\leftrightarrow}
+\newcommand{\smodels}{\vdash}
+\newcommand{\byrule}[1]{\RightLabel{\textit{#1}}}
+\newcommand{\bye}[1]{}
+\newcommand{\LeftToRight}{$\Longrightarrow$}
+\newcommand{\RightToLeft}{$\Longleftarrow$}
+\newcommand{\T}{{\textbf T}}
+\newcommand{\F}{{\textbf F}}
+\newcommand{\True}{{\textbf{True}}}
+\newcommand{\False}{{\textbf{False}}}
+\newcommand{\struct}[1]{\mathcal{#1}}
+\newcommand{\arity}[1]{\mathrm{ar}(#1)}
+\newcommand{\rank}[1]{\mathrm{qr}(#1)}
+\newcommand{\maxx}[1]{\mathrm{max}(#1)}
+\newcommand{\free}[1]{\mathrm{free}(#1)}
+\newcommand{\var}[1]{\mathrm{var}(#1)}
+\newcommand{\eqq}{\approx}
+\newcommand{\subst}[2]{[#1/#2]}
+\newcommand{\val}{\mathbf{val}}
+\newcommand{\modelof}[1]{\mathrm{Md}(#1)}
+\newcommand{\consequenceof}[1]{\mathrm{Cn}(#1)}
+\newcommand{\theoryof}[1]{\mathrm{Th}(#1)}
+\newcommand{\isomorph}{\cong}
+\newcommand{\FO}{\mathrm{FO}}
+\newcommand{\satof}[1]{\mathsf{SAT}(#1)}
+\newcommand{\finsatof}[1]{\textsf{FIN-SAT}(#1)}
+\newcommand{\validityof}[1]{\textsf{Validity}(#1)}
+\newcommand{\finvalidityof}[1]{\textsf{Finite-Validity}(#1)}
+\newcommand{\Robinson}{\mathsf{Q}}
+\newcommand{\Successor}{\mathsf{Succ}}
+\newcommand{\Proj}[1]{\Pi_{#1}}
+
+\newcommand{\sA}{\struct{A}}
+\newcommand{\sB}{\struct{B}}
+\newcommand{\sN}{\struct{N}}
+\newcommand{\sM}{\struct{M}}
+
+\newcommand{\cC}{\mathcal{C}}
+\newcommand{\cD}{\mathcal{D}}
+\newcommand{\cF}{\mathcal{F}}
+
+\newcommand\aug{\fboxsep=-\fboxrule\!\!\!\fbox{\strut}\!\!\!}
+
+\newcolumntype{M}[1]{>{\centering\arraybackslash}m{#1}}
+
+\begin{document}
+\displaydate{date}
+
+\section{Preliminaries}
+\begin{definition}
+A database $\cD$ is a finite multi-set of $m$-tuples associated with an $m$-tuple for column names $\cC$ and an $m$-tuple of finite sets for column domains $\cF$, such that $\cD \subseteq \bigtimes_{F \in \cF} F$. Let the function of taking the absolute be such that it implicitly transforms a multi-set into a set by removing the duplicates.
+\end{definition}
+
+\begin{definition}[$k$-Anonymity]
+$k$ is an integer. A database $\cD$ is $k$-anonymous iff, for all entries $d \in \cD$ and some subsets of column names $Q \subseteq \cC$, there exist a subset $S \subseteq \cD$ of size at least $k$ such that $\Proj{Q} s = \Proj{Q} d$ for all $s \in S$.
+\end{definition}
+
+\begin{definition}[MultiR $k$-Anonymity]
+$k$-Anonymity with multiple databases joined.
+\end{definition}
+
+\begin{definition}[$\ell$-Diversity]
+Extension of $k$-Anonymity. $\ell$ is an integer. A database $\cD$ is $\ell$-diverse iff, for all entries $d \in \cD$ and for all subsets of column names $Q \subseteq \cC$, there exist a subset $S \subseteq \cD$ of size at least $k$ such that $\Proj{Q} s = \Proj{Q} d$ for all $s \in S$, and for some other columns $Q' \subseteq \cC - Q$, $\abs{\Proj{c} S}$ is at least $\ell$ for all $c \in Q'$.
+\end{definition}
+
+\begin{definition}[Confidence Bounding]
+Probabilistic property.
+\end{definition}
+
+\begin{definition}[$(\alpha, k)$-Anonymity]
+\end{definition}
+
+\begin{definition}[$(X,Y)$-Privacy]
+$X,Y \subseteq C$ are subsets of column names. A database $\cD$ is $(X,Y)$-anonymous for some integer $k$ iff, for all entries $d \in \cD$ and all columns $x \in X$, there is $S \subseteq \cD$ such that $\Proj{x} d = \Proj{x} s$ for all $s \in S$, and $\abs{\Proj{y} S}$ is at least $k$ for all $y \in Y$.
+\end{definition}
+
+\begin{definition}[$(k, e)$-Anonymity]
+\end{definition}
+
+\begin{definition}[$(\epsilon,m)$-Anonymity]
+\end{definition}
+
+\begin{definition}[Personalized Privacy]
+\end{definition}
+
+\begin{definition}[$t$-closeness]
+\end{definition}
+
+\begin{definition}[$\delta$-Presence]
+\end{definition}
+
+\begin{definition}[$(c,t)$-Isolation]
+\end{definition}
+
+\begin{definition}[$\epsilon$-Differential Privacy]
+\end{definition}
+
+\begin{definition}[$(d, \gamma)$-Privacy]
+\end{definition}
+
+\begin{definition}[Distributional Privacy]
+\end{definition}
+
+\end{document}
