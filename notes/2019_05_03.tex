@@ -5,6 +5,20 @@
 \usepackage{stmaryrd}
 \usepackage[retainorgcmds]{IEEEtrantools}
 
+% alternative caligraphy
+\usepackage{calrsfs}
+\DeclareMathAlphabet{\pazocal}{OMS}{zplm}{m}{n}
+
+% alternative caligraphy
+\DeclareFontFamily{U}{mathc}{}
+\DeclareFontShape{U}{mathc}{m}{it}%
+{<->s*[1.03] mathc10}{}
+\DeclareMathAlphabet{\mathscr}{U}{mathc}{m}{it}
+
+% minted python shortcut
+\newminted{py}{frame=single,breaklines,autogobble,fontfamily=zi4,
+escapeinside=||,mathescape=true,style=bw,linenos,python3=true}
+
 \DeclareMathOperator{\probability}{\mathsf{Pr}}
 \newcommand{\pr}[1]{\probability(#1)}
 \DeclareMathOperator{\reward}{\mathsf{R}}
@@ -23,6 +37,8 @@
 \DeclareMathOperator{\init}{\mathtt{init}}
 \DeclareMathOperator{\future}{\mathsf{F}}
 \renewcommand{\F}[1]{\future#1}
+\newcommand{\PROBE}{\mathscr{Probe}}
+\newcommand{\pchoice}[1]{\mathbin{[#1]}}
 
 \newdate{date}{3}{5}{2019}
 
@@ -34,41 +50,48 @@
 % (2) liberal case ER + PROB of divergence
 
 \begin{definition}
-Let $S$ be the program states in model $\sM$.
-A path is a sequence $\pi = s_1 s_2 s_3 ...$ permitted by $\sM$.
+Let $S$ be the program states in program $P$.
+A path is a sequence $\pi = s_1 s_2 s_3 ...$ permitted by $P$.
 A variable $v$ a function $v : S \mapsto \Reals$.
 Every non-empty finite path $\pi = s_1 ... s_i$ determines a
-probe state $p$ such that we take $v(p) = v(s_i)$ for any $v$.
+probe state $p_{\pi}$ such that we take $v(p_{\pi}) = v(s_i)$ for
+any $v$.
 Henceforth a path is taken to contain a mix of normal program
-states and probe states.
+states and probe states. Write $p$ instead of $p_{\pi}$ since
+there can be no confusion.
+For example, let
+\[
+\pi =
+s_1 \cdot p_{s_1} \cdot s_2 \cdot s_3 \cdot
+p_{s_1 p_{s_1} s_2 s_3} \cdot
+p_{s_1 p_{s_1} s_2 s_3 p_{s_1 p_{s_1} s_2 s_3}}
+\]
+write
+\[
+\pi = s_1 \cdot p \cdot s_2 \cdot s_3 \cdot p \cdot p
+\]
 \end{definition}
 
 \begin{definition}
 The \emph{probed value} $\pb{v \mid \pi}$ of variable $v$
 regarding path $\pi$ is:
 \begin{itemize}
-\item if $\pi$ is finite,
-    \begin{itemize}
-    \item $v(p)$ where $p$ is the last probe state in $\pi$ and
-    \item undefined if there is no probe state in $\pi$;
-    \end{itemize}
-\item and, if $\pi$ is infinite,
-    \begin{itemize}
-    \item something %TODO
-    \item undefined if there is no probe state in $\pi$;
-    \end{itemize}
+\item $v(p)$ where $p$ is the last(?) probe state in $\pi$ and
+\item undefined if there is no probe state in $\pi$.
 \end{itemize}
 \end{definition}
 
 \begin{definition}
-The \emph{expected probed value} $\ep{v \mid T}$ of variable $v$
-regarding paths $T$ is:
+The \emph{expected probed value} $\ep{v \mid \Pi}$ of variable $v$
+regarding paths $\Pi$ is:
 \[
-\sum_{\pi \in T} \pr{\pi} \pb{v \mid \pi}
+\sum_{\pi \in \Pi} \pr{\pi} \pb{v \mid \pi}
 \]
 \end{definition}
 
-For a program $P$ without probe states and variable $v$, insert probe states $P_{\top}$ immediately after $\init$ and $P_{\bot}$ just before $\sink$:
+\section*{Generality}
+
+For a program $P$ without probe states and variable $v$, insert probe states immediately after $\init$ and just before $\sink$:
 \begin{IEEEeqnarray*}{rCl}
 \er{\F{\sink} \mid P^{v}}
 & = & \sum_{\pi \in \F{\sink}} \pr{\pi} \rw{\pi} \\
@@ -83,5 +106,57 @@ and
 & = & \er{\F{\sink} \mid P^{v}} + \sum_{\pi \in \neg\F{\sink}} \pr{\pi} \pb{1 \mid \pi} \\
 & = & \ep{v \mid \F{\sink}} + \ep{1 \mid \neg \F{\sink}}
 \end{IEEEeqnarray*}
+
+\pagebreak
+
+What should $\ep{x \mid \top}$ be for:
+
+\begin{listing}[H]
+\begin{pycode}
+x = 1
+|$\PROBE$|
+x = 2
+|$\PROBE$|
+x = 3
+\end{pycode}
+\caption{We'd want $\ep{x \mid \top} = 3$ and that compels the
+definition of $\probing$ to take the \emph{last} probe state.}
+\end{listing}
+
+\begin{listing}[H]
+\begin{pycode}
+while true:
+    x = 1
+    |$\PROBE$|
+\end{pycode}
+\caption{We'd want $\ep{x \mid \top} = 1$ but the probe state occurs
+infinitely often so there is no \emph{last} probe state.}
+\end{listing}
+
+\begin{listing}[H]
+\begin{pycode}
+while true:
+    x = 1 |$\pchoice{0.5}$| x = 2
+    |$\PROBE$|
+\end{pycode}
+\caption{We'd want $\ep{x \mid \top} = 0.5$ and even if we take
+not the last probe state but every probed value weighted by its
+path's probability, we would count in too much:
+$0.5 \cdot 1 + 0.5 \cdot 2 + 0.25 \cdot 1 + 0.25 \cdot 2
++ 0.25 \cdot 1 + 0.25 \cdot 2 + ...$.}
+\end{listing}
+
+\begin{listing}[H]
+\begin{pycode}
+x = 1
+while true:
+    x = x |$\cdot$| 0.5
+    |$\PROBE$|
+\end{pycode}
+\caption{We'd want $\ep{x \mid \top} = 0$ but I have no idea
+how would this work since $\sum_{i} 0.5^i = \frac{0.5}{1-0.5} = 1$.
+For these two I don't think I know enough to properly handle
+them in a meaningful way. I'm still reading on semantics.}
+\end{listing}
 
 \end{document}
