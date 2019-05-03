@@ -119,7 +119,7 @@ x = 2
 |$\PROBE$|
 x = 3
 \end{pycode}
-\caption{We'd want $\ep{x \mid \top} = 3$ and that compels the
+\caption{We'd want $\ep{x \mid \top} = 2$ and that compels the
 definition of $\probing$ to take the \emph{last} probe state.}
 \end{listing}
 
@@ -139,7 +139,7 @@ while true:
     x = 1 |$\pchoice{0.5}$| x = 2
     |$\PROBE$|
 \end{pycode}
-\caption{We'd want $\ep{x \mid \top} = 0.5$ and even if we take
+\caption{We'd want $\ep{x \mid \top} = 1.5$ and even if we take
 not the last probe state but every probed value weighted by its
 path's probability, we would count in too much:
 $0.5 \cdot 1 + 0.5 \cdot 2 + 0.25 \cdot 1 + 0.25 \cdot 2
