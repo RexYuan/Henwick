@@ -1,0 +1,4 @@
+initscr
+raw
+echo
+keypad

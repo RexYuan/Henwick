@@ -1,0 +1,13 @@
+endwin => 	endwin();
+initscr => 	initscr();
+cbreak => 	cbreak();
+echo => 	noecho();
+has_colors => 		if(has_colors())
+start_color => 			start_color();
+init_pair => 			init_pair(1, COLOR_GREEN, COLOR_BLACK);
+init_pair => 			init_pair(2, COLOR_BLUE, COLOR_BLACK);
+init_pair => 			init_pair(3, COLOR_CYAN, COLOR_BLACK);
+init_pair => 			init_pair(COLOR_HIGHLIGHT, COLOR_BLACK, COLOR_WHITE);
+init_pair => 			init_pair(COLOR_HIGHLIGHT_CURSOR, COLOR_BLACK, COLOR_MAGENTA);
+keypad => 	keypad(stdscr, true);
+endwin => 	endwin();
