@@ -15,23 +15,24 @@ def eqi(f1, f2, bits):
     return True
 
 # test
-'''
-basis = ['010', '101']
+
+basis = ['000', '011', '101']
 # a xor c
 def target(s):
-    return s in {'100','110','001','011'}
+    return s in {'100','110','001'}
 def mem_oracle(s):
     return target(s)
 def eqi_oracle(h):
     return eqi(h, target, 3)
-# should learn terms [100,001], [001,100]
-_,_,ret1f = LambdaAlgo(mem_oracle, eqi_oracle, basis)
-print(eqi(ret1f,target,3))
 
-#_,_,ret2f,b2 = CDNFAlgo(mem_oracle, eqi_oracle)
+# should learn terms [100,001], [001,100]
+#_,_,ret1f = LambdaAlgo(mem_oracle, eqi_oracle, basis)
+#print(eqi(ret1f,target,3))
+
+_,_,ret2f,b2 = CDNFAlgo(mem_oracle, eqi_oracle)
 print(eqi(ret2f,target,3))
 print(b2)
-'''
+
 
 # random tests
 '''
@@ -78,6 +79,7 @@ print()
 '''
 
 # standard function tests
+'''
 word = 5
 def target(bs):
     # bs[:word] < bs[word:]
@@ -107,3 +109,4 @@ print("basis size:",len(bas))
 print("basis:",bas)
 print()
 print("terms:",terms)
+'''

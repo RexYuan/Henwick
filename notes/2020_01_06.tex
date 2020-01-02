@@ -1,0 +1,148 @@
+\documentclass[12pt,a4paper]{llncs}
+
+\usepackage{rex}
+
+\usepackage{stmaryrd}
+\usepackage[retainorgcmds]{IEEEtrantools}
+
+% alternative caligraphy
+\usepackage{calrsfs}
+\DeclareMathAlphabet{\pazocal}{OMS}{zplm}{m}{n}
+
+% alternative caligraphy
+\DeclareFontFamily{U}{mathc}{}
+\DeclareFontShape{U}{mathc}{m}{it}%
+{<->s*[1.03] mathc10}{}
+\DeclareMathAlphabet{\mathscr}{U}{mathc}{m}{it}
+
+% minted python shortcut
+\newminted{py}{frame=single,breaklines,autogobble,fontfamily=zi4,
+escapeinside=||,mathescape=true,style=bw,linenos,python3=true}
+\newmintedfile[pyfile]{py}{frame=single,breaklines,autogobble,fontfamily=zi4,
+escapeinside=||,mathescape=true,linenos,python3=true}
+
+\spnewtheorem{thing}{Thing}{\bfseries}{\itshape}
+
+\newcommand{\cM}{\mathcal{M}}
+\newcommand{\cT}{\mathcal{T}}
+\newcommand{\MDNF}{\mathrm{M}_\mathrm{DNF}}
+\newcommand{\MTERM}{\mathrm{M}_\mathrm{TERM}}
+
+\begin{document}
+\section*{Lambda' Algorithm}
+For $f$
+\begin{IEEEeqnarray*}{rCl}
+f(x + a_k) & = & \bigvee_{f(a + a_k) = 1}^{m} a \\
+\cM( f(x + a_k) ) & = &
+\bigvee_{f(a + a_k) = 1}^{m} \cM(a) \\
+& = & \bigvee_{f(a + a_k) = 1}^{m} \set{
+    \bigwedge_{a[i] = 1} x_i
+} \\
+& = & \bigvee_{f(a + a_k) = 1}^{m} \cT'_k \\
+\cM_{a_k} ( f ) & = &
+(\bigvee_{f(a + a_k) = 1}^{m} \cT'_k)(x + a_k)
+\end{IEEEeqnarray*}
+
+For $S'_i = \set{v_n + a_i \mid n}$
+\begin{IEEEeqnarray*}{rCl}
+\MDNF(S'_i) & = & \set{
+    \MTERM(v_n + a_i) \mid
+    (v_n + a_i) \in S'_i
+} \\
+& = & \set{
+    \bigwedge_{(v_n + a_i)[j] = 1} x_j \mid
+    (v_n + a_i) \in S'_i
+} \\
+\bigvee_{(v_n + a_i) \in S'_i} \MDNF(S'_i) & = &
+  \bigvee_{(v_n + a_i) \in S'_i}
+    \bigwedge_{(v_n + a_i)[j] = 1} x_j \\
+H_i & = &
+(\bigvee_{(v_n + a_i) \in S_i} \MDNF(S'_i)) (x + a_i)
+\end{IEEEeqnarray*}
+
+\newpage
+\section*{Proposition A'}
+Let $f$ be a boolean function. If $a$ is an assignment
+such that $f(a) = 1$,
+then for the minterm DNF $\bigvee_{i=1}^m T_i$ of $f$
+there is a term $T_a$ such that $\cM(T_a) = \MTERM(a)$.
+
+\subsubsection*{Proof}
+Assume
+\begin{enumerate}
+\item $v^\delta$ is a positive counterexample.
+\item $I^\delta$ is non-empty.
+\item $\MTERM(v^\delta + a_i) \in \cT'_i - \MDNF(S_i^{'\delta-1})$ for $i \in I^\delta$.
+\item $\MDNF(S_i^\delta) \subseteq \cT_i$ for $i = 1 .. t$.
+\item $H_i^\delta \to \cM_{a_i}(f)$ for $i = 1 .. t$.
+\end{enumerate}
+
+Then induction is as follows.
+\begin{enumerate}[a.,start=3]
+
+\item Let $i \in I^{\delta+1}$.
+Since (b), $H_i^\delta (v^{\delta+1}) = 0$.
+By definition,
+\[
+H_i^\delta (v^{\delta+1}) = 
+(\bigvee_{v_n \in S_i^{'\delta}} \MDNF(S_i^{'\delta})) (v^{\delta+1} + a_i) = 0
+\]
+so
+\[
+\MTERM(v^{\delta+1} + a_i) \notin \MDNF(S_i^{'\delta})
+\]
+By (a),
+\[
+f(v^{\delta+1}) =
+f((v^{\delta+1} + a_i) + a_i) = 1
+\]
+By Proposition A',
+there is a term $T$ in the minterm DNF of
+$f(x + a_i)$ such that
+$\cM(T) = \MTERM(v^{\delta+1} + a_i)$.
+Therefore
+\[
+\MTERM(v^{\delta+1} + a_i) \in \cT'_i
+\]
+This is the crux of the proof.
+\addtocounter{enumi}{1}
+
+\item By definition,
+\[
+H_i^{\delta+1} (x) =
+(\bigvee_{(\widehat{v_n} + a_i) \in S_i^{\delta+1}}
+\MDNF(S_i^{\delta+1}))
+(x + a_i)
+\]
+and
+\[
+\cM_{a_k} ( f ) = (\bigvee_{n=1}^{s} \cT_k)(x + a_k)
+\]
+By (d), $\MDNF(S_i^{\delta+1}) \subseteq \cT_i$, so
+\[
+\bigvee_{(\widehat{v_n} + a_i) \in S_i^{\delta+1}}
+\MDNF(S_i^{\delta+1}) \to
+\bigvee_{n=1}^{s} \cT_k
+\]
+Therefore
+\[
+H_i^{\delta+1} (x) \to \cM_{a_k} ( f )
+\]
+
+
+\end{enumerate}
+
+
+
+
+
+
+
+
+
+
+
+
+%\pyfile{../bshouty/cdnf.py}
+
+\end{document}

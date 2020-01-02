@@ -1,4 +1,4 @@
-\documentclass[12pt]{llncs}
+\documentclass[12pt,a4paper]{llncs}
 
 \usepackage{rex}
 
@@ -46,7 +46,7 @@ f(x + a_k) & = & \bigvee_{n=1}^{s}
   (\bigwedge_{\substack{x_j \in N\ell^n \\ a_k[j] = 1}} x_j)
 ) \\
 & = & \bigvee_{n=1}^{s} \set{
-    \bigwedge_{(x + a_k)[i] = 1} x_i \mid
+    \bigwedge_{(T_n^{a_k} + a_k)[i] = 1} x_i \mid
     x \in \ell^n
 } \\
 & = & \bigvee_{n=1}^{s} \cT_k =
@@ -81,7 +81,13 @@ The idea is to fit $\MDNF(S_i)$ to $\cT_i$
 in each $a_i$ dimension s.t.
 $H_i$ fits to $\cM_{a_k} ( f )$.
 
-\newpage
+\section*{Proposition A}
+Let $f$ be a boolean function. If $a$ is an assignment
+such that $f(a) = 1$ and for all $i$ where $a[i] = 1$
+we have $f(a + \neg x_i) = 0$,
+then for any DNF $\bigvee_{i=1}^s T_i$ of $f$
+there is a term $T_a$ such that $\cM(T_a) = \MTERM(a)$.
+
 \subsubsection*{Proof}
 Assume
 \begin{enumerate}
@@ -142,10 +148,10 @@ f(\widehat{v}^{\delta+1} + \neg x_j + a_i + a_i) =
 f((\widehat{v}^{\delta+1} + a_i) + \neg x_j + a_i) = 0
 \]
 So by Proposition A, there is a term $T$ in any DNF of
-$f(x + a_i)$ such that $\cM(T) = \MDNF(\widehat{v}^{\delta+1} + a_i)$.
+$f(x + a_i)$ such that $\cM(T) = \MTERM(\widehat{v}^{\delta+1} + a_i)$.
 Therefore
 \[
-\MDNF(\widehat{v}^{\delta+1} + a_i) \in \cT_i = \set{
+\MTERM(\widehat{v}^{\delta+1} + a_i) \in \cT_i = \set{
     \cM(T) \mid T \in f(x + a_i)
 }
 \]
@@ -158,7 +164,7 @@ then
 S_i^{\delta+1} = S_i^{\delta} \cup
 \set{\widehat{v}^{\delta+1} + a_i}.
 \]
-Either way, by hypothesis 4 and (d), we have
+Either way, by hypothesis 4 and (c), we have
 $\MDNF(S_i^{\delta+1}) \subseteq \cT_i$.
 
 \item By definition,
@@ -183,14 +189,8 @@ Therefore
 H_i^{\delta+1} (x) \to \cM_{a_k} ( f )
 \]
 
-
 \end{enumerate}
 
-
-
-
-
-\newpage
 %\pyfile{../bshouty/cdnf.py}
 
 \end{document}
