@@ -60,7 +60,7 @@ def hyptize(learnd_terms_comp, basis_comp):
         return any(all(i in bst for i in t) for t in mdnf(learnd_terms_comp))
     return h
 
-def LambdaAlgo(mem_oracle, eqi_oracle, basis):
+def LambdaAlgoP(eqi_oracle, basis):
     # learned Si terms against target Ti terms
     learnd_terms = [[] for _ in basis]
     # learned hypothesized functions Hi against target basis component functions Mai
@@ -75,15 +75,13 @@ def LambdaAlgo(mem_oracle, eqi_oracle, basis):
         unaligned = [i for i,h in enumerate(hypted_funcs) if not h(ce)]
         for i in unaligned:
             # heart of the algorithm, see paper for explanation
-            #walked_ce = walk(ce, basis[i], mem_oracle)
-            walked_ce = ce
-            learnd_terms[i].append( bsxor(walked_ce,basis[i]) )
+            learnd_terms[i].append( bsxor(ce,basis[i]) )
             hypted_funcs[i] = hyptize(learnd_terms[i], basis[i])
         conj_hypts = (lambda bs: all(h(bs) for h in hypted_funcs))
         ce = eqi_oracle(conj_hypts)
     return learnd_terms, hypted_funcs, conj_hypts
 
-def CDNFAlgo(mem_oracle, eqi_oracle):
+def CDNFAlgoP(eqi_oracle):
     basis = []
     ce = eqi_oracle((lambda _: True))
     if ce == True:
@@ -107,8 +105,7 @@ def CDNFAlgo(mem_oracle, eqi_oracle):
             unaligned = [i for i,h in enumerate(hypted_funcs) if not h(ce)]
 
         for i in unaligned:
-            walked_ce = walk(ce, basis[i], mem_oracle)
-            learnd_terms[i].append( bsxor(walked_ce,basis[i]) )
+            learnd_terms[i].append( bsxor(ce,basis[i]) )
             hypted_funcs[i] = hyptize(learnd_terms[i], basis[i])
 
         conj_hypts = (lambda bs: all(h(bs) for h in hypted_funcs))
@@ -119,15 +116,15 @@ basis = ['000', '011', '101']
 # a xor c
 def target(s):
     return s in {'100','110','001'}
-def mem_oracle(s):
-    return target(s)
 def eqi_oracle(h):
     return eqi(h, target, 3)
 
 # should learn terms [100,001], [001,100]
-ts,fs,ret1f = LambdaAlgo(mem_oracle, eqi_oracle, basis)
+ts,fs,ret1f = LambdaAlgoP(eqi_oracle, basis)
 print(eqi(ret1f,target,3))
 
-ts,fs,ret2f,b2 = CDNFAlgo(mem_oracle, eqi_oracle)
+ts,fs,ret2f,b2 = CDNFAlgoP(eqi_oracle)
 print(eqi(ret2f,target,3))
 print(b2)
+
+# TODO: convert functions to SMT formulas
