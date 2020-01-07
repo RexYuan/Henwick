@@ -18,19 +18,31 @@ And(Not(x1),Not(x2),x3,Not(x4),
 And(Not(x1),Not(x2),x3,x4,
     Not(x1p),Not(x2p),Not(x3p),Not(x4p))
 )
-hyp = And(Not(x1),Not(x2))
-hypp = And(Not(x1p),Not(x2p))
+h = And(Not(x2),Not(x2))
+hp = And(Not(x1p),Not(x2p))
 
-def eqv(hyp):
+def eqv(hyp,hypp):
     s.reset()
     s.add( Not(Implies(inits, hyp)) )
+    if s.check() != unsat:
+        print("c1:")
+        return s.model()
+    s.reset()
     s.add( Not(Implies(hyp, Not(bads))) )
+    if s.check() != unsat:
+        print("c2:")
+        return s.model()
+    s.reset()
     s.add( Not(Implies(And(trans, hyp), hypp)) )
+    if s.check() != unsat:
+        print("c3:")
+        return s.model()
+    return True
 
-    return s.check() == unsat
+r = eqv(h,hp)
+print(r)
 
-#print(eqv(hyp))
-
+'''
 def inits(s):
     return s == '0000'
 def bads(s):
@@ -40,3 +52,4 @@ def trans(s1, s2):
     return int(s1,2)%mod + 1 == int(s2)%mod
 def hyp(s):
     return s[0] != '1' and s[1] != '1'
+'''

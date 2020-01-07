@@ -1,4 +1,4 @@
-
+'''
 def tabulate(f, bits):
     """Print function truth table."""
     for i in range(2**bits):
@@ -11,54 +11,8 @@ def eqi(f1, f2, bits):
             print('counter-example:',bs)
             return bs
     return True
-
+'''
 from cdnf import *
-
-def hyptize(learnd_terms_comp, basis_comp):
-    """Construct hypothesized minimal monotone function per learned terms.
-
-    Args:
-        learnd_terms_comp (bit string list): Learned terms component.
-        basis_comp (bit string): Corresponding basis component.
-
-    Returns:
-        (bit string -> bool): Hypothesized function against basis components function.
-
-    Reference:
-        learnd_terms_comp: Si
-        basis_comp: ai
-        return: Hi
-        mterm: M_DNF(assignment)
-        mdnf: M_DNF(assignment list)
-    """
-    def mterm(bs):
-        """Construct the minimal monotone function per assignment `bs`.
-
-        Represented as a list of indices of positive literals.
-
-        Example:
-            >>> mterm('10110')
-            [0, 2, 3]
-        """
-        return [i for i,b in enumerate(bs) if b == '1']
-
-    def mdnf(bss):
-        """Construct the DNF of minimal monotone functions per assignments `bss`.
-
-        Example:
-            >>> list(mdnf(['10110','01001']))
-            [[0, 2, 3], [1, 4]]
-        """
-        return map(mterm, bss)
-
-    def h(bs):
-        # keeping with the outer-most (x+a)
-        bs = bsxor(bs,basis_comp)
-        # since mterms are monotone, it suffices to check if all the positive
-        # bits in t are also positive in `bs` for some mterm t in the mdnf
-        bst = mterm(bs)
-        return any(all(i in bst for i in t) for t in mdnf(learnd_terms_comp))
-    return h
 
 def LambdaAlgoP(eqi_oracle, basis):
     # learned Si terms against target Ti terms
@@ -70,7 +24,6 @@ def LambdaAlgoP(eqi_oracle, basis):
     # get positive counter-example
     ce = eqi_oracle(conj_hypts)
     while ce != True:
-        #breakpoint()
         # find the hypothesized functions not accommodating target basis components
         unaligned = [i for i,h in enumerate(hypted_funcs) if not h(ce)]
         for i in unaligned:
@@ -97,7 +50,7 @@ def CDNFAlgoP(eqi_oracle):
         unaligned = [i for i,h in enumerate(hypted_funcs) if not h(ce)]
         while unaligned == []:
             basis.append(ce)
-            print("basis size", len(basis))
+            #print("basis size", len(basis))
             learnd_terms.append( [] )
             hypted_funcs.append( (lambda _: False) )
             conj_hypts = (lambda bs: all(h(bs) for h in hypted_funcs))
@@ -112,6 +65,7 @@ def CDNFAlgoP(eqi_oracle):
         ce = eqi_oracle(conj_hypts)
     return learnd_terms, hypted_funcs, conj_hypts, basis
 
+'''
 basis = ['000', '011', '101']
 # a xor c
 def target(s):
@@ -128,3 +82,4 @@ print(eqi(ret2f,target,3))
 print(b2)
 
 # TODO: convert functions to SMT formulas
+'''

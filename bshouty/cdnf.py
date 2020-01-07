@@ -114,7 +114,7 @@ def LambdaAlgo(mem_oracle, eqi_oracle, basis):
         unaligned = [i for i,h in enumerate(hypted_funcs) if not h(ce)]
         for i in unaligned:
             # heart of the algorithm, see paper for explanation
-            walked_ce = walk(ce, basis[i], mem_oracle)
+            walked_ce = walk(ce, basis[i], mem_oracle) if mem_oracle else ce
             learnd_terms[i].append( bsxor(walked_ce,basis[i]) )
             hypted_funcs[i] = hyptize(learnd_terms[i], basis[i])
         conj_hypts = (lambda bs: all(h(bs) for h in hypted_funcs))
@@ -137,7 +137,6 @@ def CDNFAlgo(mem_oracle, eqi_oracle):
         unaligned = [i for i,h in enumerate(hypted_funcs) if not h(ce)]
         while unaligned == []:
             basis.append(ce)
-            print("basis size", len(basis))
             learnd_terms.append( [] )
             hypted_funcs.append( (lambda _: False) )
             conj_hypts = (lambda bs: all(h(bs) for h in hypted_funcs))
@@ -145,7 +144,7 @@ def CDNFAlgo(mem_oracle, eqi_oracle):
             unaligned = [i for i,h in enumerate(hypted_funcs) if not h(ce)]
 
         for i in unaligned:
-            walked_ce = walk(ce, basis[i], mem_oracle)
+            walked_ce = walk(ce, basis[i], mem_oracle) if mem_oracle else ce
             learnd_terms[i].append( bsxor(walked_ce,basis[i]) )
             hypted_funcs[i] = hyptize(learnd_terms[i], basis[i])
 
