@@ -159,7 +159,7 @@ def huge_random_dense_test():
     if not eqi(retf1,target,10):
         print(gened)
         raise Exception("error: huge random dense cdnf")
-    print("huge random sparse cdnf time:",t2-t1)
+    print("huge random dense cdnf time:",t2-t1)
     t1 = time()
     _,_,retf2,bas2 = CDNFAlgo(None, eqi_oracle)
     t2 = time()
@@ -201,10 +201,36 @@ def fn_test():
     print()
     print("terms:",terms)
 
+from math import floor
+def random_test_ratio_bits(true_ratio, bits):
+    true_points = floor(2 ** bits * true_ratio)
+    gened = gen_bs(true_points, bits)
+    def target(s):
+        return s in gened
+    def mem_oracle(s):
+        return target(s)
+    def eqi_oracle(h):
+        return eqi(h, target, 10)
+    t1 = time()
+    _,_,retf1,bas1 = CDNFAlgo(mem_oracle, eqi_oracle)
+    t2 = time()
+    if not eqi(retf1,target,10):
+        print(gened)
+        raise Exception("error: {} bits random {} ratio cdnf".format(bits, true_ratio))
+    print("{} bits random {} cdnf time:".format(bits, true_ratio),t2-t1)
+    t1 = time()
+    _,_,retf2,bas2 = CDNFAlgo(None, eqi_oracle)
+    t2 = time()
+    if not eqi(retf2,target,10):
+        print(gened)
+        raise Exception("error: {} bits random {} ratio nomen cdnf".format(bits, true_ratio))
+    print("{} bits random {} nomen cdnf time:".format(bits, true_ratio),t2-t1)
+    print(">> {} bits random {} ratio test cleared".format(bits, true_ratio))
 
-basic_test()
-small_random_test()
-larger_random_sparse_test()
+#basic_test()
+#small_random_test()
+#larger_random_sparse_test()
 #larger_random_dense_test()
-huge_random_sparse_test()
+#huge_random_sparse_test()
 #huge_random_dense_test()
+random_test_ratio_bits(0.01, 10)

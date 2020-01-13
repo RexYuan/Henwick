@@ -151,3 +151,9 @@ def CDNFAlgo(mem_oracle, eqi_oracle):
         conj_hypts = (lambda bs: all(h(bs) for h in hypted_funcs))
         ce = eqi_oracle(conj_hypts)
     return learnd_terms, hypted_funcs, conj_hypts, basis
+
+from z3 import *
+
+def bs_to_z3term(bs):
+    pass
+    #for b in enumerate(bs)
