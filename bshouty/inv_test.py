@@ -46,4 +46,6 @@ def oracle2(hyp):
         print(s.model())
         return s.model()
     return True
-m = z3_CDNFAlgo(oracle2, 8)
+#m = z3_CDNFAlgo(oracle2, 8)
+
+m = get_invariant(total_bits, inits, bads, trans)
