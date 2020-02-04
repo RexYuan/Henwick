@@ -2,6 +2,12 @@
 from z3 import *
 from cdnf import *
 
+# shortcuts
+def B(s):
+    return Bool(str(s))
+def NB(s):
+    return Not(Bool(str(s)))
+
 def z3_bool_range(*argv):
     '''
     Example:
@@ -128,12 +134,33 @@ def get_invariant(bits, inits, bads, trans):
     
     # learn invariant by always extracting the predecessor of the transition counter-example
     def trans_oracle(h):
+        print(h)
         hp = substitute(h, *zip(z3_bool_range(bits),z3_bool_range(bits,bits*2)))
         s.reset()
         s.add( Not(Implies(And(h,trans) , hp)) )
         if s.check() != unsat:
             return s.model()
         return True
+    breakpoint()
     return z3_CDNFAlgo(trans_oracle, bits, starter=not_bads_starter)
 
-get_invariant(2, Bool('0'), Not(Bool('0')), And(Bool('0'),Bool('2')))
+#get_invariant(2, Bool('0'), Not(Bool('0')), And(Bool('0'),Bool('2')))
+get_invariant(3, And(B(0),B(1)),
+                 And(NB(0),NB(1)),
+                 Or(And(B(0),B(3)),
+                    And(NB(0),NB(3))))
+                 
+'''
+000\
+001/ bads
+010
+011
+trans
+---
+trans
+100
+101
+110\
+111/ inits
+'''
+pass
