@@ -172,7 +172,7 @@ def test4():
     trans = make_counter_trans(bits,mod=mod)
     inv = get_invariant(bits, inits, bads, trans)
     assert test_inv(inv, bits, inits, bads, trans)
-test4()
+
 def test5():
     '''
     trans: count up
@@ -225,3 +225,8 @@ s.add( Not(Implies(And(h,trans) , hp)) )
 if s.check() != unsat:
     print(z3_model_to_bs(s.model(), bits*2))
 '''
+
+#test1()
+#test2()
+#test3()
+test4()
