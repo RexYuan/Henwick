@@ -10,6 +10,9 @@ def bsxor(x,y):
     """Bit-wise XOR on bit strings."""
     return ''.join( bxor(xi,yi) for xi,yi in zip(x,y) )
 
+def flip(bs, i):
+    return bs[:i]+('0' if bs[i] == '1' else '1')+bs[i+1:]
+
 def walk(v, a, f):
     """Walk from v toward a while keeping f(v).
 
@@ -19,8 +22,6 @@ def walk(v, a, f):
         >>> walk('11','00',(lambda bs: bs[1] == '1'))
         '01'
     """
-    def flip(bs, i):
-        return bs[:i]+('0' if bs[i] == '1' else '1')+bs[i+1:]
     more = True
     while more:
         more = False

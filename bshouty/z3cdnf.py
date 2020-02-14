@@ -25,6 +25,12 @@ def z3_bool_range(*argv):
         bits = argv[1]
         for i in range(start,bits):
             yield Bool(str(i))
+    elif len(argv) == 3:
+        start = argv[0]
+        bits = argv[1]
+        step = argv[2]
+        for i in range(start,bits,step):
+            yield Bool(str(i))
 
 def bs_to_z3_term(bs, bits):
     if bs is True:
@@ -72,7 +78,7 @@ def z3_CDNFAlgo(eqi_oracle, bits, starter=False, details=False):
         basis = []
         ce = z3_model_to_bs(eqi_oracle( BoolVal(True) ), bits)
         if ce == True:
-            return True
+            raise Exception("bads is empty")
         basis.append( ce )
 
         learnd_terms = [ [] ]
@@ -85,6 +91,22 @@ def z3_CDNFAlgo(eqi_oracle, bits, starter=False, details=False):
     while ce != True:
         unaligned = [i for i,h in enumerate(hypted_funcs) if not h(ce)]
         while unaligned == []:
+            # check if this negative ce was already registered as positive
+            if starter:
+                for i in range(len(learnd_terms)):
+                    if ce in learnd_terms_og[i]:
+                        # get rid of it
+                        learnd_terms_og[i].remove( ce )
+                        learnd_terms[i].remove( bsxor(ce,basis[i]) )
+                        # add back all its successors
+                        for j in range(bits):
+                            if ce[j] == '0' and flip(ce,j) not in learnd_terms_og[i]:
+                                learnd_terms_og[i].append( flip(ce,j) )
+                            if bsxor(ce,basis[i])[j] == '0' and flip(bsxor(ce,basis[i]),j) not in learnd_terms[i]:
+                                learnd_terms[i].append( flip(bsxor(ce,basis[i]),j) )
+                        # refresh funcs and forms
+                        hypted_forms[i] = hyptize_forms(learnd_terms_og[i], basis[i])
+                        hypted_funcs[i] = hyptize_funcs(learnd_terms[i], basis[i])
             basis.append( ce )
             learnd_terms.append( [] )
             learnd_terms_og.append( [] )
@@ -98,7 +120,8 @@ def z3_CDNFAlgo(eqi_oracle, bits, starter=False, details=False):
             hypted_funcs[i] = hyptize_funcs(learnd_terms[i], basis[i])
             learnd_terms_og[i].append( ce )
             hypted_forms[i] = hyptize_forms(learnd_terms_og[i], basis[i])
-
+        
+        breakpoint()
         ce = z3_model_to_bs(eqi_oracle( And(hypted_forms) ), bits)
         
     return And(hypted_forms) if not details else (basis,learnd_terms,learnd_terms_og,hypted_funcs,hypted_forms)
@@ -111,9 +134,13 @@ def get_invariant(bits, inits, bads, trans):
         trans: z3 expr with vars from (0) to (2bits-1) where vars from (bits) to (2bits-1) are the next states
     
     Constraints:
-        inits => inv
-        inv => ~bads
-        inv & trans => inv'
+        c1) inits => inv
+        c2) inv => ~bads
+        c3) inv & trans => inv'
+
+    Note:
+        inv may be hypothesized as False which would pass (c3) but wont pass (c1),
+        but in the second phase of learning,
     '''
     s = Solver()
     
@@ -131,36 +158,27 @@ def get_invariant(bits, inits, bads, trans):
             return s.model()
         return True
     not_bads_starter = z3_CDNFAlgo(not_bad_oracle, bits, details=True)
+    breakpoint()
     
     # learn invariant by always extracting the predecessor of the transition counter-example
     def trans_oracle(h):
-        print(h)
+        s.reset()
+        s.add( Not(Implies(inits , h)) )
+        if s.check() != unsat:
+            return s.model()
+        
         hp = substitute(h, *zip(z3_bool_range(bits),z3_bool_range(bits,bits*2)))
         s.reset()
         s.add( Not(Implies(And(h,trans) , hp)) )
         if s.check() != unsat:
             return s.model()
         return True
+
     breakpoint()
     return z3_CDNFAlgo(trans_oracle, bits, starter=not_bads_starter)
 
-#get_invariant(2, Bool('0'), Not(Bool('0')), And(Bool('0'),Bool('2')))
-get_invariant(3, And(B(0),B(1)),
-                 And(NB(0),NB(1)),
-                 Or(And(B(0),B(3)),
-                    And(NB(0),NB(3))))
-                 
-'''
-000\
-001/ bads
-010
-011
-trans
----
-trans
-100
-101
-110\
-111/ inits
-'''
-pass
+def v_in_f(bs,form):
+    s = Solver()
+    s.add(form)
+    s.add(And([v if b == '1' else Not(v) for b,v in zip(bs,z3_bool_range(len(bs)))]))
+    return s.check()
