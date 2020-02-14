@@ -180,6 +180,9 @@ def test5():
     0001
     0010
     0011
+    trans: cycle back to 0000
+    ----
+    trans: count up
     0100
     0101
     0110
@@ -195,38 +198,38 @@ def test5():
     1101- bads
     1110-
     1111-
-    trans: cycle back to 1000
+    trans: cycle back to 1010
     '''
     B0,B1,B2,B3 = Bools('0 1 2 3')
     NB0,NB1,NB2,NB3 = Not(B0),Not(B1),Not(B2),Not(B3)
     bits = 4
     inits = And(NB0,NB1,NB2,NB3)
     bads = And(B0,B1)
-    mod = And(NB0,B1,B2,B3)
-    trans = make_counter_trans(4,mod=mod)
+    jumps = [(And(NB0,B1,B2,B3),And(NB0,NB1,NB2,NB3)),
+             (And(NB0,NB1,B2,B3),And(NB0,NB1,NB2,NB3)),
+             (And(B0,B1,B2,B3),And(B0,NB1,B2,NB3))]
+    trans = make_counter_trans(4,jumps=jumps)
     inv = get_invariant(bits, inits, bads, trans)
     assert test_inv(inv, bits, inits, bads, trans)
-'''
-h = And(Or(And(Not(Bool('0')), Not(Bool('1'))), And(Not(Bool('1'))), And(Not(Bool('0'))), And(Bool('2'))),
-Or(And(Not(Bool('0')), Bool('1')), And(Not(Bool('0')))))
 
-B0,B1,B2 = Bools('0 1 2')
-NB0,NB1,NB2 = Not(B0),Not(B1),Not(B2)
-bits = 3
-inits = Or(And(NB0,NB1,B2) , And(NB0,B1,B2))
-bads = And(B0,B1,NB2)
-mod = And(B0,NB1,NB2)
-trans = make_counter_trans(bits,mod=mod)
+def test6():
+    '''
+    trans: count up and cycle
+    0000 0000- inits
+    0001 0000- inits
+    0101 00**- cycle back to 0000
+    1000 ****- bads
+    11** ****- bads
+    '''
+    B0,B1,B2,B3,B4,B5,B6,B7 = Bools('0 1 2 3 4 5 6 7')
+    NB0,NB1,NB2,NB3,NB4,NB5,NB6,NB7 = Not(B0),Not(B1),Not(B2),Not(B3),Not(B4),Not(B5),Not(B6),Not(B7)
+    bits = 8
+    inits = Or(And(NB0,NB1,NB2,NB3,NB4,NB5,NB6,NB7),
+               And(NB0,NB1,NB2,B3,NB4,NB5,NB6,NB7))
+    bads = Or(And(B0,NB1,NB2,NB3),And(B0,B1))
+    mod = And(NB0,B1,NB2,B3,NB4,NB5)
+    trans = make_counter_trans(8,mod=mod)
+    inv = get_invariant(bits, inits, bads, trans)
+    assert test_inv(inv, bits, inits, bads, trans)
 
-hp = substitute(h, *zip(z3_bool_range(bits),z3_bool_range(bits,bits*2)))
-s = Solver()
-s.reset()
-s.add( Not(Implies(And(h,trans) , hp)) )
-if s.check() != unsat:
-    print(z3_model_to_bs(s.model(), bits*2))
-'''
-
-#test1()
-#test2()
-#test3()
-test4()
+test6()
