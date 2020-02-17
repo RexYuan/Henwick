@@ -32,11 +32,6 @@ def z3_bool_range(*argv):
         for i in range(start,bits,step):
             yield Bool(str(i))
 
-def bs_to_z3_term(bs, bits):
-    if bs is True:
-        return True
-    return And([ x for b,x in zip(bs,z3_bool_range(bits)) if b == '1' ])
-
 def z3_model_to_bs(m, bits):
     '''
     set 1 for True vars and 0 for False or Don't Care vars

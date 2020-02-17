@@ -1,5 +1,7 @@
 
 from z3cdnf import *
+from time import time
+from datetime import timedelta
 
 def test_inv(inv, bits, inits, bads, trans):
     '''
@@ -85,6 +87,25 @@ def tab_c(form,bits):
         bs = "{:0>{w}b}".format(i, w=bits)
         if v_in_f(bs,form) == sat:
             print(bs)
+
+def bs_to_z3_term(bs):
+    '''
+    >>> bs_to_z3_term('1011')
+    And(0, Not(1), 2, 3)
+
+    >>> bs_to_z3_term('10*1')
+    And(0, Not(1), 3)
+
+    >>> bs_to_z3_term('10 asdf *1')
+    And(0, Not(1), 3)
+    '''
+    if bs is True:
+        return True
+    bools = z3_bool_range(len(bs))
+    bs = filter(lambda b: b in '10*', bs)
+    return And([ x if b == '1' else Not(x) for b,x in zip(bs,bools) if b != '*' ])
+
+###################################################
 
 def test1():
     '''
@@ -217,7 +238,7 @@ def test6():
     trans: count up and cycle
     0000 0000- inits
     0001 0000- inits
-    0101 00**- cycle back to 0000
+    0101 00**- cycle back to 0000 0000
     1000 ****- bads
     11** ****- bads
     '''
@@ -232,4 +253,24 @@ def test6():
     inv = get_invariant(bits, inits, bads, trans)
     assert test_inv(inv, bits, inits, bads, trans)
 
-test6()
+def test7():
+    '''
+    trans: count up and cycle
+    0000 0000 0000 0000- inits
+    0001 0000 0000 0000- cycle back to 0000 0000 0000 1000
+    0111 **** 0000 ****- cycle back to 0000 0000 1111 0000
+    11** **** 0000 ****- bads
+    '''
+    bits = 16
+    inits = bs_to_z3_term('0000 0000 0000 0000')
+    bads = bs_to_z3_term('11** **** 0000 ****')
+    jumps = [(bs_to_z3_term('0001 0000 0000 0000'),bs_to_z3_term('0000 0000 0000 1000')),
+             (bs_to_z3_term('0111 **** 0000 ****'),bs_to_z3_term('0000 0000 1111 0000'))]
+    trans = make_counter_trans(bits,jumps=jumps)
+    inv = get_invariant(bits, inits, bads, trans)
+    assert test_inv(inv, bits, inits, bads, trans)
+
+t1 = time()
+test7()
+t2 = time()
+print((timedelta(seconds=t2-t1)))
