@@ -273,17 +273,19 @@ def test7():
 def test8():
     '''
     trans: count up and cycle
-    0000 0000 00- inits
-    0001 0000 00- inits
-    0101 00** **- cycle back to 0000 0000
-    1000 **** **- bads
-    11** **** **- bads
+    0000 0000 0000- inits
+    0001 0000 0000- inits
+    0101 00** ****- cycle back to 0000 0000
+    1000 **** ****- bads
+    1100 **** ****- bads
+    1111 **** 0000- inits
     '''
-    bits = 11
-    inits = Or(bs_to_z3_term('0000 0000 000'),
-               bs_to_z3_term('0001 0000 000'))
+    bits = 16
+    inits = Or(bs_to_z3_term('0000 0000 0000 0000'),
+               bs_to_z3_term('0001 0000 0000 0000'),
+               bs_to_z3_term('1111 **** 0000 0000'))
     bads = Or(bs_to_z3_term('1000 **** ****'),
-              bs_to_z3_term('11** **** ****'))
+              bs_to_z3_term('1100 **** ****'))
     mod = bs_to_z3_term('0101 00** ****')
     trans = make_counter_trans(bits,mod=mod)
     inv = get_invariant(bits, inits, bads, trans)

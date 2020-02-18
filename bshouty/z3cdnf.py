@@ -2,6 +2,7 @@
 from time import time
 from datetime import timedelta
 
+from copy import deepcopy
 from z3 import *
 from cdnf import *
 
@@ -123,7 +124,7 @@ def z3_CDNFAlgo_phase1(eqi_oracle, bits):
             hypted_forms[i] = hyptize_forms(learnd_terms_og[i], basis[i])
         
         ce = z3_model_to_bs(eqi_oracle( make_form(hypted_forms) ), bits)
-        
+    
     return (basis,learnd_terms,learnd_terms_og,hypted_funcs,hypted_forms)
 
 def init_new_basis(inits_oracle, bits, new_basis, learnd_terms, learnd_terms_og, hypted_funcs, hypted_forms):
@@ -191,6 +192,21 @@ def determine_ce(bads_bs_oracle, bits, ce, neg_ces):
         posce += 1
         return succ
 
+def bs_dist(b1,b2):
+    tmp = 0
+    for x,y in zip(b1,b2):
+        if x != y:
+            tmp += 1
+    return tmp
+def get_guess(ce,basis,bits):
+    ce = list(ce)
+    for _ in range(bs_dist(ce,basis) // 2):
+        for i in range(bits):
+            if ce[i] != basis[i]:
+                ce[i] = basis[i]
+                break
+    return ''.join(ce)
+
 def z3_CDNFAlgo_phase2(inits_oracle, trans_oracle, bads_bs_oracle, bits, starter):
     '''
     eqi_oracle is a constrained, inconsistent-but-eventually-consistent oracle
@@ -236,6 +252,8 @@ def z3_CDNFAlgo_phase2(inits_oracle, trans_oracle, bads_bs_oracle, bits, starter
             print('bads_bs_count', bads_bs_count)
             print('pos_oracle_count', pos_oracle_count)
             print('neg_oracle_count', neg_oracle_count)
+            print()
+            print('solver_time', timedelta(seconds=solver_time))
             print('------------------------------------------')
 
         unaligned = [i for i,h in enumerate(hypted_funcs) if not h(ce)]
@@ -278,6 +296,17 @@ def z3_CDNFAlgo_phase2(inits_oracle, trans_oracle, bads_bs_oracle, bits, starter
             #hypted_forms[i] = hyptize_forms(learnd_terms_og[i], basis[i])
             update_forms(hypted_forms[i], ce, basis[i])
             form_time += time() - tsstart
+
+            '''
+            d = bs_dist(ce,basis[i])
+            if d > bits // 2:
+                guess = get_guess(ce,basis[i],bits)
+                learnd_terms[i].append( bsxor(guess,basis[i]) )
+                hypted_funcs[i] = hyptize_funcs(learnd_terms[i], basis[i])
+                learnd_terms_og[i].append( guess )
+                update_forms(hypted_forms[i], guess, basis[i])
+            '''
+
         growpo_time += time() - tstart
 
         tstart = time()
@@ -349,6 +378,22 @@ def get_invariant(bits, inits, bads, trans):
         return True
     not_bads_starter = z3_CDNFAlgo_phase1(not_bad_oracle, bits)
     
+    # need this for determination
+    basis,learnd_terms,_,_,_ = not_bads_starter
+    basis = [b for b in basis]
+    learnd_terms = [[t for t in terms] for terms in learnd_terms]
+    funcs = [hyptize_funcs(ts, b) for (ts, b) in zip(learnd_terms, basis)]
+    def bads_bs_oracle(bs):
+        return not (all(h(bs) for h in funcs))
+    
+    def bads_bs_oracl2e(bs):
+        s.reset()
+        s.add( And([v if b == '1' else Not(v) for b,v in zip(bs,z3_bool_range(len(bs)))]) )
+        s.add( bads )
+        if s.check() == sat:
+            return True
+        return False
+    
     # l
     def inits_oracle(h):
         s.reset()
@@ -363,13 +408,6 @@ def get_invariant(bits, inits, bads, trans):
         if s.check() != unsat:
             return s.model()
         return True
-    def bads_bs_oracle(bs):
-        s.reset()
-        s.add( And([v if b == '1' else Not(v) for b,v in zip(bs,z3_bool_range(len(bs)))]) )
-        s.add( bads )
-        if s.check() == sat:
-            return True
-        return False
 
     return z3_CDNFAlgo_phase2(inits_oracle, trans_oracle, bads_bs_oracle, bits, not_bads_starter)
 

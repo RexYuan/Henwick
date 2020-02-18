@@ -157,7 +157,7 @@ def eqi(f1, f2, bits):
     for i in range(2**bits):
         bs = "{:0>{w}b}".format(i, w=bits)
         if f1(bs) != f2(bs):
-            #print('counter-example:',bs)
+            print('counter-example:',bs,f1(bs),f2(bs))
             return bs
     return True
 def tabulate(f, bits):
@@ -165,6 +165,8 @@ def tabulate(f, bits):
     for i in range(2**bits):
         bs = "{:0>{w}b}".format(i, w=bits)
         print(bs, '1' if f(bs) else '0')
+
+'''
 basis = ['01', '10']
 # a xor c
 def target(s):
@@ -174,4 +176,5 @@ def mem_oracle(s):
 def eqi_oracle(h):
     return eqi(h, target, 2)
 lt,hf,ret2f,b2 = CDNFAlgo(mem_oracle, eqi_oracle)
-    
+'''
+pass
