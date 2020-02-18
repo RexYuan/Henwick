@@ -270,7 +270,26 @@ def test7():
     inv = get_invariant(bits, inits, bads, trans)
     assert test_inv(inv, bits, inits, bads, trans)
 
+def test8():
+    '''
+    trans: count up and cycle
+    0000 0000 00- inits
+    0001 0000 00- inits
+    0101 00** **- cycle back to 0000 0000
+    1000 **** **- bads
+    11** **** **- bads
+    '''
+    bits = 11
+    inits = Or(bs_to_z3_term('0000 0000 000'),
+               bs_to_z3_term('0001 0000 000'))
+    bads = Or(bs_to_z3_term('1000 **** ****'),
+              bs_to_z3_term('11** **** ****'))
+    mod = bs_to_z3_term('0101 00** ****')
+    trans = make_counter_trans(bits,mod=mod)
+    inv = get_invariant(bits, inits, bads, trans)
+    assert test_inv(inv, bits, inits, bads, trans)
+
 t1 = time()
-test7()
+test8()
 t2 = time()
 print((timedelta(seconds=t2-t1)))
