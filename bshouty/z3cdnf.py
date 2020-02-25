@@ -46,6 +46,8 @@ def time_profile(final=False):
     print('bads_bs_count', bads_bs_count)
     print('pos_oracle_count', pos_oracle_count)
     print('neg_oracle_count', neg_oracle_count)
+    print('solver_time', timedelta(seconds=solver_time))
+    print('----------------------------------------')
 
 def z3_bool_range(*argv):
     '''
@@ -77,14 +79,14 @@ def z3_model_to_bs(m, bits):
     '''
     return True if m is True else "".join([ '1' if m[Bool(str(i))] else '0' for i in range(bits) ])
 
+def mterm(bs):
+    return {i for i,b in enumerate(bs) if b == '1'}
+
 def hyptize_funcs(learnd_terms_comp, basis_comp):
     '''
     argument: a list of bit strings and a basis bit string
     return: a list of term functions
     '''
-    def mterm(bs):
-        return {i for i,b in enumerate(bs) if b == '1'}
-    
     def make_term_f(t):
         '''
         function factory with closure to avoid late binding/lazy evaluation
@@ -97,9 +99,6 @@ def hyptize_funcs(learnd_terms_comp, basis_comp):
     return list(map(make_term_f, learnd_terms_comp))
 
 def update_funcs(hypted_funcs, ce, basis):
-    def mterm(bs):
-        return {i for i,b in enumerate(bs) if b == '1'}
-    
     def make_term_f(t):
         def term_f(bs):
             return mterm(bsxor(bs,basis)) >= mterm(t)
@@ -267,6 +266,20 @@ def get_guess(ce,basis,bits):
                 break
     return ''.join(ce)
 
+def update_absorption(bce, learnd_terms, hypted_func, learnd_terms_og, hypted_form):
+    if len(hypted_form) != len(hypted_func):
+        breakpoint()
+    for i,t in enumerate(learnd_terms):
+        # bce absorbs t
+        if mterm(bce) <= mterm(t):
+            del learnd_terms[i]
+            del hypted_func[i]
+            del learnd_terms_og[i]
+            del hypted_form[i]
+    if len(learnd_terms) != len(learnd_terms_og):
+        breakpoint()
+    return
+
 def z3_CDNFAlgo_phase2(inits_oracle, trans_oracle, bads_bs_oracle, bits, starter):
     '''
     eqi_oracle is a constrained, inconsistent-but-eventually-consistent oracle
@@ -291,7 +304,7 @@ def z3_CDNFAlgo_phase2(inits_oracle, trans_oracle, bads_bs_oracle, bits, starter
             neg_proced += 1
             tstart = time()
             # check if this negative ce was already registered as positive and repair if necessary
-            repair_inconsistent_bases(bits, ce, basis, learnd_terms, learnd_terms_og, hypted_funcs, hypted_forms)
+            #repair_inconsistent_bases(bits, ce, basis, learnd_terms, learnd_terms_og, hypted_funcs, hypted_forms)
             repair_time += time() - tstart
 
             # initialize new basis with inits
@@ -316,13 +329,25 @@ def z3_CDNFAlgo_phase2(inits_oracle, trans_oracle, bads_bs_oracle, bits, starter
         pos_proced += 1
         tstart = time()
         for i in unaligned:
+            if len(learnd_terms[i]) != len(learnd_terms_og[i]): breakpoint()
+            
+            update_absorption(bsxor(ce,basis[i]), learnd_terms[i], hypted_funcs[i], learnd_terms_og[i], hypted_forms[i])
+            
+            if len(learnd_terms[i]) != len(learnd_terms_og[i]): breakpoint()
+
             tsstart = time()
+
             learnd_terms[i].append( bsxor(ce,basis[i]) )
             update_funcs(hypted_funcs[i], bsxor(ce,basis[i]), basis[i])
+            
             func_time += time() - tsstart
             tsstart = time()
+            
             learnd_terms_og[i].append( ce )
             update_forms(hypted_forms[i], ce, basis[i])
+            
+            if len(learnd_terms[i]) != len(learnd_terms_og[i]): breakpoint()
+
             form_time += time() - tsstart
 
             '''
@@ -348,11 +373,16 @@ def z3_CDNFAlgo_phase2(inits_oracle, trans_oracle, bads_bs_oracle, bits, starter
     algo_time = time() - tbegin
     cdnf_time = repair_time+initba_time+determ_time+growpo_time
     basis_count = len(basis)
-    print('basis_count', basis_count)
+    
+    
     time_profile()
+    
     print('residual time', timedelta(seconds=algo_time-solver_time-cdnf_time))
     print('cdnf_time', timedelta(seconds=cdnf_time))
     print('solver_time', timedelta(seconds=solver_time))
+
+    print('basis_count', basis_count)
+    print(list(map(len,learnd_terms)))
 
     return make_form(hypted_forms)
 

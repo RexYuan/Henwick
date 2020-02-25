@@ -3,6 +3,11 @@ from z3cdnf import *
 from time import time
 from datetime import timedelta
 
+def B(i):
+    return Bool(str(i))
+def NB(i):
+    return Not(Bool(str(i)))
+
 def test_inv(inv, bits, inits, bads, trans):
     '''
     Constraints:
@@ -280,18 +285,18 @@ def test8():
     1100 **** ****- bads
     1111 **** 0000- inits
     '''
-    bits = 16
-    inits = Or(bs_to_z3_term('0000 0000 0000 0000'),
-               bs_to_z3_term('0001 0000 0000 0000'),
-               bs_to_z3_term('1111 **** 0000 0000'))
-    bads = Or(bs_to_z3_term('1000 **** ****'),
-              bs_to_z3_term('1100 **** ****'))
-    mod = bs_to_z3_term('0101 00** ****')
+    bits = 14
+    inits = Or(bs_to_z3_term('0000 0000 0000 *1'),
+               bs_to_z3_term('0001 0000 **** *0'),
+               bs_to_z3_term('1111 **** 1111 00'))
+    bads = Or(bs_to_z3_term('1000 **** **** 10'),
+              bs_to_z3_term('1100 **** **** 01'))
+    mod = bs_to_z3_term('0101 00** **** 1*')
     trans = make_counter_trans(bits,mod=mod)
     inv = get_invariant(bits, inits, bads, trans)
     assert test_inv(inv, bits, inits, bads, trans)
 
 t1 = time()
-test6()
+test8()
 t2 = time()
 print((timedelta(seconds=t2-t1)))
