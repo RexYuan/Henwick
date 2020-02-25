@@ -9,11 +9,43 @@ from cdnf import *
 import functools
 print = functools.partial(print, flush=True)
 
-# shortcuts
-def B(s):
-    return Bool(str(s))
-def NB(s):
-    return Not(Bool(str(s)))
+
+basis_count = 0
+pos_proced = 0
+neg_proced = 0
+posce = 0
+negce = 0
+repair_time = 0.0
+initba_time = 0.0
+determ_time = 0.0
+growpo_time = 0.0
+func_time = 0.0
+form_time = 0.0
+bads_bs_time = 0.0
+bads_bs_count = 0
+pos_oracle_count = 0
+neg_oracle_count = 0
+solver_time = 0.0
+tbegin = 0.0
+
+def time_profile(final=False):
+    print('pos_proced', pos_proced)
+    print('neg_proced', neg_proced)
+    print('determined positive', posce)
+    print('determined negative', negce)
+    print()
+    print('repair_time', timedelta(seconds=repair_time))
+    print('initba_time', timedelta(seconds=initba_time))
+    print('determ_time', timedelta(seconds=determ_time))
+    print('growpo_time', timedelta(seconds=growpo_time))
+    print()
+    print('func_time', timedelta(seconds=func_time))
+    print('form_time', timedelta(seconds=form_time))
+    print('bads_bs_time', timedelta(seconds=bads_bs_time))
+    print()
+    print('bads_bs_count', bads_bs_count)
+    print('pos_oracle_count', pos_oracle_count)
+    print('neg_oracle_count', neg_oracle_count)
 
 def z3_bool_range(*argv):
     '''
@@ -46,17 +78,49 @@ def z3_model_to_bs(m, bits):
     return True if m is True else "".join([ '1' if m[Bool(str(i))] else '0' for i in range(bits) ])
 
 def hyptize_funcs(learnd_terms_comp, basis_comp):
+    '''
+    argument: a list of bit strings and a basis bit string
+    return: a list of term functions
+    '''
     def mterm(bs):
-        return [i for i,b in enumerate(bs) if b == '1']
+        return {i for i,b in enumerate(bs) if b == '1'}
+    
+    def make_term_f(t):
+        '''
+        function factory with closure to avoid late binding/lazy evaluation
+        because python is dynamically scoped instead of lexicographically
+        '''
+        def term_f(bs):
+            return mterm(bsxor(bs,basis_comp)) >= mterm(t)
+        return term_f
 
-    def mdnf(bss):
-        return map(mterm, bss)
+    return list(map(make_term_f, learnd_terms_comp))
 
-    def h(bs):
-        bs = bsxor(bs,basis_comp)
-        bst = mterm(bs)
-        return any(all(i in bst for i in t) for t in mdnf(learnd_terms_comp))
-    return h
+def update_funcs(hypted_funcs, ce, basis):
+    def mterm(bs):
+        return {i for i,b in enumerate(bs) if b == '1'}
+    
+    def make_term_f(t):
+        def term_f(bs):
+            return mterm(bsxor(bs,basis)) >= mterm(t)
+        return term_f
+
+    hypted_funcs.append( make_term_f(ce) )
+    return
+
+def make_funcs(hypted_funcs):
+    '''
+    argument: a list of list of term functions
+    return: a list of dnf functions
+    '''
+    def make_dnf_f(term_fs):
+        if term_fs is False:
+            return (lambda _ : False)
+        def dnf_f(bs):
+            return any(term_f(bs) for term_f in term_fs)
+        return dnf_f
+    
+    return list(map(make_dnf_f, hypted_funcs))
 
 def hyptize_forms(learnd_terms_comp, basis_comp):
     '''
@@ -101,21 +165,21 @@ def z3_CDNFAlgo_phase1(eqi_oracle, bits):
 
     learnd_terms = [ [] ]
     learnd_terms_og = [ [] ]
-    hypted_funcs = [ (lambda _: False) ]
+    hypted_funcs = [ False ]
     hypted_forms = [ BoolVal(False) ]
 
     ce = z3_model_to_bs(eqi_oracle( make_form(hypted_forms) ), bits)
 
     while ce != True:
-        unaligned = [i for i,h in enumerate(hypted_funcs) if not h(ce)]
+        unaligned = [i for i,h in enumerate( make_funcs(hypted_funcs) ) if not h(ce)]
         while unaligned == []:
             basis.append( ce )
             learnd_terms.append( [] )
             learnd_terms_og.append( [] )
-            hypted_funcs.append( (lambda _: False) )
+            hypted_funcs.append( False )
             hypted_forms.append( BoolVal(False) )
             ce = z3_model_to_bs(eqi_oracle( make_form(hypted_forms) ), bits)
-            unaligned = [i for i,h in enumerate(hypted_funcs) if not h(ce)]
+            unaligned = [i for i,h in enumerate( make_funcs(hypted_funcs) ) if not h(ce)]
         
         for i in unaligned:
             learnd_terms[i].append( bsxor(ce,basis[i]) )
@@ -165,11 +229,6 @@ def repair_inconsistent_bases(bits, ce, basis, learnd_terms, learnd_terms_og, hy
             hypted_funcs[i] = hyptize_funcs(learnd_terms[i], basis[i])
     return
 
-posce = 0
-negce = 0
-bads_bs_time = 0.0
-bads_bs_count = 0
-
 def determine_ce(bads_bs_oracle, bits, ce, neg_ces):
     '''
     for ce of transitional pair, determine which is the negative or positve ce to learn
@@ -177,6 +236,7 @@ def determine_ce(bads_bs_oracle, bits, ce, neg_ces):
     else successor is judged a positive ce
     '''
     global posce,negce,bads_bs_time,bads_bs_count
+
     if ce is True:
         return True
     pred = ce[:bits]
@@ -213,50 +273,19 @@ def z3_CDNFAlgo_phase2(inits_oracle, trans_oracle, bads_bs_oracle, bits, starter
     assuming only false positive is possible, since false negative wont change anything eventually
     so its okay to assume all negative judgements are final
     '''
-    global negce,posce,bads_bs_time,bads_bs_count
-    solver_time = 0.0
-    repair_time = 0.0
-    initba_time = 0.0
-    determ_time = 0.0
-    growpo_time = 0.0
-    basis_count = 0
-    neg_oracle_count = 0
-    pos_oracle_count = 0
-    func_time,form_time = 0.0,0.0
-    pos_proced, neg_proced = 0,0
-    tbegin = time()
-
+    global basis_count, pos_proced, neg_proced, posce, negce, repair_time, initba_time, determ_time, growpo_time, func_time, form_time, bads_bs_time, bads_bs_count, pos_oracle_count, neg_oracle_count, solver_time, tbegin
+    
     basis,learnd_terms,learnd_terms_og,hypted_funcs,hypted_forms = starter
+
+    tbegin = time()
     
     # transitional ce not possible yet, must be negative since starting from not bad
     ce = z3_model_to_bs(trans_oracle( make_form(hypted_forms) ), bits)
 
     while ce != True:
         if pos_proced % 10 == 0:
-            basis_count = len(basis)
-            print('basis_count', basis_count)
-            print('pos_proced', pos_proced)
-            print('neg_proced', neg_proced)
-            print('determined positive', posce)
-            print('determined negative', negce)
-            print()
-            print('repair_time', timedelta(seconds=repair_time))
-            print('initba_time', timedelta(seconds=initba_time))
-            print('determ_time', timedelta(seconds=determ_time))
-            print('growpo_time', timedelta(seconds=growpo_time))
-            print()
-            print('func_time', timedelta(seconds=func_time))
-            print('form_time', timedelta(seconds=form_time))
-            print('bads_bs_time', timedelta(seconds=bads_bs_time))
-            print()
-            print('bads_bs_count', bads_bs_count)
-            print('pos_oracle_count', pos_oracle_count)
-            print('neg_oracle_count', neg_oracle_count)
-            print()
-            print('solver_time', timedelta(seconds=solver_time))
-            print('------------------------------------------')
-
-        unaligned = [i for i,h in enumerate(hypted_funcs) if not h(ce)]
+            time_profile()
+        unaligned = [i for i,h in enumerate( make_funcs(hypted_funcs) ) if not h(ce)]
         # negative ce
         while unaligned == []:
             neg_proced += 1
@@ -281,7 +310,7 @@ def z3_CDNFAlgo_phase2(inits_oracle, trans_oracle, bads_bs_oracle, bits, starter
             determ_time += time() - tstart
             if ce == True:
                 return make_form(hypted_forms)
-            unaligned = [i for i,h in enumerate(hypted_funcs) if not h(ce)]
+            unaligned = [i for i,h in enumerate( make_funcs(hypted_funcs) ) if not h(ce)]
         
         # positive ce, same as before
         pos_proced += 1
@@ -289,11 +318,10 @@ def z3_CDNFAlgo_phase2(inits_oracle, trans_oracle, bads_bs_oracle, bits, starter
         for i in unaligned:
             tsstart = time()
             learnd_terms[i].append( bsxor(ce,basis[i]) )
-            hypted_funcs[i] = hyptize_funcs(learnd_terms[i], basis[i])
+            update_funcs(hypted_funcs[i], bsxor(ce,basis[i]), basis[i])
             func_time += time() - tsstart
             tsstart = time()
             learnd_terms_og[i].append( ce )
-            #hypted_forms[i] = hyptize_forms(learnd_terms_og[i], basis[i])
             update_forms(hypted_forms[i], ce, basis[i])
             form_time += time() - tsstart
 
@@ -321,27 +349,10 @@ def z3_CDNFAlgo_phase2(inits_oracle, trans_oracle, bads_bs_oracle, bits, starter
     cdnf_time = repair_time+initba_time+determ_time+growpo_time
     basis_count = len(basis)
     print('basis_count', basis_count)
-    print('pos_proced', pos_proced)
-    print('neg_proced', neg_proced)
-    print('determined positive', posce)
-    print('determined negative', negce)
-    print()
-    print('repair_time', timedelta(seconds=repair_time))
-    print('initba_time', timedelta(seconds=initba_time))
-    print('determ_time', timedelta(seconds=determ_time))
-    print('growpo_time', timedelta(seconds=growpo_time))
-    print()
-    print('func_time', timedelta(seconds=func_time))
-    print('form_time', timedelta(seconds=form_time))
-    print('bads_bs_time', timedelta(seconds=bads_bs_time))
-    print()
+    time_profile()
+    print('residual time', timedelta(seconds=algo_time-solver_time-cdnf_time))
     print('cdnf_time', timedelta(seconds=cdnf_time))
     print('solver_time', timedelta(seconds=solver_time))
-    print('residual time', timedelta(seconds=algo_time-solver_time-cdnf_time))
-    print()
-    print('bads_bs_count', bads_bs_count)
-    print('pos_oracle_count', pos_oracle_count)
-    print('neg_oracle_count', neg_oracle_count)
 
     return make_form(hypted_forms)
 
@@ -380,11 +391,11 @@ def get_invariant(bits, inits, bads, trans):
     
     # need this for determination
     basis,learnd_terms,_,_,_ = not_bads_starter
-    basis = [b for b in basis]
-    learnd_terms = [[t for t in terms] for terms in learnd_terms]
-    funcs = [hyptize_funcs(ts, b) for (ts, b) in zip(learnd_terms, basis)]
+    nb_basis = [b for b in basis]
+    nb_learnd_terms = [[t for t in terms] for terms in learnd_terms]
+    nb_hypted_funcs = [hyptize_funcs(ts, b) for (ts, b) in zip(nb_learnd_terms, nb_basis)]
     def bads_bs_oracle(bs):
-        return not (all(h(bs) for h in funcs))
+        return any(not dnf(bs) for dnf in make_funcs(nb_hypted_funcs))
     
     def bads_bs_oracl2e(bs):
         s.reset()
