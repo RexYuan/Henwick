@@ -166,15 +166,44 @@ def tabulate(f, bits):
         bs = "{:0>{w}b}".format(i, w=bits)
         print(bs, '1' if f(bs) else '0')
 
-'''
 basis = ['01', '10']
 # a xor c
+false_test = True
+def false_pos_target(s):
+    return s in {'00','10','01'}
 def target(s):
     return s in {'10','01'}
 def mem_oracle(s):
+    if false_test:
+        return false_pos_target(s)
     return target(s)
 def eqi_oracle(h):
+    global false_test
+    if false_test:
+        if eqi(h, false_pos_target, 2) == True:
+            false_test = False
+        else:
+            return eqi(h, false_pos_target, 2)
     return eqi(h, target, 2)
 lt,hf,ret2f,b2 = CDNFAlgo(mem_oracle, eqi_oracle)
-'''
-pass
+assert eqi(target, ret2f, 2)
+
+false_test = True
+def false_neg_target(s):
+    return s in {'01'}
+def target(s):
+    return s in {'10','01'}
+def mem_oracle(s):
+    if false_test:
+        return false_neg_target(s)
+    return target(s)
+def eqi_oracle(h):
+    global false_test
+    if false_test:
+        if eqi(h, false_neg_target, 2) == True:
+            false_test = False
+        else:
+            return eqi(h, false_neg_target, 2)
+    return eqi(h, target, 2)
+lt,hf,ret2f,b2 = CDNFAlgo(mem_oracle, eqi_oracle)
+assert eqi(target, ret2f, 2)
