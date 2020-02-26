@@ -170,6 +170,7 @@ def test3():
     mod = And(NB0,B1)
     trans = make_counter_trans(bits,mod=mod)
     inv = get_invariant(bits, inits, bads, trans)
+    print(inv)
     assert test_inv(inv, bits, inits, bads, trans)
 
 def test4():
@@ -297,6 +298,6 @@ def test8():
     assert test_inv(inv, bits, inits, bads, trans)
 
 t1 = time()
-#test8()
+test8()
 t2 = time()
 print((timedelta(seconds=t2-t1)))

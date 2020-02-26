@@ -166,6 +166,7 @@ def tabulate(f, bits):
         bs = "{:0>{w}b}".format(i, w=bits)
         print(bs, '1' if f(bs) else '0')
 
+'''
 basis = ['01', '10']
 # a xor c
 false_test = True
@@ -207,3 +208,5 @@ def eqi_oracle(h):
     return eqi(h, target, 2)
 lt,hf,ret2f,b2 = CDNFAlgo(mem_oracle, eqi_oracle)
 assert eqi(target, ret2f, 2)
+'''
+pass
