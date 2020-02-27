@@ -1,20 +1,32 @@
 
 from collections.abc import Set,Hashable
+from z3 import Bool, Bools, And
 
 class Asgmt(Set, Hashable):
     def __init__(self, supp, dime):
-        self._supp = frozenset(supp)
-        self._dime = dime
+        self.__supp = frozenset(supp)
+        self.__dime = dime
+        self.__z3_mterm_form = None
 
     @classmethod
     def from_bit_string(cls, bs):
         supp = frozenset(i for i, x in enumerate(bs) if x == '1')
         dime = len(bs)
         return cls( supp , dime )
+    
+    @classmethod
+    def from_z3_model(cls, md):
+        raise NotImplementedError
+
+    def to_bit_string(self):
+        return repr(self)
+
+    def to_z3_mterm_form(self):
+        return And( Bools(i for i in range(self.dimension) if i in self) )
 
     @property
     def support(self):
-        return self._supp
+        return self.__supp
 
     @support.setter
     def support(self, value):
@@ -26,7 +38,7 @@ class Asgmt(Set, Hashable):
 
     @property
     def dimension(self):
-        return self._dime
+        return self.__dime
 
     @dimension.setter
     def dimension(self, value):
@@ -35,9 +47,9 @@ class Asgmt(Set, Hashable):
     @dimension.deleter
     def dimension(self):
         raise TypeError
-    
+
     def __repr__(self):
-        return ''.join('1' if i in self.support else '0' for i in range(len(self)))
+        return ''.join(iter(self))
 
     def __hash__(self):
         return Set._hash(self.support)
@@ -83,7 +95,20 @@ class Asgmt(Set, Hashable):
 
 interned = dict()
 
-def make_asgmt(bs):
+def mk_asgmt(bs):
     if bs not in interned:
         interned[bs] = Asgmt.from_bit_string(bs)
     return interned[bs]
+
+def mk_mterm(a):
+    return mk_asgmt(a)
+
+def mk_mterm_func(t):
+    def mterm_func(a):
+        return t <= a
+    return mterm_func
+
+def mk_mdnf_func(*ts):
+    def mdnf_func(a):
+        return any( f(a) for f in map(mk_mterm_func, ts) )
+    return mdnf_func
