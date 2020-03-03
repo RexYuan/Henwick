@@ -298,6 +298,6 @@ def test8():
     assert test_inv(inv, bits, inits, bads, trans)
 
 t1 = time()
-test8()
+test6()
 t2 = time()
 print((timedelta(seconds=t2-t1)))

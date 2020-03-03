@@ -208,26 +208,6 @@ def init_new_basis(inits_oracle, bits, new_basis, learnd_terms, learnd_terms_og,
         ce = z3_model_to_bs(inits_oracle( make_form(hypted_forms) ), bits)
     return
 
-def repair_inconsistent_bases(bits, ce, basis, learnd_terms, learnd_terms_og, hypted_funcs, hypted_forms):
-    '''
-    attempt to remove the false positve ce from all the bases if exists
-    '''
-    for i in range(len(learnd_terms)):
-        if ce in learnd_terms_og[i]:
-            # get rid of it
-            learnd_terms_og[i].remove( ce )
-            learnd_terms[i].remove( bsxor(ce,basis[i]) )
-            # add back all its successors
-            for j in range(bits):
-                if ce[j] == '0' and flip(ce,j) not in learnd_terms_og[i]:
-                    learnd_terms_og[i].append( flip(ce,j) )
-                if bsxor(ce,basis[i])[j] == '0' and flip(bsxor(ce,basis[i]),j) not in learnd_terms[i]:
-                    learnd_terms[i].append( flip(bsxor(ce,basis[i]),j) )
-            # refresh funcs and forms
-            hypted_forms[i] = hyptize_forms(learnd_terms_og[i], basis[i])
-            hypted_funcs[i] = hyptize_funcs(learnd_terms[i], basis[i])
-    return
-
 def determine_ce(bads_bs_oracle, bits, ce, neg_ces):
     '''
     for ce of transitional pair, determine which is the negative or positve ce to learn
@@ -250,21 +230,6 @@ def determine_ce(bads_bs_oracle, bits, ce, neg_ces):
     else:
         posce += 1
         return succ
-
-def bs_dist(b1,b2):
-    tmp = 0
-    for x,y in zip(b1,b2):
-        if x != y:
-            tmp += 1
-    return tmp
-def get_guess(ce,basis,bits):
-    ce = list(ce)
-    for _ in range(bs_dist(ce,basis) // 2):
-        for i in range(bits):
-            if ce[i] != basis[i]:
-                ce[i] = basis[i]
-                break
-    return ''.join(ce)
 
 def update_absorption(bce, learnd_terms, hypted_func, learnd_terms_og, hypted_form):
     if len(hypted_form) != len(hypted_func):
@@ -302,10 +267,6 @@ def z3_CDNFAlgo_phase2(inits_oracle, trans_oracle, bads_bs_oracle, bits, starter
         # negative ce
         while unaligned == []:
             neg_proced += 1
-            tstart = time()
-            # check if this negative ce was already registered as positive and repair if necessary
-            #repair_inconsistent_bases(bits, ce, basis, learnd_terms, learnd_terms_og, hypted_funcs, hypted_forms)
-            repair_time += time() - tstart
 
             # initialize new basis with inits
             tstart = time()
@@ -328,13 +289,9 @@ def z3_CDNFAlgo_phase2(inits_oracle, trans_oracle, bads_bs_oracle, bits, starter
         # positive ce, same as before
         pos_proced += 1
         tstart = time()
-        for i in unaligned:
-            if len(learnd_terms[i]) != len(learnd_terms_og[i]): breakpoint()
-            
+        for i in unaligned:            
             update_absorption(bsxor(ce,basis[i]), learnd_terms[i], hypted_funcs[i], learnd_terms_og[i], hypted_forms[i])
             
-            if len(learnd_terms[i]) != len(learnd_terms_og[i]): breakpoint()
-
             tsstart = time()
 
             learnd_terms[i].append( bsxor(ce,basis[i]) )
@@ -346,19 +303,7 @@ def z3_CDNFAlgo_phase2(inits_oracle, trans_oracle, bads_bs_oracle, bits, starter
             learnd_terms_og[i].append( ce )
             update_forms(hypted_forms[i], ce, basis[i])
             
-            if len(learnd_terms[i]) != len(learnd_terms_og[i]): breakpoint()
-
             form_time += time() - tsstart
-
-            '''
-            d = bs_dist(ce,basis[i])
-            if d > bits // 2:
-                guess = get_guess(ce,basis[i],bits)
-                learnd_terms[i].append( bsxor(guess,basis[i]) )
-                hypted_funcs[i] = hyptize_funcs(learnd_terms[i], basis[i])
-                learnd_terms_og[i].append( guess )
-                update_forms(hypted_forms[i], guess, basis[i])
-            '''
 
         growpo_time += time() - tstart
 
