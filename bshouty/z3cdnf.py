@@ -231,6 +231,20 @@ def determine_ce(bads_bs_oracle, bits, ce, neg_ces):
         posce += 1
         return succ
 
+def blind_walk(bs, basis, bads_bs_oracle, bits, neg_ces):
+    '''
+    walk blindly towards basis from bs according to bads_bs_oracle and neg_ces
+    '''
+    more = True
+    while more:
+        more = False
+        for i,(bi,ai) in enumerate(zip(bs,basis)):
+            if bi != ai and not bads_bs_oracle(flip(bs,i)) and flip(bs,i) not in neg_ces:
+                bs = flip(bs,i)
+                more = True
+                break
+    return bs
+
 def update_absorption(bce, learnd_terms, hypted_func, learnd_terms_og, hypted_form):
     if len(hypted_form) != len(hypted_func):
         breakpoint()
@@ -289,7 +303,9 @@ def z3_CDNFAlgo_phase2(inits_oracle, trans_oracle, bads_bs_oracle, bits, starter
         # positive ce, same as before
         pos_proced += 1
         tstart = time()
-        for i in unaligned:            
+        for i in unaligned:
+            #ce = blind_walk(ce, basis[i], bads_bs_oracle, bits, basis)
+
             update_absorption(bsxor(ce,basis[i]), learnd_terms[i], hypted_funcs[i], learnd_terms_og[i], hypted_forms[i])
             
             tsstart = time()

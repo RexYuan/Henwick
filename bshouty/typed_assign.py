@@ -4,13 +4,18 @@ from typing import *
 from z3 import * # type: ignore
 
 Assignment = NewType('Assignment', int)
-BitString = NewType('Bit String', str)
+BitString = NewType('BitString', str)
+TermF = Callable[ [Assignment] , bool ]
+DnfF = AbstractSet[ TermF ]
 
 def asgmt_subseteq(a1 : Assignment, a2 : Assignment) -> bool:
     return (a1 & a2) == a1
 
 def asgmt_to_bs(a : Assignment, bits : int) -> BitString:
-    return bin(a)[2:].zfill(bits)
+    return BitString(bin(a)[2:].zfill(bits))
+
+def bs_to_asgmt(bs : BitString) -> Assignment:
+    return Assignment(int(bs, base=2))
 
 def asgmt_to_z3_term(a : Assignment, bits : int, monotone : bool = False) -> 'z3 term':
     bs = asgmt_to_bs(a, bits)
