@@ -1,4 +1,5 @@
 
+from abc import *
 from collections.abc import *
 from typing import *
 from z3 import *
@@ -75,37 +76,24 @@ def z3_bool_range(*argv):
         for i in range(start,bits,step):
             yield Bool(i)
 
-class InvTeacher:
-    def __init__(self, bits : int, inits : z3Formula, bads : z3Formula, trans : z3Formula) -> None:
-        self.bits = bits
-        self.inits = inits
-        self.bads = bads
-        self.trans = trans
-        self.s = Solver()
+# TODO: change to typing.Protocol after python 3.8 
+HT = TypeVar('HT')
+AT = TypeVar('AT')
+class BoolTeacher(ABC, Generic[HT, AT]):
+    @abstractmethod
+    def check(self, hyp : HT) -> Optional[ AT ]:
+        pass
 
-    def check_valid(self, form : z3Formula) -> Optional[ Assignment ]:
-        self.s.reset()
-        self.s.add( form )
-        if self.s.check() != unsat:
-            return z3_model_to_asgmt( self.s.model() , self.bits )
-        return None
-    
-    def check_inits(self, hyp : z3Formula) -> Optional[ Assignment ]:
-        return self.check_valid( Not(Implies(self.inits , hyp)) )
-    
-    def check_bads(self, hyp : z3Formula) -> Optional[ Assignment ]:
-        return self.check_valid( Not(Implies(hyp , self.bads)) )
-    
-    def check_trans(self, hyp : z3Formula) -> Optional[ Assignment ]:
-        hypp = substitute( hyp , *zip(z3_bool_range(self.bits),
-                                    z3_bool_range(self.bits,self.bits*2)) )
-        return self.check_valid( Not(Implies(And(hyp,self.trans) , hypp)) )
+# TODO: change to typing.Protocol after python 3.8 
+class BoolLearner(ABC, Generic[HT, AT]):
+    @abstractmethod
+    def __init__(self, oracle : BoolTeacher[HT, AT]) -> None:
+        pass
 
-class CdnfLearner:
-    def __init__(self, oracle : InvTeacher) -> None:
-        self.oracle = oracle
-        self.basis : List[Assignment] = []
-        self.dnfs : List[Dnf] = []
-        self.dnf_funcs : List[BoolFunc] = []
-        self.og_dnfs : List[Dnf] = []
-        self.z3_forms : List[z3Formula] = []
+    @abstractmethod
+    def learn(self) -> bool:
+        pass
+
+    @abstractmethod
+    def result(self) -> Optional[ HT ]:
+        pass
