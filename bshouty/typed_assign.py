@@ -3,9 +3,11 @@ from collections.abc import *
 from typing import *
 from z3 import *
 
-z3Formula = BoolRef
-z3Model = ModelRef
-z3Sat = CheckSatResult
+######## to shut the linter up, remove for production
+z3Formula = BoolRef # type: ignore
+z3Model = ModelRef # type: ignore
+z3Sat = CheckSatResult # type: ignore
+######## remove for production
 
 Assignment = NewType('Assignment', int)
 BoolFunc = Callable[ [Assignment] , bool ]
@@ -35,7 +37,7 @@ def bs_to_z3_term(bs : BitString) -> z3Formula:
 
 def asgmt_to_z3_mterm(a : Assignment, bits : int) -> z3Formula:
     vs = []
-    r = a
+    r = cast(int, a)
     for i in range(bits):
         if (r & 0b1) == 0b1:
             vs.append(Bool(i))
