@@ -153,6 +153,53 @@ def CDNFAlgo(mem_oracle, eqi_oracle):
         ce = eqi_oracle(conj_hypts)
     return learnd_terms, hypted_funcs, conj_hypts, basis
 
+def dc_hyptize(learnd_terms_comp, basis_comp):
+    def mclause(bs):
+        return [i for i,b in enumerate(bs) if b == '1']
+
+    def mzeros(bs):
+        return [i for i,b in enumerate(bs) if b == '0']
+
+    def mcnf(bss):
+        return map(mclause, bss)
+
+    def h(bs):
+        bs = bsxor(bs,basis_comp)
+        bst = mzeros(bs)
+        return all(any(i in bst for i in t) for t in mcnf(learnd_terms_comp))
+    return h
+
+def DCNFAlgo(mem_oracle, eqi_oracle):
+    basis = []
+    ce = eqi_oracle((lambda _: True))
+    if ce == True:
+        return True
+    basis.append(ce)
+
+    learnd_terms = [[]]
+    hypted_funcs = [(lambda _: True)]
+    disj_hypts = (lambda bs: any(h(bs) for h in hypted_funcs))
+    ce = eqi_oracle(disj_hypts)
+
+    while ce != True:
+        unaligned = [i for i,h in enumerate(hypted_funcs) if h(ce)]
+        while unaligned == []:
+            basis.append(ce)
+            learnd_terms.append( [] )
+            hypted_funcs.append( (lambda _: True) )
+            disj_hypts = (lambda bs: any(h(bs) for h in hypted_funcs))
+            ce = eqi_oracle(disj_hypts)
+            unaligned = [i for i,h in enumerate(hypted_funcs) if h(ce)]
+
+        for i in unaligned:
+            walked_ce = walk(ce, basis[i], (lambda bs: not mem_oracle(bs))) if mem_oracle else ce
+            learnd_terms[i].append( bsxor(walked_ce,basis[i]) )
+            hypted_funcs[i] = dc_hyptize(learnd_terms[i], basis[i])
+
+        disj_hypts = (lambda bs: any(h(bs) for h in hypted_funcs))
+        ce = eqi_oracle(disj_hypts)
+    return learnd_terms, hypted_funcs, disj_hypts, basis
+
 def eqi(f1, f2, bits):
     for i in range(2**bits):
         bs = "{:0>{w}b}".format(i, w=bits)
@@ -187,7 +234,9 @@ def eqi_oracle(h):
             return eqi(h, false_pos_target, 2)
     return eqi(h, target, 2)
 lt,hf,ret2f,b2 = CDNFAlgo(mem_oracle, eqi_oracle)
+dlt,dhf,dret2f,db2 = DCNFAlgo(mem_oracle, eqi_oracle)
 assert eqi(target, ret2f, 2)
+assert eqi(dret2f, ret2f, 2)
 
 false_test = True
 def false_neg_target(s):

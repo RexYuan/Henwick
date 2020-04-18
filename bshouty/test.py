@@ -233,4 +233,27 @@ def random_test_ratio_bits(true_ratio, bits):
 #larger_random_dense_test()
 #huge_random_sparse_test()
 #huge_random_dense_test()
-random_test_ratio_bits(0.01, 10)
+#random_test_ratio_bits(0.01, 10)
+
+def dc_small_random_test():
+    siz = 7
+    gened = gen_bs(50,siz)
+    def target(s):
+        return s in gened
+    def mem_oracle(s):
+        return target(s)
+    def eqi_oracle(h):
+        return eqi(h, target, siz)
+    _,_,retf,bas = CDNFAlgo(mem_oracle, eqi_oracle)
+    _,_,dretf,bas = DCNFAlgo(mem_oracle, eqi_oracle)
+    if not eqi(retf,dretf,siz) or not eqi(retf,target,siz):
+        print(gened)
+        raise Exception("error: small random cdnf")
+    _,_,retf,bas = CDNFAlgo(None, eqi_oracle)
+    _,_,dretf,bas = DCNFAlgo(None, eqi_oracle)
+    if not eqi(retf,dretf,siz) or not eqi(retf,target,siz):
+        print(gened)
+        raise Exception("error: small random nomem cdnf")
+    print(">> small random test cleared")
+
+dc_small_random_test()

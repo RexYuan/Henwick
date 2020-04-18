@@ -17,17 +17,29 @@ class InvTeacher(BoolTeacher[z3Formula, Assignment]):
         return None
     
     def check_inits(self, hyp : z3Formula) -> Optional[ Assignment ]:
+        '''
+        c1) inits => inv
+        '''
         return self.check( Not(Implies(self.inits , hyp)) )
     
     def check_bads(self, hyp : z3Formula) -> Optional[ Assignment ]:
+        '''
+        c2) inv => ~bads
+        '''
         return self.check( Not(Implies(hyp , self.bads)) )
     
     def check_trans(self, hyp : z3Formula) -> Optional[ Assignment ]:
+        '''
+        c3) inv & trans => inv'
+        '''
         hypp = substitute( hyp , *zip(z3_bool_range(self.bits),
                                     z3_bool_range(self.bits,self.bits*2)) )
         return self.check( Not(Implies(And(hyp,self.trans) , hypp)) )
 
     def init_checks(self) -> bool:
+        '''
+        make sure inits and bads dont intersect already
+        '''
         return self.check( And(self.inits, self.bads) ) is None
 
 class CdnfLearner(BoolLearner[z3Formula, Assignment]):
