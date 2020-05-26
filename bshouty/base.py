@@ -15,8 +15,11 @@ BoolFunc = Callable[ [Assignment] , bool ]
 BitString = NewType('BitString', str)
 
 Term = Assignment
-Dnf = AbstractSet[ Term ]
+Clause = Term
+Dnf =  AbstractSet[ Term ]
+Cnf = Dnf
 Cdnf = AbstractSet[ Dnf ]
+Dcnf = Cdnf
 
 def subseteq(a1 : Assignment, a2 : Assignment) -> bool:
     return (a1 & a2) == a1
@@ -49,15 +52,20 @@ def z3_model_to_asgmt(md : z3Model, bits : int) -> Assignment:
     bs = "".join( ['1' if md[Bool(i)] else '0' for i in range(bits)] )
     return Assignment( int(bs, base=2) )
 
-def mk_termf(t : Term) -> BoolFunc:
+def mk_mterm_f(t : Term) -> BoolFunc:
     def termf(a : Assignment) -> bool:
-        return subseteq(a, t)
+        return subseteq(t, a)
     return termf
 
-def mk_dnff(ts : Dnf) -> BoolFunc:
+def mk_mdnf_f(ts : Dnf) -> BoolFunc:
     def dnff(a : Assignment) -> bool:
         return any(subseteq(t, a) for t in ts)
     return dnff
+
+def mk_mcnf_f(cs : Cnf) -> BoolFunc:
+    def cnff(a : Assignment) -> bool:
+        return not any(subseteq(c, a) for c in cs)
+    return cnff
 
 def z3_bool_range(*argv : int) -> Iterator[ z3Formula ]:
     if len(argv) == 1:
@@ -96,7 +104,7 @@ def learn_cdnf(mem_oracle : BoolFunc, eqi_oracle : Callable[ [BoolFunc] , Option
     def hyptize(learnd_terms_comp : Dnf, basis_comp : Assignment) -> BoolFunc:
         def h(x : Assignment) -> bool:
             x = xor(x,basis_comp)
-            return mk_dnff(learnd_terms_comp)(x)
+            return mk_mdnf_f(learnd_terms_comp)(x)
         return h
 
     basis : List[ Assignment ] = []
@@ -130,6 +138,91 @@ def learn_cdnf(mem_oracle : BoolFunc, eqi_oracle : Callable[ [BoolFunc] , Option
         conj_hypts = (lambda bs: all(h(bs) for h in hypted_funcs))
         ce = eqi_oracle(conj_hypts)
     return learnd_terms, hypted_funcs, conj_hypts, basis
+
+def dc_hyptize(learnd_terms_comp, basis_comp):
+    def mclause(bs):
+        return [i for i,b in enumerate(bs) if b == '1']
+
+    def mzeros(bs):
+        return [i for i,b in enumerate(bs) if b == '0']
+
+    def mcnf(bss):
+        return map(mclause, bss)
+
+    def h(bs):
+        bs = bsxor(bs,basis_comp)
+        bst = mzeros(bs)
+        return all(any(i in bst for i in t) for t in mcnf(learnd_terms_comp))
+    return h
+
+def learn_dcnf(mem_oracle : BoolFunc, eqi_oracle : Callable[ [BoolFunc] , Optional[Assignment] ], bits : int):
+    def bs_flip(bs : BitString, i : int) -> BitString:
+        return BitString( bs[:i]+('0' if bs[i] == '1' else '1')+bs[i+1:] )
+
+    def walk(v : Assignment, a : Assignment, f : BoolFunc) -> Assignment:
+        bs_v,bs_a = asgmt_to_bs(v,bits),asgmt_to_bs(a,bits)
+        more : bool = True
+        while more:
+            more = False
+            for i,(vi,ai) in enumerate(zip(bs_v,bs_a)):
+                flipped_v = bs_flip(bs_v,i)
+                if vi != ai and not f( bs_to_asgmt(flipped_v) ):
+                    bs_v = flipped_v
+                    more = True
+                    break
+        return bs_to_asgmt(bs_v)
+    
+    def hyptize(learnd_terms_comp : Cnf, basis_comp : Assignment) -> BoolFunc:
+        def h(x : Assignment) -> bool:
+            x = xor(x,basis_comp)
+            return mk_mcnf_f(learnd_terms_comp)(x)
+        return h
+
+    basis : List[ Assignment ] = []
+    ce : Optional[ Assignment ] = eqi_oracle( (lambda _: False) )
+    if ce is None:
+        return True
+    basis.append(ce)
+
+    learnd_terms : List[ Cnf ] = [ set() ]
+    hypted_funcs : List[ BoolFunc ] = [ (lambda _: True) ]
+    disj_hypts : BoolFunc = (lambda bs: any(h(bs) for h in hypted_funcs))
+    ce = eqi_oracle(disj_hypts)
+
+    while ce is not None:
+        unaligned : List[ int ] = [i for i,h in enumerate(hypted_funcs) if h(ce)]
+        while unaligned == []:
+            assert ce is not None # guarded by loop
+            basis.append(ce)
+            learnd_terms.append( set() )
+            hypted_funcs.append( (lambda _: True) )
+            disj_hypts = (lambda bs: any(h(bs) for h in hypted_funcs))
+            ce = eqi_oracle(disj_hypts)
+            assert ce is not None # since adding new basis restarts whole hypothesis
+            unaligned = [i for i,h in enumerate(hypted_funcs) if h(ce)]
+
+        for i in unaligned:
+            walked_ce = walk(ce, basis[i], mem_oracle)
+            learnd_terms[i] = learnd_terms[i] | { xor(walked_ce,basis[i]) }
+            hypted_funcs[i] = hyptize(learnd_terms[i], basis[i])
+
+        disj_hypts = (lambda bs: any(h(bs) for h in hypted_funcs))
+        ce = eqi_oracle(disj_hypts)
+    return learnd_terms, hypted_funcs, disj_hypts, basis
+
+
+
+
+
+
+
+
+
+
+
+
+
+###############################################################################
 
 def tabulate(f, bits):
     for i in range(2**bits):
@@ -165,19 +258,20 @@ from datetime import timedelta
 
 def basic_test():
     def target(s):
-        return s in {0b100,0b110,0b001}
+        return s not in {0b100,0b110,0b001}
     def mem_oracle(s):
         return target(s)
     def eqi_oracle(h):
         return eqi(h, target, 3)
     
-    _,_,retf,_ = learn_cdnf(mem_oracle, eqi_oracle, 3)
+    _,_,retf,_ = learn_dcnf(mem_oracle, eqi_oracle, 3)
     if eqi(retf,target,3) is not None:
         raise Exception()
+#basic_test()
 
-def random_test():
-    size = 100
-    bits = 10
+def random_test(s,b):
+    size = s
+    bits = b
     gened = gen_bs(size,bits)
     def target(s):
         return s in gened
@@ -187,8 +281,9 @@ def random_test():
         return eqi(h, target, bits)
 
     t = time()
-    _,_,retf,_ = learn_cdnf(mem_oracle, eqi_oracle, bits)
+    _,_,retf,_ = learn_dcnf(mem_oracle, eqi_oracle, bits)
     print(timedelta(seconds=time()-t))
     if eqi(retf,target,bits) is not None:
         raise Exception()
-random_test()
+#random_test(100,10)
+
