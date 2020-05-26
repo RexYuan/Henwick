@@ -25,7 +25,6 @@ def xor(a1 : Assignment, a2 : Assignment) -> Assignment:
     return Assignment( a1 ^ a2 )
 
 def asgmt_to_bs(a : Assignment, bits : int) -> BitString:
-    print(a, type(a))
     return BitString( bin(a)[2:].zfill(bits) )
 
 def bs_to_asgmt(bs : BitString) -> Assignment:
@@ -140,11 +139,29 @@ def tabulate(f, bits):
 def eqi(f1, f2, bits):
     for i in range(2**bits):
         bs = "{:0>{w}b}".format(i, w=bits)
-        bs = bs_to_asgmt(bs)
-        if f1(bs) != f2(bs):
+        b = bs_to_asgmt(bs)
+        if f1(b) != f2(b):
             #print('counter-example:',bs)
-            return bs
+            return b
     return None
+
+from random import choice
+def gen_bs(size, bits):
+    tmp = []
+    while len(tmp) < size:
+        bs = ''.join(choice(['0','1']) for _ in range(bits))
+        if bs not in tmp:
+            tmp.append(int(bs,2))
+    return tmp
+def all_bs(bits):
+    tmp = []
+    for i in range(2**bits):
+        bs = "{:0>{w}b}".format(i, w=bits)
+        tmp.append(bs)
+    return tmp
+
+from time import time
+from datetime import timedelta
 
 def basic_test():
     def target(s):
@@ -154,8 +171,24 @@ def basic_test():
     def eqi_oracle(h):
         return eqi(h, target, 3)
     
-    _,_,ret2f,b2 = learn_cdnf(mem_oracle, eqi_oracle, 3)
-    if not eqi(ret2f,target,3):
-        tabulate(ret2f,3)
-        raise Exception("error: basic cdnf")
-basic_test()
+    _,_,retf,_ = learn_cdnf(mem_oracle, eqi_oracle, 3)
+    if eqi(retf,target,3) is not None:
+        raise Exception()
+
+def random_test():
+    size = 100
+    bits = 10
+    gened = gen_bs(size,bits)
+    def target(s):
+        return s in gened
+    def mem_oracle(s):
+        return target(s)
+    def eqi_oracle(h):
+        return eqi(h, target, bits)
+
+    t = time()
+    _,_,retf,_ = learn_cdnf(mem_oracle, eqi_oracle, bits)
+    print(timedelta(seconds=time()-t))
+    if eqi(retf,target,bits) is not None:
+        raise Exception()
+random_test()
