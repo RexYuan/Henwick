@@ -1,6 +1,6 @@
 
-from abc import *
-from collections.abc import *
+#from abc import *
+#from collections.abc import *
 from typing import *
 from z3 import *
 
@@ -13,13 +13,6 @@ z3Sat = CheckSatResult # type: ignore
 Assignment = NewType('Assignment', int)
 BoolFunc = Callable[ [Assignment] , bool ]
 BitString = NewType('BitString', str)
-
-Term = Assignment
-Clause = Term
-Dnf =  AbstractSet[ Term ]
-Cnf = Dnf
-Cdnf = AbstractSet[ Dnf ]
-Dcnf = Cdnf
 
 def subseteq(a1 : Assignment, a2 : Assignment) -> bool:
     return (a1 & a2) == a1
@@ -52,17 +45,8 @@ def z3_model_to_asgmt(md : z3Model, bits : int) -> Assignment:
     bs = "".join( ['1' if md[Bool(i)] else '0' for i in range(bits)] )
     return Assignment( int(bs, base=2) )
 
-def mk_mterm_f(t : Term) -> BoolFunc:
-    def termf(a : Assignment) -> bool:
-        return subseteq(t, a)
-    return termf
 
-def mk_mdnf_f(ts : Dnf) -> BoolFunc:
-    def dnff(a : Assignment) -> bool:
-        return any(subseteq(t, a) for t in ts)
-    return dnff
-
-def mk_mcnf_f(cs : Cnf) -> BoolFunc:
+def mk_mcnf_f(cs : AbstractSet[ Assignment ]) -> BoolFunc:
     def cnff(a : Assignment) -> bool:
         return not any(subseteq(c, a) for c in cs)
     return cnff
@@ -84,6 +68,8 @@ def z3_bool_range(*argv : int) -> Iterator[ z3Formula ]:
         for i in range(start,bits,step):
             yield Bool(i)
 
+###############################################################################
+
 def learn_cdnf(mem_oracle : BoolFunc, eqi_oracle : Callable[ [BoolFunc] , Optional[Assignment] ], bits : int):
     def bs_flip(bs : BitString, i : int) -> BitString:
         return BitString( bs[:i]+('0' if bs[i] == '1' else '1')+bs[i+1:] )
@@ -100,60 +86,54 @@ def learn_cdnf(mem_oracle : BoolFunc, eqi_oracle : Callable[ [BoolFunc] , Option
                     more = True
                     break
         return bs_to_asgmt(bs_v)
-    
-    def hyptize(learnd_terms_comp : Dnf, basis_comp : Assignment) -> BoolFunc:
-        def h(x : Assignment) -> bool:
-            x = xor(x,basis_comp)
-            return mk_mdnf_f(learnd_terms_comp)(x)
+
+    def mk_mterm_f(t : Assignment) -> BoolFunc:
+        def termf(a : Assignment) -> bool:
+            return subseteq(t, a)
+        return termf
+
+    def mk_mdnf_f(termfs : MutableSet[ BoolFunc ], basis : Assignment) -> BoolFunc:
+        def dnf(a : Assignment) -> bool:
+            a = xor(a,basis)
+            return any(termf(a) for termf in termfs)
+        return dnf
+
+    def mk_conj_hypt(hypted_funcs : MutableSequence[ MutableSet[BoolFunc] ], bases : MutableSequence[ Assignment ]) -> BoolFunc:
+        def h(a : Assignment) -> bool:
+            return all(mk_mdnf_f(termfs,basis)(a) for termfs,basis in zip(hypted_funcs,bases))
         return h
 
-    basis : List[ Assignment ] = []
+    bases : List[ Assignment ] = []
     ce : Optional[ Assignment ] = eqi_oracle( (lambda _: True) )
     if ce is None:
         return True
-    basis.append(ce)
+    bases.append(ce)
 
-    learnd_terms : List[ Dnf ] = [ set() ]
-    hypted_funcs : List[ BoolFunc ] = [ (lambda _: False) ]
-    conj_hypts : BoolFunc = (lambda bs: all(h(bs) for h in hypted_funcs))
+    learnd_terms : List[ Set[Assignment] ] = [ set() ]
+    hypted_funcs : List[ MutableSet[BoolFunc] ] = [ {(lambda _: False)} ]
+    conj_hypts : BoolFunc = mk_conj_hypt(hypted_funcs, bases)
     ce = eqi_oracle(conj_hypts)
 
     while ce is not None:
-        unaligned : List[ int ] = [i for i,h in enumerate(hypted_funcs) if not h(ce)]
+        unaligned : List[ int ] = [i for i,(termfs,basis) in enumerate(zip(hypted_funcs,bases)) if not mk_mdnf_f(termfs,basis)(ce)]
         while unaligned == []:
             assert ce is not None # guarded by loop
-            basis.append(ce)
+            bases.append(ce)
             learnd_terms.append( set() )
-            hypted_funcs.append( (lambda _: False) )
-            conj_hypts = (lambda bs: all(h(bs) for h in hypted_funcs))
+            hypted_funcs.append( {(lambda _: False)} )
+            conj_hypts = mk_conj_hypt(hypted_funcs, bases)
             ce = eqi_oracle(conj_hypts)
             assert ce is not None # since adding new basis restarts whole hypothesis
-            unaligned = [i for i,h in enumerate(hypted_funcs) if not h(ce)]
+            unaligned = [i for i,(termfs,basis) in enumerate(zip(hypted_funcs,bases)) if not mk_mdnf_f(termfs,basis)(ce)]
 
         for i in unaligned:
-            walked_ce = walk(ce, basis[i], mem_oracle)
-            learnd_terms[i] = learnd_terms[i] | { xor(walked_ce,basis[i]) }
-            hypted_funcs[i] = hyptize(learnd_terms[i], basis[i])
+            walked_ce = walk(ce, bases[i], mem_oracle)
+            learnd_terms[i].add( xor(walked_ce,bases[i]) )
+            hypted_funcs[i].add( mk_mterm_f( xor(walked_ce,bases[i]) ) )
 
-        conj_hypts = (lambda bs: all(h(bs) for h in hypted_funcs))
+        conj_hypts = mk_conj_hypt(hypted_funcs, bases)
         ce = eqi_oracle(conj_hypts)
-    return learnd_terms, hypted_funcs, conj_hypts, basis
-
-def dc_hyptize(learnd_terms_comp, basis_comp):
-    def mclause(bs):
-        return [i for i,b in enumerate(bs) if b == '1']
-
-    def mzeros(bs):
-        return [i for i,b in enumerate(bs) if b == '0']
-
-    def mcnf(bss):
-        return map(mclause, bss)
-
-    def h(bs):
-        bs = bsxor(bs,basis_comp)
-        bst = mzeros(bs)
-        return all(any(i in bst for i in t) for t in mcnf(learnd_terms_comp))
-    return h
+    return learnd_terms, hypted_funcs, conj_hypts, bases
 
 def learn_dcnf(mem_oracle : BoolFunc, eqi_oracle : Callable[ [BoolFunc] , Optional[Assignment] ], bits : int):
     def bs_flip(bs : BitString, i : int) -> BitString:
@@ -172,7 +152,7 @@ def learn_dcnf(mem_oracle : BoolFunc, eqi_oracle : Callable[ [BoolFunc] , Option
                     break
         return bs_to_asgmt(bs_v)
     
-    def hyptize(learnd_terms_comp : Cnf, basis_comp : Assignment) -> BoolFunc:
+    def hyptize(learnd_terms_comp : AbstractSet[ Assignment ], basis_comp : Assignment) -> BoolFunc:
         def h(x : Assignment) -> bool:
             x = xor(x,basis_comp)
             return mk_mcnf_f(learnd_terms_comp)(x)
@@ -184,7 +164,7 @@ def learn_dcnf(mem_oracle : BoolFunc, eqi_oracle : Callable[ [BoolFunc] , Option
         return True
     basis.append(ce)
 
-    learnd_terms : List[ Cnf ] = [ set() ]
+    learnd_terms : List[ AbstractSet[Assignment] ] = [ set() ]
     hypted_funcs : List[ BoolFunc ] = [ (lambda _: True) ]
     disj_hypts : BoolFunc = (lambda bs: any(h(bs) for h in hypted_funcs))
     ce = eqi_oracle(disj_hypts)
@@ -210,7 +190,45 @@ def learn_dcnf(mem_oracle : BoolFunc, eqi_oracle : Callable[ [BoolFunc] , Option
         ce = eqi_oracle(disj_hypts)
     return learnd_terms, hypted_funcs, disj_hypts, basis
 
+###############################################################################
 
+def z3_CDNFAlgo_phase1(eqi_oracle, bits):
+    '''
+    eqi_oracle is an exact, consistent oracle
+    '''
+    basis = []
+    ce = z3_model_to_bs(eqi_oracle( BoolVal(True) ), bits)
+    if ce == True:
+        raise Exception("bads is empty")
+    basis.append( ce )
+
+    learnd_terms = [ [] ]
+    learnd_terms_og = [ [] ]
+    hypted_funcs = [ False ]
+    hypted_forms = [ BoolVal(False) ]
+
+    ce = z3_model_to_bs(eqi_oracle( make_form(hypted_forms) ), bits)
+
+    while ce != True:
+        unaligned = [i for i,h in enumerate( make_funcs(hypted_funcs) ) if not h(ce)]
+        while unaligned == []:
+            basis.append( ce )
+            learnd_terms.append( [] )
+            learnd_terms_og.append( [] )
+            hypted_funcs.append( False )
+            hypted_forms.append( BoolVal(False) )
+            ce = z3_model_to_bs(eqi_oracle( make_form(hypted_forms) ), bits)
+            unaligned = [i for i,h in enumerate( make_funcs(hypted_funcs) ) if not h(ce)]
+        
+        for i in unaligned:
+            learnd_terms[i].append( bsxor(ce,basis[i]) )
+            hypted_funcs[i] = hyptize_funcs(learnd_terms[i], basis[i])
+            learnd_terms_og[i].append( ce )
+            hypted_forms[i] = hyptize_forms(learnd_terms_og[i], basis[i])
+        
+        ce = z3_model_to_bs(eqi_oracle( make_form(hypted_forms) ), bits)
+    
+    return (basis,learnd_terms,learnd_terms_og,hypted_funcs,hypted_forms)
 
 
 
@@ -264,7 +282,7 @@ def basic_test():
     def eqi_oracle(h):
         return eqi(h, target, 3)
     
-    _,_,retf,_ = learn_dcnf(mem_oracle, eqi_oracle, 3)
+    _,_,retf,_ = learn_cdnf(mem_oracle, eqi_oracle, 3)
     if eqi(retf,target,3) is not None:
         raise Exception()
 #basic_test()

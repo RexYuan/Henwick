@@ -55,7 +55,7 @@ def all_bs(bits):
     return tmp
 
 def small_random_test():
-    gened = gen_bs(4,3)
+    gened = gen_bs(10,5)
     def target(s):
         return s in gened
     def mem_oracle(s):
@@ -66,11 +66,12 @@ def small_random_test():
     if not eqi(retf,target,3):
         print(gened)
         raise Exception("error: small random cdnf")
-    _,_,retf,bas = CDNFAlgo(None, eqi_oracle)
-    if not eqi(retf,target,3):
-        print(gened)
-        raise Exception("error: small random nomem cdnf")
-    print(">> small random test cleared")
+    #_,_,retf,bas = CDNFAlgo(None, eqi_oracle)
+    #if not eqi(retf,target,3):
+    #    print(gened)
+    #    raise Exception("error: small random nomem cdnf")
+    #print(">> small random test cleared")
+#small_random_test()
 
 from time import time
 def larger_random_sparse_test():
@@ -88,14 +89,15 @@ def larger_random_sparse_test():
         print(gened)
         raise Exception("error: larger random sparse cdnf")
     print("larger random sparse cdnf time:",t2-t1)
-    t1 = time()
-    _,_,retf2,bas2 = CDNFAlgo(None, eqi_oracle)
-    t2 = time()
-    if not eqi(retf2,target,10):
-        print(gened)
-        raise Exception("error: larger random sparse nomem cdnf")
-    print("larger random sparse nomem cdnf time:",t2-t1)
-    print(">> larger random sparse test cleared")
+    #t1 = time()
+    #_,_,retf2,bas2 = CDNFAlgo(None, eqi_oracle)
+    #t2 = time()
+    #if not eqi(retf2,target,10):
+    #    print(gened)
+    #    raise Exception("error: larger random sparse nomem cdnf")
+    #print("larger random sparse nomem cdnf time:",t2-t1)
+    #print(">> larger random sparse test cleared")
+larger_random_sparse_test()
 
 def larger_random_dense_test():
     gened = gen_bs(900,10)
@@ -254,4 +256,4 @@ def dc_small_random_test():
 
     print(">> small random test cleared")
 
-dc_small_random_test()
+#dc_small_random_test()
