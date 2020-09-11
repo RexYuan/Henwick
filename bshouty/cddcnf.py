@@ -1,6 +1,4 @@
 
-#from abc import *
-#from collections.abc import *
 from typing import *
 from z3 import *
 
@@ -189,51 +187,6 @@ def learn_dcnf(mem_oracle : BoolFunc, eqi_oracle : Callable[ [BoolFunc] , Option
         disj_hypts = (lambda bs: any(h(bs) for h in hypted_funcs))
         ce = eqi_oracle(disj_hypts)
     return learnd_terms, hypted_funcs, disj_hypts, basis
-
-###############################################################################
-
-def z3_CDNFAlgo_phase1(eqi_oracle, bits):
-    '''
-    eqi_oracle is an exact, consistent oracle
-    '''
-    basis = []
-    ce = z3_model_to_bs(eqi_oracle( BoolVal(True) ), bits)
-    if ce == True:
-        raise Exception("bads is empty")
-    basis.append( ce )
-
-    learnd_terms = [ [] ]
-    learnd_terms_og = [ [] ]
-    hypted_funcs = [ False ]
-    hypted_forms = [ BoolVal(False) ]
-
-    ce = z3_model_to_bs(eqi_oracle( make_form(hypted_forms) ), bits)
-
-    while ce != True:
-        unaligned = [i for i,h in enumerate( make_funcs(hypted_funcs) ) if not h(ce)]
-        while unaligned == []:
-            basis.append( ce )
-            learnd_terms.append( [] )
-            learnd_terms_og.append( [] )
-            hypted_funcs.append( False )
-            hypted_forms.append( BoolVal(False) )
-            ce = z3_model_to_bs(eqi_oracle( make_form(hypted_forms) ), bits)
-            unaligned = [i for i,h in enumerate( make_funcs(hypted_funcs) ) if not h(ce)]
-        
-        for i in unaligned:
-            learnd_terms[i].append( bsxor(ce,basis[i]) )
-            hypted_funcs[i] = hyptize_funcs(learnd_terms[i], basis[i])
-            learnd_terms_og[i].append( ce )
-            hypted_forms[i] = hyptize_forms(learnd_terms_og[i], basis[i])
-        
-        ce = z3_model_to_bs(eqi_oracle( make_form(hypted_forms) ), bits)
-    
-    return (basis,learnd_terms,learnd_terms_og,hypted_funcs,hypted_forms)
-
-
-
-
-
 
 
 

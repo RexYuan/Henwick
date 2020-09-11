@@ -139,22 +139,6 @@ def learn_cdnf(mem_oracle : BoolFunc, eqi_oracle : Callable[ [BoolFunc] , Option
         ce = eqi_oracle(conj_hypts)
     return learnd_terms, hypted_funcs, conj_hypts, basis
 
-def dc_hyptize(learnd_terms_comp, basis_comp):
-    def mclause(bs):
-        return [i for i,b in enumerate(bs) if b == '1']
-
-    def mzeros(bs):
-        return [i for i,b in enumerate(bs) if b == '0']
-
-    def mcnf(bss):
-        return map(mclause, bss)
-
-    def h(bs):
-        bs = bsxor(bs,basis_comp)
-        bst = mzeros(bs)
-        return all(any(i in bst for i in t) for t in mcnf(learnd_terms_comp))
-    return h
-
 def learn_dcnf(mem_oracle : BoolFunc, eqi_oracle : Callable[ [BoolFunc] , Optional[Assignment] ], bits : int):
     def bs_flip(bs : BitString, i : int) -> BitString:
         return BitString( bs[:i]+('0' if bs[i] == '1' else '1')+bs[i+1:] )
