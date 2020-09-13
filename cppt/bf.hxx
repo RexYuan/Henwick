@@ -9,10 +9,10 @@
 #include <variant>
 #include <memory>
 #include <string>
+#include <utility>
 
 #include "minisat.hxx"
 
-using namespace Minisat;
 using namespace std;
 
 struct Bf;
@@ -47,11 +47,11 @@ Bf_ptr neg(Bf_ptr bf);
 Bf_ptr conj(Bf_ptr bf1, Bf_ptr bf2);
 Bf_ptr disj(Bf_ptr bf1, Bf_ptr bf2);
 
-Var addBf (Solver& s, Bf_ptr bf);
-
 inline Bf_ptr operator~(Bf_ptr bf) { return neg(bf); };
 inline Bf_ptr operator&(Bf_ptr bf1, Bf_ptr bf2) { return conj(bf1,bf2); };
 inline Bf_ptr operator|(Bf_ptr bf1, Bf_ptr bf2) { return disj(bf1,bf2); };
 inline Bf_ptr operator>(Bf_ptr bf1, Bf_ptr bf2) { return ~bf1 | bf2; };
+inline Bf_ptr operator==(Bf_ptr bf1, Bf_ptr bf2) { return (~bf1 | bf2) & (bf1 | ~bf2); };
+inline Bf_ptr operator!=(Bf_ptr bf1, Bf_ptr bf2) { return (bf1 | bf2) & (~bf1 | ~bf2); };
 
 inline std::ostream& operator<<(std::ostream &out, Bf_ptr bf) { out << bf->to_string(); return out; }

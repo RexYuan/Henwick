@@ -7,12 +7,12 @@
 #include <variant>
 #include <memory>
 #include <string>
+#include <utility>
 
 #include "minisat.hxx"
 
 #include "bf.hxx"
 
-using namespace Minisat;
 using namespace std;
 
 Bf::Bf (bool b) : sub {monostate{}} { if (b) t=Conn::Top; else t=Conn::Bot; };
@@ -148,68 +148,4 @@ Bf_ptr disj(Bf_ptr bf1, Bf_ptr bf2)
     {
         return make_shared<Bf>( Conn::Or, bf1, bf2 );
     }
-}
-
-Var addBf (Solver& s, Bf_ptr bf)
-{
-    switch (bf->t)
-    {
-    case Conn::Top:
-    {
-        Var v = s.newVar();
-        s.addClause( mkLit(v) );
-        return v;
-        break;
-    }   
-    case Conn::Bot:
-    {
-        Var v = s.newVar();
-        s.addClause( ~mkLit(v) );
-        return v;
-        break;
-    }
-    case Conn::Base:
-        return bf->get_int();
-        break;    
-    case Conn::Not:
-    {
-        Var v = s.newVar();
-        Var sub_v = addBf(s, bf->get_range()[0]);
-        s.addClause(  mkLit(v) ,  mkLit(sub_v) );
-        s.addClause( ~mkLit(v) , ~mkLit(sub_v) );
-        return v;
-        break;
-    }
-    case Conn::And:
-    {
-        Var v = s.newVar();
-        vec<Lit> l;
-        l.push( mkLit(v) );
-        for (Var sub_v; Bf_ptr sub : bf->get_range())
-        {
-            sub_v = addBf(s, sub);
-            s.addClause( ~mkLit(v) , mkLit(sub_v) );
-            l.push( ~mkLit(sub_v) );
-        }
-        s.addClause_( l );
-        return v;
-        break;
-    }
-    case Conn::Or:
-    {
-        Var v = s.newVar();
-        vec<Lit> l;
-        l.push( ~mkLit(v) );
-        for (Var sub_v; Bf_ptr sub : bf->get_range())
-        {
-            sub_v = addBf(s, sub);
-            s.addClause( mkLit(v) , ~mkLit(sub_v) );
-            l.push( mkLit(sub_v) );
-        }
-        s.addClause_( l );
-        return v;
-        break;
-    }
-    }
-    assert( false );
 }

@@ -28,38 +28,48 @@ namespace exposer
     auto& to_string = ctx::to_string;
 }
 
-int main()
-{
-    using namespace exposer;
+using namespace exposer;
 
-    Ctx<2> c;
-    c.init_cdnf();
+void t1()
+{
+    Ctx<2> c(Mode::States);
 
     Face f1 ("00", {"10","01"});
-
-    Face f2 {"11"};
-    f2.primes = mkBvs({"10"});
-    f2.push("01");
-
+    Face f2 ("11", {"10","01"});
     vector<Face> cdnf {f1,f2};
-    c.add_cdnf(cdnf);
+
+    Var f, fp;
+    tie(f, fp) = c.tryCdnf(cdnf);
+    c.s.addClause(mkLit(f));
+    c.s.addClause(mkLit(fp));
+    //c.tryClause(mkLit(f));
+    //c.tryClause(mkLit(fp));
+    
+    Var b = c.tryBf(v(0) > v(2) & v(1) != v(3));
+    //c.s.addClause(mkLit(b));
+    c.tryClause(mkLit(b));
 
     c.tabulate();
+    c.forget();
+    c.tryClause(mkLit(b));
+    c.tabulate();
+}
 
-/*
-    Solver s2;
-    s2.newVar();
-    s2.newVar();
-    s2.newVar();
-    s2.newVar();
-    //s.addClause(~mkLit(0), mkLit(1));
-    //s.addClause(~mkLit(0), ~mkLit(1));
+void t2()
+{
+    Ctx<3> c(Mode::Vars);
+
     Bf_ptr b = (v(0) > v(1)) &
                (v(1) > v(0)) &
                (v(1) > v(2));
-    cout << b;
-    Var v = addBf(s2, b);
-    s2.addClause(mkLit(v));
-    
-    Ctx<3>::tabulate(s2);*/
+    Var v = c.addBf(b);
+
+    c.tryClause(mkLit(v));
+    c.tabulateVars();
+}
+
+int main()
+{
+    t1();
+    //f<ff>(2);
 }
