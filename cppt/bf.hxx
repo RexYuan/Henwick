@@ -19,7 +19,7 @@ struct Bf;
 enum class Conn {Top, Bot, Base, Not, And, Or};
 using Bf_ptr = shared_ptr<Bf>;
 template <typename T> concept is_Bf_ptr = same_as<T, Bf_ptr>;
-template <typename... Ts> concept are_Bf_ptrs = (sizeof...(Ts) < 2) || (is_Bf_ptr<Ts> && ...);
+template <typename... Ts> concept are_Bf_ptrs = (is_Bf_ptr<Ts> && ...);
 struct Bf
 {
     Conn t;

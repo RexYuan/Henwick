@@ -40,12 +40,12 @@ void t1()
 
     Var f, fp;
     tie(f, fp) = c.tryCdnf(cdnf);
-    c.s.addClause(mkLit(f));
-    c.s.addClause(mkLit(fp));
+    c.addClause(mkLit(f));
+    c.addClause(mkLit(fp));
     //c.tryClause(mkLit(f));
     //c.tryClause(mkLit(fp));
     
-    Var b = c.tryBf(v(0) > v(2) & v(1) != v(3));
+    Var b = c.addBf(v(0) > v(2) & v(1) != v(3));
     //c.s.addClause(mkLit(b));
     c.tryClause(mkLit(b));
 
@@ -62,14 +62,21 @@ void t2()
     Bf_ptr b = (v(0) > v(1)) &
                (v(1) > v(0)) &
                (v(1) > v(2));
-    Var v = c.addBf(b);
+    //Var v = c.addBf(b);
+    Var v = c.tryBf(b);
 
     c.tryClause(mkLit(v));
-    c.tabulateVars();
+    c.tabulate();
+    c.forget();
+    c.tryClause(~mkLit(v));
+    c.tabulate();
 }
+#include <typeinfo>
 
+void apple(){};
 int main()
 {
+    //S<2> x;
+    //x.handler();
     t1();
-    //f<ff>(2);
 }
