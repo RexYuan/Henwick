@@ -149,3 +149,31 @@ Bf_ptr disj(Bf_ptr bf1, Bf_ptr bf2)
         return make_shared<Bf>( Conn::Or, bf1, bf2 );
     }
 }
+
+Bf_ptr characteristic(string bs, int offset)
+{
+    Bf_ptr tmp = make_shared<Bf>( Conn::And );
+    for (int i=0; i<bs.size(); i++)
+    switch (bs[i])
+    {
+    case '1': tmp->push( v(i+offset)); break;
+    case '0': tmp->push(~v(i+offset)); break;
+    case '*': break;
+    case ' ': break;
+    default: assert(false);
+    }
+
+    return tmp;
+}
+
+Bf_ptr counter(int bits)
+{
+    Bf_ptr tmp = make_shared<Bf>( Conn::And );
+    for (int i=0; i<bits; i++)
+    {
+        Bf_ptr cin = make_shared<Bf>( Conn::And );
+        for (int j=i+1; j<bits; j++) cin->push( v(j) );
+        tmp->push( v(i+bits)==(v(i)!=cin) );
+    }
+    return tmp;
+}

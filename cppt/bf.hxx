@@ -50,8 +50,11 @@ Bf_ptr disj(Bf_ptr bf1, Bf_ptr bf2);
 inline Bf_ptr operator~(Bf_ptr bf) { return neg(bf); };
 inline Bf_ptr operator&(Bf_ptr bf1, Bf_ptr bf2) { return conj(bf1,bf2); };
 inline Bf_ptr operator|(Bf_ptr bf1, Bf_ptr bf2) { return disj(bf1,bf2); };
-inline Bf_ptr operator>(Bf_ptr bf1, Bf_ptr bf2) { return ~bf1 | bf2; };
+inline Bf_ptr operator|=(Bf_ptr bf1, Bf_ptr bf2) { return ~bf1 | bf2; };
 inline Bf_ptr operator==(Bf_ptr bf1, Bf_ptr bf2) { return (~bf1 | bf2) & (bf1 | ~bf2); };
 inline Bf_ptr operator!=(Bf_ptr bf1, Bf_ptr bf2) { return (bf1 | bf2) & (~bf1 | ~bf2); };
 
 inline std::ostream& operator<<(std::ostream &out, Bf_ptr bf) { out << bf->to_string(); return out; }
+
+Bf_ptr characteristic(string bs, int offset=0);
+Bf_ptr counter(int bits);
