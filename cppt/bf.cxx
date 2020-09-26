@@ -1,19 +1,5 @@
 
-#include <iostream>
-#include <algorithm>
-#include <bitset>
-#include <functional>
-#include <vector>
-#include <variant>
-#include <memory>
-#include <string>
-#include <utility>
-
-#include "minisat.hxx"
-
 #include "bf.hxx"
-
-using namespace std;
 
 Bf::Bf (bool b) : sub {monostate{}} { if (b) t=Conn::Top; else t=Conn::Bot; };
 Bf::Bf (int i) : t {Conn::Base}, sub {int{i}} {};

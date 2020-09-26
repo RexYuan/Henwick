@@ -1,101 +1,100 @@
 
 #pragma once
 
-#include <iostream>
-#include <algorithm>
-#include <bitset>
-#include <functional>
-#include <vector>
-#include <variant>
-#include <memory>
-#include <string>
-#include <utility>
-#include <optional>
-
 #include "ctx.hxx"
 #include "bf.hxx"
 
-using namespace Minisat;
-using namespace std;
+/*template <size_t N>
+void Ctx<N>::walk (Bv& b, const Bv& towards, Bf_ptr bads, const FaceVector& faces)
+{
+    auto in_bases = [&faces](const Bv& b)
+    {
+        for (const auto& f : faces)
+        if (f.basis == b)
+            return true;
+        return false;
+    };
+
+    bool peaked = false;
+    while (!peaked)
+    {
+        peaked = true;
+        for (int i=0; i<N; i++)
+        if (b[i] != towards[i])
+        {
+            b.flip(i);
+            if (!solveAtomicSW (b, bads) && !in_bases(b))
+            {
+                peaked = false;
+                break;
+            }
+            b.flip(i);
+        }
+    }
+}*/
 
 template <size_t N>
 bool Ctx<N>::learn (Bf_ptr inits_, Bf_ptr bads_, Bf_ptr trans_)
 {
-    cout << boolalpha;
-
-    Var inits = addBf(inits_),
-        bads  = addBf(bads_),
-        trans = addBf(trans_);
+    Var fixed = newSW();
+    Var inits = addBfSW(fixed, inits_),
+        bads  = addBfSW(fixed, bads_),
+        trans = addBfSW(fixed, trans_);
     
-    if (tryOnce ( v(inits)&v(bads) ))
-    {
-        cout << "degen false" << endl;
+    if (solveAtomicSW ( v(inits)&v(bads) )) // degen false
         return false;
-    }
 
     FaceVector faces;
     Var hypt, hyptP;
     bool pass = false;
-    
-    //if (!tryOnce ( ~(v(inits) |= v(true))) &&
-    //    !tryOnce ( ~(v(true)  |= ~v(bads))) &&
-    //    !tryOnce ( ~(v(true)&v(trans) |= v(true)) ))
-    if (!tryOnce( v(bads) ))
-    {
-        cout << "degen true" << endl;
+
+    if (!solveAtomicSW( v(bads) )) // degen true
         return true;
-    }
     
     update_ce(false);
+    Var sw = newSW();
     while (!pass)
     {
-        //cout << "cet " <<ce_type <<" , " << "ce " << to_string(ce)<<endl;
         if (ce_type) // positive ce
         {
             for (auto& f : faces)
-            if ( !f(ce) ) f.push_absorption(ce);
+            if ( !f(ce) )
+            {
+                //walk(ce, f.basis, v(bads), faces);
+                f.push_absorption(ce);
+            }
         }
         else // negative ce
         {
-            if (tryOnce (ce, v(inits)))
-            {
-                cout << "violated false" << endl;
+            if (solveAtomicSW (ce, v(inits))) // the only way to return false once algo starts
+                                              // when a decided neg ce is in inits meaning bads is
+                                              // reachable from inits and refutation is possible
                 return false;
-            }
             faces.push_back( Face(ce) );
         }
-        //printFaces(faces);
 
-        tie(hypt,hyptP) = tryCdnf(faces);
+        tie(hypt,hyptP) = addCdnfSW (sw, faces);
         
-        if (tryOnce ( ~(v(inits) |= v(hypt)) ))
-        {
-            //cout << "sat 1" <<endl;
-            update_ce(true);
-            continue;
-        }    
-        if (tryOnce ( ~(v(hypt) |= ~v(bads)) ))
-        {
-            //cout << "sat 2" <<endl;
+        if (solveAtomicSW ( ~(v(inits) |= v(hypt)) ))
+            update_ce(true);   
+        else if (solveAtomicSW ( ~(v(hypt) |= ~v(bads)) ))
             update_ce(false);
-            continue;
-        }
-        if (tryOnce ( ~(v(hypt)&v(trans) |= v(hyptP)) ))
-        {
-            //cout << "sat 3" <<endl;
+        else if (solveAtomicSW ( ~(v(hypt)&v(trans) |= v(hyptP)) ))
             decide_ce(v(bads), faces);
-            continue;
-        }
-        pass = true;
+        else
+            pass = true;
+        
+        releaseSW(sw);
+        sw = newSW();
     }
     
     cout << "passing true" << endl;
-    //printFaces(faces);
+    cout << to_string(faces);
     return true;
 }
 
 template <size_t N>
-void Ctx<N>::decide_ce (Bf_ptr bads, FaceVector faces) // determine ce when trans violated
+void Ctx<N>::decide_ce (Bf_ptr bads, const FaceVector& faces) // determine ce when trans violated
 {
     assert( s.okay() );
     string tmp = "";
@@ -107,7 +106,7 @@ void Ctx<N>::decide_ce (Bf_ptr bads, FaceVector faces) // determine ce when tran
     tmp += (s.model[i] == l_True) ? "1" : "0";
     Bv succ = mkBv(tmp);
 
-    if (tryOnce (succ, bads))
+    if (solveAtomicSW (succ, bads))
     {
         ce_type = false;
         ce = pred;

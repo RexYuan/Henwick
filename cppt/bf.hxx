@@ -1,25 +1,25 @@
 
 #pragma once
 
-#include <iostream>
-#include <algorithm>
 #include <bitset>
-#include <functional>
 #include <vector>
+#include <string>
+
+#include <iostream>
 #include <variant>
 #include <memory>
-#include <string>
-#include <utility>
 
 #include "minisat.hxx"
 
 using namespace std;
 
 struct Bf;
-enum class Conn {Top, Bot, Base, Not, And, Or};
 using Bf_ptr = shared_ptr<Bf>;
 template <typename T> concept is_Bf_ptr = same_as<T, Bf_ptr>;
 template <typename... Ts> concept are_Bf_ptrs = (is_Bf_ptr<Ts> && ...);
+
+enum class Conn {Top, Bot, Base, Not, And, Or};
+
 struct Bf
 {
     Conn t;
@@ -54,7 +54,7 @@ inline Bf_ptr operator|=(Bf_ptr bf1, Bf_ptr bf2) { return ~bf1 | bf2; };
 inline Bf_ptr operator==(Bf_ptr bf1, Bf_ptr bf2) { return (~bf1 | bf2) & (bf1 | ~bf2); };
 inline Bf_ptr operator!=(Bf_ptr bf1, Bf_ptr bf2) { return (bf1 | bf2) & (~bf1 | ~bf2); };
 
-inline std::ostream& operator<<(std::ostream &out, Bf_ptr bf) { out << bf->to_string(); return out; }
+inline std::ostream& operator<<(std::ostream &out, const Bf_ptr& bf) { out << bf->to_string(); return out; }
 
 Bf_ptr characteristic(string bs, int offset=0);
 Bf_ptr counter(int bits);

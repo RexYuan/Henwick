@@ -1,15 +1,12 @@
 
 #pragma once
 
-#include <iostream>
-#include <algorithm>
 #include <bitset>
-#include <functional>
+#include <set>
 #include <vector>
-#include <variant>
-#include <memory>
 #include <string>
-#include <utility>
+
+#include <iostream>
 
 #include "minisat.hxx"
 
@@ -23,142 +20,44 @@ enum class Mode {Vars, States};
 template <size_t N>
 struct Ctx
 {
+    struct Face;
+    
     using Bv = bitset<N>;
     using BvVector = vector<Bv>;
-
-    struct Face
-    {
-        Bv basis;
-        BvVector primes;
-
-        Face (Bv b) : basis {b}, primes {BvVector{}} {};
-        Face (string bs) : basis {mkBv(bs)}, primes {BvVector{}} {};
-        Face (Bv b, initializer_list<Bv> bs) : basis {b}, primes {BvVector(bs)} {};
-        Face (string bs, initializer_list<string> bss) : basis {mkBv(bs)}, primes {mkBvs(bss)} {};
-
-        void push (Bv b) { primes.push_back(b); }
-        void push (string bs) { primes.push_back(mkBv(bs)); }
-        void push_absorption (Bv b)
-        {
-            for (size_t i=0; i<primes.size();)
-            if (((b^basis)&(primes[i]^basis)) == (b^basis))
-                primes.erase(primes.begin()+i);
-            else i++;
-
-            push(b);
-        }
-        void push_absorption (string bs) { push_absorption(mkBv(bs)); }
-
-        bool operator() (Bv b)
-        {
-            for (Bv p : primes)
-                if (((b^basis)&(p^basis)) == (p^basis))
-                    return true;
-            return false;
-        }
-    };
     using FaceVector = vector<Face>;
-
-    static void printFace (Face f)
-    {
-        cout << to_string(f.basis) << ", {";
-        if (f.primes.size()>0)
-        {
-            cout << to_string(f.primes[0]);
-            for (size_t i=1; i<f.primes.size(); i++)
-                cout << ", " << to_string(f.primes[i]);
-        }
-        cout << "}" << endl;
-    }
-    static void printFaces (FaceVector fs)
-    {
-        for (auto f : fs)
-        {
-            printFace(f);
-        }
-        cout << endl;
-    }
 
     static Bv mkBv (string s);
     static BvVector mkBvs (initializer_list<string> ss);
-    static string to_string (Bv bs);
+    static string to_string (const Bv& bs);
+    static string to_string (const Face& f);
+    static string to_string (const FaceVector& fs);
 
-    bool learn (Bf_ptr inits, Bf_ptr bads, Bf_ptr trans);
-    Bv ce;
-    bool ce_type;
-    void decide_ce (Bf_ptr bads, FaceVector faces);
-    void update_ce (bool t);
+    set<Var> activeSW;
+    set<Var> inactiveSW;
+    // new switches default to active
+    inline Var newSW () { Var sw=s.newVar(); activeSW.insert(sw); return sw; }
+    inline void releaseSW (Var sw) { activeSW.erase(sw); inactiveSW.erase(sw); s.releaseVar(mkLit(sw)); }
+    inline void activate (Var sw) { inactiveSW.erase(sw); activeSW.insert(sw); }
+    inline void deactivate (Var sw) { activeSW.erase(sw); inactiveSW.insert(sw); }
+    
+    template <typename... Ts> requires (sizeof...(Ts)<=3) && (same_as<Ts, Lit> && ...)
+    inline bool addClauseSW (Var sw, Ts... lits) { return s.addClause(mkLit(sw), lits...); }
+    template <typename... Ts> requires (sizeof...(Ts)>3) && (same_as<Ts, Lit> && ...)
+    inline bool addClauseSW (Var sw, Ts... lits) { vec<Lit> ps; (ps.push(lits), ...); return addClauseSW(sw, ps); }
+    inline bool addClauseSW (Var sw, const vec<Lit>& ps) { vec<Lit> tmp; ps.copyTo(tmp); tmp.push(mkLit(sw)); return s.addClause_(tmp); }
+    
+    template <typename... Ts> requires (same_as<Ts, Lit> && ...)
+    bool solveSW (Ts... lits);
+    bool solveSW (const vec<Lit>& ps);
+    bool solveAtomicSW (Bf_ptr bf);
+    bool solveAtomicSW (Bv bv, Bf_ptr bf, int offset=0); // if bv is in bf
+    Var addBfSW (Var sw, const Bf_ptr& bf);
+    pair<Var,Var> addCdnfSW (Var sw, const FaceVector& cdnf);
 
     Mode mode;
     Solver s;
-    Var epoch;
 
-    Ctx (Mode m) : mode {m} { init(); initEpoch(); }
-
-    template <typename... Ts> requires (sizeof...(Ts)<=3) && (same_as<Ts, Lit> && ...)
-    inline bool _addClause (Ts... lits) { return addClause(lits...); }
-    inline bool  addClause (Lit p) { return s.addClause(p); }
-    inline bool  addClause (Lit p, Lit q) { return s.addClause(p, q); }
-    inline bool  addClause (Lit p, Lit q, Lit r) { return s.addClause(p, q, r); }
-    inline bool  addClause_(vec<Lit>& ps) { return s.addClause_(ps); }
-
-    inline void initEpoch () // call this after initVars / initStates
-                          { epoch = s.newVar(); }
-    inline void forget ()
-                       { s.releaseVar(mkLit(epoch)); epoch = s.newVar(); }
-    template <typename... Ts> requires (sizeof...(Ts)<=3) && (same_as<Ts, Lit> && ...)
-    inline bool _tryClause (Ts... lits) { return tryClause(lits...); }
-    inline bool  tryClause (Lit p)
-                           { return s.addClause(mkLit(epoch), p); }
-    inline bool  tryClause (Lit p, Lit q)
-                           { return s.addClause(mkLit(epoch), p, q); }
-    inline bool  tryClause (Lit p, Lit q, Lit r)
-                           { return s.addClause(mkLit(epoch), p, q, r); }
-    inline bool  tryClause_(vec<Lit>& ps)
-                           { ps.push(mkLit(epoch)); return addClause_(ps); }
-    inline bool trySolve ()
-                         { return s.solve(~mkLit(epoch)); }
-    inline bool trySolve (Lit p)
-                         { return s.solve(~mkLit(epoch), p); }
-    inline bool trySolve (Lit p, Lit q)
-                         { return s.solve(~mkLit(epoch), p, q); }
-    inline bool tryForget (Lit p)
-                          { bool tmp = trySolve(p); forget(); return tmp; }
-    
-    template <typename... Ts> requires (sizeof...(Ts)<=3) && (same_as<Ts, Lit> && ...)
-    inline bool _tryOnce (Var e, Ts... lits) { return tryOnce(e, lits...); }
-    inline bool  tryOnce (Var e, Lit p)
-                         { return s.addClause(mkLit(e), p); }
-    inline bool  tryOnce (Var e, Lit p, Lit q)
-                         { return s.addClause(mkLit(e), p, q); }
-    inline bool  tryOnce (Var e, Lit p, Lit q, Lit r)
-                         { return s.addClause(mkLit(e), p, q, r); }
-    inline bool  tryOnce_(Var e, vec<Lit>& ps)
-                         { ps.push(mkLit(e)); return addClause_(ps); }
-    Var handleOnceBf (Var e, Bf_ptr bf);
-    bool tryOnce (Bf_ptr bf)
-    {
-        Var e = s.newVar();
-        bool ret = s.solve(~mkLit(epoch),
-            ~mkLit(e),mkLit(handleOnceBf(e, bf)));
-        s.releaseVar(mkLit(e));
-        return ret;
-    }
-    bool tryOnce (Bv bv, Bf_ptr bf) // if bv in bf
-    {
-        Var e = s.newVar();
-        vec<Lit> l;
-        l.push( ~mkLit(epoch) );
-        l.push( ~mkLit(e) );
-        l.push( mkLit(handleOnceBf(e, bf)) );
-        for (size_t i=0; i<N; i++)
-            if (bv[i]) l.push( mkLit(i) );
-            else l.push( ~mkLit(i) );
-
-        bool ret = s.solve( l );
-        s.releaseVar(mkLit(e));
-        return ret;
-    }
+    Ctx (Mode m) : mode {m} { init(); }
 
     inline void tabulate () { switch (mode) {
         case Mode::Vars:   tabulateVars();   break;
@@ -174,60 +73,69 @@ struct Ctx
     void initStates () // or call this first
                   { for (int i=0; i<N*2; i++) s.newVar(); }
     
-    template <bool(Ctx<N>::*)(Lit),
-              bool(Ctx<N>::*)(Lit,Lit),
-              bool(Ctx<N>::*)(Lit,Lit,Lit),
-              bool(Ctx<N>::*)(vec<Lit>&)>
-    Var handleBf (Bf_ptr bf);
-    inline Var addBf (Bf_ptr bf)
-                     { return handleBf<&Ctx<N>::_addClause<Lit>,
-                                       &Ctx<N>::_addClause<Lit,Lit>,
-                                       &Ctx<N>::_addClause<Lit,Lit,Lit>,
-                                       &Ctx<N>::addClause_>(bf); }
-    inline Var tryBf (Bf_ptr bf)
-                     { return handleBf<&Ctx<N>::_tryClause<Lit>,
-                                       &Ctx<N>::_tryClause<Lit,Lit>,
-                                       &Ctx<N>::_tryClause<Lit,Lit,Lit>,
-                                       &Ctx<N>::tryClause_>(bf); }
-    
-    template <bool(Ctx<N>::*)(Lit),
-              bool(Ctx<N>::*)(Lit,Lit),
-              bool(Ctx<N>::*)(Lit,Lit,Lit),
-              bool(Ctx<N>::*)(vec<Lit>&)>
-    pair<Var,Var> handleCdnf (const FaceVector& cdnf);
-    inline pair<Var,Var> addCdnf (const FaceVector& cdnf)
-                                 { return handleCdnf<&Ctx<N>::_addClause<Lit>,
-                                                     &Ctx<N>::_addClause<Lit,Lit>,
-                                                     &Ctx<N>::_addClause<Lit,Lit,Lit>,
-                                                     &Ctx<N>::addClause_>(cdnf); }
-    inline pair<Var,Var> tryCdnf (const FaceVector& cdnf)
-                                 { return handleCdnf<&Ctx<N>::_tryClause<Lit>,
-                                                     &Ctx<N>::_tryClause<Lit,Lit>,
-                                                     &Ctx<N>::_tryClause<Lit,Lit,Lit>,
-                                                     &Ctx<N>::tryClause_>(cdnf); }
+    //void walk (Bv& b, const Bv& towards, Bf_ptr bads, const FaceVector& faces);
+    bool learn (Bf_ptr inits, Bf_ptr bads, Bf_ptr trans);
+    Bv ce;
+    bool ce_type;
+    void decide_ce (Bf_ptr bads, const FaceVector& faces);
+    void update_ce (bool t);
+
+    // clean
+    bool mclearnInit (FaceVector& faces, Var inits, Var bads);
+    bool mclearnStep (FaceVector& faces, Var inits, Var bads, Var trans);
+    bool mclearn (Bf_ptr inits, Bf_ptr bads, Bf_ptr trans);
+    void getSucc();
 };
 
 template <size_t N>
-template <bool(Ctx<N>::*handle1)(Lit),
-          bool(Ctx<N>::*handle2)(Lit,Lit),
-          bool(Ctx<N>::*handle3)(Lit,Lit,Lit),
-          bool(Ctx<N>::*handlel)(vec<Lit>&)>
-Var Ctx<N>::handleBf (Bf_ptr bf)
+struct Ctx<N>::Face
+{
+    Bv basis;
+    BvVector primes;
+
+    Face (Bv b) : basis {b}, primes {BvVector{}} {};
+    Face (string bs) : basis {mkBv(bs)}, primes {BvVector{}} {};
+    Face (Bv b, initializer_list<Bv> bs) : basis {b}, primes {BvVector(bs)} {};
+    Face (string bs, initializer_list<string> bss) : basis {mkBv(bs)}, primes {mkBvs(bss)} {};
+
+    void push (Bv b) { primes.push_back(b); }
+    void push (string bs) { primes.push_back(mkBv(bs)); }
+    void push_absorption (Bv b)
+    {
+        for (size_t i=0; i<primes.size();)
+        if (((b^basis)&(primes[i]^basis)) == (b^basis))
+            primes.erase(primes.begin()+i);
+        else i++;
+
+        push(b);
+    }
+    void push_absorption (string bs) { push_absorption(mkBv(bs)); }
+
+    bool operator() (Bv b)
+    {
+        for (Bv p : primes)
+            if (((b^basis)&(p^basis)) == (p^basis))
+                return true;
+        return false;
+    }
+};
+
+template <size_t N>
+Var Ctx<N>::addBfSW (Var sw, const Bf_ptr& bf)
 {
     switch (bf->t)
     {
     case Conn::Top:
     {
         Var v = s.newVar();
-        //invoke(handle1, this, mkLit(v));
-        (this->*handle1)( mkLit(v) );
+        addClauseSW(sw, mkLit(v));
         return v;
         break;
     }   
     case Conn::Bot:
     {
         Var v = s.newVar();
-        (this->*handle1)( ~mkLit(v) );
+        addClauseSW(sw, ~mkLit(v));
         return v;
         break;
     }
@@ -237,9 +145,9 @@ Var Ctx<N>::handleBf (Bf_ptr bf)
     case Conn::Not:
     {
         Var v = s.newVar();
-        Var sub_v = handleBf<handle1,handle2,handle3,handlel>(bf->get_range()[0]);
-        (this->*handle2)(  mkLit(v) ,  mkLit(sub_v) );
-        (this->*handle2)( ~mkLit(v) , ~mkLit(sub_v) );
+        Var sub_v = addBfSW(sw, bf->get_range()[0]);
+        addClauseSW(sw,  mkLit(v),  mkLit(sub_v));
+        addClauseSW(sw, ~mkLit(v), ~mkLit(sub_v));
         return v;
         break;
     }
@@ -247,14 +155,14 @@ Var Ctx<N>::handleBf (Bf_ptr bf)
     {
         Var v = s.newVar();
         vec<Lit> l;
-        l.push( mkLit(v) );
+        l.push(mkLit(v));
         for (Var sub_v; Bf_ptr sub : bf->get_range())
         {
-            sub_v = handleBf<handle1,handle2,handle3,handlel>(sub);
-            (this->*handle2)( ~mkLit(v) , mkLit(sub_v) );
-            l.push( ~mkLit(sub_v) );
+            sub_v = addBfSW(sw, sub);
+            addClauseSW(sw, ~mkLit(v), mkLit(sub_v));
+            l.push(~mkLit(sub_v));
         }
-        (this->*handlel)( l );
+        addClauseSW(sw, l);
         return v;
         break;
     }
@@ -262,14 +170,14 @@ Var Ctx<N>::handleBf (Bf_ptr bf)
     {
         Var v = s.newVar();
         vec<Lit> l;
-        l.push( ~mkLit(v) );
+        l.push(~mkLit(v));
         for (Var sub_v; Bf_ptr sub : bf->get_range())
         {
-            sub_v = handleBf<handle1,handle2,handle3,handlel>(sub);
-            (this->*handle2)( mkLit(v) , ~mkLit(sub_v) );
-            l.push( mkLit(sub_v) );
+            sub_v = addBfSW(sw, sub);
+            addClauseSW(sw, mkLit(v), ~mkLit(sub_v));
+            l.push(mkLit(sub_v));
         }
-        (this->*handlel)( l );
+        addClauseSW(sw, l);
         return v;
         break;
     }
@@ -278,120 +186,92 @@ Var Ctx<N>::handleBf (Bf_ptr bf)
 }
 
 template <size_t N>
-Var Ctx<N>::handleOnceBf (Var e, Bf_ptr bf)
-{
-    switch (bf->t)
-    {
-    case Conn::Top:
-    {
-        Var v = s.newVar();
-        //invoke(handle1, this, mkLit(v));
-        _tryOnce(e,  mkLit(v) );
-        return v;
-        break;
-    }   
-    case Conn::Bot:
-    {
-        Var v = s.newVar();
-        _tryOnce(e, ~mkLit(v) );
-        return v;
-        break;
-    }
-    case Conn::Base:
-        return bf->get_int();
-        break;    
-    case Conn::Not:
-    {
-        Var v = s.newVar();
-        Var sub_v = handleOnceBf(e,bf->get_range()[0]);
-        _tryOnce(e,  mkLit(v) ,  mkLit(sub_v) );
-        _tryOnce(e, ~mkLit(v) , ~mkLit(sub_v) );
-        return v;
-        break;
-    }
-    case Conn::And:
-    {
-        Var v = s.newVar();
-        vec<Lit> l;
-        l.push( mkLit(v) );
-        for (Var sub_v; Bf_ptr sub : bf->get_range())
-        {
-            sub_v = handleOnceBf(e,sub);
-            _tryOnce(e, ~mkLit(v) , mkLit(sub_v) );
-            l.push( ~mkLit(sub_v) );
-        }
-        tryOnce_(e, l );
-        return v;
-        break;
-    }
-    case Conn::Or:
-    {
-        Var v = s.newVar();
-        vec<Lit> l;
-        l.push( ~mkLit(v) );
-        for (Var sub_v; Bf_ptr sub : bf->get_range())
-        {
-            sub_v = handleOnceBf(e,sub);
-            _tryOnce(e, mkLit(v) , ~mkLit(sub_v) );
-            l.push( mkLit(sub_v) );
-        }
-        tryOnce_(e, l );
-        return v;
-        break;
-    }
-    }
-    assert( false );
-}
-
-template <size_t N>
-template <bool(Ctx<N>::*handle1)(Lit),
-          bool(Ctx<N>::*handle2)(Lit,Lit),
-          bool(Ctx<N>::*handle3)(Lit,Lit,Lit),
-          bool(Ctx<N>::*handlel)(vec<Lit>&)>
-pair<Var,Var> Ctx<N>::handleCdnf (const FaceVector& cdnf)
+pair<Var,Var> Ctx<N>::addCdnfSW (Var sw, const FaceVector& cdnf)
 {
     assert( s.nVars() >= N*2 );
 
-    Var r = s.newVar(),    rp = s.newVar();
-    //addClause(mkLit(r)); addClause(mkLit(rp));
+    Var r = s.newVar(), rp = s.newVar();
 
-    vec<Lit> rls,       rpls;
+    vec<Lit> rls, rpls;
+    rls.push(mkLit(sw)); rpls.push(mkLit(sw));
     rls.push(mkLit(r)); rpls.push(mkLit(rp));
     for (Face dnf : cdnf)
     {
-        Var dr = s.newVar(),               drp = s.newVar();
-        (this->*handle2)(~mkLit(r), mkLit(dr)); (this->*handle2)(~mkLit(rp), mkLit(drp));
-        rls.push(~mkLit(dr));              rpls.push(~mkLit(drp));
+        Var dr = s.newVar(), drp = s.newVar();
+        addClauseSW(sw, ~mkLit(r), mkLit(dr)); addClauseSW(sw, ~mkLit(rp), mkLit(drp));
+        rls.push(~mkLit(dr)); rpls.push(~mkLit(drp));
 
-        vec<Lit> dls,         dpls;
+        vec<Lit> dls, dpls;
+        dls.push(mkLit(sw)); dpls.push(mkLit(sw));
         dls.push(~mkLit(dr)); dpls.push(~mkLit(drp));
         for (Bv term : dnf.primes)
         {
-            Var cr = s.newVar(),                crp = s.newVar();
-            (this->*handle2)(~mkLit(cr), mkLit(dr)); (this->*handle2)(~mkLit(crp), mkLit(drp));
-            dls.push(mkLit(cr));                dpls.push(mkLit(crp));
+            Var cr = s.newVar(), crp = s.newVar();
+            addClauseSW(sw, ~mkLit(cr), mkLit(dr)); addClauseSW(sw, ~mkLit(crp), mkLit(drp));
+            dls.push(mkLit(cr)); dpls.push(mkLit(crp));
 
-            vec<Lit> cls,        cpls;
+            vec<Lit> cls, cpls;
+            cls.push(mkLit(sw)); cpls.push(mkLit(sw));
             cls.push(mkLit(cr)); cpls.push(mkLit(crp));
             for (int i=0; i<N; i++)
             {
                 if (term[i] == true && dnf.basis[i] == false)
                 {
-                    (this->*handle2)(~mkLit(cr), mkLit(i)); (this->*handle2)(~mkLit(crp), mkLit(i+N));
-                    cls.push(~mkLit(i));               cpls.push(~mkLit(i+N));
+                    addClauseSW(sw, ~mkLit(cr), mkLit(i)); addClauseSW(sw, ~mkLit(crp), mkLit(i+N));
+                    cls.push(~mkLit(i)); cpls.push(~mkLit(i+N));
                 }
                 else if (term[i] == false && dnf.basis[i] == true)
                 {
-                    (this->*handle2)(~mkLit(cr), ~mkLit(i)); (this->*handle2)(~mkLit(crp), ~mkLit(i+N));
-                    cls.push(mkLit(i));                 cpls.push(mkLit(i+N));
+                    addClauseSW(sw, ~mkLit(cr), ~mkLit(i)); addClauseSW(sw, ~mkLit(crp), ~mkLit(i+N));
+                    cls.push(mkLit(i)); cpls.push(mkLit(i+N));
                 }
             }
-            (this->*handlel)(cls); (this->*handlel)(cpls);
+            addClauseSW(sw, cls); addClauseSW(sw, cpls);
         }
-        (this->*handlel)(dls); (this->*handlel)(dpls);
+        addClauseSW(sw, dls); addClauseSW(sw, dpls);
     }
-    (this->*handlel)(rls); (this->*handlel)(rpls);
+    addClauseSW(sw, rls); addClauseSW(sw, rpls);
     return make_pair(r,rp);
+}
+
+template <size_t N>
+template <typename... Ts> requires (same_as<Ts, Lit> && ...)
+bool Ctx<N>::solveSW (Ts... lits)
+{
+    vec<Lit> ps; (ps.push(lits), ...);
+    return solveSW(ps);
+}
+
+template <size_t N>
+bool Ctx<N>::solveSW (const vec<Lit>& ps)
+{
+    vec<Lit> tmp; ps.copyTo(tmp);
+    for (auto sw :   activeSW) tmp.push(~mkLit(sw));
+    for (auto sw : inactiveSW) tmp.push( mkLit(sw));
+    return s.solve(tmp);
+}
+
+template <size_t N>
+bool Ctx<N>::solveAtomicSW (Bf_ptr bf)
+{
+    Var e = newSW();
+    bool ret = solveSW(mkLit(addBfSW(e, bf)));
+    releaseSW(e);
+    return ret;
+}
+
+template <size_t N>
+bool Ctx<N>::solveAtomicSW (Bv bv, Bf_ptr bf, int offset) // if bv is in bf
+{
+    vec<Lit> tmp;
+    for (size_t i=0; i<N; i++)
+        if (bv[i]) tmp.push( mkLit(i+offset) );
+        else tmp.push( ~mkLit(i+offset) );
+    Var e = newSW();
+    tmp.push(mkLit(addBfSW(e, bf)));
+    bool ret = solveSW(tmp);
+    releaseSW(e);
+    return ret;
 }
 
 template <size_t N>
@@ -400,15 +280,16 @@ void Ctx<N>::tabulateVars ()
     assert( s.nVars() >= N );
 
     cout << "listing truth table:" << endl;
-    for (int i=0, tmp_v=s.newVar(); i<pow(2,N); i++, tmp_v=s.newVar())
+    vec<Lit> tmp;
+    for (int i=0; i<pow(2,N); i++)
     {
         Bv tmp_b (i);
         for (int j=0; j<N; j++)
-            if (tmp_b[j]) addClause(mkLit(tmp_v), mkLit(j));
-            else addClause(mkLit(tmp_v), ~mkLit(j));
+            if (tmp_b[j]) tmp.push(mkLit(j));
+            else tmp.push(~mkLit(j));
         
-        cout << to_string(tmp_b) << " " << trySolve(~mkLit(tmp_v)) << endl;
-        s.releaseVar(mkLit(tmp_v));
+        cout << to_string(tmp_b) << " " << solveSW(tmp) << endl;
+        tmp.clear();
     }
 }
 
@@ -418,26 +299,28 @@ void Ctx<N>::tabulateStates ()
     assert( s.nVars() >= N*2 );
 
     cout << "listing truth table:" << endl;
-    for (int i=0, tmp_v=s.newVar(); i<pow(2,N); i++, tmp_v=s.newVar())
+    vec<Lit> tmp, tmpp, pre;
+    for (int i=0; i<pow(2,N); i++)
     {
         Bv tmp_b (i);
         for (int j=0; j<N; j++)
-            if (tmp_b[j]) addClause(mkLit(tmp_v), mkLit(j));
-            else addClause(mkLit(tmp_v), ~mkLit(j));
+            if (tmp_b[j]) tmp.push(mkLit(j));
+            else tmp.push(~mkLit(j));
         
-        for (int k=0, tmp_vp=s.newVar(); k<pow(2,N); k++, tmp_vp=s.newVar())
+        tmp.copyTo(pre);
+        for (int k=0; k<pow(2,N); k++)
         {
             Bv tmp_bp (k);
             for (int l=0; l<N; l++)
-                if (tmp_bp[l]) addClause(mkLit(tmp_vp), mkLit(l+N));
-                else addClause(mkLit(tmp_vp), ~mkLit(l+N));
+                if (tmp_bp[l]) tmp.push(mkLit(l+N));
+                else tmp.push(~mkLit(l+N));
             
             cout << to_string(tmp_b) << " " <<
                     to_string(tmp_bp) << " " <<
-                    trySolve(~mkLit(tmp_v),~mkLit(tmp_vp)) << endl;
-            s.releaseVar(mkLit(tmp_vp));
+                    solveSW(tmp) << endl;
+            pre.copyTo(tmp);
         }
-        s.releaseVar(mkLit(tmp_v));
+        tmp.clear();
     }
 }
 
@@ -457,9 +340,31 @@ Ctx<N>::BvVector Ctx<N>::mkBvs (initializer_list<string> ss)
 }
 
 template <size_t N>
-string Ctx<N>::to_string (Ctx<N>::Bv bs)
+string Ctx<N>::to_string (const Bv& bs)
 {
     string s = bs.to_string();
     reverse(s.begin(), s.end());
+    return s;
+}
+
+template <size_t N>
+string Ctx<N>::to_string (const Face& f)
+{
+    string s = "";
+    s += to_string(f.basis) + ", {";
+    if (f.primes.size()>0)
+        s += to_string(f.primes[0]);
+    for (size_t i=1; i<f.primes.size(); i++)
+        s += ", " + to_string(f.primes[i]);
+    s += "}\n";
+    return s;
+}
+
+template <size_t N>
+string Ctx<N>::to_string (const FaceVector& fs)
+{
+    string s = "";
+    for (auto f : fs)
+        s += to_string(f);
     return s;
 }
