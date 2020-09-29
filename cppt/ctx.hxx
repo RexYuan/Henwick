@@ -3,10 +3,12 @@
 
 #include <bitset>
 #include <set>
+#include <map>
 #include <vector>
 #include <string>
 
 #include <iostream>
+#include <functional>
 
 #include "minisat.hxx"
 
@@ -15,12 +17,12 @@
 using namespace Minisat;
 using namespace std;
 
-enum class Mode {Vars, States};
-
 template <size_t N>
 struct Ctx
 {
-    struct Face;
+    Solver s; // context-wise global solver
+
+    struct Face; // dnf representation
     
     using Bv = bitset<N>;
     using BvVector = vector<Bv>;
@@ -32,59 +34,61 @@ struct Ctx
     static string to_string (const Face& f);
     static string to_string (const FaceVector& fs);
 
+    // State management
+    //
+    using Step = size_t;
+    map<Step,Var> states; // stepped states offsets
+    inline Step nStates () const { return states.size(); } // number of active state steps
+    inline Step addStates () { states[nStates()]=s.nVars(); for (size_t i=0; i<N; i++) s.newVar(); return nStates()-1; } // add a step of N vars into s and return this step
+    inline void releaseStates (Step step) { for (Var i=states[step], h=i+N; i<h; i++) s.releaseVar(mkLit(i)); states.erase(step); }
+    
+    void tabulate (); // tabulate current truth table considering every state's values
+    void tabulate (int step); // tabulate current truth table considering only given step's valuation
+
+    Ctx () {}
+    Ctx (int steps) { for (size_t i=0; i<steps; i++) addStates(); }
+
+    // Switch management
+    //
     set<Var> activeSW;
     set<Var> inactiveSW;
-    // new switches default to active
-    inline Var newSW () { Var sw=s.newVar(); activeSW.insert(sw); return sw; }
-    inline void releaseSW (Var sw) { activeSW.erase(sw); inactiveSW.erase(sw); s.releaseVar(mkLit(sw)); }
-    inline void activate (Var sw) { inactiveSW.erase(sw); activeSW.insert(sw); }
-    inline void deactivate (Var sw) { activeSW.erase(sw); inactiveSW.insert(sw); }
+    
+    Var newSW (); // new switches default to active
+    void releaseSW (Var sw);
+    void activate (Var sw);
+    void deactivate (Var sw);
     
     template <typename... Ts> requires (sizeof...(Ts)<=3) && (same_as<Ts, Lit> && ...)
-    inline bool addClauseSW (Var sw, Ts... lits) { return s.addClause(mkLit(sw), lits...); }
+    bool addClauseSW (Var sw, Ts... lits);
     template <typename... Ts> requires (sizeof...(Ts)>3) && (same_as<Ts, Lit> && ...)
-    inline bool addClauseSW (Var sw, Ts... lits) { vec<Lit> ps; (ps.push(lits), ...); return addClauseSW(sw, ps); }
-    inline bool addClauseSW (Var sw, const vec<Lit>& ps) { vec<Lit> tmp; ps.copyTo(tmp); tmp.push(mkLit(sw)); return s.addClause_(tmp); }
+    bool addClauseSW (Var sw, Ts... lits);
+    bool addClauseSW (Var sw, const vec<Lit>& ps);
     
     template <typename... Ts> requires (same_as<Ts, Lit> && ...)
     bool solveSW (Ts... lits);
     bool solveSW (const vec<Lit>& ps);
-    bool solveAtomicSW (Bf_ptr bf);
-    bool solveAtomicSW (Bv bv, Bf_ptr bf, int offset=0); // if bv is in bf
+    bool solveAtomicSW (const Bf_ptr& bf);
+    bool solveAtomicSW (Step step, const Bv& bv, const Bf_ptr& bf); // if bv is in bf
     Var addBfSW (Var sw, const Bf_ptr& bf);
-    pair<Var,Var> addCdnfSW (Var sw, const FaceVector& cdnf);
+    pair<Var,Var> addCdnfSW (Step step, Var sw, const FaceVector& cdnf);
 
-    Mode mode;
-    Solver s;
+    struct CE { Bv v; bool t; };
+    // Recoverable cdnf given eventually consistent oracle:
+    //
+    /*void walk (Bv& b, const Bv& towards, Bf_ptr bads, const FaceVector& faces);*/
+    CE dgetCE (Step curr, bool t); // ce oracle for inits and bads violation
+    CE dgetCE (Step curr, Step next, Bf_ptr bads, const FaceVector& faces); // ce oracle for trans violation
+    pair<Var,Var> daddCdnfSW (Step curr, Var sw, const FaceVector& cdnf); // optimized to add both curr and next in same traversal
+    bool dlearn (Bf_ptr inits, Bf_ptr bads, Bf_ptr trans);
 
-    Ctx (Mode m) : mode {m} { init(); }
-
-    inline void tabulate () { switch (mode) {
-        case Mode::Vars:   tabulateVars();   break;
-        case Mode::States: tabulateStates(); break; } }
-    void tabulateVars ();
-    void tabulateStates ();
-
-    inline void init () { switch (mode) {
-        case Mode::Vars:   initVars();   break;
-        case Mode::States: initStates(); break; } }
-    void initVars () // call this first
-                  { for (int i=0; i<N; i++) s.newVar(); }
-    void initStates () // or call this first
-                  { for (int i=0; i<N*2; i++) s.newVar(); }
-    
-    //void walk (Bv& b, const Bv& towards, Bf_ptr bads, const FaceVector& faces);
-    bool learn (Bf_ptr inits, Bf_ptr bads, Bf_ptr trans);
-    Bv ce;
-    bool ce_type;
-    void decide_ce (Bf_ptr bads, const FaceVector& faces);
-    void update_ce (bool t);
-
-    // clean
+    // Breath-over-depth expansion cdnf
+    // TODO: clean and rewrite
     bool mclearnInit (FaceVector& faces, Var inits, Var bads);
     bool mclearnStep (FaceVector& faces, Var inits, Var bads, Var trans);
     bool mclearn (Bf_ptr inits, Bf_ptr bads, Bf_ptr trans);
     void getSucc();
+
+    inline bool learn (Bf_ptr inits, Bf_ptr bads, Bf_ptr trans) { return dlearn(inits, bads, trans); }
 };
 
 template <size_t N>
@@ -102,224 +106,76 @@ struct Ctx<N>::Face
     void push (string bs) { primes.push_back(mkBv(bs)); }
     void push_absorption (Bv b)
     {
-        for (size_t i=0; i<primes.size();)
-        if (((b^basis)&(primes[i]^basis)) == (b^basis))
-            primes.erase(primes.begin()+i);
-        else i++;
+        for (auto p_it=primes.begin(); p_it!=primes.end();)
+        if ( ((b^basis)&(*p_it^basis))==(b^basis) )
+            primes.erase(p_it);
+        else p_it++;
 
         push(b);
     }
     void push_absorption (string bs) { push_absorption(mkBv(bs)); }
 
-    bool operator() (Bv b)
+    bool operator() (const Bv& b)
     {
         for (Bv p : primes)
-            if (((b^basis)&(p^basis)) == (p^basis))
+            if ( ((b^basis)&(p^basis))==(p^basis) )
                 return true;
         return false;
     }
 };
 
 template <size_t N>
-Var Ctx<N>::addBfSW (Var sw, const Bf_ptr& bf)
+void Ctx<N>::tabulate ()
 {
-    switch (bf->t)
-    {
-    case Conn::Top:
-    {
-        Var v = s.newVar();
-        addClauseSW(sw, mkLit(v));
-        return v;
-        break;
-    }   
-    case Conn::Bot:
-    {
-        Var v = s.newVar();
-        addClauseSW(sw, ~mkLit(v));
-        return v;
-        break;
-    }
-    case Conn::Base:
-        return bf->get_int();
-        break;    
-    case Conn::Not:
-    {
-        Var v = s.newVar();
-        Var sub_v = addBfSW(sw, bf->get_range()[0]);
-        addClauseSW(sw,  mkLit(v),  mkLit(sub_v));
-        addClauseSW(sw, ~mkLit(v), ~mkLit(sub_v));
-        return v;
-        break;
-    }
-    case Conn::And:
-    {
-        Var v = s.newVar();
-        vec<Lit> l;
-        l.push(mkLit(v));
-        for (Var sub_v; Bf_ptr sub : bf->get_range())
-        {
-            sub_v = addBfSW(sw, sub);
-            addClauseSW(sw, ~mkLit(v), mkLit(sub_v));
-            l.push(~mkLit(sub_v));
-        }
-        addClauseSW(sw, l);
-        return v;
-        break;
-    }
-    case Conn::Or:
-    {
-        Var v = s.newVar();
-        vec<Lit> l;
-        l.push(~mkLit(v));
-        for (Var sub_v; Bf_ptr sub : bf->get_range())
-        {
-            sub_v = addBfSW(sw, sub);
-            addClauseSW(sw, mkLit(v), ~mkLit(sub_v));
-            l.push(mkLit(sub_v));
-        }
-        addClauseSW(sw, l);
-        return v;
-        break;
-    }
-    }
-    assert( false );
-}
-
-template <size_t N>
-pair<Var,Var> Ctx<N>::addCdnfSW (Var sw, const FaceVector& cdnf)
-{
-    assert( s.nVars() >= N*2 );
-
-    Var r = s.newVar(), rp = s.newVar();
-
-    vec<Lit> rls, rpls;
-    rls.push(mkLit(sw)); rpls.push(mkLit(sw));
-    rls.push(mkLit(r)); rpls.push(mkLit(rp));
-    for (Face dnf : cdnf)
-    {
-        Var dr = s.newVar(), drp = s.newVar();
-        addClauseSW(sw, ~mkLit(r), mkLit(dr)); addClauseSW(sw, ~mkLit(rp), mkLit(drp));
-        rls.push(~mkLit(dr)); rpls.push(~mkLit(drp));
-
-        vec<Lit> dls, dpls;
-        dls.push(mkLit(sw)); dpls.push(mkLit(sw));
-        dls.push(~mkLit(dr)); dpls.push(~mkLit(drp));
-        for (Bv term : dnf.primes)
-        {
-            Var cr = s.newVar(), crp = s.newVar();
-            addClauseSW(sw, ~mkLit(cr), mkLit(dr)); addClauseSW(sw, ~mkLit(crp), mkLit(drp));
-            dls.push(mkLit(cr)); dpls.push(mkLit(crp));
-
-            vec<Lit> cls, cpls;
-            cls.push(mkLit(sw)); cpls.push(mkLit(sw));
-            cls.push(mkLit(cr)); cpls.push(mkLit(crp));
-            for (int i=0; i<N; i++)
-            {
-                if (term[i] == true && dnf.basis[i] == false)
-                {
-                    addClauseSW(sw, ~mkLit(cr), mkLit(i)); addClauseSW(sw, ~mkLit(crp), mkLit(i+N));
-                    cls.push(~mkLit(i)); cpls.push(~mkLit(i+N));
-                }
-                else if (term[i] == false && dnf.basis[i] == true)
-                {
-                    addClauseSW(sw, ~mkLit(cr), ~mkLit(i)); addClauseSW(sw, ~mkLit(crp), ~mkLit(i+N));
-                    cls.push(mkLit(i)); cpls.push(mkLit(i+N));
-                }
-            }
-            addClauseSW(sw, cls); addClauseSW(sw, cpls);
-        }
-        addClauseSW(sw, dls); addClauseSW(sw, dpls);
-    }
-    addClauseSW(sw, rls); addClauseSW(sw, rpls);
-    return make_pair(r,rp);
-}
-
-template <size_t N>
-template <typename... Ts> requires (same_as<Ts, Lit> && ...)
-bool Ctx<N>::solveSW (Ts... lits)
-{
-    vec<Lit> ps; (ps.push(lits), ...);
-    return solveSW(ps);
-}
-
-template <size_t N>
-bool Ctx<N>::solveSW (const vec<Lit>& ps)
-{
-    vec<Lit> tmp; ps.copyTo(tmp);
-    for (auto sw :   activeSW) tmp.push(~mkLit(sw));
-    for (auto sw : inactiveSW) tmp.push( mkLit(sw));
-    return s.solve(tmp);
-}
-
-template <size_t N>
-bool Ctx<N>::solveAtomicSW (Bf_ptr bf)
-{
-    Var e = newSW();
-    bool ret = solveSW(mkLit(addBfSW(e, bf)));
-    releaseSW(e);
-    return ret;
-}
-
-template <size_t N>
-bool Ctx<N>::solveAtomicSW (Bv bv, Bf_ptr bf, int offset) // if bv is in bf
-{
-    vec<Lit> tmp;
-    for (size_t i=0; i<N; i++)
-        if (bv[i]) tmp.push( mkLit(i+offset) );
-        else tmp.push( ~mkLit(i+offset) );
-    Var e = newSW();
-    tmp.push(mkLit(addBfSW(e, bf)));
-    bool ret = solveSW(tmp);
-    releaseSW(e);
-    return ret;
-}
-
-template <size_t N>
-void Ctx<N>::tabulateVars ()
-{
-    assert( s.nVars() >= N );
-
+    assert( nStates() > 0 );
     cout << "listing truth table:" << endl;
+    
+    auto to_bs = [&](int i) -> string
+    {
+        string s;
+        for (int j=0; j<N; j++, i>>=1)
+            if (1&i) s = "1"+s;
+            else s = "0"+s;
+        return s;
+    };
+    auto baseHelper = [&](string bss) -> void
+    {
+        vec<Lit> tmp;
+        for (Step s=0, nS=nStates(); s<nS; s++)
+        for (Var b=0; b<N; b++)
+            if (bss[N*s+b]=='1') tmp.push(mkLit(b+states[s]));
+            else tmp.push(~mkLit(b+states[s]));
+
+        for (Step s=0, nS=nStates(); s<nS; s++) bss.insert(N*s+s, " ");
+        cout << bss << " " << solveSW(tmp) << endl;
+    };
+    function<void(string,unsigned int)> recurHelper;
+    recurHelper = [&to_bs,&baseHelper,&recurHelper](string prefix, unsigned int depth) -> void
+    {
+        if (depth == 0)
+            baseHelper(prefix);
+        else
+            for (unsigned int i=0; i<pow(2,N); i++)
+                recurHelper(prefix+to_bs(i), depth-1);
+    };
+
+    recurHelper("", nStates());
+}
+
+template <size_t N>
+void Ctx<N>::tabulate (int step)
+{
+    assert( nStates() > step );
+    cout << "listing truth table of step " << step << ":" << endl;
     vec<Lit> tmp;
-    for (int i=0; i<pow(2,N); i++)
+    for (int i=0, offset=states[step]; i<pow(2,N); i++)
     {
         Bv tmp_b (i);
         for (int j=0; j<N; j++)
-            if (tmp_b[j]) tmp.push(mkLit(j));
-            else tmp.push(~mkLit(j));
+            if (tmp_b[j]) tmp.push(mkLit(j+offset));
+            else tmp.push(~mkLit(j+offset));
         
         cout << to_string(tmp_b) << " " << solveSW(tmp) << endl;
-        tmp.clear();
-    }
-}
-
-template <size_t N>
-void Ctx<N>::tabulateStates ()
-{
-    assert( s.nVars() >= N*2 );
-
-    cout << "listing truth table:" << endl;
-    vec<Lit> tmp, tmpp, pre;
-    for (int i=0; i<pow(2,N); i++)
-    {
-        Bv tmp_b (i);
-        for (int j=0; j<N; j++)
-            if (tmp_b[j]) tmp.push(mkLit(j));
-            else tmp.push(~mkLit(j));
-        
-        tmp.copyTo(pre);
-        for (int k=0; k<pow(2,N); k++)
-        {
-            Bv tmp_bp (k);
-            for (int l=0; l<N; l++)
-                if (tmp_bp[l]) tmp.push(mkLit(l+N));
-                else tmp.push(~mkLit(l+N));
-            
-            cout << to_string(tmp_b) << " " <<
-                    to_string(tmp_bp) << " " <<
-                    solveSW(tmp) << endl;
-            pre.copyTo(tmp);
-        }
         tmp.clear();
     }
 }
@@ -368,3 +224,7 @@ string Ctx<N>::to_string (const FaceVector& fs)
         s += to_string(f);
     return s;
 }
+
+#include "sw.hxx"
+#include "dlearn.hxx"
+#include "blearn.hxx"

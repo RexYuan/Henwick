@@ -3,8 +3,8 @@
 
 #include "bf.hxx"
 #include "ctx.hxx"
-#include "learn.hxx"
 //#include "mclearn.hxx"
+
 
 namespace exposer
 {
@@ -26,7 +26,7 @@ using namespace exposer;
 
 void t3()
 {
-    ctx c(Mode::States);
+    ctx c;
 
     // trans: totally connected component
     // 00 - bads
@@ -44,7 +44,7 @@ void t3()
 
 void t4()
 {
-    ctx c(Mode::States);
+    ctx c;
 
     /*
     00 - bads
@@ -85,7 +85,7 @@ void t4()
 
 void t5()
 {
-    Ctx<3> c(Mode::States);
+    Ctx<3> c;
 
     /*
     000-
@@ -111,7 +111,7 @@ void t5()
 
 void t6()
 {
-    Ctx<3> c(Mode::States);
+    Ctx<3> c;
 
     /*
     000- bad
@@ -130,16 +130,23 @@ void t6()
     Bf_ptr trans = (~characteristic("011") & ~characteristic("110") |= counter(3)) &
                     (characteristic("011") |= characteristic("001",3)) &
                     (characteristic("110") |= characteristic("100",3));
-
-    //Var x = c.addBf(trans);
-    //c.addClause(mkLit(x));
+    //c.addStates();
+    //c.addStates();
+    //Var sw = c.newSW();
+    //Var x = c.addBfSW(sw, trans);
+    //c.addClauseSW(sw, mkLit(x));
     //c.tabulate();
+    
+    cout << "vars " << c.s.nVars() << endl;
+    cout << "states " << c.nStates() << endl;
     c.learn(inits, bads, trans);
+    cout << "vars " << c.s.nVars() << endl;
+    cout << "states " << c.nStates() << endl;
 }
 
 void t7()
 {
-    Ctx<3> c(Mode::States);
+    Ctx<3> c;
 
     /*
     000- bad
@@ -167,7 +174,7 @@ void t7()
 
 void t8()
 {
-    Ctx<3> c(Mode::States);
+    Ctx<3> c;
 
     /*
     000- bad
@@ -195,7 +202,7 @@ void t8()
 
 void t9()
 {
-    Ctx<12> c(Mode::States);
+    Ctx<12> c;
 
     /*
     0000 0000 0000- bad
@@ -220,7 +227,7 @@ void t9()
 void t10()
 {
     constexpr size_t n = 16;
-    Ctx<n> c(Mode::States);
+    Ctx<n> c;
 
     /*
     0000 0000 0000 0000- bad
@@ -246,11 +253,34 @@ void t10()
     c.learn(inits, bads, trans);
 }
 
+
 #include <chrono>
 #include <typeinfo>
 
+struct CE { string v; bool t; };
+
 int main()
 {
-    t6();
-    t7();
+    auto start = std::chrono::steady_clock::now();
+
+    t10();
+    
+    /*Ctx<2> c;
+    c.addStates();
+    c.addStates();
+    c.addStates();
+    c.s.addClause(mkLit(0),mkLit(2));
+    c.s.addClause(~mkLit(0),~mkLit(2));
+    c.s.addClause(mkLit(2),~mkLit(4));
+    c.s.addClause(~mkLit(2),mkLit(4));
+    c.s.addClause(mkLit(5),~mkLit(4));
+    c.s.addClause(~mkLit(5),mkLit(4));
+    c.tabulate(0);*/
+    
+
+
+    
+    auto end = std::chrono::steady_clock::now();
+    std::chrono::duration<double> elapsed_seconds = end-start;
+    std::cout << "elapsed time: " << elapsed_seconds.count() << "s\n";
 }
