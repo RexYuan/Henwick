@@ -40,10 +40,10 @@ bool Ctx<N>::dlearn (Bf_ptr inits_, Bf_ptr bads_, Bf_ptr trans_)
     Step next = addStates(); // next
 
     Var fixed = newSW();
-    Var inits = addBfSW(fixed, inits_),
-        bads  = addBfSW(fixed, bads_),
-        trans = addBfSW(fixed, trans_);
-    
+    Var inits = addBfSW(fixed, inits_, curr),
+        bads  = addBfSW(fixed, bads_, curr),
+        trans = addBfSW(fixed, trans_, curr);
+
     if (solveAtomicSW ( v(inits)&v(bads) )) // degen false
         return false;
 
@@ -53,8 +53,8 @@ bool Ctx<N>::dlearn (Bf_ptr inits_, Bf_ptr bads_, Bf_ptr trans_)
 
     if (!solveAtomicSW( v(bads) )) // degen true
         return true;
-    
-    CE ce = dgetCE(curr, false);
+
+    CE ce = dgetCE(false, curr);
     Var sw = newSW();
     while (!pass)
     {
@@ -69,21 +69,23 @@ bool Ctx<N>::dlearn (Bf_ptr inits_, Bf_ptr bads_, Bf_ptr trans_)
         }
         else // negative ce
         {
-            if (solveAtomicSW (curr, ce.v, v(inits))) // the only way to return false once algo starts
-                                              // when a decided neg ce is in inits meaning bads is
-                                              // reachable from inits and refutation is possible
-                return false;
+            if ( evalAtomicSW (ce.v, v(inits), curr) ) // the only way to return false once algo starts
+                return false;                          // when a decided neg ce is in inits meaning bads is
+                                                       // reachable from inits and refutation is possible
             faces.push_back( Face(ce.v) );
         }
 
-        tie(hypt,hyptP) = daddCdnfSW (curr, sw, faces);
+        // equivalent to:
+        // hypt  = addCdnfSW (sw, faces, curr);
+        // hyptP = addCdnfSW (sw, faces, next);
+        tie(hypt,hyptP) = addCdnfSW (sw, faces, curr, next);
         
         if (solveAtomicSW ( ~(v(inits) |= v(hypt)) ))
-            ce = dgetCE(curr, true);
+            ce = dgetCE(true, curr);
         else if (solveAtomicSW ( ~(v(hypt) |= ~v(bads)) ))
-            ce = dgetCE(curr, false);
+            ce = dgetCE(false, curr);
         else if (solveAtomicSW ( ~(v(hypt)&v(trans) |= v(hyptP)) ))
-            ce = dgetCE(curr, next, v(bads), faces);
+            ce = dgetCE(v(bads), faces, curr, next);
         else
             pass = true;
         
@@ -96,13 +98,12 @@ bool Ctx<N>::dlearn (Bf_ptr inits_, Bf_ptr bads_, Bf_ptr trans_)
     releaseStates(curr);
     releaseStates(next);
 
-    cout << "passing true" << endl;
     cout << to_string(faces);
     return true;
 }
 
 template <size_t N>
-Ctx<N>::CE Ctx<N>::dgetCE (Step curr, bool t)
+Ctx<N>::CE Ctx<N>::dgetCE (bool t, Step curr)
 {
     assert( s.okay() );
 
@@ -114,7 +115,7 @@ Ctx<N>::CE Ctx<N>::dgetCE (Step curr, bool t)
 }
 
 template <size_t N>
-Ctx<N>::CE Ctx<N>::dgetCE (Step curr, Step next, Bf_ptr bads, const FaceVector& faces)
+Ctx<N>::CE Ctx<N>::dgetCE (Bf_ptr bads, const FaceVector& faces, Step curr, Step next)
 {
     assert( s.okay() );
     
@@ -129,7 +130,7 @@ Ctx<N>::CE Ctx<N>::dgetCE (Step curr, Step next, Bf_ptr bads, const FaceVector& 
     Bv succ = mkBv(tmp);
 
     // if succ is in bads => pred is false
-    if (solveAtomicSW (curr, succ, bads))
+    if (evalAtomicSW (succ, bads, curr))
         return CE {pred, false};
     // if succ is an old neg ce => pred is false
     for (const auto& f : faces)
@@ -140,7 +141,7 @@ Ctx<N>::CE Ctx<N>::dgetCE (Step curr, Step next, Bf_ptr bads, const FaceVector& 
 }
 
 template <size_t N>
-pair<Var,Var> Ctx<N>::daddCdnfSW (Step curr, Var sw, const FaceVector& cdnf)
+pair<Var,Var> Ctx<N>::addCdnfSW (Var sw, const FaceVector& cdnf, Step curr, Step next)
 {
     assert( s.nVars() >= N*2 );
 
@@ -167,17 +168,17 @@ pair<Var,Var> Ctx<N>::daddCdnfSW (Step curr, Var sw, const FaceVector& cdnf)
             vec<Lit> cls, cpls;
             cls.push(mkLit(sw)); cpls.push(mkLit(sw));
             cls.push(mkLit(cr)); cpls.push(mkLit(crp));
-            for (int i=states[curr],h=i+N; i<h; i++)
+            for (Var i=0, c=states[curr], n=states[next]; i<N; i++, c++, n++)
             {
                 if (term[i] == true && dnf.basis[i] == false)
                 {
-                    addClauseSW(sw, ~mkLit(cr), mkLit(i)); addClauseSW(sw, ~mkLit(crp), mkLit(i+N));
-                    cls.push(~mkLit(i)); cpls.push(~mkLit(i+N));
+                    addClauseSW(sw, ~mkLit(cr), mkLit(c)); addClauseSW(sw, ~mkLit(crp), mkLit(n));
+                    cls.push(~mkLit(c)); cpls.push(~mkLit(n));
                 }
                 else if (term[i] == false && dnf.basis[i] == true)
                 {
-                    addClauseSW(sw, ~mkLit(cr), ~mkLit(i)); addClauseSW(sw, ~mkLit(crp), ~mkLit(i+N));
-                    cls.push(mkLit(i)); cpls.push(mkLit(i+N));
+                    addClauseSW(sw, ~mkLit(cr), ~mkLit(c)); addClauseSW(sw, ~mkLit(crp), ~mkLit(n));
+                    cls.push(mkLit(c)); cpls.push(mkLit(n));
                 }
             }
             addClauseSW(sw, cls); addClauseSW(sw, cpls);

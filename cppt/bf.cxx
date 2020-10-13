@@ -139,13 +139,13 @@ Bf_ptr disj(Bf_ptr bf1, Bf_ptr bf2)
 Bf_ptr characteristic(string bs, int offset)
 {
     Bf_ptr tmp = make_shared<Bf>( Conn::And );
-    for (int i=0; i<bs.size(); i++)
+    for (int i=0, ind=0; i<bs.size(); i++, ind++)
     switch (bs[i])
     {
-    case '1': tmp->push( v(i+offset)); break;
-    case '0': tmp->push(~v(i+offset)); break;
-    case '*': break;
-    case ' ': break;
+    case '1': tmp->push( v(ind+offset)); break;
+    case '0': tmp->push(~v(ind+offset)); break;
+    case '*': ind--; break;
+    case ' ': ind--; break;
     default: assert(false);
     }
 

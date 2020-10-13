@@ -3,20 +3,39 @@
 
 #include "bf.hxx"
 #include "ctx.hxx"
-//#include "mclearn.hxx"
 
+#include <chrono>
+#include <typeinfo>
+void timer ()
+{
+    static auto start = std::chrono::steady_clock::now();
+    static auto run = 0;
+
+    if (run & 1)
+    {
+        cout << endl;
+        auto end = std::chrono::steady_clock::now();
+        std::chrono::duration<double> elapsed_seconds = end-start;
+        std::cout << "elapsed time: " << elapsed_seconds.count() << "s\n";        
+    }
+    else
+    {
+        start = std::chrono::steady_clock::now();
+    }
+    
+    run++;
+    return;
+}
 
 namespace exposer
 {
-    using ctx = Ctx<3>;
-
-    using Bv = ctx::Bv;
-    using Face = ctx::Face;
-    using FaceVector = ctx::FaceVector;
-    //using Learner = ctx::Learner;
-    
-    auto& mkBv = ctx::mkBv;
-    auto& mkBvs = ctx::mkBvs;
+    //using ctx = Ctx<3>;
+    //using Bv = ctx::Bv;
+    //using Face = ctx::Face;
+    //using FaceVector = ctx::FaceVector;
+    //
+    //auto& mkBv = ctx::mkBv;
+    //auto& mkBvs = ctx::mkBvs;
     //auto& to_string = ctx::to_string;
     //auto& printFace = ctx::printFace;
     //auto& printFaces = ctx::printFaces;
@@ -26,7 +45,7 @@ using namespace exposer;
 
 void t3()
 {
-    ctx c;
+    Ctx<2> c;
 
     // trans: totally connected component
     // 00 - bads
@@ -40,11 +59,12 @@ void t3()
            trans = v(0) == v(0+2);
 
     c.learn(inits, bads, trans);
+    c.learn(inits, bads, trans);
 }
 
 void t4()
 {
-    ctx c;
+    Ctx<2> c;
 
     /*
     00 - bads
@@ -61,8 +81,24 @@ void t4()
            bads  = ~v(0) & ~v(1), //00
            trans = (v(0) != v(0+2)) &
                    (v(1) != v(1+2));
+    //trans = trans | (v(0)&~v(1)&v(2)&v(3));
 
-    //c.learn(inits, bads, trans);
+    //auto x = c.addStates();
+    //auto y = c.addStates();
+    //auto z = c.addStates();
+
+    //auto sw = c.newSW();
+    //auto i = c.addBfSW(sw, inits, x);
+    //auto t1 = c.addBfSW(sw, trans, x, y);
+    //auto t2 = c.addBfSW(sw, trans, y, z);
+    //auto h = c.addBfSW(sw, bads, z);
+    //auto h2 = c.addBfSW(sw, bads, y);
+//
+    //cout << "whats " << c.solveAtomicSW ( v(i)&v(t1) & v(t2)&(v(h)|v(h2)) ) << endl;
+
+
+
+    cout << c.learn(inits, bads, trans);
 
     /*
     00 - init
@@ -80,7 +116,7 @@ void t4()
     trans = (v(0) != v(0+2)) &
             (v(1) != v(1+2));
 
-    c.learn(inits, bads, trans);
+    //c.learn(inits, bads, trans);
 }
 
 void t5()
@@ -137,11 +173,12 @@ void t6()
     //c.addClauseSW(sw, mkLit(x));
     //c.tabulate();
     
-    cout << "vars " << c.s.nVars() << endl;
-    cout << "states " << c.nStates() << endl;
-    c.learn(inits, bads, trans);
-    cout << "vars " << c.s.nVars() << endl;
-    cout << "states " << c.nStates() << endl;
+    //cout << "vars " << c.s.nVars() << endl;
+    //cout << "states " << c.nStates() << endl;
+    cout << c.learn(inits, bads, trans) << endl;
+    cout << c.learn(inits, bads, trans) << endl;
+    //cout << "vars " << c.s.nVars() << endl;
+    //cout << "states " << c.nStates() << endl;
 }
 
 void t7()
@@ -169,7 +206,7 @@ void t7()
     //Var x = c.addBf(trans);
     //c.addClause(mkLit(x));
     //c.tabulate();
-    c.learn(inits, bads, trans);
+    assert (c.dlearn(inits, bads, trans));
 }
 
 void t8()
@@ -197,7 +234,41 @@ void t8()
     //Var x = c.addBf(trans);
     //c.addClause(mkLit(x));
     //c.tabulate();
-    c.learn(inits, bads, trans);
+    timer();
+    assert (!c.dlearn(inits, bads, trans));
+    timer();
+    
+    timer();
+    assert (!c.mlearn(inits, bads, trans));
+    timer();
+}
+
+void t85()
+{
+    constexpr size_t bits = 8;
+    Ctx<bits> c;
+
+    /*
+    0000 0000- bad
+    0000 0001- init
+    0001 0000- bad
+    trans: 0000 1000 =>0000 0100
+    */
+    
+    Bf_ptr inits =   characteristic("0000 0001");
+    Bf_ptr bads =    characteristic("0000 0000") |
+                     characteristic("0001 0000");
+    Bf_ptr trans = (~characteristic("0000 1000") |= counter(bits)) &
+                    (characteristic("0000 1000") |=
+                     characteristic("0000 0100",bits));
+
+    timer();
+    cout << c.dlearn(inits, bads, trans) << endl;
+    timer();
+
+    timer();
+    cout << c.mlearn(inits, bads, trans) << endl;
+    timer();
 }
 
 void t9()
@@ -217,11 +288,22 @@ void t9()
     Bf_ptr trans = (~characteristic("0000 1000 0000") & ~characteristic("0000 1111 0000") |= counter(12)) &
                     (characteristic("0000 1000 0000") |= characteristic("0000 0100 0000",12)) &
                     (characteristic("0000 1111 0000") |= characteristic("0000 0100 0000",12));
-
     //Var x = c.addBf(trans);
     //c.addClause(mkLit(x));
     //c.tabulate();
-    c.learn(inits, bads, trans);
+
+    timer();
+    cout << c.dlearn(inits, bads, trans) << endl;
+    timer();
+
+    timer();
+    cout << c.mlearn(inits, bads, trans) << endl;
+    timer();
+    //cout << c.learn(inits, bads, trans) << endl;
+    //cout << c.learn(inits, bads, trans) << endl;
+    //cout << c.learn(inits, bads, trans) << endl;
+    //cout << c.learn(inits, bads, trans) << endl;
+    //cout << c.learn(inits, bads, trans) << endl;
 }
 
 void t10()
@@ -253,34 +335,18 @@ void t10()
     c.learn(inits, bads, trans);
 }
 
-
-#include <chrono>
-#include <typeinfo>
-
-struct CE { string v; bool t; };
-
 int main()
 {
-    auto start = std::chrono::steady_clock::now();
-
-    t10();
-    
-    /*Ctx<2> c;
-    c.addStates();
-    c.addStates();
-    c.addStates();
-    c.s.addClause(mkLit(0),mkLit(2));
-    c.s.addClause(~mkLit(0),~mkLit(2));
-    c.s.addClause(mkLit(2),~mkLit(4));
-    c.s.addClause(~mkLit(2),mkLit(4));
-    c.s.addClause(mkLit(5),~mkLit(4));
-    c.s.addClause(~mkLit(5),mkLit(4));
-    c.tabulate(0);*/
+    cout << boolalpha;
     
 
+    //t3();
+    //t4();
+    //t5();
+    //t6();
+    //t7();
+    //t8();
+    t85();
 
     
-    auto end = std::chrono::steady_clock::now();
-    std::chrono::duration<double> elapsed_seconds = end-start;
-    std::cout << "elapsed time: " << elapsed_seconds.count() << "s\n";
 }
