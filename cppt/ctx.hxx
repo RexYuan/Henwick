@@ -2,11 +2,13 @@
 #pragma once
 
 #include <bitset>
+#include <tuple>
 #include <set>
 #include <map>
 #include <vector>
 #include <string>
 
+#include <fstream>
 #include <iostream>
 #include <functional>
 
@@ -37,12 +39,13 @@ struct Ctx
     // State management
     //
     using Step = size_t;
-    map<Step,Var> states; // stepped states offsets
+    map<Step,Var> states; // stepped states offsets; a step of states is N *contiguous* minisat Vars
     set<Step> released;
     inline Step beginStates () const; // index of active state start
     inline Step endStates () const; // index of active state end
     inline Step nStates () const; // number of active state steps
     inline Step addStates (); // add a step of N vars into s and return this step
+    inline Step addStates (Var n); // indicate that starting at n there has been a step added
     inline void releaseStates (Step step);
     Bf_ptr substitute (Bf_ptr bf, Step from, Step to); // transform statespace
     
@@ -72,29 +75,56 @@ struct Ctx
     bool evalAtomicSW (const Bv& bv, const Bf_ptr& bf, optional<Step> step=nullopt); // if bv is in bf
     Var addBfSW (Var sw, const Bf_ptr& bf, optional<Step> step1=nullopt, optional<Step> step2=nullopt);
     Var addCdnfSW (Var sw, const FaceVector& cdnf, optional<Step> step=nullopt);
+    pair<Var,Var> addCdnfSW (Var sw, const FaceVector& cdnf, Step curr, Step next); // optimized to add both curr and next in same traversal
 
     // Learning algorithms
     //
     struct CE { Bv v; bool t; };
     static string to_string (const CE& ce);
-    // Recoverable cdnf given eventually consistent oracle:
-    /*void walk (Bv& b, const Bv& towards, Bf_ptr bads, const FaceVector& faces);*/
-    CE dgetCE (bool t, Step curr); // ce oracle for inits and bads violation
-    CE dgetCE (Bf_ptr bads, const FaceVector& faces, Step curr, Step next); // ce oracle for trans violation
-    pair<Var,Var> addCdnfSW (Var sw, const FaceVector& cdnf, Step curr, Step next); // optimized to add both curr and next in same traversal
-    bool dlearn (Bf_ptr inits, Bf_ptr bads, Bf_ptr trans);
+    CE getCE (bool t, Step curr); // ce oracle for inits and bads violation
+    CE getCE (Bf_ptr bads, const FaceVector& faces, Step curr, Step next); // ce oracle for trans violation
+    
+    struct Problem { Var inits; Var bads; Var trans; Step curr; Step next; };
+    Problem inputBf (Bf_ptr inits_, Bf_ptr bads_, Bf_ptr trans_);
+    Problem inputBf (Var initsSW, Var badsSW, Var transSW, Bf_ptr inits_, Bf_ptr bads_, Bf_ptr trans_);
+    Problem inputAAG (string filename);
+    Problem inputAAG (Var initsSW, Var badsSW, Var transSW, string filename);
 
-    Var deployCdnfAtomic (Var sw, Var hypt, Var trans, Bf_ptr sufftrans, Bf_ptr suffbads, Step curr, Step next);
+    void minputInputAAG (string filename, vector<Var>& input_to_var_map);
+    void minputStateAAG (string filename, vector<Var>& input_to_var_map, vector<Var>& aag_to_var_map, Step step1);
+    Var minputGetInitsAAG (Var initsSW, Step step1);
+    Var minputGetBadsAAG (Var badsSW, string filename, vector<Var>& aag_to_var_map, Step step1);
+    Var minputGetTransAAG (Var transSW, string filename, vector<Var>& aag_to_var_map, Step step1, Step step2);
+
+    // Recoverable naive cdnf given eventually consistent oracle:
+    bool dlearn (string filename);
+    bool dlearn (Bf_ptr inits, Bf_ptr bads, Bf_ptr trans);
+    bool dlearn (Problem P);
+
+    // Mccarthy's forward image overapprox with new cdnf deployment in place of interpolant
     bool mlearn (Bf_ptr inits, Bf_ptr bads, Bf_ptr trans);
+    void walk (Bv& b, const Bv& a, Var hypt, Var trans, Bf_ptr sufftrans, Bf_ptr suffbads, Step curr, Step next, vector<Step> suffSteps);
+    Var deployCdnfAtomic (Var sw, Var hypt, Var trans, Bf_ptr sufftrans, Bf_ptr suffbads, Step curr, Step next, vector<Step> suffSteps);
+    bool mlearn (string filename);
 
     // Breath-over-depth expansion cdnf
-    // TODO: clean and rewrite
+    bool blearn (string filename);
     bool blearn (Bf_ptr inits, Bf_ptr bads, Bf_ptr trans);
-    bool grow (Var pred, Var inits, Var bads, Var trans, FaceVector& faces, Step next); // returns true if progress was made
+    bool blearn (Problem P);
     
+    inline bool learn (Bf_ptr inits, Bf_ptr bads, Bf_ptr trans) { return blearn(inits, bads, trans); }
+    Var fixedSW;
+    Var constTrue, constFalse;
+    Ctx ()
+    {
+        constTrue = s.newVar();
+        assert ( s.addClause(mkLit(constTrue)) );
+        constFalse = s.newVar();
+        assert ( s.addClause(~mkLit(constFalse)) );
 
-    inline bool learn (Bf_ptr inits, Bf_ptr bads, Bf_ptr trans) { return mlearn(inits, bads, trans); }
-    Ctx () {}
+        fixedSW = constFalse;
+        //fixedSW = newSW(); //NOTE: how is it that *THIS* is the bottleneck?
+    }
 };
 
 template <size_t N>
@@ -134,6 +164,7 @@ struct Ctx<N>::Face
 #include "misc.hxx"
 #include "state.hxx"
 #include "switch.hxx"
+#include "input.hxx"
 
 // algorithms
 #include "dlearn.hxx"

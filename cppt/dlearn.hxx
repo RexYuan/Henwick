@@ -4,45 +4,28 @@
 #include "ctx.hxx"
 #include "bf.hxx"
 
-/*template <size_t N>
-void Ctx<N>::walk (Bv& b, const Bv& towards, Bf_ptr bads, const FaceVector& faces)
+template <size_t N>
+bool Ctx<N>::dlearn (string filename)
 {
-    auto in_bases = [&faces](const Bv& b)
-    {
-        for (const auto& f : faces)
-        if (f.basis == b)
-            return true;
-        return false;
-    };
-
-    bool peaked = false;
-    while (!peaked)
-    {
-        peaked = true;
-        for (int i=0; i<N; i++)
-        if (b[i] != towards[i])
-        {
-            b.flip(i);
-            if (!solveAtomicSW (b, bads) && !in_bases(b))
-            {
-                peaked = false;
-                break;
-            }
-            b.flip(i);
-        }
-    }
-}*/
+    Problem P = inputAAG (filename);
+    return dlearn (P);
+}
 
 template <size_t N>
 bool Ctx<N>::dlearn (Bf_ptr inits_, Bf_ptr bads_, Bf_ptr trans_)
 {
-    Step curr = addStates(); // current
-    Step next = addStates(); // next
+    Problem P = inputBf (inits_, bads_, trans_);
+    return dlearn (P);
+}
 
-    Var fixed = newSW();
-    Var inits = addBfSW(fixed, inits_, curr),
-        bads  = addBfSW(fixed, bads_, curr),
-        trans = addBfSW(fixed, trans_, curr);
+template <size_t N>
+bool Ctx<N>::dlearn (Problem P)
+{
+    Var inits = P.inits,
+        bads  = P.bads, 
+        trans = P.trans; 
+    Step curr = P.curr,
+         next = P.next;
 
     if (solveAtomicSW ( v(inits)&v(bads) )) // degen false
         return false;
@@ -54,7 +37,7 @@ bool Ctx<N>::dlearn (Bf_ptr inits_, Bf_ptr bads_, Bf_ptr trans_)
     if (!solveAtomicSW( v(bads) )) // degen true
         return true;
 
-    CE ce = dgetCE(false, curr);
+    CE ce = getCE(false, curr);
     Var sw = newSW();
     while (!pass)
     {
@@ -62,10 +45,7 @@ bool Ctx<N>::dlearn (Bf_ptr inits_, Bf_ptr bads_, Bf_ptr trans_)
         {
             for (auto& f : faces)
             if ( !f(ce.v) )
-            {
-                //walk(ce, f.basis, v(bads), faces);
                 f.push_absorption(ce.v);
-            }
         }
         else // negative ce
         {
@@ -81,29 +61,28 @@ bool Ctx<N>::dlearn (Bf_ptr inits_, Bf_ptr bads_, Bf_ptr trans_)
         tie(hypt,hyptP) = addCdnfSW (sw, faces, curr, next);
         
         if (solveAtomicSW ( ~(v(inits) |= v(hypt)) ))
-            ce = dgetCE(true, curr);
+            ce = getCE(true, curr);
         else if (solveAtomicSW ( ~(v(hypt) |= ~v(bads)) ))
-            ce = dgetCE(false, curr);
+            ce = getCE(false, curr);
         else if (solveAtomicSW ( ~(v(hypt)&v(trans) |= v(hyptP)) ))
-            ce = dgetCE(v(bads), faces, curr, next);
+            ce = getCE(v(bads), faces, curr, next);
         else
             pass = true;
         
         releaseSW(sw);
         sw = newSW();
     }
-    
-    releaseSW(fixed);
+
     releaseSW(sw);
     releaseStates(curr);
     releaseStates(next);
 
-    cout << to_string(faces);
+    //cout << to_string(faces);
     return true;
 }
 
 template <size_t N>
-Ctx<N>::CE Ctx<N>::dgetCE (bool t, Step curr)
+Ctx<N>::CE Ctx<N>::getCE (bool t, Step curr)
 {
     assert( s.okay() );
 
@@ -115,7 +94,7 @@ Ctx<N>::CE Ctx<N>::dgetCE (bool t, Step curr)
 }
 
 template <size_t N>
-Ctx<N>::CE Ctx<N>::dgetCE (Bf_ptr bads, const FaceVector& faces, Step curr, Step next)
+Ctx<N>::CE Ctx<N>::getCE (Bf_ptr bads, const FaceVector& faces, Step curr, Step next)
 {
     assert( s.okay() );
     
@@ -138,53 +117,4 @@ Ctx<N>::CE Ctx<N>::dgetCE (Bf_ptr bads, const FaceVector& faces, Step curr, Step
         return CE {pred, false};
     // else => succ is true
     return CE {succ, true};
-}
-
-template <size_t N>
-pair<Var,Var> Ctx<N>::addCdnfSW (Var sw, const FaceVector& cdnf, Step curr, Step next)
-{
-    assert( s.nVars() >= N*2 );
-
-    Var r = s.newVar(), rp = s.newVar();
-
-    vec<Lit> rls, rpls;
-    rls.push(mkLit(sw)); rpls.push(mkLit(sw));
-    rls.push(mkLit(r)); rpls.push(mkLit(rp));
-    for (Face dnf : cdnf)
-    {
-        Var dr = s.newVar(), drp = s.newVar();
-        addClauseSW(sw, ~mkLit(r), mkLit(dr)); addClauseSW(sw, ~mkLit(rp), mkLit(drp));
-        rls.push(~mkLit(dr)); rpls.push(~mkLit(drp));
-
-        vec<Lit> dls, dpls;
-        dls.push(mkLit(sw)); dpls.push(mkLit(sw));
-        dls.push(~mkLit(dr)); dpls.push(~mkLit(drp));
-        for (Bv term : dnf.primes)
-        {
-            Var cr = s.newVar(), crp = s.newVar();
-            addClauseSW(sw, ~mkLit(cr), mkLit(dr)); addClauseSW(sw, ~mkLit(crp), mkLit(drp));
-            dls.push(mkLit(cr)); dpls.push(mkLit(crp));
-
-            vec<Lit> cls, cpls;
-            cls.push(mkLit(sw)); cpls.push(mkLit(sw));
-            cls.push(mkLit(cr)); cpls.push(mkLit(crp));
-            for (Var i=0, c=states[curr], n=states[next]; i<N; i++, c++, n++)
-            {
-                if (term[i] == true && dnf.basis[i] == false)
-                {
-                    addClauseSW(sw, ~mkLit(cr), mkLit(c)); addClauseSW(sw, ~mkLit(crp), mkLit(n));
-                    cls.push(~mkLit(c)); cpls.push(~mkLit(n));
-                }
-                else if (term[i] == false && dnf.basis[i] == true)
-                {
-                    addClauseSW(sw, ~mkLit(cr), ~mkLit(c)); addClauseSW(sw, ~mkLit(crp), ~mkLit(n));
-                    cls.push(mkLit(c)); cpls.push(mkLit(n));
-                }
-            }
-            addClauseSW(sw, cls); addClauseSW(sw, cpls);
-        }
-        addClauseSW(sw, dls); addClauseSW(sw, dpls);
-    }
-    addClauseSW(sw, rls); addClauseSW(sw, rpls);
-    return make_pair(r,rp);
 }

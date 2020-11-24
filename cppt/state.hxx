@@ -31,6 +31,13 @@ Ctx<N>::Step Ctx<N>::addStates ()
 }
 
 template <size_t N>
+Ctx<N>::Step Ctx<N>::addStates (Var n)
+{
+    states[states.size()]=n;
+    return states.size()-1;
+}
+
+template <size_t N>
 void Ctx<N>::releaseStates (Step step)
 {
     for (Var i=states[step], h=i+N; i<h; i++)

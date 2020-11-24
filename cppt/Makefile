@@ -1,5 +1,5 @@
 
-.PHONY: all build run clean test
+.PHONY: all debug build run clean test
 .DEFAULT_GOAL := all
 
 CXX := g++-10
@@ -7,7 +7,7 @@ CXXFLAGS := -std=c++20 -I. -L. -lminisat
 HXXFLAGS := -std=c++20 -I.
 
 ALGOS := dlearn.hxx blearn.hxx
-HELPERS := misc.hxx state.hxx switch.hxx ctx.hxx
+HELPERS := misc.hxx state.hxx switch.hxx input.hxx ctx.hxx
 
 MINISAT := minisat.hxx.gch
 OBJS := bf.o
@@ -15,13 +15,15 @@ HDRS := $(ALGOS) $(HELPERS)
 MAIN := main.cxx
 DEP := $(MINISAT) $(OBJS) $(HDRS) $(MAIN)
 
-all: $(DEP)
-	$(CXX) $(CXXFLAGS) $(OBJS) $(MAIN) -o out.o && ./out.o
+all: build run
+
+debug: CXXFLAGS += -g -O0
+debug: build
 
 build: $(DEP)
 	$(CXX) $(CXXFLAGS) $(OBJS) $(MAIN) -o out.o
 
-run: build
+run:
 	./out.o
 
 bf.o: bf.cxx bf.hxx

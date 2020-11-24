@@ -73,7 +73,7 @@ Var Ctx<N>::addBfSW (Var sw, const Bf_ptr& bf, optional<Step> step1, optional<St
         addClauseSW(sw, mkLit(v));
         return v;
         break;
-    }   
+    }
     case Conn::Bot:
     {
         Var v = s.newVar();
@@ -93,6 +93,7 @@ Var Ctx<N>::addBfSW (Var sw, const Bf_ptr& bf, optional<Step> step1, optional<St
         }
         else if (step1)
         {
+            cout << "step input is " << step1.value() << endl;
             if ( bf->get_int() < N+N )
                 return states[step1.value()]+bf->get_int();
             else throw runtime_error( "user v out of range: "+std::to_string(bf->get_int()) );
@@ -152,21 +153,26 @@ Var Ctx<N>::addCdnfSW (Var sw, const FaceVector& cdnf, optional<Step> step)
 {
     assert( s.nVars() >= N );
 
+    if (cdnf.size() == 0)
+        return constTrue;
+
     Var r = s.newVar();
 
     vec<Lit> rls;
     rls.push(mkLit(sw));
     rls.push(mkLit(r));
-    for (Face dnf : cdnf)
+    for (const Face& dnf : cdnf)
     {
         Var dr = s.newVar();
         addClauseSW(sw, ~mkLit(r), mkLit(dr));
         rls.push(~mkLit(dr));
 
         vec<Lit> dls;
+        dls.push(mkLit(constFalse)); // identity element of disjunction
+                                     // force empty dnf be constant false
         dls.push(mkLit(sw));
         dls.push(~mkLit(dr));
-        for (Bv term : dnf.primes)
+        for (const Bv& term : dnf.primes)
         {
             Var cr = s.newVar();
             addClauseSW(sw, ~mkLit(cr), mkLit(dr));
@@ -194,4 +200,57 @@ Var Ctx<N>::addCdnfSW (Var sw, const FaceVector& cdnf, optional<Step> step)
     }
     addClauseSW(sw, rls);
     return r;
+}
+
+template <size_t N>
+pair<Var,Var> Ctx<N>::addCdnfSW (Var sw, const FaceVector& cdnf, Step curr, Step next)
+{
+    assert( s.nVars() >= N*2 );
+
+    if (cdnf.size() == 0)
+        return make_pair(constTrue,constTrue);
+
+    Var r = s.newVar(), rp = s.newVar();
+
+    vec<Lit> rls, rpls;
+    rls.push(mkLit(sw)); rpls.push(mkLit(sw));
+    rls.push(mkLit(r)); rpls.push(mkLit(rp));
+    for (Face dnf : cdnf)
+    {
+        Var dr = s.newVar(), drp = s.newVar();
+        addClauseSW(sw, ~mkLit(r), mkLit(dr)); addClauseSW(sw, ~mkLit(rp), mkLit(drp));
+        rls.push(~mkLit(dr)); rpls.push(~mkLit(drp));
+
+        vec<Lit> dls, dpls;
+        rls.push(mkLit(constFalse)); rpls.push(mkLit(constFalse));
+        dls.push(mkLit(sw)); dpls.push(mkLit(sw));
+        dls.push(~mkLit(dr)); dpls.push(~mkLit(drp));
+        for (Bv term : dnf.primes)
+        {
+            Var cr = s.newVar(), crp = s.newVar();
+            addClauseSW(sw, ~mkLit(cr), mkLit(dr)); addClauseSW(sw, ~mkLit(crp), mkLit(drp));
+            dls.push(mkLit(cr)); dpls.push(mkLit(crp));
+
+            vec<Lit> cls, cpls;
+            cls.push(mkLit(sw)); cpls.push(mkLit(sw));
+            cls.push(mkLit(cr)); cpls.push(mkLit(crp));
+            for (Var i=0, c=states[curr], n=states[next]; i<N; i++, c++, n++)
+            {
+                if (term[i] == true && dnf.basis[i] == false)
+                {
+                    addClauseSW(sw, ~mkLit(cr), mkLit(c)); addClauseSW(sw, ~mkLit(crp), mkLit(n));
+                    cls.push(~mkLit(c)); cpls.push(~mkLit(n));
+                }
+                else if (term[i] == false && dnf.basis[i] == true)
+                {
+                    addClauseSW(sw, ~mkLit(cr), ~mkLit(c)); addClauseSW(sw, ~mkLit(crp), ~mkLit(n));
+                    cls.push(mkLit(c)); cpls.push(mkLit(n));
+                }
+            }
+            addClauseSW(sw, cls); addClauseSW(sw, cpls);
+        }
+        addClauseSW(sw, dls); addClauseSW(sw, dpls);
+    }
+    addClauseSW(sw, rls); addClauseSW(sw, rpls);
+    return make_pair(r,rp);
 }

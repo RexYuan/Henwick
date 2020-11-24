@@ -4,88 +4,55 @@
 #include "ctx.hxx"
 #include "bf.hxx"
 
-/*template <size_t N>
-bool Ctx<N>::blearn (Bf_ptr inits_, Bf_ptr bads_, Bf_ptr trans_)
+template <size_t N>
+bool Ctx<N>::blearn (string filename)
 {
-    Step curr = addStates(); // current
-    Step next = addStates(); // next
-
-    Var fixed = newSW();
-    Var inits = addBfSW(fixed, inits_),
-        bads  = addBfSW(fixed, bads_),
-        trans = addBfSW(fixed, trans_);
-    
-    if (solveAtomicSW ( v(inits)&v(bads) )) // degen false
-        return false;
-
-    FaceVector faces;
-    Var hypt, hyptP;
-    bool pass = false;
-
-    if (!solveAtomicSW( v(bads) )) // degen true
-        return true;
-    
-    CE ce = dgetCE(curr, false);
-    Var sw = newSW();
-    while (!pass)
-    {
-        if (ce.t) // positive ce
-        {
-            for (auto& f : faces)
-            if ( !f(ce.v) )
-            {
-                //walk(ce, f.basis, v(bads), faces);
-                f.push_absorption(ce.v);
-            }
-        }
-        else // negative ce
-        {
-            if (solveAtomicSW (curr, ce.v, v(inits))) // the only way to return false once algo starts
-                return false;                         // when a decided neg ce is in inits meaning bads is
-                                                      // reachable from inits and refutation is possible
-            faces.push_back( Face(ce.v) );
-        }
-
-        tie(hypt,hyptP) = daddCdnfSW (curr, sw, faces);
-        
-        if (solveAtomicSW ( ~(v(inits) |= v(hypt)) ))
-            ce = dgetCE(curr, true);
-        else if (solveAtomicSW ( ~(v(hypt) |= ~v(bads)) ))
-            ce = dgetCE(curr, false);
-        else if (solveAtomicSW ( ~(v(hypt)&v(trans) |= v(hyptP)) ))
-            ce = dgetCE(curr, next, v(bads), faces);
-        else
-            pass = true;
-        
-        releaseSW(sw);
-        sw = newSW();
-    }
-    
-    releaseSW(fixed);
-    releaseSW(sw);
-    releaseStates(curr);
-    releaseStates(next);
-
-    cout << to_string(faces);
-    return true;
+    Problem P = inputAAG (filename);
+    return blearn (P);
 }
 
 template <size_t N>
-bool Ctx<N>::grow (Var pred, Var inits, Var bads, Var trans, FaceVector& faces, Step next)
+bool Ctx<N>::blearn (Bf_ptr inits_, Bf_ptr bads_, Bf_ptr trans_)
 {
-    Var sw = newSW();
-    Var succ  = addCdnfSW (sw, faces, next);
-    if (!solveAtomicSW ( ~(v(pred)&v(trans) |= v(succ)) )) // is invariant
-        return false;
+    Problem P = inputBf (inits_, bads_, trans_);
+    return blearn (P);
+}
 
-    bool pass = false;
-    CE ce = dgetCE(true, next);
+template <size_t N>
+bool Ctx<N>::blearn (Problem P)
+{
+    Var inits = P.inits,
+        bads  = P.bads, 
+        trans = P.trans; 
+    Step curr = P.curr,
+         next = P.next;
+    
+    if ( solveAtomicSW( v(inits)&v(bads) )) return false;
+    if (!solveAtomicSW( v(bads) )) return true;
+    
+    FaceVector faces = { Face(getCE(false, curr).v) };
+    Var  h,  hP; Var nh, nhP;
+    Var sw = newSW(), nsw = newSW();
+    tie(nh,nhP) = addCdnfSW (sw, faces, curr, next);
+    h=nh; hP=nhP;
 
-    releaseSW(sw);
-    sw = newSW();
-    while (!pass)
+    CE ce;
+    while (true)
     {
-        cout << to_string(faces) << flush;
+        if (solveAtomicSW ( ~(v(inits) |= v(nh)) ))
+            ce = getCE(true, curr);
+        else if (solveAtomicSW ( ~(v(nh) |= ~v(bads)) ))
+            ce = getCE(false, curr);
+        else if (solveAtomicSW ( ~(v(nh)&v(trans) |= v(nhP)) ))
+        {
+            ce = getCE(v(bads), faces, curr, next);
+            // prioritize transition pairs from last iteration
+            if (solveAtomicSW ( ~(v(h)&v(trans) |= v(nhP)) ))
+                ce = getCE(v(bads), faces, curr, next);
+        }
+        else
+            break;
+
         if (ce.t) // positive ce
         {
             for (auto& f : faces)
@@ -94,26 +61,43 @@ bool Ctx<N>::grow (Var pred, Var inits, Var bads, Var trans, FaceVector& faces, 
         }
         else // negative ce
         {
+            if ( evalAtomicSW (ce.v, v(inits), curr) )
+                return false;
+
             faces.push_back( Face(ce.v) );
+
+            // update last iteration on restart
+            releaseSW(sw);
+            sw = newSW();
+            tie(h,hP) = addCdnfSW (sw, faces, curr, next);
         }
 
-        succ = addCdnfSW (sw, faces, next);
-        
-        if (solveAtomicSW ( ~(v(inits) |= v(succ)) ))
-            {ce = dgetCE(true, next); cout << "1" << flush;}
-        else if (solveAtomicSW ( ~(v(succ) |= ~v(bads)) )) // FIXME: the problem is with different state space between bads and succ
-            {ce = dgetCE(false, next); cout << "2" << flush << endl; 
-            cout << to_string(ce.v) << endl;
-            return true;}
-        else if (solveAtomicSW ( ~(v(pred)&v(trans) |= v(succ)) ))
-            {ce = dgetCE(true, next); cout << "3" << flush;}
-        else
-            pass = true;
-        
-        releaseSW(sw);
-        sw = newSW();
+        releaseSW(nsw);
+        nsw = newSW();
+
+        tie(nh,nhP) = addCdnfSW (nsw, faces, curr, next);
+    
+        // update last iteration when on subsumption
+        if (!solveAtomicSW ( ~(v(h)&v(trans) |= v(nhP)) ))
+        {
+            releaseSW(sw);
+            sw = newSW();
+            tie(h,hP) = addCdnfSW (sw, faces, curr, next);
+        }
     }
+
     releaseSW(sw);
+    releaseSW(nsw);
+    releaseStates(curr);
+    releaseStates(next);
 
     return true;
-}*/
+}
+
+// NOTE: what if: learn 'exact' formula(x) = Ex'.trans(x',x) and force it into h?
+// NOTE: we can isolate the troubling states by hypt(x) & Ex'.trans(x,x')
+//       question is what can we do with them?
+// NOTE: info is most present at the nodes, viewpoints of faces, ie the bases
+// NOTE: what can we do with hypercube of trans thats like two cube cubed?
+// NOTE: trans is a set of edges between state cubes.
+//       what if its a basis? what if its covered? what if its a prime?

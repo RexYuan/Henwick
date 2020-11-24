@@ -16,10 +16,11 @@ void timer ()
         cout << endl;
         auto end = std::chrono::steady_clock::now();
         std::chrono::duration<double> elapsed_seconds = end-start;
-        std::cout << "elapsed time: " << elapsed_seconds.count() << "s\n";        
+        std::cout << "elapsed time: " << elapsed_seconds.count() << "s\n";
     }
     else
     {
+        std::cout << "timer starting..." << "\n";
         start = std::chrono::steady_clock::now();
     }
     
@@ -58,8 +59,8 @@ void t3()
            bads = ~v(0),
            trans = v(0) == v(0+2);
 
-    c.learn(inits, bads, trans);
-    c.learn(inits, bads, trans);
+    assert ( c.learn(inits, bads, trans) );
+    //c.learn(inits, bads, trans);
 }
 
 void t4()
@@ -81,22 +82,6 @@ void t4()
            bads  = ~v(0) & ~v(1), //00
            trans = (v(0) != v(0+2)) &
                    (v(1) != v(1+2));
-    //trans = trans | (v(0)&~v(1)&v(2)&v(3));
-
-    //auto x = c.addStates();
-    //auto y = c.addStates();
-    //auto z = c.addStates();
-
-    //auto sw = c.newSW();
-    //auto i = c.addBfSW(sw, inits, x);
-    //auto t1 = c.addBfSW(sw, trans, x, y);
-    //auto t2 = c.addBfSW(sw, trans, y, z);
-    //auto h = c.addBfSW(sw, bads, z);
-    //auto h2 = c.addBfSW(sw, bads, y);
-//
-    //cout << "whats " << c.solveAtomicSW ( v(i)&v(t1) & v(t2)&(v(h)|v(h2)) ) << endl;
-
-
 
     cout << c.learn(inits, bads, trans);
 
@@ -206,7 +191,7 @@ void t7()
     //Var x = c.addBf(trans);
     //c.addClause(mkLit(x));
     //c.tabulate();
-    assert (c.dlearn(inits, bads, trans));
+    assert (c.learn(inits, bads, trans));
 }
 
 void t8()
@@ -267,8 +252,14 @@ void t85()
     timer();
 
     timer();
+    cout << c.blearn(inits, bads, trans) << endl;
+    timer();
+
+    timer();
     cout << c.mlearn(inits, bads, trans) << endl;
     timer();
+
+    
 }
 
 void t9()
@@ -294,6 +285,10 @@ void t9()
 
     timer();
     cout << c.dlearn(inits, bads, trans) << endl;
+    timer();
+
+    timer();
+    cout << c.blearn(inits, bads, trans) << endl;
     timer();
 
     timer();
@@ -332,12 +327,188 @@ void t10()
     //Var x = c.addBf(trans);
     //c.addClause(mkLit(x));
     //c.tabulate();
-    c.learn(inits, bads, trans);
+    
+    timer();
+    cout << c.dlearn(inits, bads, trans) << endl;
+    timer();
+
+    timer();
+    cout << c.blearn(inits, bads, trans) << endl;
+    timer();
+
+    timer();
+    cout << c.mlearn(inits, bads, trans) << endl;
+    timer();
 }
 
+// TODO: use setDecisionVar
 int main()
 {
     cout << boolalpha;
+
+    Ctx<5> c5;
+    Ctx<16> c16;
+
+    timer();
+    cout << c5.dlearn("aags/pdtvisgray0.aag");
+    timer();
+
+    timer();
+    cout << c5.blearn("aags/pdtvisgray0.aag");
+    timer();
+
+    timer();
+    cout << c5.mlearn("aags/pdtvisgray0.aag");
+    timer();
+    return 0;
+
+
+    //timer();
+    //cout << c5.mlearn("aags/pdtvisgray0.aag");
+    //cout << c16.dlearn("aags/pdtvisgigamax1.aag");
+    //timer();
+
+
+    //cout << c5.mlearn("aags/pdtvisgray1.aag");
+
+    //return 0;
+
+    
+    
+    cout << "pdtvisgigamax0\n";
+    timer();
+    cout << c16.dlearn("aags/pdtvisgigamax0.aag");
+    timer();
+
+    timer();
+    cout << c16.blearn("aags/pdtvisgigamax0.aag");
+    timer();
+
+    timer();
+    cout << c16.mlearn("aags/pdtvisgigamax0.aag");
+    timer();
+
+    cout << "\npdtvisgigamax1\n";
+    timer();
+    cout << c16.dlearn("aags/pdtvisgigamax1.aag");
+    timer();
+
+    timer();
+    cout << c16.blearn("aags/pdtvisgigamax1.aag");
+    timer();
+
+    timer();
+    cout << c16.mlearn("aags/pdtvisgigamax1.aag");
+    timer();
+
+    cout << "\npdtvisgigamax2\n";
+    timer();
+    cout << c16.dlearn("aags/pdtvisgigamax2.aag");
+    timer();
+
+    timer();
+    cout << c16.blearn("aags/pdtvisgigamax2.aag");
+    timer();
+
+    timer();
+    cout << c16.mlearn("aags/pdtvisgigamax2.aag");
+    timer();
+
+    cout << "\npdtvisgigamax3\n";
+    timer();
+    cout << c16.dlearn("aags/pdtvisgigamax3.aag");
+    timer();
+
+    timer();
+    cout << c16.blearn("aags/pdtvisgigamax3.aag");
+    timer();
+
+    timer();
+    cout << c16.mlearn("aags/pdtvisgigamax3.aag");
+    timer();
+
+    cout << "\npdtvisgigamax4\n";
+    timer();
+    cout << c16.dlearn("aags/pdtvisgigamax4.aag");
+    timer();
+
+    timer();
+    cout << c16.blearn("aags/pdtvisgigamax4.aag");
+    timer();
+
+    timer();
+    cout << c16.mlearn("aags/pdtvisgigamax4.aag");
+    timer();
+
+    cout << "\npdtvisgigamax5\n";
+    timer();
+    cout << c16.dlearn("aags/pdtvisgigamax5.aag");
+    timer();
+
+    timer();
+    cout << c16.blearn("aags/pdtvisgigamax5.aag");
+    timer();
+
+    timer();
+    cout << c16.mlearn("aags/pdtvisgigamax5.aag");
+    timer();
+    
+    return 0;
+
+    //Ctx<33> c33;
+    //timer();
+    //cout << c33.dlearn("aags/pdtvisheap01.aag");    
+    //timer();
+
+    Ctx<28> c28;
+    timer();
+    cout << c28.dlearn("aags/pdtvisminmaxr0.aag");    
+    timer();
+
+    return 0;
+/*
+
+    timer();
+    cout << c.dlearnAAG("aags/pdtvisgigamax0.aag");
+    timer();
+
+    timer();
+    cout << c.dlearnAAG("aags/pdtvisgigamax1.aag");
+    timer();
+
+    timer();
+    cout << c.dlearnAAG("aags/pdtvisgigamax2.aag");
+    timer();
+
+    timer();
+    cout << c.dlearnAAG("aags/pdtvisgigamax3.aag");
+    timer();
+
+    timer();
+    cout << c.dlearnAAG("aags/pdtvisgigamax4.aag");
+    timer();
+
+    timer();
+    cout << c.dlearnAAG("aags/pdtvisgigamax5.aag");
+    timer();
+
+
+    return 0;
+    
+    
+    cout << c.dlearnAAG("aags/pdtvisgray0.aag");
+    cout << c.dlearnAAG("aags/test.aag");
+*/
+    
+    //pp c;
+    //c.addStates();
+    //auto one = pp::Face("00", {"01", "10"});
+    //auto two = pp::Face("11", {});
+    //pp::FaceVector gg = {one, two};
+    //auto k = c.addCdnfSW(c.fixedSW, gg);
+    //c.addClauseSW(c.fixedSW, mkLit(k));
+    //c.tabulate();
+
     
 
     //t3();
@@ -346,7 +517,44 @@ int main()
     //t6();
     //t7();
     //t8();
-    t85();
+    //t85();
+    //t9();
+    //t10();
 
+    /*Bf_ptr inits_ = v(0),
+            bads_ = ~v(0),
+           trans_ = v(0) == v(0+2);
+
+    Ctx<2> c;
+    Ctx<2>::Step curr = c.addStates(),
+                 next = c.addStates();
+
+    Var inits = c.addBfSW(c.fixedSW, inits_, curr),
+        bads  = c.addBfSW(c.fixedSW, bads_,  curr),
+        trans = c.addBfSW(c.fixedSW, trans_, curr, next);
     
+    if ( c.solveAtomicSW( v(inits)&v(bads) )) return false;
+    if (!c.solveAtomicSW( v(bads) )) return true;
+    
+    Ctx<2>::FaceVector faces { Ctx<2>::Face( c.getCE(false, curr).v ) };
+    Var h, hP;*/
+
+    /*using pp = Ctx<3>;
+    pp c;
+
+    pp::FaceVector faces = { pp::Face("000") };
+    pp::Step curr = c.addStates();
+    pp::Step next = c.addStates();
+    Var  h,  hP; Var nh, nhP;
+    Var sw = c.newSW();
+    tie(nh,nhP) = c.addCdnfSW (sw, faces, curr, next);
+    h=nh; hP=nhP;
+
+
+    Var asdf = c.newSW();
+                cout << "this is nh " << endl;
+    c.addClauseSW(asdf, mkLit(nh));
+    //c.s.addClause(mkLit(nh));
+    c.tabulate();
+    c.releaseSW(asdf);*/
 }
