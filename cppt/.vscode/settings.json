@@ -1,9 +1,0 @@
-{
-    "files.associations": {
-        "iostream": "cpp",
-        "bitset": "cpp",
-        "ostream": "cpp",
-        "random": "cpp",
-        "initializer_list": "cpp"
-    }
-}
