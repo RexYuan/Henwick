@@ -1,4 +1,0 @@
-initscr
-raw
-echo
-keypad
