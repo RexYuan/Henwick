@@ -1,0 +1,251 @@
+\documentclass[12pt]{llncs}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\usepackage{CJKutf8}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage[linesnumbered,lined,boxed,commentsnumbered,vlined]{algorithm2e}
+\usepackage{array}
+
+\newcolumntype{M}[1]{>{\centering\arraybackslash}m{#1}}
+
+\DeclarePairedDelimiter\set\{\}
+
+\newcommand{\cC}{\mathcal{C}}
+\newcommand{\cD}{\mathcal{D}}
+\newcommand{\cF}{\mathcal{F}}
+\newcommand{\Proj}[1]{\Pi_{#1}}
+\newcommand{\bye}[1]{}
+
+\title{Finding Quasi-identifiers Against $k$-anonymity}
+
+\author{Chih-chen Yuan}
+\institute{National Taiwan Normal University, Taiwan}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\begin{CJK}{UTF8}{bsmi}我是資工系大四的袁至誠，我的學號是 40371115H。\end{CJK}This article briefly summarizes some current results of my ongoing work in privacy research with my teacher \begin{CJK}{UTF8}{bsmi}王柏堯\end{CJK}. I thought I'd use this opportunity to fulfill the essay requirement of \begin{CJK}{UTF8}{bsmi}全球化與社會關懷課程\end{CJK} while also reviewing my own work.
+\end{abstract}
+
+\section{Introduction}
+The field of data science has made tremendous strides in the past decade, thanks to the maturation of hardware and the widespread adoption of data gathering devices, such as environment sensors and social networks. The sheer amount of data from various sources combined could potentially reveal otherwise unauthorized private information about people. For example, the data used for Netflix Prize, an open competition on collaborative filtering algorithm, was found by Narayanan and Shmatikov \cite{Narayanan:2008} to suffer from serious privacy vulnerabilities, costing Netflix a lawsuit thereafter.
+
+Sweeney \cite{Sweeney:2002} proposed one of the first privacy protection model of data releasing. With the advent of big data and machine learning, the demand of such techniques increases with each passing years, as more data providers seek ways to employ new technologies while upholding the promises of protecting user data.
+
+In \cite{Sweeney:2002}, Sweeney demonstrated that, at as early as 1997, the voter registration data of Cambridge, Massachusetts sold by the city government and the health insurance data of state employees sold by the Group Insurance Commission (GIC) can be linked together to uniquely re-identify some personal medical information with only ZIP code, birth date, and gender. For example, the governor of Massachusetts then, William Weld, is the only man with that particular birth date in that ZIP code.
+
+To protect released data from this kind of de-identification by attribute linking, Sweeney formalized the notion of $k$-anonymity upon the idea of quasi-identifier (QID) which is some set of potentially sensitive attributes capable of re-identification, introduced by Dalenius \cite{Dalenius:1986} in 1986. For some integer $k$, to say some QID is $k$-anonymous is to say that there are at least $k$ entries with identical values, for all combinations of values present.
+
+Since its conception, to date, potential attacks were discovered and more sophisticated paradigms, such as $l$-diversity, $t$-closeness, or more recently, differential or transparent approaches were developed. However, in this work, we shall focus on the fundemental idea of $k$-anonymity and consider some problems defined on it.
+
+The most natural problem associated with $k$-anonymity is the problem of, given a database, transforming it so that it conforms to some level of $k$-anonymity. Meyerson and Williams \cite{Meyerson:2004} proved that finding such solution is NP-hard for $3$-anonymity with unrestricted attribute domains. Later, Aggarwal et al. \cite{Aggarwal:2005} and Dondi et al. \cite{Dondi:2009}, respectively, proved the NP-hardness of $3$-anonymity with attribute domains restricted to $3$ and $2$. For the case of $2$-anonymity, Blocki and Williams \cite{Blocki:2010} proved that it's in P. The complexity results of general case call for approximation algorithms and several have also been developed.
+
+In this work, I consider the more pragmatic problem of deciding if some given database conforms to $k$-anonymity and that, if it does not, what are the violating QIDs.
+
+\section{Preliminaries}
+I shall first give the formal definition of the concepts I'll be working on.
+
+\begin{definition}
+A database $\cD$ is a finite set of $m$-tuples associated with an $m$-tuple of column names $\cC$ and an $m$-tuple of finite sets of column domains $\cF$, such that $\cD \subseteq \bigtimes_{F \in \cF} F$ and $|\cD| \leq |F|$ for all $F \in \cF$.
+\end{definition}
+
+\begin{definition}[$k$-anonymity]
+A database $\cD$ is $k$-anonymous iff, for all $d \in \cD$ and for all $c \subseteq \cC$, there exist a subset $S \subseteq \Proj{c} \cD$ of size at least $k$ such that $s = \Proj{c} d$ for all $s \in S$.
+\end{definition}
+
+\begin{definition}
+A quasi-identifier (QID) is a finite set of columns $Q \subseteq \cC$ such that it is a witness to violation of $k$-anonymity; that is, there is some $d \in \cD$ such that there is no $S \subseteq \Proj{Q} \cD$ with $s = \Proj{Q} d$ for all $s \in S$ of size at least $k$.
+\end{definition}
+
+Now, I am ready to define the problems at hand.
+
+\section{$k$-anonymity-test}
+Consider the problem of \emph{$k$-anonymity-test}, which decides if some given database is $k$-anonymous.
+
+\begin{problem}[$k$-anonymity-test]
+Given an instance of a database $\cD$, is $\Proj{c} \cD$ $k$-anonymous for all $c \subseteq \cC$.
+\end{problem}
+
+For the following, I shally employ Sweeney's Lemma from \cite{Sweeney:2002}, which effectively states that removing columns can only make it k-anonymous and that, vice versa, adding columns can only make it not k-anonymous.
+
+\begin{lemma}
+Given an instance of a database $\cD$, if $\Proj{A} \cD$ is k-anonymous, then $\Proj{B} \cD$ is k-anonymous for all $B \subseteq A$.
+\label{lemma:sweeney}
+\end{lemma}
+
+\begin{proposition}
+$k$-anonymity-test is in P.
+\end{proposition}
+
+\begin{proof}
+Given $\cD$, by Lemma~\ref{lemma:sweeney}, it suffices to solve $k$-anonymity-test by checking whether $\Proj{\cC} \cD$ is $k$-anonymous, which is polynomial in the size of $\cD$.
+\end{proof}
+
+Therefore, to check if $k$-anonymity holds for all subsets of columns for a given database, we only need to check if $k$-anonymity holds for the case of the whole sets of columns.
+
+\section{minimum-QID}
+If some database is found to not be $k$-anonymous, the natural question to ask is: what are the QIDs that violates $k$-anonymity? By Lemma~\ref{lemma:sweeney}, since all supersets of violating QIDs are themselves violating QIDs, we shall consider the problem of finding the minimum QIDs.
+
+\begin{definition}
+For a QID $Q$ that violates $k$-anonymity, it is minimum if $Q'$ does not violate $k$-anonymity for all $|Q'| < |Q|$.
+\end{definition}
+
+Note that minimum QID is unique. Now we can look at the function problem presented by this definitions.
+
+\begin{problem}[minimum-QID]
+Given an instance of a database $\cD$, find the minimum QID.
+\end{problem}
+
+\begin{proposition}
+minimum-QID is NP-hard.
+\end{proposition}
+
+\subsection{Proof}
+As function problems can be easily transformed to corresponding decision problems. To prove the NP-hardness, I consider the decision version of the problem, $k$-QID: if there is some QID of size $k$, and reduce it to the minimum cover problem, a NP-complete problem, which is [SP5] in Garey and Johnson \cite{Garey:1990}. It asks: given a collection $C$ of subsets of a finite set $S$ and a positive integer $K \leq |C|$, does $C$ contain a cover for $S$ of size $K$ or less, i.e., a subset $C' \subseteq C$ with $|C'| \leq K$ such that every element of $S$ belongs to at least one member of $C'$?
+
+The construction goes as follows. Given an instance of minimum cover, construct a database $\cD$ with $\cC$ as columns and $S \cup \set{\bot}$ as rows. For the content of the database, let
+$$
+\cD[i][j] =
+\begin{cases}
+    i,    &\text{if } S[i] \in \cC[j]\\
+    \bot, &\text{otherwise}
+\end{cases}
+$$
+where $\cD[i][j]$ represents the $j$th element in the $i$th tuple in $\cD$ and $\bot$ is a fresh symbol not in $S$.
+
+Now for the correctness that the given instance satisfies minimum cover iff the constructed instance satisfies $k$-QID.
+
+Suppose there is such subset $C'$ of $C$ such that every element in $S$ is in at least one set of $C'$. Project the columns corresponding to $C'$ in the database. Since every element is in at least one set of $C'$, every row except the $\bot$-row has at least one element unique to that row, so there are no duplicate rows in $\Proj{C'} \cD$; thus, the number of rows in the projected database $\Proj{C'} \cD$ is equal to the original database $\cD$.
+
+Suppose there is some subset of columns $N$ such that the number of rows in the projected database $\Proj{N} \cD$ is equal to the original database $\cD$. Per the assumption, it immediately follows that there are no duplicate rows in $\Proj{N} \cD$; furthermore, per the construction rule of the database, every row must have at least one non-$\bot$ element in some column in $N$. Thus, choose those subsets $C'$ corresponding to $N$ from $C$, and every element of $S$ must be in at least one set in $C'$.
+
+\subsection{Example}
+Let $k=2$, $S = \{a,b,c,d,e\}$, and $C = \{c_1,c_2,c_3,c_4\}$ with $c_1 = \{a,b,c\}, c_2 = \{b,d\}, c_3 = \{c,d\}, c_4 = \{d,e\}\}$. There is a solution $C' = \{c_1,c_4\} = \{\{1,2,3\},~\{4,5\}\}$.
+
+The constructed database for this instance is:
+
+\begin{align*}
+                 &  c_1   && c_2   && c_3   && c_4     &&\\
+\mathcal{D} = \{ & (1,    && \bot, && \bot, && \bot),  && a\\
+                 & (2,    && 2,    && \bot, && \bot),  && b\\
+                 & (3,    && \bot, && 3,    && \bot),  && c\\
+                 & (\bot, && 4,    && 4,    && 4   ),  && d\\
+                 & (\bot, && \bot, && \bot, && 5   ),  && e\\
+                 & (\bot, && \bot, && \bot, && \bot)\} && \bot\\
+\end{align*}
+\vspace*{10pt}
+If we project the solution, i.e., $\Pi_{c_1,c_4} \mathcal{D}$, we get:
+
+\begin{align*}
+                 &  c_1   && c_4     &&\\
+\mathcal{D} = \{ & (1,    && \bot),  && a\\
+                 & (2,    && \bot),  && b\\
+                 & (3,    && \bot),  && c\\
+                 & (\bot, && 4   ),  && d\\
+                 & (\bot, && 5   ),  && e\\
+                 & (\bot, && \bot)\} && \bot\\
+\end{align*}
+
+where no two rows are identical, meaning every element is in at least one of $c_1,c_4$.
+
+If we project something incorrect, e.g., $\Pi_{c_1,c_2,c_3} \mathcal{D}$, we get:
+
+\begin{align*}
+                 &  c_1   && c_2   && c_3     &&\\
+\mathcal{D} = \{ & (1,    && \bot, && \bot),  && a\\
+                 & (2,    && 2,    && \bot),  && b\\
+                 & (3,    && \bot, && 3,  ),  && c\\
+                 & (\bot, && 4,    && 4,  ),  && d\\
+                 & (\bot, && \bot, && \bot),  && e\\
+                 & (\bot, && \bot, && \bot)\} && \bot\\
+\end{align*}
+
+where the $e$-row and $\bot$-row are identical, meaning $e$ is not in any of $c_1,c_2,c_3$.
+
+\section{minimal-QID}
+As minimum-QID is NP-hard, I turned to try to come up with a randomized algorithm and, in turn, found a solution to a somewhat slightly different problem, where the result is only locally optimal, the minimal-QID problem.
+
+\begin{definition}
+For a QID $Q$ that violates $k$-anonymity, it is minimal if $Q'$ does not violate $k$-anonymity for all $Q' \subseteq Q$.
+\end{definition}
+
+Note that a minimal QID is not unique as it may be only locally maximal.
+
+\begin{problem}[minimal-QID]
+Given an instance of a database $\cD$, find the minimal QID.
+\end{problem}
+
+\begin{proposition}
+minimal-QID is in P.
+\end{proposition}
+
+I shall prove it by simply giving the polynomial time algorithm for finding a minimal QID. This algorithm essentially avoid the factorial blow-up of combinations by choosing only the immediately successing level and descending in a greedy manner whenever possible.
+
+\subsection{Algorithm}
+\begin{algorithm}[H]
+    \DontPrintSemicolon
+    \KwData{A database $\cD$.}
+    \KwResult{A set of columns that completely identifies the database.}
+    $goal = |\Pi_{\mathcal{C}} \mathcal{D}|$\;
+    $fields = \mathcal{C}$\;
+    $found = True$\;
+    \While{$found$}
+    {
+        $found = False$\;
+        \For{$next \in combinations(fields,|fields|-1)$}
+        {
+            \If{$|\Pi_{next} \mathcal{D}| = goal$}
+            {
+                $found = True$\;
+                $fields = next$\;
+                break\;
+            }
+        }
+    }
+    return $fields$\;
+\end{algorithm}
+
+The running time is $\mathcal{O}(\Sigma_{i=1}^{|\mathcal{D}|} \binom{i}{i-1}) = \mathcal{O}(|\mathcal{D}|^2)$.
+
+\subsection{Example}
+Consider this database.
+\begin{center}
+    \begin{tabular}{ | M{3em} | M{3em} | M{3em} | M{3em} | M{3em} | }
+    \hline
+    a & b & c & d & e\\
+    \hline
+    x & 1 & x & 6 & x\\
+    x & x & 2 & 7 & x\\
+    x & 3 & x & 8 & x\\
+    x & x & 4 & x & 9\\
+    5 & x & x & x & 0\\
+    \hline
+    \end{tabular}
+\end{center}
+
+The minimum QID is (d,e) and the algorithm finds the minimal QID (a,b,c) following these steps.
+\begin{center}
+    \begin{tabular}{ | M{3em} | M{3em} | M{3em} | M{3em} | M{3em} | M{3em} | }
+    \hline
+    a & b & c & d & e & yes\\
+    a & b & c & d &   & yes\\
+    a & b & c &   &   & yes\\
+    a & b &   &   &   & no\\
+      & b & c &   &   & no\\
+    a &   & c &   &   & no\\
+    \hline
+    \end{tabular}
+\end{center}
+
+\section{Conclusion}
+I should be able to fashion the algorithm for finding minimal QID into some sort of randomized algorithm with proper bounds for finding minimum QID. This is going to be the next step for my research.
+
+\bibliography{essay}
+\bibliographystyle{splncs04}
+
+\end{document}
