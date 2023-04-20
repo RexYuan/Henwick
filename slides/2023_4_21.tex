@@ -1,0 +1,283 @@
+\documentclass{beamer}
+
+\usetheme{CambridgeUS}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\usepackage{CJKutf8}
+\usepackage{datetime}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{xcolor}
+\usepackage{tikz}
+
+\usetikzlibrary{positioning, quotes}
+
+\newdate{date}{21}{04}{2023}
+\date{\displaydate{date}}
+\title[SAT]{The Why, How, and What of SAT}
+\author[Rex]{\begin{CJK}{UTF8}{bsmi}袁至誠\end{CJK}\\Chih-cheng Rex Yuan}
+\institute[at SZU]{Shenzhen University}
+
+\usetikzlibrary{arrows,shapes,fit}
+\pgfdeclarelayer{background}
+\pgfsetlayers{background,main}
+
+\DeclarePairedDelimiter{\set}{\{}{\}}
+\DeclarePairedDelimiter{\tuple}{(}{)}
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+
+\let\oldleq\leq
+\renewcommand{\leq}[1][]{\oldleq_{#1}}
+\renewcommand{\implies}{\rightarrow}
+
+\newcommand{\bye}[1]{}
+\newcommand{\bicond}{\leftrightarrow}
+\newcommand{\poset}[1]{\mathcal{#1}}
+\newcommand{\uni}[1][]{\Omega_{#1}}
+\newcommand{\lang}[1]{L(#1)}
+\newcommand{\lin}[1]{\texttt{#1}}
+\newcommand{\swap}[1][]{\leftrightarrow_{#1}}
+\newcommand{\sgraph}[1]{G(#1)}
+\newcommand{\lext}{\sqsubseteq}
+\newcommand{\incomp}[1][]{\parallel_{#1}}
+\newcommand{\covered}[1][]{\prec_{#1}}
+\newcommand{\complmt}[1]{\overline{#1}}
+\newcommand{\satvar}[2]{\mathtt{X}_{#1}^{#2}}
+\newcommand{\bigo}[1]{\mathcal{O}(#1)}
+\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\swapfn}[2]{#1[#2]}
+\newcommand{\inv}[2]{inv(#1,#2)}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+\begin{frame}
+    \frametitle{P and NP}
+    \alert{P} The class of problems that are ``easy'':
+    \begin{itemize}
+        \item $\bigo{1}$
+        \item $\bigo{n}$
+        \item $\bigo{n^3 + k}$
+    \end{itemize}
+
+    \alert{NP} The class of problems that are ``hard'':
+    \begin{itemize}
+        \item $\bigo{n!}$
+        \item $\bigo{2^n}$
+        \item $\bigo{2^{n^3+k}}$
+    \end{itemize}
+
+    For all intents and purposes, P $\neq$ NP.
+\end{frame}
+
+\begin{frame}
+    \frametitle{Hamiltonian path}
+    A Hamiltonian path of a graph is a path which visits every
+    node of the graph exactly once.
+
+    A Hamiltonian path of $G$ is $\tuple{a,b,d,c}$.
+    \begin{figure}[H]
+        \centering
+        \begin{tikzpicture}
+            [
+            vertex/.style={circle,thick,draw,minimum size=2em},
+            edge/.style={}
+            ]
+        \node[vertex] (1) at (1,2) {$a$};
+        \node[vertex] (2) at (0,1) {$b$};
+        \node[vertex] (3) at (2,1) {$c$};
+        \node[vertex] (4) at (1,0) {$d$};
+        \draw[edge] (1) -- (2);
+        \draw[edge] (1) -- (3);
+        \draw[edge] (2) -- (4);
+        \draw[edge] (3) -- (4);
+        \end{tikzpicture}
+        \caption{Undirected $\sgraph{\set{a,b,c,d}, E}$}
+        \label{figure:posetp}
+    \end{figure}
+
+    A Hamiltonian path can be found in $\bigo{n \times n!}$ by enumerating
+    over all possible sequence and checking each of them if it is a path.
+\end{frame}
+
+\begin{frame}
+    \frametitle{Hardness, Completeness, and Reduction}
+    \alert{Reduction} A reduction is a problem ``wrapper''.
+    We say $A$ reduces to $B$ if there's an ``easy enough''
+    reduction $R$ such that we can solve $A$ by passing
+    the input through $R$ to $B$.
+
+    \begin{figure}[H]
+        \centering
+        \begin{tikzpicture}
+        \draw[draw=black] (0,0) rectangle (4,2);
+        \node[draw=red!60,rectangle,minimum size=10mm] (R) at (1,1) {R};
+        \node[draw,rectangle,minimum size=10mm] (B) at (3,1) {};
+        \draw[->] (R) -- (B);
+        \draw[->] (-1,1) -- (R);
+        \draw[->] (B) -- (5,1);
+        \end{tikzpicture}
+    \end{figure}
+
+    \alert{Hardness} If every problem of a class $C$ reduces to a
+    problem $A$, we say that $A$ is $C$-hard.
+
+    \alert{Completeness} If $A$ is $C$-hard and $A$ is also in the class $C$,
+    we say that $A$ is $C$-complete.
+    \\~\\
+    A $C$-complete problem can be treated as the ``hardest'' problem in that class.
+\end{frame}
+
+\begin{frame}
+    \frametitle{Why SAT?}
+    \begin{block}{Fact}
+        Hamiltonian path is NP-complete.
+    \end{block}
+    Solving Hamiltonian path is tough.
+    \begin{block}{Fact}
+        SAT is NP-complete.
+    \end{block}
+    Solving SAT is also tough, but since it's NP-complete,
+    if we can solve it fairly fast, we can solve any NP problem
+    fairly fast.
+    \\~\\
+    However, decades of research in SAT-solving has yielded heuristics
+    and implementations that are ``unreasonably effective'' against
+    large problems (millions of clauses and variables).
+\end{frame}
+
+\begin{frame}
+    \frametitle{Reduction of Hamiltonian path to SAT}
+    $G=\tuple{S,E}$. Set $\satvar{i,j}{}$ to mean
+    the $i$th position in the Hamiltonian path is
+    occupied by node $j$.
+    \begin{itemize}
+        \item Each node $j$ must appear in the path:
+        $\bigwedge_{j \in S} \bigvee_{i \in S} \satvar{i,j}{}$
+        \item No node $j$ appears twice in the path:
+        $\bigwedge_{i,j,k \in S, i \neq k} \neg (\satvar{i,j}{} \wedge \satvar{k,j}{})$
+        \item Every position $i$ on the path must be occupied:
+        $\bigwedge_{i \in S} \bigvee_{j \in S} \satvar{i,j}{}$
+        \item No two nodes $j$ and $k$ occupy the same position in the path:
+        $\bigwedge_{i,j,k \in S, j \neq k} \neg (\satvar{i,j}{} \wedge \satvar{i,k}{})$
+        \item Nonadjacent nodes i and j cannot be adjacent in the path:
+        $\bigwedge_{k \in \set{1,...,n-1}, (i,j) \notin E} \neg (\satvar{k,i}{} \wedge \satvar{k+1,j}{})$
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{How SAT?}
+    The backbone of modern SAT-solving is the idea of unit propagration and
+    Conflict-Driven Clause-Learning (CDCL). Consider this example
+    from Carsten Sinz and Tomáš Balyo of Karlsruhe Institute of Technology.
+
+    \begin{columns}
+    \column{0.6\textwidth}
+    \begin{tikzpicture}
+        [
+        every edge quotes/.style = {auto, font=\footnotesize, sloped}
+        ]
+    \node[] (a) {0: A=1};
+    \node[below=0.3cm of a] (b) {1: B=1};
+    \node[below=0.3cm of b] (c) {2: C=1};
+    \node[below=0.3cm of c] (x) {3: X=1};
+    \node[right=0.5cm of x] (y) {3: Y=1};
+    \node[right=0.5cm of y] (z) {3: Z=1};
+    \node[right=0.5 of z] (nz) {3: Z=0};
+
+    \draw[->] (a) edge["c", bend left=20] (y);
+    \draw[->] (x) edge["c"] (y);
+    \draw[->] (a) edge["e", bend left=30] (z);
+    \draw[->] (y) edge["e"] (z);
+    \draw[->] (a) edge["g", bend left=40] (nz);
+    \draw[->] (y) edge["g", bend right=30] (nz);
+    \draw[<->] (z) edge["$\bot$"] (nz);
+    \end{tikzpicture}
+
+    \column{0.4\textwidth}
+    \begin{align*}
+     \{ & \set{A,B},                      && a \\
+        & \set{B,C},                      && b \\
+        & \set{\neg A, \neg X, Y},        && c \\
+        & \set{\neg A, X, Z},             && d \\
+        & \set{\neg A, \neg Y, Z},        && e \\
+        & \set{\neg A, X, \neg Z},        && f \\
+        & \set{\neg A, \neg Y, \neg Z} \} && g \\
+    \end{align*}
+    \end{columns}
+\end{frame}
+
+\begin{frame}
+    \frametitle{CDCL}
+    \begin{columns}
+    \column{0.6\textwidth}
+    \begin{tikzpicture}
+        [
+        every edge quotes/.style = {auto, font=\footnotesize, sloped}
+        ]
+    \node[] (a) {0: {\color{red} A=1}};
+    \node[below=0.3cm of a] (b) {1: B=1};
+    \node[below=0.3cm of b] (c) {2: C=1};
+    \node[below=0.3cm of c] (x) {3: X=1};
+    \node[right=0.5cm of x] (y) {3: {\color{red} Y=1}};
+    \node[right=0.5cm of y] (z) {3: {\color{red} Z=1}};
+    \node[right=0.5 of z] (nz) {3: Z=0};
+
+    \draw[->] (a) edge["c", bend left=20] (y);
+    \draw[->] (x) edge["c"] (y);
+    \draw[->] (a) edge["e", bend left=30] (z);
+    \draw[->] (y) edge["e"] (z);
+    \draw[->] (a) edge["g", bend left=40] (nz);
+    \draw[->] (y) edge["g", bend right=30] (nz);
+    \draw[<->] (z) edge["$\bot$"] (nz);
+    \end{tikzpicture}
+
+    \column{0.4\textwidth}
+    \begin{align*}
+     \{ & \set{A,B},                      && a \\
+        & \set{B,C},                      && b \\
+        & \set{\neg A, \neg X, Y},        && c \\
+        & \set{\neg A, X, Z},             && d \\
+        & \set{\neg A, \neg Y, Z},        && e \\
+        & \set{\neg A, X, \neg Z},        && f \\
+        & \set{\neg A, \neg Y, \neg Z} \} && g \\
+    \end{align*}
+    \end{columns}
+    Conflicting clause: $\neg (A \wedge Y \wedge Z) =
+    {\color{red} \set{\neg A, \neg Y, \neg Z}}$
+    \\~\\
+    By adding this ``learned'' clause to our database,
+    we prevent all future cases where this conflict
+    may arise again.
+\end{frame}
+
+\begin{frame}
+\frametitle{Directed acyclic graph}
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        [
+        vertex/.style={circle,thick,draw,minimum size=2em},
+        edge/.style={->,> = latex'}
+        ]
+    \node[vertex] (1) at (1,2) {$a$};
+    \node[vertex] (2) at (0,1) {$b$};
+    \node[vertex] (3) at (2,1) {$c$};
+    \node[vertex] (4) at (1,0) {$d$};
+    \draw[edge] (1) -- (2);
+    \draw[edge] (1) -- (3);
+    \draw[edge] (2) -- (4);
+    \draw[edge] (3) -- (4);
+    \end{tikzpicture}
+    \caption{Directed $\sgraph{\set{a,b,c,d}, E}$}
+    \label{figure:posetp}
+\end{figure}
+\end{frame}
+
+\end{document}
