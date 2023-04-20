@@ -418,28 +418,166 @@ $\set{\lin{abdce},\lin{badce},\lin{abcde},\lin{abdec}}$
     For a DAG $\poset{P}$ and $x \!\neq\! y \!\in\! \uni$,
     we encode with the propositional variable
     $\satvar{x,y}{\poset{P}}$ the case that
-    $x \leq[\poset{P}] y$, meaning there is a path from
+    there is a path from
     $x$ to $y$. We
     must first set some constraints based on the axioms
     of the DAG properties.
     \begin{itemize}
-        \item If $x \leq[\poset{P}] y$ then it must be that
-        $y \not\leq[\poset{P}] x$:
+        \item Two distinct nodes can't have paths both ways:
         $
         \bigwedge_{x \neq y \in \uni} \neg (\satvar{x,y}{\poset{P}} \wedge \satvar{y,x}{\poset{P}})
         $
-        \item If $x \leq[\poset{P}] y$ and $y \leq[\poset{P}] z$
-        then it must be that $x \leq[\poset{P}] z$:
+        \item If $x$ leads to $y$ and $y$ leads to $z$
+        then it must be that $x$ leads to $z$:
         $
         \bigwedge_{x \neq y \neq z \in \uni}
         \satvar{x,y}{\poset{P}} \wedge \satvar{y,z}{\poset{P}} \implies \satvar{x,z}{\poset{P}}
         $
-        \item Moreover, for a linear topological sort, we have to add
+        \item Moreover, for a linear DAG, we have
         on top of that:
         $
         \bigwedge_{x \neq y \in \uni} \satvar{x,y}{\poset{P}} \vee \satvar{y,x}{\poset{P}}
         $
     \end{itemize}
+    If a DAG $\poset{P}$ have a topological sort $\poset{L}$,
+    we denote that $\poset{P} \lext \poset{L}$, and this property
+    is encoded by the constraints:
+    \[
+    \poset{P} \lext \poset{L} \coloneqq
+    \bigwedge_{x \neq y \in \uni} \satvar{x,y}{\poset{P}}
+    \implies \satvar{x,y}{\poset{L}}
+    \]
+\end{frame}
+
+\begin{frame}
+    \frametitle{Reduction of poset cover problem to SAT}
+    \begin{block}{Poset cover problem}
+        Given a set of linear DAGs $\Upsilon$,
+        find a set of DAGs $C$, called a cover,
+        such that $\abs{C}$ is minimal and the union
+        of the topological sorts of DAGs in $C$ is equal
+        to $\Upsilon$; that is,
+        $\Upsilon = \bigcup_{\poset{P} \in C} \lang{\poset{P}}$
+        , where $L$ denotes the set of topological sorts of a DAG.
+    \end{block}
+    We can reduce the poset cover problem to SAT and set $\abs{C}$
+    incrementally from 1 to find the minimal cover, but for the equality
+    $\Upsilon = \bigcup_{\poset{P} \in C} \lang{\poset{P}}$ to hold,
+    we must have by definition that
+    $\Upsilon \subseteq \bigcup_{\poset{P} \in C} \lang{\poset{P}}$
+    and
+    $\Upsilon \supseteq \bigcup_{\poset{P} \in C} \lang{\poset{P}}$.
+\end{frame}
+
+\begin{frame}
+    \frametitle{Reduction of poset cover problem to SAT}
+    A naive reduction is to encode
+    \[
+    \Upsilon \subseteq \bigcup_{\poset{P} \in C} \lang{\poset{P}}
+    \]
+    as
+    \[
+    \bigwedge_{\poset{L} \in \Upsilon} \bigvee_{\poset{P} \in C} \poset{P} \lext \poset{L}
+    \]
+    and
+    \[
+    \Upsilon \supseteq \bigcup_{\poset{P} \in C} \lang{\poset{P}}
+    \]
+    as
+    \[
+    \bigwedge_{\poset{L} \in \complmt{\Upsilon}} \bigwedge_{\poset{P} \in C} \poset{P} \not\lext \poset{L}
+    \]
+    But this latter case causes exponential blowup
+    because $\abs{\complmt{\Upsilon}} \in \bigo{n!}$.
+\end{frame}
+
+\begin{frame}
+    \frametitle{Reduction of poset cover problem to SAT}
+    A better encoding is needed. It also necesarrily exists
+    because poset cover problem was proved to be NP-complete.
+    \begin{block}{Definition}
+    The \emph{adjacent transposition}, or \emph{swap},
+    relation $\swap$ describes the case of ``off by one swap''
+    between linear DAGs with shared universe: for linear DAGs
+    $\poset{L}_1,\poset{L}_2$, we denote this relation by
+    $\poset{L}_1 \swap \poset{L}_2$
+    \end{block}
+    An example of this is $\lin{abcd} \swap \lin{acbd}$.
+\end{frame}
+
+\begin{frame}
+    \frametitle{Reduction of poset cover problem to SAT}
+    \begin{block}{Definition}
+    For a set of linear DAGs $\Upsilon$,
+    the \emph{swap graph} $\sgraph{\Upsilon}$ of it is
+    the undirected graph $\tuple{V,E} = \tuple{\Upsilon,\swap}$.
+    \end{block}
+    The swap graph of the previous example $\lin{abcd} \swap \lin{acbd}$ is:
+    \begin{figure}[H]
+        \centering
+        \begin{tikzpicture}
+            [
+            vertex/.style={circle,thick,draw,minimum size=2em},
+            edge/.style={thick}
+            ]
+        \node[vertex] (1) at (0,0) {\lin{abcd}};
+        \node[vertex] (2) at (2,0) {\lin{acbd}};
+        \draw[edge] (1) -- (2);
+        \end{tikzpicture}
+        \label{figure:graphlp}
+    \end{figure}
+    \begin{block}{Observation}
+    A swap graph built from the topological sorts
+    of a DAG is connected.
+    \end{block}
+    We will exploit this observation for our better reduction.
+\end{frame}
+
+\begin{frame}
+    \frametitle{Reduction of poset cover problem to SAT}
+    We ``insulate'' each closed connected component
+    $\upsilon \subseteq \sgraph{\Upsilon}$ with a
+    ``moat'' set. We denote by $moat(\Upsilon)$ the union of
+    the moat sets.
+
+    \begin{figure}[H]
+        %\centering
+        \begin{tikzpicture}
+            \node[draw,ellipse,minimum height=2.5cm,minimum width=1.5cm,fill=white] (comp1) at (8,4) {comp1};
+
+            \node[draw,ellipse,minimum height=2.5cm,minimum width=3.5cm,fill=white] (comp2) at (2,2) {comp2};
+
+            \begin{pgfonlayer}{background}
+                \node[draw,ellipse,minimum height=3.5cm,minimum width=2.5cm,fill=gray,fill opacity=0.2,text opacity=1] (comp1moat) at (8,4) {};
+                \node[above=0.5mm] at (comp1moat.south) {comp1};
+
+                \node[draw,ellipse,minimum height=3.5cm,minimum width=4.5cm,fill=gray,fill opacity=0.2,text opacity=1] (comp2moat) at (2,2) {};
+                \node[above=0.5mm] at (comp2moat.south) {comp2};
+            \end{pgfonlayer}
+
+            \node[draw,fit=(comp1moat)(comp2moat)] (x) {};
+        \end{tikzpicture}
+    \end{figure}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Reduction of poset cover problem to SAT}
+    With this information, an alternative way to encode
+    $\Upsilon \supseteq \bigcup_{\poset{P} \in C}
+    \lang{\poset{P}}$ is:
+    \[
+    \bigwedge_{\poset{L} \in moat(\Upsilon)}
+    \bigwedge_{\poset{P} \in C} \poset{P} \not\lext \poset{L}
+    \]
+    And we have found our reduction.
+\end{frame}
+
+\begin{frame}
+    \frametitle{The end}
+    The source code of this slides is available at:
+    \url{https://github.com/RexYuan/Henwick/blob/master/slides/2023_4_21.tex}
+    \\~\\
+    Questions?
 \end{frame}
 
 \end{document}
