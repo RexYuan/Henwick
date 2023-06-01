@@ -1,0 +1,24 @@
+\begin{thebibliography}{1}
+\providecommand{\url}[1]{\texttt{#1}}
+\providecommand{\urlprefix}{URL }
+\providecommand{\doi}[1]{https://doi.org/#1}
+
+\bibitem{Dalenius:1986}
+Dalenius, T.: Finding a needle in a haystack or identifying anonymous census
+  records. Journal of Official Statistics  \textbf{2}(3),  329--336 (1986)
+
+\bibitem{Garey:1990}
+Garey, M.R., Johnson, D.S.: Computers and Intractability; A Guide to the Theory
+  of NP-Completeness. W. H. Freeman \& Co., New York, NY, USA (1990)
+
+\bibitem{Narayanan:2008}
+Narayanan, A., Shmatikov, V.: Robust de-anonymization of large sparse datasets.
+  In: Proceedings of the 2008 IEEE Symposium on Security and Privacy. pp.
+  111--125. SP '08 (2008)
+
+\bibitem{Sweeney:2002}
+Sweeney, L.: K-anonymity: A model for protecting privacy. International Journal
+  of Uncertainty, Fuzziness and Knowledge-Based Systems  \textbf{10}(5),
+  557--570 (2002)
+
+\end{thebibliography}
