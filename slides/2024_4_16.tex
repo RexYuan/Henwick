@@ -14,6 +14,7 @@
 \usepackage{xcolor}
 \usepackage{tikz}
 \usepackage{ulem}
+\usepackage{hyperref}
 
 \usetikzlibrary{positioning, quotes}
 
@@ -84,13 +85,15 @@
     The most straightforward solution to fairness seems to be that
     just simply dropping all the protected columns.
     \begin{itemize}
-        \item This is called \textit{Fairness Through Unawareness}.
+        \item This is called fairness through unawareness.
         \item Formally it's
         \[
             X_i = X_j \implies \hat{Y}_i = \hat{Y}_j
         \]
         where $i,j$ are individuals; $X$ is the set of attributes
         except protected attributes; and $\hat{Y}$ is the prediction.
+        \item Also known as fairness through blindness and
+        anti-classification.
     \end{itemize}
 \end{frame}
 
@@ -214,7 +217,6 @@
             \abs{P[\hat{Y} = 1 | S = 1, Y = 1] - P[\hat{Y} = 1 | S \neq 1, Y = 1]} & \leq \epsilon
         \end{align*}
         where $Y$ represents ground truths.
-        %% TODO: clarity
         \item A fully accurate classifier
         will necessarily satisfy the two equalized odds constraints.
     \end{itemize}
@@ -230,13 +232,36 @@
             \abs{P[\hat{Y} = 1 | S = 1, Y = 1] - P[\hat{Y} = 1 | S \neq 1, Y = 1]} & \leq \epsilon
         \end{align*}
         where $Y$ represents ground truths.
-        %% TODO: 倒果為因？
         \item It is a relaxation of equalized odds that focuses on the
         typically considered ``advantaged'' group $Y = 1$. For example,
         it ``requires that people who pay back their loan, have an equal
         opportunity of getting the loan in the first place (without specifying
         any requirement for those that will ultimately default).''
     \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{COMPAS}
+    \begin{itemize}
+        \item COMPAS is an algorithm used in used by U.S. courts
+        for predicting recidivism(reoffending) based on a questionaire.
+        \item Its risk score is calculated:
+        \begin{align*}
+            score = & age(-w) + age_{first} (-w) + \\
+                    & history_{violence} w +
+                     vocation_{education} w +
+                     history_{noncompliance} w
+        \end{align*}
+        \item In 2016, ProPublica found that the algorithm is biased.
+        \begin{quote}
+            Black defendants were often predicted to be at a higher risk of recidivism than they actually were.
+            White defendants were often predicted to be less risky than they were.
+        \end{quote}
+        \item The false-positive rates vary significantly across
+        black people and white people, violating equalized odds.
+    \end{itemize}
+    \footnotetext[1]{\href{https://www.propublica.org/article/how-we-analyzed-the-compas-recidivism-algorithm}{(Link) How We Analyzed the COMPAS Recidivism Algorithm}}
+    \footnotetext[2]{\href{https://www.youtube.com/watch?v=TqnYf2h6A-k}{(Link) The Dangerous Math Used To Predict Criminals}}
 \end{frame}
 
 \begin{frame}
@@ -318,7 +343,30 @@
             \abs{E[V | Y = 1, S = 1] - E[V | Y = 1, S \neq 1]} \leq \epsilon
         \]
         where V is the predicted probability value.
+        \item Balance for the negative class:
+        \[
+            \abs{E[V | Y = 0, S = 1] - E[V | Y = 0, S \neq 1]} \leq \epsilon
+        \]
+        where V is the predicted probability value.
+    \end{itemize}
+\end{frame}
 
+\begin{frame}
+    \frametitle{Other Measures}
+    \begin{itemize}
+        \item Mutual information:
+        \[
+            \sum{P(\hat{y}, s) \log (\frac{P(\hat{y}, s)}{P(\hat{y})P(s)})} \leq \epsilon
+        \]
+        This measures the mutual dependence between the sensitive feature
+        and the predicted outcome.
+        \item Mean difference:
+        \[
+            \abs{E[\hat{Y}|S = 1] - E[\hat{Y}|S \neg 1]} \leq \epsilon
+        \]
+        This measures the difference between the means of the predictions across
+        groups. This is similar to demographic parity when the target
+        is binary.
     \end{itemize}
 \end{frame}
 
