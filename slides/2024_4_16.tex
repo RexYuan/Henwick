@@ -243,15 +243,12 @@
 \begin{frame}
     \frametitle{COMPAS}
     \begin{itemize}
-        \item COMPAS is an algorithm used in used by U.S. courts
-        for predicting recidivism(reoffending) based on a questionaire.
-        \item Its risk score is calculated:
-        \begin{align*}
-            score = & age(-w) + age_{first} (-w) + \\
-                    & history_{violence} w +
-                     vocation_{education} w +
-                     history_{noncompliance} w
-        \end{align*}
+        \item COMPAS is an algorithm
+        used by U.S. courts for predicting recidivism(reoffending) based on a
+        questionaire.
+        \item Supreme Court ruled that it can be considered by judges during
+        sentencing, but there must be warnings about the tool's "limitations and cautions."
+        \item Risk score: $s =  a(-w_1) + a_{1st} (-w_2) + h_{vio} w_3 + v_{edu} w_4 + h_{nc} w_5$
         \item In 2016, ProPublica found that the algorithm is biased.
         \begin{quote}
             Black defendants were often predicted to be at a higher risk of recidivism than they actually were.
