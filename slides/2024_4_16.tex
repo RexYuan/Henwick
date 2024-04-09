@@ -132,7 +132,8 @@
         \[
             \frac{P[\hat{Y} = 1 | S \neq 1]}{P[\hat{Y} = 1 | S = 1]} \geq 1 - \epsilon
         \]
-        where $\hat{Y} = 1$ represents acceptance(positive);
+        where $\hat{Y} = 1$ represents predicated/observed result being
+        acceptance(positive);
         $S = 1$ represents privileged group;
         $S \neq 1$ represents unprivileged group where $S$ is some protected
         attributes.
@@ -174,7 +175,7 @@
     \frametitle{Disparate Impact and Demographic Parity}
     If for some job opening there are $10$ female applicants and
     $100$ male applicants, and there are $8$ accepted females
-    and $90$ accepted males:
+    and $80$ accepted males:
     \[
         \frac{8/10}{90/100} = 0.\overline{8} \quad\quad\quad
         \abs{8/10 - 90/100} = 0.1
@@ -184,6 +185,17 @@
         \frac{1/10}{20/100} = 0.5 \quad\quad\quad
         \abs{1/10 - 20/100} = 0.1
     \]
+\end{frame}
+
+\begin{frame}
+    \frametitle{Disparate Impact and Demographic Parity}
+    Disparate impact is strictly stronger than demographic parity:
+    \begin{align*}
+        \frac{r_a}{r_b} & \geq 1 - \epsilon \\
+        r_a & \geq r_b - r_b \epsilon \\
+        r_b \epsilon & \geq r_b - r_a \\
+        \epsilon & \geq r_b - r_a \text{ since } 0 \leq r_b \leq 1
+    \end{align*}
 \end{frame}
 
 \begin{frame}
@@ -208,7 +220,7 @@
     \frametitle{Equalized Odds}
     \begin{itemize}
         \item Equalized odds is designed to address the downsides of the previous two
-        by taking into accounts the actual ``ground truths'' and consider
+        by taking into accounts the ``ground truths'' and consider
         the difference between false-positive rates and true-positive rates of
         the groups.
         \item Formally, it requires that
@@ -324,7 +336,7 @@
         actually experiencing a positive outcome.
         \item Equal calibration:
         \[
-            \abs{P[Y = 1 | S = 1, V = v] - P[Y = 1 | S \neq 1, V = v]} \leq \epsilon
+            \abs{P[Y = 1 | S = 1, \hat{V} = v] - P[Y = 1 | S \neq 1, \hat{V} = v]} \leq \epsilon
         \]
         where $V$ is the predicted probability value. When $V$ is binary, this is equivalent to predictive parity.
     \end{itemize}
@@ -348,6 +360,7 @@
         \item Conditional use accuracy equality:
         \begin{align*}
             \abs{P[Y = 1 | S = 1, \hat{Y} = 1] - P[Y = 1 | S \neq 1, \hat{Y} = 1]} & \leq \epsilon \\
+            % TODO: add inequality
             \abs{P[Y = 0 | S = 1, \hat{Y} = 0] - P[Y = 0 | S \neq 1, \hat{Y} = 0]} & \leq \epsilon
         \end{align*}
         This is similar to predictive parity but it additionally requires
@@ -365,12 +378,12 @@
         This is similar to equalized odds but difference of ratio is taken instead.
         \item Balance for the positive class:
         \[
-            \abs{E[V | Y = 1, S = 1] - E[V | Y = 1, S \neq 1]} \leq \epsilon
+            \abs{E[\hat{V} | Y = 1, S = 1] - E[\hat{V} | Y = 1, S \neq 1]} \leq \epsilon
         \]
         where V is the predicted probability value.
         \item Balance for the negative class:
         \[
-            \abs{E[V | Y = 0, S = 1] - E[V | Y = 0, S \neq 1]} \leq \epsilon
+            \abs{E[\hat{V} | Y = 0, S = 1] - E[\hat{V} | Y = 0, S \neq 1]} \leq \epsilon
         \]
         where V is the predicted probability value.
     \end{itemize}
@@ -379,22 +392,15 @@
 \begin{frame}
     \frametitle{Other Measures}
     \begin{itemize}
-        \item Mutual information:
-        \[
-            \sum{P(\hat{y}, s) \log (\frac{P(\hat{y}, s)}{P(\hat{y})P(s)})} \leq \epsilon
-        \]
-        This measures the mutual dependence between the sensitive feature
-        and the predicted outcome.
+        %TODO: move this up
         \item Mean difference:
         \[
-            \abs{E[\hat{Y}|S = 1] - E[\hat{Y}|S \neg 1]} \leq \epsilon
+            \abs{E[\hat{Y}|S = 1] - E[\hat{Y}|S \neq 1]} \leq \epsilon
         \]
         This measures the difference between the means of the predictions across
         groups. This is similar to demographic parity when the target
         is binary.
     \end{itemize}
 \end{frame}
-
-%% TODO: COMPAS
 
 \end{document}
