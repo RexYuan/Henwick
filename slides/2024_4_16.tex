@@ -202,7 +202,6 @@
     \frametitle{Disparate Impact and Demographic Parity}
     Disadvantage of these two measures:
     \begin{itemize}
-        %% TODO: clarity
         \item ``A fully accurate classifier
         may be considered unfair, when the base rates (i.e., the proportion of
         actual positive outcomes) of the various groups are significantly different.''
@@ -313,7 +312,6 @@
         \end{align*}
         where $i,j$ denotes two individuals; $S^{(\cdot)}$ refers to sensitive attributes;
         $X^{(\cdot)}$ refers to associated features; and $d(i, j)$ is a distance metric between individuals.
-        %% TODO: what is X?
         \item ``This measure considers other individual attributes for defining fairness rather
         than just the sensitive attributes.''
     \end{itemize}
@@ -371,11 +369,6 @@
 \begin{frame}
     \frametitle{Other Measures}
     \begin{itemize}
-        \item Treatment equality:
-        \[
-            \abs{\frac{FN_{S=1}}{FP_{S=1}} - \frac{FN_{S\neq 1}}{FP_{S\neq 1}}} \leq \epsilon
-        \]
-        This is similar to equalized odds but difference of ratio is taken instead.
         \item Balance for the positive class:
         \[
             \abs{E[\hat{V} | Y = 1, S = 1] - E[\hat{V} | Y = 1, S \neq 1]} \leq \epsilon
@@ -386,13 +379,6 @@
             \abs{E[\hat{V} | Y = 0, S = 1] - E[\hat{V} | Y = 0, S \neq 1]} \leq \epsilon
         \]
         where V is the predicted probability value.
-    \end{itemize}
-\end{frame}
-
-\begin{frame}
-    \frametitle{Other Measures}
-    \begin{itemize}
-        %TODO: move this up
         \item Mean difference:
         \[
             \abs{E[\hat{Y}|S = 1] - E[\hat{Y}|S \neq 1]} \leq \epsilon
